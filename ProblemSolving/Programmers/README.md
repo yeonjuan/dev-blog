@@ -4,3 +4,4 @@
 | --- | --- |
 | [완주하지 못한 선수](https://programmers.co.kr/learn/courses/30/lessons/42576) | [link](./완주하지-못한-선수.js) |
 | [같은 숫자는 싫어](https://programmers.co.kr/learn/courses/30/lessons/12906) | [link](./같은-숫자는-싫어.js) |
+| [두 정수 사이의 합](https://programmers.co.kr/learn/courses/30/lessons/12912) | [link](./두-정수-사이의-합.js) |
