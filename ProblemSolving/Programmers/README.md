@@ -9,3 +9,4 @@
 | [문자열을 정수로 바꾸기](https://programmers.co.kr/learn/courses/30/lessons/12925) | [link](./문자열을-정수로-바꾸기.js) |
 | [자연수 뒤집어 배열로 만들기](https://programmers.co.kr/learn/courses/30/lessons/12932) | [link](./자연수-뒤집어-배열로-만들기.js) |
 | [K번째수](https://programmers.co.kr/learn/courses/30/lessons/42748) | [link](./K번째수.js) |
+| [문자열 내 p와 y의 개수](https://programmers.co.kr/learn/courses/30/lessons/12916) | [link](./문자열-내-p와-y의-개수.js) |
