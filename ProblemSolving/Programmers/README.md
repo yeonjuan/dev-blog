@@ -10,3 +10,4 @@
 | [자연수 뒤집어 배열로 만들기](https://programmers.co.kr/learn/courses/30/lessons/12932) | [link](./자연수-뒤집어-배열로-만들기.js) |
 | [K번째수](https://programmers.co.kr/learn/courses/30/lessons/42748) | [link](./K번째수.js) |
 | [문자열 내 p와 y의 개수](https://programmers.co.kr/learn/courses/30/lessons/12916) | [link](./문자열-내-p와-y의-개수.js) |
+| [x만큼 간격이 있는 n개의 숫자](https://programmers.co.kr/learn/courses/30/lessons/12954) | [link](./x만큼-간격이-있는-n개의-숫자.js) |
