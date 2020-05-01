@@ -16,3 +16,4 @@
 | [탑](https://programmers.co.kr/learn/courses/30/lessons/42588) | [link](./탑.js) |
 | [스킬트리](https://programmers.co.kr/learn/courses/30/lessons/49993) | [link](./스킬트리.js) |
 | [문자열 압축](https://programmers.co.kr/learn/courses/30/lessons/60057) | [link](./문자열-압축.js) |
+| [124 나라의 숫자](https://programmers.co.kr/learn/courses/30/lessons/12899) | [link](./124-나라의-숫자.js) |
