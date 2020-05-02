@@ -19,3 +19,4 @@
 | [124 나라의 숫자](https://programmers.co.kr/learn/courses/30/lessons/12899) | [link](./124-나라의-숫자.js) |
 | [가장 큰 수](https://programmers.co.kr/learn/courses/30/lessons/42746) | [link](./가장-큰-수.js) |
 | [피보나치 수](https://programmers.co.kr/learn/courses/30/lessons/12945) | [link](./피보나치-수.js) |
+| [가운데 글자 가져오기](https://programmers.co.kr/learn/courses/30/lessons/12903) | [link](./가운데-글자-가져오기.js) |
