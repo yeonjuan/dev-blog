@@ -18,3 +18,4 @@
 | [문자열 압축](https://programmers.co.kr/learn/courses/30/lessons/60057) | [link](./문자열-압축.js) |
 | [124 나라의 숫자](https://programmers.co.kr/learn/courses/30/lessons/12899) | [link](./124-나라의-숫자.js) |
 | [가장 큰 수](https://programmers.co.kr/learn/courses/30/lessons/42746) | [link](./가장-큰-수.js) |
+| [피보나치 수](https://programmers.co.kr/learn/courses/30/lessons/12945) | [link](./피보나치-수.js) |
