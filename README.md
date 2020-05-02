@@ -3,6 +3,7 @@
 
 ## JavaScript
 * [`undefined`](./JavaScript/undefined.md)
+* [`falsy` & `truthy`](./JavaScript/falsy-truthy.md)
 * [Lexical Environment](./JavaScript/lexical-environment.md)
 
 ## Browser
