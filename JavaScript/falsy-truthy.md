@@ -24,9 +24,9 @@ ECMA 스펙에서 어떤 값을 **true**, **false**로 변환하는 연산은 [7
 
 ToBoolean 스펙을 일부 번역한 내용을 살펴보겠습니다.
 
-[7.1.2 ToBoolean](https://tc39.es/ecma262/2020/#sec-toboolean)
+[7.1.2 ToBoolean ( *argument* )](https://tc39.es/ecma262/2020/#sec-toboolean)
 
-> ### 7.1.2 ToBoolean 
+> ### 7.1.2 ToBoolean ( *argument* ) 
 > 추상 연산 ToBoolean 은 *argument*를 인자로 받고, **Table 10** 에 따라 *argument* 를 Boolean 타입 값으로 변환한다:  
 >  
 > #### Table 10: ToBoolean 변환   
