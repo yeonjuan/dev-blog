@@ -22,7 +22,9 @@ ECMA 스펙에서 어떤 값을 **true**, **false**로 변환하는 연산은 [7
 > #### 추상 연산(Abstract Operation)  
 > 스펙을 위해 정의된 연산으로, 스펙 내에서만 존재하며 실제로 구현되어 있는 연산은 아닙니다.
 
-[7.1.2 ToBoolean 스펙](https://tc39.es/ecma262/2020/#sec-toboolean) 을 일부 번역한 내용을 살펴보겠습니다.
+ToBoolean 스펙을 일부 번역한 내용을 살펴보겠습니다.
+
+[7.1.2 ToBoolean](https://tc39.es/ecma262/2020/#sec-toboolean)
 
 > ### 7.1.2 ToBoolean 
 > 추상 연산 ToBoolean 은 *argument*를 인자로 받고, **Table 10** 에 따라 *argument* 를 Boolean 타입 값으로 변환한다:  
@@ -53,8 +55,7 @@ ToBoolean은 Not 연산자(!), if, while, for, 삼항 연산자 ...등의 런타
 
 * 참고: 아래에서 ToBoolean 앞의 **!** 표시는 해당 연산이 추상 연산이라는 표시입니다.
 
-[12.5.9  Logical NOT Operator ( ! )](https://tc39.es/ecma262/2020/#sec-logical-not-operator) 일부 번역
-
+[12.5.9  Logical NOT Operator ( ! )](https://tc39.es/ecma262/2020/#sec-logical-not-operator)
 > **12.5.9 NOT 논리 연산자**  
 > ...  
 > *UnaryExpression*: ! *UnaryExpression*  
@@ -71,8 +72,7 @@ console.log( !"a" ); // false
 console.log( !null ); // true
 ```
 
-[13.6 The if Statement](https://tc39.es/ecma262/2020/#sec-logical-not-operator) 일부 번역
-
+[13.6 The if Statement](https://tc39.es/ecma262/2020/#sec-logical-not-operator)
 > **13.6 if 문**  
 > ...   
 > *IfStatement* : if ( *Expression* ) *Statement*  
