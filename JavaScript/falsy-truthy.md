@@ -4,7 +4,7 @@
 번역해보면 **truthy**는 "참 같은 값", **falsy**는 "거짓 같은 값" 정도로 해석되며, 다음과 같이 정리할 수 있습니다.
 
 **falsy**: 불리언 값으로 평가되는 문맥에서, **false**로 평가되는 값.
-  * undefined, null, false, 0, -0, NaN, ""(빈문자열), 0n 등이 있음 (ECMA 2021 기준)
+  * undefined, null, false, 0, -0, NaN, ""(빈문자열), 0n 등이 있음 (ECMA 2020 기준)
 
 **truthy**: 불리언 값으로 평가되는 문맥에서, **true**로 평가되는 값.
   * **falsy**를 제외한 값들
