@@ -21,3 +21,4 @@
 | [피보나치 수](https://programmers.co.kr/learn/courses/30/lessons/12945) | [link](./피보나치-수.js) |
 | [가운데 글자 가져오기](https://programmers.co.kr/learn/courses/30/lessons/12903) | [link](./가운데-글자-가져오기.js) |
 | [소수 찾기](https://programmers.co.kr/learn/courses/30/lessons/12921) | [link](./소수-찾기.js) |
+| [직사각형 별찍기](https://programmers.co.kr/learn/courses/30/lessons/12969) | [link](./직사각형-별찍기.js) |
