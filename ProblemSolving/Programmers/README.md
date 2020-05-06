@@ -29,3 +29,4 @@
 | [JadenCase 문자열 만들기](https://programmers.co.kr/learn/courses/30/lessons/12951) | [link](./JadenCase-문자열-만들기.js) |
 | [서울에서 김서방 찾기](https://programmers.co.kr/learn/courses/30/lessons/12919) | [link](./서울에서-김서방-찾기.js) |
 | [수박수박수박수박수박수?](https://programmers.co.kr/learn/courses/30/lessons/12922) | [link](./수박수박수박수박수박수?.js) |
+| [짝수와 홀수](https://programmers.co.kr/learn/courses/30/lessons/12937) | [link](./짝수와-홀수.js) |
