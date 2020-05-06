@@ -27,3 +27,4 @@
 | [최댓값과 최솟값](https://programmers.co.kr/learn/courses/30/lessons/12939) | [link](./최댓값과-최솟값.js) |
 | [나누어 떨어지는 숫자 배열](https://programmers.co.kr/learn/courses/30/lessons/12910) | [link](./나누어-떨어지는-숫자-배열.js) |
 | [JadenCase 문자열 만들기](https://programmers.co.kr/learn/courses/30/lessons/12951) | [link](./JadenCase-문자열-만들기.js) |
+| [서울에서 김서방 찾기](https://programmers.co.kr/learn/courses/30/lessons/12919) | [link](./서울에서-김서방-찾기.js) |
