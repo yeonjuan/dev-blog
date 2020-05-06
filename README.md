@@ -19,3 +19,6 @@
 
 ## Problem Solving
 * [프로그래머스](./ProblemSolving/Programmers/README.md)
+
+## Algorithm
+* [최대공약수, 최소공배수](./Algorithm/gcd-lcm.md)
