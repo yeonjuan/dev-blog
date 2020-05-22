@@ -32,3 +32,4 @@
 | [짝수와 홀수](https://programmers.co.kr/learn/courses/30/lessons/12937) | [link](./짝수와-홀수.js) |
 | [문자열 다루기 기본](https://programmers.co.kr/learn/courses/30/lessons/12918) | [link](./문자열-다루기-기본.js) |
 | [최대공약수와 최소공배수](https://programmers.co.kr/learn/courses/30/lessons/12940) | [link](./최대공약수와-최소공배수.js) |
+| [핸드폰 번호 가리기](https://programmers.co.kr/learn/courses/30/lessons/12948) | [link](./핸드폰-번호-가리기.js) |
