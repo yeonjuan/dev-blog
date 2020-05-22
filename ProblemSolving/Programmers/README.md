@@ -33,3 +33,4 @@
 | [문자열 다루기 기본](https://programmers.co.kr/learn/courses/30/lessons/12918) | [link](./문자열-다루기-기본.js) |
 | [최대공약수와 최소공배수](https://programmers.co.kr/learn/courses/30/lessons/12940) | [link](./최대공약수와-최소공배수.js) |
 | [핸드폰 번호 가리기](https://programmers.co.kr/learn/courses/30/lessons/12948) | [link](./핸드폰-번호-가리기.js) |
+| [멀리 뛰기](https://programmers.co.kr/learn/courses/30/lessons/12914) | [link](./멀리뛰기.js) |
