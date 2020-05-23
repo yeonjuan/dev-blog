@@ -10,6 +10,10 @@
 * [이벤트 버블링, 캡쳐링](./Browser/event-bubbling-capturing.md)
 * [`<script>`, `<script async>`, `<script defer>`](./Browser/script-async-defer.md)
 
+## DesignPattern
+
+* [빌더 패턴 탐구(번역)](./DesignPattern/builder-pattern-exploration.md)
+
 ## Infra
 * [Docker 사용법](./Infra/Docker-사용법.md)
 
