@@ -16,6 +16,20 @@ Lexical Environment와 관련된 스코프에서 생성되는 식별자가 가�
 
 해당 Lexical Environment의 바깥 Lexical Environment를 참조하고 있는데, 이는 외부 스코프의 식별자를 참조할 때 사용됩니다.(스코프 체인)
 
+## 3. Lexical Environment 종류
+
+### global environment
+
+**global environment** 의 **outer** 는 null 인데, 이는 **global environment**가 더 이상 외부 스코프가 존재하지 않는 가장 바깥 스코프의 식별자 정보를 가지고 있다는 것을 뜻합니다. **global environment** 의 Environment Record 에는 전역 객체(global object)와 관련된 식별자가 바인딩 되어있습니다.
+
+### moudule environment
+
+**moudule environment** 의 Environment Record 에는 모듈의 최상위 선언에 대한 바인딩을 가지고 있으며, 모듈로 import 한 식별자에 대한 정보를 가지고 있습니다. **moudle environment** 의 **outer** 는 **global environment** 를 가르키고 있습니다.
+
+### function environment
+
+**function environment** 는 함수 객체(function object) 호출에 해당하는 Lexical Environment 로 경우에 따라 새로운 **this** 바인딩을 생성합니다.
+
 ## 3. 클로저 (Closure)
 
 클로저는 함수와 함수가 생성될 때 함수가 이를 감싸고 있는 환경을 기억하는 것입니다.
