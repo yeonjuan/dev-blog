@@ -30,7 +30,7 @@ Lexical Environment와 관련된 스코프에서 생성되는 식별자가 가�
 
 **function environment** 는 함수 객체(function object) 호출에 해당하는 Lexical Environment 로 경우에 따라 새로운 **this** 바인딩을 생성합니다.
 
-## 3. 클로저 (Closure)
+## 4. 클로저 (Closure)
 
 클로저는 함수와 함수가 생성될 때 함수가 이를 감싸고 있는 환경을 기억하는 것입니다.
 
