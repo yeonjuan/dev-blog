@@ -1,6 +1,5 @@
 # dev-blog
 
-
 ## JavaScript
 * [`undefined`](./JavaScript/undefined.md)
 * [`falsy` & `truthy`](./JavaScript/falsy-truthy.md)
@@ -12,11 +11,11 @@
 * [`<script>`, `<script async>`, `<script defer>`](./Browser/script-async-defer.md)
 
 ## DesignPattern
-
 * [빌더 패턴 탐구(번역)](./DesignPattern/builder-pattern-exploration.md)
 
-## Infra
-* [Docker 사용법](./Infra/Docker-사용법.md)
+## ETC
+* [오픈소스 Git/Github 사용법](./ETC/open-source-git-github.md)
+* [Docker 사용법](./ETC/Docker-사용법.md)
 
 ## Review
 * [Js13kGames 2019 참가 후기](./Review/js-13k-2019.md)
