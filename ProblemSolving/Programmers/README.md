@@ -36,3 +36,4 @@
 | [멀리 뛰기](https://programmers.co.kr/learn/courses/30/lessons/12914) | [link](./멀리뛰기.js) |
 | [2xn 타일링](https://programmers.co.kr/learn/courses/30/lessons/12900) | [link](./2xn-타일링.js) |
 | [카펫](https://programmers.co.kr/learn/courses/30/lessons/42842) | [link](./카펫.js) |
+| [단어 변환](https://programmers.co.kr/learn/courses/30/lessons/43163) | [link](./단어-변환.js) |
