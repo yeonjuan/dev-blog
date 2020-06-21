@@ -32,7 +32,7 @@ console.log(bar()); // undefined
 예약어로는 `const`, `var`, `if`, `false`... 등이 있습니다. 
 `undefined`는 이 예약어에 속해 있지 않아 식별자로 사용이 가능합니다.
 
-전역 스코프를 제외하고, `undefined` 식별자를 사용하여 `undefined` 식별자의 값을 변경할 수 있습니다.
+전역 스코프를 제외하고 (5. 참고), `undefined` 식별자를 사용하여 `undefined` 식별자의 값을 변경할 수 있습니다.
 
 ```js
 function foo() {
@@ -44,7 +44,6 @@ foo(); // "foo"
 ```
 
 `undefined`를 식별자로 사용할 수 있기 때문에, 믿을 수 있는 `undefined` 값을 얻기 위해 `void` 연산자를 쓰기도 합니다.
-`void` 연산자는 뒤에 어떤 피연산자가 오든지 `undefined` 값을 반환합니다.
 
 ```js
 var foo = void 0;
@@ -75,4 +74,15 @@ Object.getOwnPropertyDescriptor(window, 'undefined');
 ```js
 var undefined = "foo";
 console.log(undefined); // undefined
+```
+
+## 6. `void` 연산자는 항상 `undefined` 값을 반환합니다.
+
+`void` 연산자는 뒤에 어떤 피연산자가 오든지 `undefined` 값을 반환합니다.
+`void` 연산자는 `undefined` 가 식별자로 사용될 수 있는 특징 때문에 믿을 수 있는 `undefined` 값을 얻기 위해 사용되곤 합니다.
+
+```js
+void 0; // undefined
+void {}; // undefined
+void "string"; // undefined
 ```
