@@ -15,7 +15,7 @@
 
 # 컨트리뷰션 - Git/Github 워크 플로우
 
-![flow](./assets/flow.png)
+<img src="./assets/flow.png" width="500"/>
 
 # fork
 
