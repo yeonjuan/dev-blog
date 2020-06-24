@@ -2,7 +2,6 @@
 
 * [Cookie](#Cookie)
 * [웹 스토리지](#웹-스토리지-Session-Storage-Local-Storage)
-* [Local Storage](#Local-Storage)
 * [Index DB](#IndexDB)
 * [Summary](#Summary)
 
@@ -29,5 +28,14 @@
 #### Local Storage 특징
  * 탭/윈도우에 관계 없이 데이터를 공유합니다.
  * 브라우저가 재시작 되어도 데이터가 유지됩니다.
+
+#### Session Storage/Local Storage 브라우저 지원 현황
+* Session Storage - [출처: can i use sessionStorage?](https://caniuse.com/#search=SessionStorage)
+
+  <img src="./assets/caniuse-session-storage.png" width=500/>
+
+* Local Storage - [출처: can i use localStorage?](https://caniuse.com/#search=LocalStorage)
+
+  <img src="./assets/caniuse-local-storage.png" width=500/>
 
 ## IndexedDB
