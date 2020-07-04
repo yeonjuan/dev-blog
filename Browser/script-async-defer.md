@@ -10,7 +10,7 @@
 <script src ="..."></script>
 ```
 
-<img src="./assets/script.jpeg" width="600"/>
+<img src="./assets/script.jpeg" width="800"/>
 
 브라우저가 HTML을 파싱 하다가 `<script>` 태그를 만날 경우 브라우저는 해당 스크립트를 즉시 실행하려고 합니다.
 
@@ -36,7 +36,7 @@
 <script async src ="..."></script>
 ```
 
-<img src="./assets/script_async.jpeg" width="600"/>
+<img src="./assets/script_async.jpeg" width="800"/>
 
 `<script>`에 `async` 속성을 사용하면 HTML 파싱을 막지 않고 스크립트를 로딩합니다.
 
@@ -50,7 +50,7 @@
 <script defer src ="..."></script>
 ```
 
-<img src="./assets/script_defer.jpeg" width="600"/>
+<img src="./assets/script_defer.jpeg" width="800"/>
 
 `<script>`에 `defer` 속성을 사용하면 HTML 파싱을 막지 않고 스크립트를 로딩합니다.
 
