@@ -13,7 +13,7 @@
 
 # 컨트리뷰션 - Git/Github 워크 플로우
 
-<img src="./assets/flow.jpeg" width="600"/>
+<img src="./assets/flow.jpeg" width="800"/>
 
 # Fork
 
@@ -118,7 +118,7 @@ Branch 사용법에 따라 다양한 전략이 있습니다.
 -  
 
 # File Status Lifecycle
-<img src="./assets/status.jpeg" width="600"/>
+<img src="./assets/status.jpeg" width="800"/>
 
 # Pull Request
 
