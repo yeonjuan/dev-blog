@@ -1,6 +1,6 @@
 # dev-blog
 
-- [Cheat Sheet](./cheatsheat.md)
+- [Cheat Sheet](./cheatsheet.md)
 
 ## JavaScript
 * [`undefined`](./JavaScript/undefined.md)
