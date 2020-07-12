@@ -62,6 +62,28 @@ document.getElementById('empty'); // null
 
 찾아본 프로젝트 수가 적어서 큰 의미는 없지만 조사한 프로젝트에서는, JavaScript는 `null`, TypeScript는 `undefined` 를 사용하는 경우가 보입니다. 여기서 조금 놀랐는데, 당연히 모두 `null`을 사용하고 있을 줄 알았습니다. (근거 없음)
 
+* [ESLint - example](https://github.com/eslint/eslint/blob/master/lib/rules/utils/ast-utils.js#L87-L99)
+
+```js
+function getUpperFunction(node) {
+    for (let currentNode = node; currentNode; currentNode = currentNode.parent) {
+        if (anyFunctionPattern.test(currentNode.type)) {
+            return currentNode;
+        }
+    }
+    return null; // <--
+}
+```
+
+* [TypeScript - example](https://github.com/microsoft/TypeScript/blob/7b942b4fa875f2877a90d201cf146e6196b0c07b/src/compiler/watchUtilities.ts#L42-L46)
+
+```ts
+ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost, /* ...*/): CachedDirectoryStructureHost | undefined {
+        if (!host.getDirectories || !host.readDirectory) {
+            return undefined; // <--
+        }
+```
+
 살펴본 오픈소스 프로젝트에서도 선호하는 컨벤션에 대한 명확한 이유를 찾을 수는 없었습니다. 이에 `null`, `undefined` 각각 선호하는 이유에 대해 정리해보았습니다.
 
 # null 선호
