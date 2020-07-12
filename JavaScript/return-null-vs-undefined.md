@@ -60,7 +60,7 @@ document.getElementById('empty'); // null
 </tbody>
 </table>
 
-찾아본 프로젝트 수가 적어서 큰 의미는 없지만 조사한 프로젝트에서는, JavaScript는 `null`, TypeScript는 `undefined` 를 사용하는 경우가 보입니다. 여기서 조금 놀랐는데, 당연히 모두 `null`을 사용하고 있을 줄 알았습니다. (근거 없음)
+찾아본 프로젝트 수가 적어서 큰 의미는 없지만 조사한 프로젝트에서는, JavaScript는 `null`, TypeScript는 `undefined` 를 사용하는 경우가 보입니다. 여기서 조금 놀랐는데, 당연히 모두 `null`을 사용하고 있을 줄 알았습니다.  근거 없음 :)
 
 * [ESLint - example](https://github.com/eslint/eslint/blob/master/lib/rules/utils/ast-utils.js#L87-L99)
 
