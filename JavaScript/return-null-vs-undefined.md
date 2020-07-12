@@ -9,7 +9,7 @@ document.getElementById('empty'); // null
 [1, 2, 3, 4].find(num => num === 5); // undefined
 ```
 
-한, 두달전쯔음 회사 내 팀원들과 `null` vs `undefined`로 이야기를 나눈 적이 있었습니다. 이야기를 나누기 전에는 당연하듯 `null` 을 사용했었고 `undefined`를 사용해야겠다는 생각 자체를 안 했었습니다.
+2개월 전 즈음, 회사 내 팀원들과 `null` vs `undefined`로 이야기를 나눈 적이 있었습니다. 이야기를 나누기 전에는 당연하듯 `null` 을 사용했었고 `undefined`를 사용해야겠다는 생각 자체를 안 했었습니다.
 
 그런데 최근 들어 `undefined`를 사용하는 코드를 종종 보게 되었고 `null` vs `undefined`에 대한 고민이 다시 생기게 되어 간략히 정리해 보았습니다.
 
