@@ -60,13 +60,11 @@ document.getElementById('empty'); // null
 </tbody>
 </table>
 
-찾아본 프로젝트 수가 적어서 큰 의미는 없지만 조사한 프로젝트에서는, JavaScript는 `null`, TypeScript는 `undefined` 를 사용하는 경우가 보입니다.
+찾아본 프로젝트 수가 적어서 큰 의미는 없지만 조사한 프로젝트에서는, JavaScript는 `null`, TypeScript는 `undefined` 를 사용하는 경우가 보입니다. 여기서 조금 놀랐는데, 당연히 모두 `null`을 사용하고 있을 줄 알았습니다. (근거 없음)
 
-> 사실 여기서 살짝 놀랐는데, 당연히 모두 `null`을 사용하고 있을 줄 알았습니다.
+살펴본 오픈소스 프로젝트에서도 선호하는 컨벤션에 대한 명확한 이유를 찾을 수는 없었습니다. 이에 `null`, `undefined` 각각 선호하는 이유에 대해 정리해보았습니다.
 
-살펴본 오픈소스 프로젝트에서도 선호하는 컨벤션에 대한 명확한 이유를 찾을 수는 없었습니다. 이에 `null` 과 `undefined` 사용에 각각 어떤 장점이 있는지 알아보았습니다.
-
-# null 을 사용해야 하는 이유
+# null 선호
 
 ## 1. ECMASpec
 
@@ -77,7 +75,7 @@ document.getElementById('empty'); // null
 > primitive value that represents the intentional absence of any object value
 
 ECMA 10 스펙을 보면 `undefined` 와 `null` 값을 위와 같이 설명하고 있습니다
-해석해 보면 `undefined`는 변수에 값이 할당되지 않았을 때, `null` 은 객체 값의 부재를 의도적으로 표현할 때 쓰인다고 되어있습니다. 때문에 스펙상으로는 어떤 값의 부재를 표현할 때는 `null`이 더 적절해 보입니다.
+해석해 보면 `undefined`는 "변수에 값이 할당되지 않았을 때", `null` 은 "객체 값의 부재를 의도적으로 표현할 때" 쓰인다고 되어있습니다. 때문에 스펙상으로는 어떤 값의 부재를 표현할 때는 `null`이 더 적절해 보입니다.
 
 ## 2. 명시적인 반환값 표현
 
@@ -89,6 +87,8 @@ ret; // unedfined
 ```
 
 JavaScript 함수에서 return 문이 없거나 뒤에 반환 값이 없으면 `undefined`를 반환하게 됩니다. 
+
+때문에 `undefined`를 사용하면 **값을 반환하지 않는 함수** 와 **값을 반환 하지만 없는 값을 표현하는 함수**를 명확하게 구분 지을 수 없습니다.
 
 ```js
 // 반환 값이 없는 함수
@@ -105,9 +105,7 @@ function getBar() {
 }
 ```
 
-때문에 `undefined`를 사용하면 **값을 반환하지 않는 함수** 와 **값을 반환 하지만 없는 값을 표현하는 함수**를 명확하게 구분 지을 수 없습니다.
-
-반면 `null` 을 사용하면 이 둘을 구분 지울 수 있습니다.
+반면 `null` 을 사용하면 위와 같이, 이 둘을 구분 지울 수 있습니다.
 
 ## 3. undefined 식별자
 
@@ -129,7 +127,7 @@ foo();
 
 때문에 중첩된 스코프에서 `undefined` 식별자에는 다른 값이 할당될 수 있습니다. (전역스코프에선 안됩니당)
 
-# undefined 를 사용해야 하는 이유
+# undefined 선호
 
 ## 1. Optional Chaining 과의 궁합
 
@@ -169,11 +167,11 @@ typeof returnUndefined(); // "undefined"
 
 ## 그 밖에...
 
-그 밖에 장, 단점이라 하기 애매한 `null`과 `undefined`의 다른 동작들입니다.
+그 밖에 상황에 따라 장, 단점이 되는 `null`과 `undefined`의 다른 동작들입니다.
 
 ### JSON.stringify
 
-`JSON.stringify`를 이용해 객체를 직렬화하면 `undefined`는 생략되지만 null 은 생략되지 않습니다
+`JSON.stringify`를 이용해 객체를 직렬화하면 `undefined`는 생략되지만 `null` 은 생략되지 않습니다
 
 ```js
 JSON.stringify(undefined);
