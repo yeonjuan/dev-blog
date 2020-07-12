@@ -7,7 +7,7 @@
 * [`this`](./JavaScript/this.md)
 * [`falsy` & `truthy`](./JavaScript/falsy-truthy.md)
 * [Lexical Environment](./JavaScript/lexical-environment.md)
-* [return undefined vs null](./JavaScript/return-null-vs-undefined.md)
+* [return `undefined` vs `null`](./JavaScript/return-null-vs-undefined.md)
 
 ## Browser
 * [이벤트 버블링, 캡쳐링](./Browser/event-bubbling-capturing.md)

@@ -14,8 +14,8 @@ document.getElementById('empty'); // null
 그런데 최근 들어 `undefined`를 사용하는 코드를 종종 보게 되었고 `null` vs `undefined`에 대한 고민이 다시 생기게 되어 간략히 정리해 보았습니다.
 
 * [오픈소스 null vs undefined](#오픈소스-null-vs-undefined)
-* [null을 사용해야 하는 이유](#null-을-사용해야-하는-이유)
-* [undefined을 사용해야 하는 이유](#undefined-를-사용해야-하는-이유)
+* [null 선호](#null-선호)
+* [undefined 선호](#undefined-선호)
 
 ## 오픈소스 null vs undefined
 
@@ -151,7 +151,7 @@ foo();
 
 # undefined 선호
 
-## 1. Optional Chaining 과의 궁합
+## 1. Optional Chaining
 
 [ECMA Propsal 4의 Optional Chaining](https://github.com/tc39/proposal-optional-chaining) 은 프로퍼티 접근에서 참조가 nullish(`null` or `undefined`)일 경우에 더 이상 참조하지 않고 반환값을 `undefined`로 종결짓습니다.
 
