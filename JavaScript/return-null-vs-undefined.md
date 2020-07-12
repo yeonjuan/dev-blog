@@ -9,7 +9,7 @@ document.getElementById('empty'); // null
 [1, 2, 3, 4].find(num => num === 5); // undefined
 ```
 
-이전에 회사 내 팀원들과 `null` vs `undefined`로 이야기를 나눈 적이 있었습니다. 이전에는 당연하듯 `null` 을 사용했었고 `undefined`를 사용해야겠다는 생각 자체를 안 했었습니다.
+한, 두달전쯔음 회사 내 팀원들과 `null` vs `undefined`로 이야기를 나눈 적이 있었습니다. 이야기를 나누기 전에는 당연하듯 `null` 을 사용했었고 `undefined`를 사용해야겠다는 생각 자체를 안 했었습니다.
 
 그런데 최근 들어 `undefined`를 사용하는 코드를 종종 보게 되었고 `null` vs `undefined`에 대한 고민이 다시 생기게 되어 간략히 정리해 보았습니다.
 
@@ -36,24 +36,24 @@ document.getElementById('empty'); // null
     <td>null</td>
 </tr>
 <tr>
-    <td><a herf='https://github.com/facebook/react'>react</a></td>
+    <td><a href='https://github.com/facebook/react'>react</a></td>
     <td>null</td>
 </tr>
 <tr>
-    <td><a herf='https://github.com/GoogleChrome/lighthouse'>lighthouse</a></td>
+    <td><a href='https://github.com/GoogleChrome/lighthouse'>lighthouse</a></td>
     <td>null</td>
 </tr>
 <tr>
     <td rowspan=3>TypeScript</td>
-    <td><a herf='https://github.com/typescript-eslint/typescript-eslint'>typescript-eslint</a></td>
+    <td><a href='https://github.com/typescript-eslint/typescript-eslint'>typescript-eslint</a></td>
     <td>null</td>
 </tr>
 <tr>
-    <td><a herf='https://github.com/romefrontend/rome'> rome </a></td>
+    <td><a href='https://github.com/romefrontend/rome'> rome </a></td>
     <td>undefined</td>
 </tr>
 <tr>
-    <td><a herf='https://github.com/microsoft/TypeScript'> TypeScript</a></td>
+    <td><a href='https://github.com/microsoft/TypeScript'> TypeScript</a></td>
     <td>undefined</td>
 </tr>
 
@@ -66,9 +66,9 @@ document.getElementById('empty'); // null
 
 살펴본 오픈소스 프로젝트에서도 선호하는 컨벤션에 대한 명확한 이유를 찾을 수는 없었습니다. 이에 `null` 과 `undefined` 사용에 각각 어떤 장점이 있는지 알아보았습니다.
 
-## null 을 사용해야 하는 이유
+# null 을 사용해야 하는 이유
 
-### 1. ECMASpec
+## 1. ECMASpec
 
 > **4.3.10 undefined value**  
 > primitive value used when a variable has not been assigned a value 
@@ -79,7 +79,7 @@ document.getElementById('empty'); // null
 ECMA 10 스펙을 보면 `undefined` 와 `null` 값을 위와 같이 설명하고 있습니다
 해석해 보면 `undefined`는 변수에 값이 할당되지 않았을 때, `null` 은 객체 값의 부재를 의도적으로 표현할 때 쓰인다고 되어있습니다. 때문에 스펙상으로는 어떤 값의 부재를 표현할 때는 `null`이 더 적절해 보입니다.
 
-### 2. 명시적인 반환값 표현
+## 2. 명시적인 반환값 표현
 
 ```js
 function foo () { console.log("foo"); }
@@ -109,7 +109,7 @@ function getBar() {
 
 반면 `null` 을 사용하면 이 둘을 구분 지울 수 있습니다.
 
-### 3. undefined 식별자
+## 3. undefined 식별자
 
 ```js
 var null = 1; // Uncaught SyntaxError: Unexpected token 'null'
@@ -129,9 +129,9 @@ foo();
 
 때문에 중첩된 스코프에서 `undefined` 식별자에는 다른 값이 할당될 수 있습니다. (전역스코프에선 안됩니당)
 
-## undefined 를 사용해야 하는 이유
+# undefined 를 사용해야 하는 이유
 
-### 1. Optional Chaining 과의 궁합
+## 1. Optional Chaining 과의 궁합
 
 [ECMA Propsal 4의 Optional Chaining](https://github.com/tc39/proposal-optional-chaining) 은 프로퍼티 접근에서 참조가 nullish(`null` or `undefined`)일 경우에 더 이상 참조하지 않고 반환값을 `undefined`로 종결짓습니다.
 
@@ -153,7 +153,7 @@ function getBaz() {
 
 > 실제로 [typescript-eslint 에서 코드를 작성할 때](https://github.com/typescript-eslint/typescript-eslint/pull/2156/files#diff-bcb5a3b3b1ba2154d91dbf1ebd8c54d2R56), 이 경험을 했었는데 다소 어색했습니다.
 
-### 2. typeof
+## 2. typeof
 
 `undefined`의 타입은 Undefined 이고 `null`의 타입은 Null 입니다. 그럼에도 `typeof` 연산자는 `null` 값에 대해서 "object"를 반환합니다.
 
@@ -194,7 +194,7 @@ foo(undefined); // {}
 foo(null);  // null
 ```
 
-## 결론
+# 결론
 
 알아보기 전에는 딱히 고민 없이 `null` 을 사용해야 한다고 생각했었습니다. 이는 첫 프로그래밍 언어가 C였기 때문에 당연히 그렇게 생각했던 것 같습니다.
 
