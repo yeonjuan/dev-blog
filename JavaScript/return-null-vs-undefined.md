@@ -179,7 +179,7 @@ function getBaz() {
 
 ```js
 function returnNull() { return null };
-function returnUndefined() { return null };
+function returnUndefined() { return undefined; };
 
 typeof returnNull(); // "object"
 typeof returnUndefined(); // "undefined"
