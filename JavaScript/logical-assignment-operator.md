@@ -1,6 +1,6 @@
 # Logical Assignment Operator
 
-Logical Assignment Operator(논리 할당 연산자)는 ECMA 2021 스팩에 추가될 연산자로 논리 연산자 `||`, `&&`, `??` 와 할당 연산자 `=` 가 합쳐진 형태입니다.
+Logical Assignment Operator(논리 할당 연산자)는 ECMA 2021 스펙에 추가될 연산자로 논리 연산자 `||`, `&&`, `??` 와 할당 연산자 `=` 가 합쳐진 형태입니다.
 
 ## `&&=`
 
