@@ -21,6 +21,7 @@
 ## ETC
 * [오픈소스 Git/Github 사용법](./ETC/open-source-git-github.md)
 * [Docker 사용법](./ETC/Docker-사용법.md)
+* [개발 원칙](./ETC/principles.md)
 
 ## Review
 * [Js13kGames 2019 참가 후기](./Review/js-13k-2019.md)
