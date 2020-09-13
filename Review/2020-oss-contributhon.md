@@ -9,7 +9,7 @@ ESLint 및 플러그인 프로젝트에 기여한 후기 모음
 - [ESLint 기여 TIL](https://github.com/sunghyunjo/TIL/blob/master/etc/ESLint%20Contribution%20review.md) - by [@sunghyunjo](https://github.com/sunghyunjo) 
 - [초보인 내가 ESLint에 merge 성공?! 上편(with 오픈소스 컨트리뷰톤)](https://velog.io/@soda-melon/eslint-contributed1) - by [@sodaMelon](https://github.com/sodaMelon)
 - [초보인 내가 ESLint에 merge 성공?! 下편(with 오픈소스 컨트리뷰톤)](https://velog.io/@soda-melon/eslint-contributed2) - by [@sodaMelon](https://github.com/sodaMelon)
-
+- [OSS - eslint](https://jjogeon.github.io/posts/OSS-eslint/) - by [@jjogeon](https://github.com/JJoGeon)
 ## TypeScript-ESLint
 
 - [typescript-eslint 프로젝트 이해하기](https://blog.naver.com/qls0147/222087641506) - by [@soobing](https://github.com/soobing)
