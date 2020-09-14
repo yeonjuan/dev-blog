@@ -26,6 +26,7 @@
 ## Review
 * [Js13kGames 2019 참가 후기](./Review/js-13k-2019.md)
 * [Hacktoberfest 2019 참가 후기](./Review/hacktoberfest-2019.md)
+* [2020 OSS 컨트리뷰톤 멘티님들 후기 모음](./Review/2020-oss-contributhon.md)
 
 ## Problem Solving
 * [프로그래머스](./ProblemSolving/Programmers/README.md)
