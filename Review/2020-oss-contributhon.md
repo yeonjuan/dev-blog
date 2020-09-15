@@ -13,7 +13,8 @@ ESLint 및 플러그인 프로젝트에 기여한 후기 모음
 ## TypeScript-ESLint
 
 - [typescript-eslint 프로젝트 이해하기](https://blog.naver.com/qls0147/222087641506) - by [@soobing](https://github.com/soobing)
- - [typescript-eslint 2338 이슈 기여 후기](https://blog.naver.com/qls0147/222082041854) - by [@soobing](https://github.com/soobing)
+- [typescript-eslint 2338 이슈 기여 후기](https://blog.naver.com/qls0147/222082041854) - by [@soobing](https://github.com/soobing)
+- [2020 오픈소스 컨트리뷰톤 후기](https://gingerkang.tistory.com/93) - by [@ginger-kang](https://github.com/ginger-kang)
 
 ## ESLint-Plugin-React
 
