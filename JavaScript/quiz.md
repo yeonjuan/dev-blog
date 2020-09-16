@@ -13,7 +13,7 @@ console.log(bar.name); // ?
 <details><summary>Q-1 답안 보기</summary>
 <p>
 
-### 정답: "foo"
+### 정답: "Foo"
 
 ### 해설:
 결과를 이해하기 위해서는 `delete`와 `Object.create` 를 이해해야합니다.
@@ -59,17 +59,26 @@ newObj.hasOwnProperty('prop1'); // false
 
 #### 문제 해설
 
+`Object.create` 로 **foo** 를 프로토타입으로 한 **bar** 객체를 생성합니다.
+
 ```js
 const foo = {
     name: 'Foo'
 };
-// (1) foo를 프로토타입으로 한 bar 객체 생성
 const bar = Object.create(foo); 
+```
 
-// (2) bar의 고유 프로퍼티 name 제거 (없는 프로퍼티)
-delete bar.name; 
 
-// (3) 프로토타입 체이닝으로 foo 의 name 이 출력됨
+`delete` 로 **bar** 의 고유 프로퍼티 **name** 을 제거합니다. 하지만 **bar** 에는 **name** 프로퍼티가 없기 때문에 아무 변화도 일어나지 않습니다.
+
+```js
+delete bar.name
+```
+
+
+`bar.name`에 접근하면 프로토타입 체이닝을 통해 **foo**의 **name** 으로 접근됩니다.
+
+```js
 console.log(bar.name);  // 'Foo'
 ```
 
