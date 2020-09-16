@@ -16,9 +16,9 @@ console.log(bar.name); // ?
 ### 정답: "Foo"
 
 ### 해설:
-결과를 이해하기 위해서는 `delete`와 `Object.create` 를 이해해야합니다.
+결과를 이해하기 위해서는 **1. delete**와 **2 Object.create** 를 이해해야합니다.
 
-#### `delete`
+#### 1. delete
 `delete` 연산자는 대상 객체의 **고유 프로퍼티를 삭제**합니다.
 
 ```js
@@ -41,7 +41,7 @@ console.log(obj.toString()); // [object Object]
 ```
 
 
-#### `Object.create`
+#### 2. Object.create
 
 `Object.create` 는 첫 번째 인자를 프로토타입으로 하는 객체를 생성합니다.
 
