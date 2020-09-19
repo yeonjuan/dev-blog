@@ -7,6 +7,23 @@
 
 ## Cookie
 
+쿠키는 브라우저에 저장될 수 있는 문자열입니다.
+
+#### 특징
+
+- 쿠키는 클라이언트가 통신하는 서버에 의해서 설정 될 수 있습니다.
+
+#### Browser Cookie API
+
+`document.cookie` 에 값을 할당, 읽음으로 쿠키값을 설정할 수 있습니다.
+
+```js
+document.cookie = "foo=1";
+document.cookie = "bar=2";
+
+console.log(document.cookie); // foo=1; bar=1
+```
+
 ## 웹 스토리지 (Session Storage, Local Storage)
 
 웹 스토리지(Session Storage, Local Storage) 에는 "키", "값" 쌍을 저장할 수 있습니다.
