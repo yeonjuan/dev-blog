@@ -58,3 +58,21 @@ HTTPS 프로토콜을 사용할 때만 쿠키가 함께 전송되도록 한다.
 #### httpOnly
 
 HTTP 요청에만 쿠키가 실리도록 한다. 즉 `document.cookie` 로 쿠키에 접근할 수 없도록 한다.
+
+#### samesite
+
+서로 다른 도메인간 쿠키 전송여부에 대한 설정이다. 사이트간 요청 위조 (XSRF) 를 방지하기 위한 옵션이다.
+
+**samesite=none**
+
+모두 쿠키가 전송된다.
+
+**samesite=strict**
+
+서로 다른 도메인에서는 쿠키가 전송되지 않음
+
+**samesite=lax**
+
+일부 예외 경우을 제외하고 서로 다른 도메인에서 쿠키가 전송되지 않음
+
+> 예외: GET, a href, link href
