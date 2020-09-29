@@ -7,7 +7,9 @@
 ### 2019
 * [Js13kGames 2019 참가 후기](./Review/js-13k-2019.md)
 * [Hacktoberfest 2019 참가 후기](./Review/hacktoberfest-2019.md)
-* [ESLint 조금 더 잘 활용하기](https://tech.kakao.com/2019/12/05/make-better-use-of-eslint/)
+* [ESLint 조금 더 잘 활용하기 - kakao tech](https://tech.kakao.com/2019/12/05/make-better-use-of-eslint/)
+* [코딩 컨벤션 업무를 하며 알게 된 것들 - 1](./JavaScript/coding-convention-1.md)
+* [코딩 컨벤션 업무를 하며 알게 된 것들 - 2](./JavaScript/coding-convention-2.md)
 
 ### 2020
 
