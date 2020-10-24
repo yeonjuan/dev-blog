@@ -30,7 +30,7 @@ Module not found: Error: Can't resolve 'fs' in '/Users/yeonjuan/Desktop/open-sou
 1. NodeJS Built-In 모듈을 사용하지만, 런타임에는 필요없는 모듈
 2. NodeJS Built-In 모듈을 사용하고, 런타임에도 필요한 모듈
 
-## 해결 1. 런타임에 필요없는 모듈
+## 해결 1. 런타임에 필요 없는 모듈
 
 번들 결과에서 실제로 런타임에는 필요가 없는 모듈이 있는데, 예를 들어 ESLint에서 CLI 동작을 담당하는 모듈이 있습니다. 이 모듈은 브라우저 데모 동작시에는 실제로 동작할 필요가 없습니다.
 
