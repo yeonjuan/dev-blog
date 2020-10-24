@@ -1,13 +1,16 @@
 # node 패키지 브라우저에서 사용하기 (with Webpack 4)
 
-Webpack 을 사용해서, `fs`, `path`와 같은 NodeJS Built-In 모듈을 사용하는 패키지를 브라우저에서 동작하도록 번들링해본 후기입니다.  
+웹팩을 사용해서, `fs`, `path`와 같은 NodeJS Built-In 모듈을 사용하는 패키지를 브라우저에서 동작하도록 번들링해본 후기입니다.  
 
 ## 이유
 
 근래에 TypeScript에 흥미를 느껴 [typescript-eslint](https://github.com/typescript-eslint/typescript-eslint) 프로젝트에 간간히 컨트리뷰션을 하고 있습니다.
 컨트리뷰션을 하기 위해 해결할 이슈를 재현해 보곤 하는데, 매번 이슈를 재현하기 위해 프로젝트의 테스트 코드를 찾아서 수정하는 것이 귀찮게 느껴졌습니다.
 
-ESLint에서는 이를 위해 [ESLint Online Demo](https://eslint.org/demo)를 제공하고 있는데 이슈를 재현하고 공유할 때 유용하게 사용됩니다. 이에 typescript-eslint 를 지원하는 웹 데모를 만들어 보면 좋겠다고 생각하였고 이를 만들며 겪었던 문제점과 해결방법을 정리해 보았습니다.
+ESLint에서는 이를 위해 [ESLint Online Demo](https://eslint.org/demo)를 제공하고 있는데 이슈를 재현하고 공유할 때 유용하게 사용됩니다. 
+![eslint-demo](./assets/eslint-demo.png)
+
+이에 typescript-eslint 를 지원하는 웹 데모를 만들어 보면 좋겠다고 생각하였고 이를 만들며 겪었던 문제점과 해결방법을 정리해 보았습니다.
 
 ## 문제점
 
@@ -31,7 +34,7 @@ Module not found: Error: Can't resolve 'fs' in '/Users/yeonjuan/Desktop/open-sou
 
 번들 결과에서 실제로 런타임에는 필요가 없는 모듈이 있는데, 예를들어 ESLint 에서 CLI 동작을 담당하는 모듈이 있습니다. 이 모듈은 브라우저 데모 동작시에는 실제로 동작할 필요가 없습니다.
 
-이 경우 [Webpack - null-loader](https://webpack.js.org/loaders/null-loader/) 를 사용하면 해당 모듈을 빈 모듈로 변경할 수 있습니다.
+이 경우 [웹팩 - null-loader](https://webpack.js.org/loaders/null-loader/) 를 사용하면 해당 모듈을 빈 모듈로 변경할 수 있습니다.
 
 먼저 `null-loader` 를 설치합니다.
 
@@ -39,7 +42,7 @@ Module not found: Error: Can't resolve 'fs' in '/Users/yeonjuan/Desktop/open-sou
 $ npm install null-loader --save-dev
 ```
 
-이후, webpack 설정의 `rules` 에 아래와 같이 `null-loader` 를 추가해 줍니다. `test` 에는 비어있는 모듈로 교체할 모듈을 명시해 줍니다.
+이후, 웹팩 설정의 `rules` 에 아래와 같이 `null-loader` 를 추가해 줍니다. `test` 에는 비어있는 모듈로 교체할 모듈을 명시해 줍니다.
 
 - [webpack.config.js](https://github.com/yeonjuan/typescript-eslint-demo/blob/master/webpack.base.config.js#L20-L34)
 
@@ -79,7 +82,7 @@ typescript-eslint 에서는 설정에 따라 tsconfig.json 파일의 경로를 �
     }
     ```
 
-이 경우 [NormalModuleReplacementPlugin](https://webpack.js.org/plugins/normal-module-replacement-plugin/) 을 통해 내가 정의한 커스텀 모듈로 이를 대체 시킬 수 있습니다.
+이 경우 [NormalModuleReplacementPlugin](https://webpack.js.org/plugins/normal-module-replacement-plugin/) 을 통해 내가 정의한 커스텀 모듈로 이를 대체할 수 있습니다.
 
 먼저 해당 모듈을 대체해서 동작할 모듈을 간단하게 작성합니다.
 - [/src/modules/globby.js](https://github.com/typescript-eslint/typescript-eslint/blob/90a587845088da1b205e4d7d77dbc3f9447b1c5a/packages/typescript-estree/src/parser.ts#L2)
@@ -101,6 +104,7 @@ NormalModuleReplacementPlugin로 해당 모듈을 내가 정의한 커스텀 모
   const webpack = require('webpack');
 
   module.exports = {
+    //...
     plugins: [
       new webpack.NormalModuleReplacementPlugin(
         /globby/, // 교체 대상 모듈
