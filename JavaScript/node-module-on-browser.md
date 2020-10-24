@@ -1,6 +1,8 @@
-# node 패키지 브라우저에서 번들하기 (with Webpack)
+# node 패키지 브라우저에서 사용하기 (with Webpack)
 
-## 동기
+Webpack 을 사용해서, `fs`, `path`와 같은 NodeJS Built-In 모듈을 사용하는 패키지를 브라우저에서 동작하도록 번들링해본 후기입니다.  
+
+## 이유
 
 근래에 TypeScript에 흥미를 느껴 [typescript-eslint](https://github.com/typescript-eslint/typescript-eslint) 프로젝트에 간간히 컨트리뷰션을 하고 있습니다.
 컨트리뷰션을 하기 위해 해결할 이슈를 재현해 보곤 하는데, 매번 이슈를 재현하기 위해 프로젝트의 테스트 코드를 찾아서 수정하는 것이 귀찮게 느껴졌습니다.
@@ -31,6 +33,14 @@ Module not found: Error: Can't resolve 'fs' in '/Users/yeonjuan/Desktop/open-sou
 
 이 경우 [Webpack - null-loader](https://webpack.js.org/loaders/null-loader/) 를 사용하면 해당 모듈을 빈 모듈로 변경할 수 있습니다.
 
+먼저 `null-loader` 를 설치합니다.
+
+```
+$ npm install null-loader --save-dev
+```
+
+이후, webpack 설정의 `rules` 에 아래와 같이 `null-loader` 를 추가해 줍니다. `test` 에는 비어있는 모듈로 교체할 모듈을 명시해 줍니다.
+
 - [webpack.config.js](https://github.com/yeonjuan/typescript-eslint-demo/blob/master/webpack.base.config.js#L20-L34)
 
     ```js
@@ -48,7 +58,7 @@ Module not found: Error: Can't resolve 'fs' in '/Users/yeonjuan/Desktop/open-sou
     }
     ```
 
-null-loader 에 test 에 설정한 모듈은 번들시 비어있는 모듈이 됩니다. 아무런 기능이 없는 모듈이 번들되게 되지만 실제로 런타임에는 사용되지 않기 때문에 동작에 아무런 문제가 되지 않습니다.
+번들시 `null-loader` 에 `test` 에 설정한 모듈은 비어있는 모듈이 됩니다. 아무런 기능이 없는 모듈이 번들되게 되지만 실제로 런타임에는 사용되지 않기 때문에 동작에 아무런 문제가 되지 않습니다.
 
 ## 해결 2: 런타임에도 필요한 모듈
 
