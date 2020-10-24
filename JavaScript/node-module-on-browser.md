@@ -96,7 +96,7 @@ typescript-eslint 에서는 설정에 따라 tsconfig.json 파일의 경로를 �
   };
   ```
 
-NormalModuleReplacementPlugin로 해당 모듈을 대체할 커스텀 모듈로 대체합니다.
+이후 웹팩 설정에서 `plugins` 에 NormalModuleReplacementPlugin로 해당 모듈을 대체할 커스텀 모듈로 대체합니다.
 
 - [webpack.config.js](https://github.com/yeonjuan/typescript-eslint-demo/blob/master/webpack.base.config.js#L76-L78)
 
@@ -114,7 +114,7 @@ NormalModuleReplacementPlugin로 해당 모듈을 대체할 커스텀 모듈로 
   }
   ```
 
-이제 웹팩으로 번들링시 typescript-eslint 내부에서 import 해서 사용하는 globby 는 제 프로젝트에 있는 `src/modules/globby.js` 로 대체되게 됩니다.
+이제 웹팩으로 번들시 typescript-eslint 내부에서 import 해서 사용하는 globby 는 제 프로젝트에 있는 `src/modules/globby.js` 로 대체되게 됩니다.
 
 ## 결론
 
@@ -136,4 +136,4 @@ NormalModuleReplacementPlugin로 해당 모듈을 대체할 커스텀 모듈로 
 
 ## Summary
 
-`fs`, `path` 와 같은 NodeJS 모듈을 사용하는 패키지를 Webpack 으로 번들해야만 한다면 [null-loader](), [NormalModuleReplacementPlugin](https://webpack.js.org/plugins/normal-module-replacement-plugin/) 을 사용하세요. 
+`fs`, `path` 와 같은 NodeJS 모듈을 사용하는 패키지를 웹팩으로 번들해야만 한다면 [null-loader](), [NormalModuleReplacementPlugin](https://webpack.js.org/plugins/normal-module-replacement-plugin/) 를 활용해 보세요. 
