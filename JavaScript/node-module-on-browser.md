@@ -84,7 +84,8 @@ typescript-eslint 에서는 설정에 따라 tsconfig.json 파일의 경로를 �
 
 이 경우 [NormalModuleReplacementPlugin](https://webpack.js.org/plugins/normal-module-replacement-plugin/)를 사용할 수 있습니다. NormalModuleReplacementPlugin 은 웹팩 번들시에 특정 모듈을 내가 정의한 커스텀 모듈로 교체해 사용할 수 있습니다
 
-먼저 해당 모듈을 대체해서 동작할 모듈을 간단하게 작성합니다.
+먼저 해당 모듈을 대체해서 동작할 모듈을 간단하게 작성합니다.(Node Built-In 을 사용하는 패키지를 모킹한다고 생각하면 됩니다)
+ 
 - [/src/modules/globby.js](https://github.com/typescript-eslint/typescript-eslint/blob/90a587845088da1b205e4d7d77dbc3f9447b1c5a/packages/typescript-estree/src/parser.ts#L2)
 
   ```js
