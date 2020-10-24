@@ -1,4 +1,4 @@
-# node 패키지 브라우저에서 사용하기 (with Webpack)
+# node 패키지 브라우저에서 사용하기 (with Webpack 4)
 
 Webpack 을 사용해서, `fs`, `path`와 같은 NodeJS Built-In 모듈을 사용하는 패키지를 브라우저에서 동작하도록 번들링해본 후기입니다.  
 
