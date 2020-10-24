@@ -20,7 +20,7 @@ NodeJS 의 `fs`, `path` 와 같은 built-in 모듈을 사용하는 패키지를 
 
 ```
 ERROR in ./node_modules/@eslint/eslintrc/lib/config-array-factory.js
-Module not found: Error: Can't resolve 'fs' in '/Users/yeonjuan/Desktop/open-source/forblog-repor/node_modules/@eslint/eslintrc/lib'
+Module not found: Error: Can't resolve 'fs' in '...project/node_modules/@eslint/eslintrc/lib'
 ```
 
 결국 번들링을 해서 사용하기 위해서는 NodeJS built-in 모듈을 사용하는 모듈을 별도로 처리해 주어야 했습니다.
