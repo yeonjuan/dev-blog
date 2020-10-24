@@ -29,8 +29,8 @@ Module not found: Error: Can't resolve 'fs' in '...project/node_modules/@eslint/
 
 처리해야 할 모듈은 런타임에 따라 아래 두 가지 경우로 나눌 수 있었습니다.
 
-1. NodeJS Built-In 모듈을 사용하지만, 런타임에는 필요없는 모듈
-2. NodeJS Built-In 모듈을 사용하고, 런타임에도 필요한 모듈
+1. NodeJS Built-In 모듈을 사용하지만, **런타임에는 필요 없는 모듈**
+2. NodeJS Built-In 모듈을 사용하고, **런타임에도 필요한 모듈**
 
 ## 해결 1. 런타임에 필요 없는 모듈
 
