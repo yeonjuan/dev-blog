@@ -1,6 +1,8 @@
 # node 패키지 브라우저에서 사용하기 (with Webpack 4)
 
 웹팩을 사용해서, `fs`, `path`와 같은 NodeJS Built-In 모듈을 사용하는 패키지를 브라우저에서 동작하도록 땜질식(?)으로 번들링해본 후기입니다.  
+간단한 결론만 원하신다면 [Summary](#summary) 를 참고하세요.
+
 
 ## 이유
 
@@ -137,4 +139,4 @@ typescript-eslint 에서는 설정에 따라 tsconfig.json 파일의 경로를 �
 
 ## Summary
 
-`fs`, `path` 와 같은 NodeJS 모듈을 사용하는 패키지를 웹팩으로 번들해야만 한다면 [null-loader](), [NormalModuleReplacementPlugin](https://webpack.js.org/plugins/normal-module-replacement-plugin/) 를 활용해 보세요. 
+`fs`, `path` 와 같은 NodeJS 모듈을 사용하는 패키지를 웹팩으로 번들하는 경우, 런타임에 필요없는 모듈은 [null-loader](https://webpack.js.org/loaders/null-loader/), 런타임에도 필요한 모듈은 [NormalModuleReplacementPlugin](https://webpack.js.org/plugins/normal-module-replacement-plugin/) 를 활용해 보세요. 
