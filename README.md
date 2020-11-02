@@ -1,6 +1,6 @@
 # dev-blog
 
-- [Cheat Sheet](./cheatsheet.md)
+- [Cheat Sheet](./https://github.com/yeonjuan/cheatsheet/blob/main/README.md)
 
 ## Posts
 
