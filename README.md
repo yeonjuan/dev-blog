@@ -22,6 +22,9 @@
 ## Study
 * [JavaScript](./Study/JavaScript/README.md)
 * [CSS](./Study/CSS/README.md)
-* [Browser](./Study/Browser/README.md)
 * [Algorithm](./Study/Algorithm/README.md)
 * [프로그래머스](./Study/ProblemSolving/Programmers/README.md)
+
+### Browser
+
+- [Critical Rendering Path](./Study/Browser/critical-rendering-path.md)
