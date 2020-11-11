@@ -28,3 +28,4 @@
 ### Browser
 
 - [Critical Rendering Path](./Study/Browser/critical-rendering-path.md)
+- [\<script\>, \<script async\>, \<script defer\>](./Study/Browser/script-async-defer.md)

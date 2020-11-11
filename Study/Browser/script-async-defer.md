@@ -55,3 +55,5 @@
 `<script>`에 `defer` 속성을 사용하면 HTML 파싱을 막지 않고 스크립트를 로딩합니다.
 
 HTML 파싱이 끝난 후, script 선언 순서대로 스크립트를 실행시킵니다.
+
+`defer` 스크립트는 다 실행될때 까지 `DOMContentLoaded` 이벤트 발생을 막습니다.
