@@ -4,7 +4,7 @@ CRP (Critical Rendering Path): 주요 렌더링 경로
 
 브라우저가 리소스 (HTML, CSS, JS)를 전달 받은뒤 픽셀로 변환하여 렌더링하기 위한 처리과정
 
-<img src="./assets/crp.png" width="500">
+![CRP](./assets/crp.png)
 
 1. [DOM, CSSOM 생성](#1-dom-cssom-생성)
 2. [렌더 트리 생성](#2-렌더-트리-생성)
