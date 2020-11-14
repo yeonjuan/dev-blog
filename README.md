@@ -20,12 +20,15 @@
 * [node 패키지 브라우저에서 사용하기 (with Webpack 4)](./JavaScript/node-module-on-browser.md)
 
 ## Study
-* [JavaScript](./Study/JavaScript/README.md)
 * [CSS](./Study/CSS/README.md)
 * [Algorithm](./Study/Algorithm/README.md)
 * [프로그래머스](./Study/ProblemSolving/Programmers/README.md)
 
+### JavaScript
+- [데이터 타입](./Study/JavaScript/data-types.md)
+  - [undefined](./Study/JavaScript/undefined.md)
+
 ### Browser
 
-- [Critical Rendering Path](./Study/Browser/critical-rendering-path.md)
+- [주요 렌더링 경로 (CRP: Critical Rendering Path)](./Study/Browser/critical-rendering-path.md)
 - [\<script\>, \<script async\>, \<script defer\>](./Study/Browser/script-async-defer.md)
