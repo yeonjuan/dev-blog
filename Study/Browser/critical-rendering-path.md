@@ -31,7 +31,7 @@ CRP (Critical Rendering Path): 주요 렌더링 경로
     - 블락에 상관없이 브라우저는 모든 CSS를 다운로드함
   
   * JavaScript
-    - JavaScript 실행은 CSSOM 의 생성을 차단함
+    - JavaScript 실행은 CSSOM 에 의해 Block 됨
     - `<script>` 태그의 JavaScript 는 비동기(async, defer) 선언이 없을 경우, DOM 생성을 차단함 (inline, external 구분 없음)
 
 
