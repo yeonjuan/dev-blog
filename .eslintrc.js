@@ -16,7 +16,7 @@ module.exports = {
         "@html-eslint/no-multiple-h1": "error",
         "@html-eslint/require-img-alt": "error",
         "@html-eslint/no-skip-heading-levels": "error",
-        "@html-eslint/indent": "error",
+        "@html-eslint/indent": ["error", 2],
         "@html-eslint/element-newline": "error",
         "@html-eslint/no-extra-spacing-attrs": "error",
         "@html-eslint/quotes": "error",
