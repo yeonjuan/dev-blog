@@ -8,7 +8,8 @@
   },
   "scripts": {
     "lint": "eslint docs",
-    "fix": "eslint --fix docs"
+    "fix": "eslint --fix docs",
+    "build": "node ./tools/build-site"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,9 @@
   "devDependencies": {
     "@html-eslint/eslint-plugin": "^0.6.5",
     "@html-eslint/parser": "^0.6.0",
-    "eslint": "^7.14.0"
+    "eslint": "^7.14.0",
+    "glob": "^7.1.6",
+    "markdown-it": "^12.0.4",
+    "mkdirp": "^1.0.4"
   }
 }
