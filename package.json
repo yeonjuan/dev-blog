@@ -9,7 +9,11 @@
   "scripts": {
     "lint": "eslint docs",
     "fix": "eslint --fix docs",
-    "build": "node ./tools/build-site"
+    "develop": "gatsby develop",
+    "start": "gatsby develop",
+    "build": "gatsby build",
+    "serve": "gatsby serve",
+    "clean": "gatsby clean"
   },
   "repository": {
     "type": "git",
@@ -25,8 +29,12 @@
     "@html-eslint/eslint-plugin": "^0.6.5",
     "@html-eslint/parser": "^0.6.0",
     "eslint": "^7.14.0",
-    "glob": "^7.1.6",
-    "markdown-it": "^12.0.4",
-    "mkdirp": "^1.0.4"
+    "@deckdeckgo/highlight-code": "^2.5.0",
+    "gatsby": "^2.32.8",
+    "gatsby-remark-highlight-code": "^2.2.0",
+    "gatsby-source-filesystem": "^2.11.1",
+    "gatsby-transformer-remark": "^2.16.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
   }
 }
