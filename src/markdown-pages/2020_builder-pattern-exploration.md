@@ -1,5 +1,5 @@
 ---
-slug: "/design-pattern/builder-pattern-exploration"
+slug: "/2020/builder-pattern-exploration"
 date: "2019-05-04"
 title: "빌더 패턴 탐구"
 ---

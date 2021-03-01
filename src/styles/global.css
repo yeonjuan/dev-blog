@@ -989,7 +989,7 @@
 		min-width: 200px;
 		/* max-width: 980px; */
     /* margin: 0 auto; */
-    margin-left: 15em;
+    margin-left: 16em;
     padding: 45px;
     border: 1px solid #a7d7f9;
     border-width: 0px 0px 0px 1px;
@@ -1006,13 +1006,20 @@
   font-size: inherit;
   position: absolute;
   top: 0;
-  width: 15em;
+  width: 16em;
   padding-left: 20px;
   left: 0;
 }
 
+.side-bar ul {
+  text-align: left;
+  list-style-type: none;
+  padding-left: 1em;
+  padding-right: 0px;
+}
+
 .side-bar li {
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .side-title {

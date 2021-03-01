@@ -21,32 +21,28 @@ export default function Sidebar () {
     <div className="side-bar">
       <h1>Dev Blog</h1>
       <nav>
-        <h3 className="side-title">
-        <Link to={data.site.siteMetadata.sideBar[0].pages[0].link}>
-        {data.site.siteMetadata.sideBar[0].title}
-        </Link></h3>
-        <ul>
-            <li>
-                <Link to={data.site.siteMetadata.sideBar[0].pages[0].link}>
-                {data.site.siteMetadata.sideBar[0].pages[0].name}
-                </Link>
-            </li>
-        </ul>
-      </nav>
-      <nav>
-        <ul>
-          <li>
-            {data.site.siteMetadata.sideBar[0].title}
-          </li>
-          <li> test 1</li>
-          <ul>
-            <li> test 1</li>
-            <ul>
-              <li>test2</li>
-            </ul>
-          </ul>
-          <li> test 1</li>
-        </ul>
+        {
+          data.site.siteMetadata.sideBar.map(({title, pages}) => {
+            return (
+              <React.Fragment key={title}>
+                <h3 className="side-title">
+                  {title}
+                </h3>
+                <ul>
+                  {
+                    pages.map(({name, link}) => (
+                      <li key={name}>
+                        <Link to={link}>
+                          {name}
+                        </Link>
+                      </li>
+                    ))
+                  }
+                </ul>
+              </React.Fragment>
+            )
+          })
+        }
       </nav>
     </div>
   );
