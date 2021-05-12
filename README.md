@@ -1,6 +1,8 @@
 # dev-blog
 
-- [Cheat Sheet](https://github.com/yeonjuan/cheatsheet/blob/main/README.md)
+## Projects
+
+- [HTML ESLint](https://github.com/yeonjuan/html-eslint): ESLint plugin for HTML. 
 
 ## Posts
 
@@ -35,3 +37,7 @@
 
 - [주요 렌더링 경로 (CRP: Critical Rendering Path)](./Study/Browser/critical-rendering-path.md)
 - [\<script\>, \<script async\>, \<script defer\>](./Study/Browser/script-async-defer.md)
+
+### ETC
+
+- [Cheat Sheet](https://github.com/yeonjuan/cheatsheet/blob/main/README.md)
