@@ -1,46 +1,139 @@
-# Cheat Sheet
+# Cheatsheet
 
-* [Git](#Git)
-  * [Fork한 레포지토리로 동기화](#Fork한-레포지토리로-동기화)
+## Table of Contents
+  1. [node](#node)
+  1. [git](#git)
+  1. [mysql](#mysql)
+  1. [kubernetes](#kubernetes)
+  1. [docker](#docker)
+  1. [argo](#argo)
 
-* [Kubernetes](#Kubernetes)
-  * [시크릿 파일 마운트](#시크릿-파일-마운트)
-  * [SSL 인증서 마운트](#SSL-인증서-마운트)
+# node
+- [DNS lookup](#dns-lookup)
+- [Remove directory](#remove-directory)
 
-* [Docker](#Docker)
-  * [로컬 이미지, 컨테이너 제거](#로컬-이미지-컨테이너-제거)
+### DNS lookup
 
-## Git
+Simple dns lookup.
 
-#### Fork한 레포지토리로 동기화
+```js
+const dns = require('dns');
+
+dns.lookup('google.com', (err, address, family) => {
+  // DNS server IP
+  console.log(address); // 172.217.25.110
+
+  // IPv4 or IPv6
+  console.log(address, family); // 4
+});
+```
+
+### Remove directory
+
+Removes the entire directory recursively.
+
+```js
+const fs = require('fs');
+fs.rmdirSync('directory/path', { recursive: true })
+```
+# git
+- [Delete remote tag](#delete-remote-tag)
+- [Sync forked repo](#sync-forked-repo)
+
+### Delete remote tag
+
+Delete remote tag.
 
 ```bash
-$ git remote add upstream {Fork한 레포}
+$ git push --delete origin {tagname}
+```
+
+### Sync forked repo
+
+Sync forked repo.
+
+```bash
+$ git remote add upstream {upstream github.git}
 $ git fetch upstream
 $ git checkout master
 $ git merge upstream/master
 $ git push origin master
 ```
+# mysql
+- [Add column](#add-column)
+- [Connecting to the MySQL](#connecting-to-the-mysql)
 
-## Kubernetes
+### Add column
 
-#### 시크릿 파일 마운트
+Adding a new column in the existing table.
 
-```bash
-$ kubectl create secret generic {시크릿 이름} --from-file={파일 경로}
+```sql
+ALTER TABLE table_name ADD COLUMN column_name VARCHAR(200) NOT NULL;
 ```
 
-#### SSL 인증서 마운트
+### Connecting to the MySQL
+
+Connecting to the MySQL using command.
+
+```console
+$ mysql -h 123.456.7.89 -P 3306 -u root -p
+```
+# kubernetes
+- [Mount secret file](#mount-secret-file)
+- [Mount SSL](#mount-ssl)
+
+### Mount secret file
 
 ```bash
-$ kubectl create secret tls {시크릿 이름} --key {key 파일 경로} --cert {cert 파일 경로}
+$ kubectl create secret generic {secret name} --from-file={file path}
 ```
 
-## Docker
-
-#### 로컬 이미지, 컨테이너 제거
+### Mount SSL
 
 ```bash
-$ docker rm $(docker ps -q -f 'status=exited')
-$ docker rmi $(docker images -q -f "dangling=true")
+$ kubectl create secret tls {secret name} --key {key file path} --cert {cert file path}
+```
+# docker
+- [Build image](#build-image)
+- [Push image](#push-image)
+
+### Build image
+
+Build a docker image with a specified docker file.
+
+```bash
+$ docker build -t {image name} -f {docker file path} {path}
+```
+
+### Push image
+
+Push docker image.
+
+```bash
+$ docker push {docker image name}
+```
+# argo
+- [Create cron workflow](#create-cron-workflow)
+- [Submit workflow](#submit-workflow)
+
+### Create cron workflow
+
+Create cron workflow with argo cli.
+
+```bash
+$ argo cron create {cron-workflow.yaml}
+```
+
+### Submit workflow
+
+Submit workflow with argo cli.
+
+```bash
+$ argo submit {workflow.yaml}
+```
+
+### Access the argo workflow ui
+
+```bash
+$ kubectl -n argo port-forward svc/argo-server 2746:2746
 ```

@@ -1,5 +1,8 @@
 # dev-blog
 
+## YeonJuAn 👋
+- 💼 Kakao FE플랫폼 팀 (2019.01 ~)
+
 ## Projects
 
 - [HTML ESLint](https://github.com/yeonjuan/html-eslint): ESLint plugin for HTML. 
@@ -23,15 +26,17 @@
 
 ### 2021
 
+* [주니어 FE 개발자 오픈소스 성장기 - kakao tech](https://tech.kakao.com/2021/06/16/frontend-growth-10/)
+
 ## Code Snippet
 
 - [debounce](./CodeSnippet/debounce.md)
 - [throttle](./CodeSnippet/throttle.md)
 
-### Course
+## Course
 
 * [FrontEnd-Masters: Advanced React Patterns](./Course/FrontEndMasters/advanced-react-patterns.md)
 
-### ETC
+## ETC
 
 - [Cheat Sheet](https://github.com/yeonjuan/cheatsheet/blob/main/README.md)
