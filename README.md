@@ -23,6 +23,10 @@
 
 ### 2021
 
+## Code Snippet
+
+- [debounce](./CodeSnippet/debounce.md)
+- [throttle](./CodeSnippet/throttle.md)
 
 ### Course
 
