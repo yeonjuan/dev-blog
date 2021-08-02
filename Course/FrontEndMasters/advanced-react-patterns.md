@@ -98,6 +98,35 @@ Context API 를 이용하는 방법
 
 ## Render Props
 
+자식 컴포넌트로 render 함수를 사용할 수 있도록 한다.
+render 함수의 인자로는 사용자가 필요한 상태값과 상태를 변경할 수 있는 액션 함수를 제공한다.
+
+- Usage
+
+    ```jsx
+    const Usage = (props) => {
+        return <Toggle onToggle={props.onToggle}>
+          {
+            ({on, toggle}) => (
+              <div>
+                { on ? 'This button is on' : 'This button is off'}
+                <Switch on={on} onClick={toggle}>
+              </div>
+            )
+          }
+        </Toggle>
+    }
+    ```
+
+- Implementation
+
+    ```jsx
+    // TODO
+    ```
+
+
+
+
 ## Controlling State
 
 ## Provider Pattern
