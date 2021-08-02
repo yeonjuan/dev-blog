@@ -1,7 +1,7 @@
 # dev-blog
 
 ## YeonJuAn 👋
-- 💼 Kakao FE플랫폼 팀 (2019.01 ~)
+- 💼 Kakao FE플랫폼 (2019.01 ~)
 
 ## Project
 
@@ -37,6 +37,7 @@
 ## Course
 
 * [FrontEnd-Masters: Advanced React Patterns](./Course/FrontEndMasters/advanced-react-patterns.md)
+* [FrontEnd-Masters: Functional JavaScript First Steps](./Course/FrontEndMasters/functional-javascript-first-steps.md)
 
 ## ETC
 
