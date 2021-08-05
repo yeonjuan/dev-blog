@@ -40,6 +40,10 @@
 * [FrontEnd-Masters: Functional JavaScript First Steps](./Course/FrontEndMasters/functional-javascript-first-steps.md)
 * [FrontEnd-Masters: Hardcore Functional Programming](./Course/FrontEndMasters/hardcore-functional-programming-in-javascript.md)
 
+## Book
+
+* [Composing Software](./Book/composing-software.md)
+
 ## ETC
 
 - [Cheat Sheet](https://github.com/yeonjuan/cheatsheet/blob/main/README.md)
