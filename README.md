@@ -33,6 +33,7 @@
 
 - [debounce](./CodeSnippet/debounce.md)
 - [throttle](./CodeSnippet/throttle.md)
+- [useOnClickOutside - react](./CodeSnippet/useOnClickOutside.md)
 
 ## Course
 
