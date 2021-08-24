@@ -1,3 +1,17 @@
+* {
+  box-sizing: border-box;
+}
 body {
   font-family: sans-serif;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+table, th, td {
+  border: 1px solid #e0e3e6;
+  padding: 6px 13px;
+}
+tr {
+  border-top: 1px solid #c6cbd2;
 }
