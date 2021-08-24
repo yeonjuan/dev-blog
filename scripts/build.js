@@ -29,7 +29,8 @@ async function onEachFile (file) {
     const parsed = parse(file);
     const markdown = readFile(file);
     const html = await mdToHTML(markdown);
-    outputPath = join(OUTPUT, parsed.dir, `${parsed.name}.html`);
+    const name = parsed.name === 'README' ? 'index' : parsed.name;
+    outputPath = join(OUTPUT, parsed.dir, `${name}.html`);
 
     log('convert', `${file} => ${outputPath}`);
     writeFile(outputPath, html);
