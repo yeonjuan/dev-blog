@@ -75,7 +75,7 @@ function isExternalUrl (url) {
 }
 
 function convertLinkUrl (url) {
-  return url.replace('./', '/').replace(/.md$/, '.html');
+  return '/dev-blog' + (!url.startsWith('/') ? '/' : '') + url.replace('./', '/').replace(/.md$/, '.html');
 }
 
 /**
