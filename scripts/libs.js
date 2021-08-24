@@ -1,8 +1,9 @@
-import {readFileSync, existsSync, mkdirSync, rmdirSync, writeFileSync, statSync} from 'node:fs';
+import {readFileSync, existsSync, mkdirSync, rmdirSync, writeFileSync, statSync, copyFileSync} from 'node:fs';
 import {parse} from 'node:path';
 import {unified} from 'unified'
 import remarkParse from 'remark-parse'
 import remarkHtml from 'remark-html'
+import remarkHighlight from 'remark-highlight.js';
 
 const own = {}.hasOwnProperty
 
@@ -75,7 +76,8 @@ function isExternalUrl (url) {
 }
 
 function convertLinkUrl (url) {
-  return '/dev-blog' + (!url.startsWith('/') ? '/' : '') + url.replace('./', '/').replace(/.md$/, '.html');
+  if (url.startsWith('#')) return url;
+  return '/dev-blog' + url.replace('./', '/').replace(/.md$/, '.html');
 }
 
 /**
@@ -86,10 +88,10 @@ export function mdToHTML (markdown) {
   return new Promise((resolve) => {
     unified()
     .use(remarkParse)
+    .use(remarkHighlight)
     .use(remarkHtml, {
       handlers: {
         link(h, node) {
-          // console.log(node);
           return h(node, 'a', {
             href: isExternalUrl(node.url || '')
               ? node.url
@@ -175,4 +177,39 @@ export function isMarkdown(path) {
 export function isDirectory (path) {
   const stat = statSync(path);
   return stat.isDirectory();
+}
+
+/**
+ * @param {string} src 
+ * @param {string} dest 
+ */
+export function copyFile (src, dest) {
+  copyFileSync(src, dest);
+}
+
+/**
+ * @param {string} content 
+ */
+export function applyTemplate(
+  content,
+  {
+    description,
+    title
+  } = {}) {
+  return `
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    ${description ? `<meta name="description" content="${description}">` : ''}
+    ${title ? `<title>${title} - deb-blog</title>` : ''}
+    <link rel="stylesheet" href="/dev-blog/highlight/default.min.css">
+  </head>
+  <body>
+    <article>
+      ${content}
+    </article>
+  </body>
+</html>
+`
 }

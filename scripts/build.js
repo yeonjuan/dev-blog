@@ -1,6 +1,6 @@
 import nodeFs from 'node:fs'
 import {join, parse} from 'node:path';
-import {mdToHTML, readFile, mkdirIfNotExist, rmdir, writeFile, log, isMarkdown, isDirectory} from './libs.js';
+import {mdToHTML, readFile, mkdirIfNotExist, rmdir, writeFile, log, isMarkdown, isDirectory, copyFile, applyTemplate} from './libs.js';
 import glob from 'glob';
 
 const IGNORE = [
@@ -25,6 +25,8 @@ function cleanOutput () {
 async function onEachFile (file) {
   let outputPath = join(OUTPUT, file);
 
+  if (file)
+
   if (isMarkdown(file)) {
     const parsed = parse(file);
     const markdown = readFile(file);
@@ -33,16 +35,14 @@ async function onEachFile (file) {
     outputPath = join(OUTPUT, parsed.dir, `${name}.html`);
 
     log('convert', `${file} => ${outputPath}`);
-    writeFile(outputPath, html);
+    writeFile(outputPath, applyTemplate(html));
   } else if (isDirectory(file)) {
 
     log('create', outputPath);
     mkdirIfNotExist(outputPath);
   } else if (!isDirectory(file)) {
-    const content = readFile(file);
-
     log('copy', `${file} => ${outputPath}`);
-    writeFile(outputPath, content);
+    copyFile(file, outputPath);
   }
 }
 
