@@ -1,13 +1,20 @@
 
+<!DOCTYPE html>
 <html lang="ko">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    
+    <title>dev-blog</title>
+    <link rel="stylesheet" href="/dev-blog/styles/global.css">
     <link rel="stylesheet" href="/dev-blog/highlight/default.min.css">
   </head>
   <body>
+    <header>
+      <nav>
+        <a href="/dev-blog">dev-blog</a>
+      </nav>
+    </header>
     <article>
       <h1>node 패키지 브라우저에서 사용하기 (with Webpack 4)</h1>
 <p>웹팩을 사용해서, <code>fs</code>, <code>path</code>와 같은 NodeJS Built-In 모듈을 사용하는 패키지를 브라우저에서 동작하도록 땜질식(?)으로 번들링해본 후기입니다.<br>
