@@ -1,3 +1,8 @@
+<!--
+title: dev-blog
+description: JavaScript development blogs
+-->
+
 # dev-blog
 
 ## YeonJuAn 👋
@@ -37,9 +42,11 @@
 
 ## Course
 
-* [FrontEnd-Masters: Advanced React Patterns](./Course/FrontEndMasters/advanced-react-patterns.md)
-* [FrontEnd-Masters: Functional JavaScript First Steps](./Course/FrontEndMasters/functional-javascript-first-steps.md)
-* [FrontEnd-Masters: Hardcore Functional Programming](./Course/FrontEndMasters/hardcore-functional-programming-in-javascript.md)
+- [FrontEnd Masters](https://frontendmasters.com/)
+    - [Design Systems with React and Storybook](./Course/FrontEndMasters/design-systems-with-react-and-storybook)
+    - [Advanced React Patterns](./Course/FrontEndMasters/advanced-react-patterns.md)
+    - [Functional JavaScript First Steps](./Course/FrontEndMasters/functional-javascript-first-steps.md)
+    - [Hardcore Functional Programming](./Course/FrontEndMasters/hardcore-functional-programming-in-javascript.md)
 
 ## Book
 
