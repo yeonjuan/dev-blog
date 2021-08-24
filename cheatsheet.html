@@ -12,17 +12,17 @@
       <h1>Cheatsheet</h1>
 <h2>Table of Contents</h2>
 <ol>
-<li><a href="/dev-blog/#node">node</a></li>
-<li><a href="/dev-blog/#git">git</a></li>
-<li><a href="/dev-blog/#mysql">mysql</a></li>
-<li><a href="/dev-blog/#kubernetes">kubernetes</a></li>
-<li><a href="/dev-blog/#docker">docker</a></li>
-<li><a href="/dev-blog/#argo">argo</a></li>
+<li><a href="#node">node</a></li>
+<li><a href="#git">git</a></li>
+<li><a href="#mysql">mysql</a></li>
+<li><a href="#kubernetes">kubernetes</a></li>
+<li><a href="#docker">docker</a></li>
+<li><a href="#argo">argo</a></li>
 </ol>
 <h1>node</h1>
 <ul>
-<li><a href="/dev-blog/#dns-lookup">DNS lookup</a></li>
-<li><a href="/dev-blog/#remove-directory">Remove directory</a></li>
+<li><a href="#dns-lookup">DNS lookup</a></li>
+<li><a href="#remove-directory">Remove directory</a></li>
 </ul>
 <h3>DNS lookup</h3>
 <p>Simple dns lookup.</p>
@@ -41,8 +41,8 @@ dns.<span class="hljs-title hljs-function">lookup</span>(<span class="hljs-strin
 fs.<span class="hljs-title hljs-function">rmdirSync</span>(<span class="hljs-string">'directory/path'</span>, { <span class="hljs-attr">recursive</span>: <span class="hljs-literal">true</span> })</code></pre>
 <h1>git</h1>
 <ul>
-<li><a href="/dev-blog/#delete-remote-tag">Delete remote tag</a></li>
-<li><a href="/dev-blog/#sync-forked-repo">Sync forked repo</a></li>
+<li><a href="#delete-remote-tag">Delete remote tag</a></li>
+<li><a href="#sync-forked-repo">Sync forked repo</a></li>
 </ul>
 <h3>Delete remote tag</h3>
 <p>Delete remote tag.</p>
@@ -56,8 +56,8 @@ $ git merge upstream/master
 $ git push origin master</code></pre>
 <h1>mysql</h1>
 <ul>
-<li><a href="/dev-blog/#add-column">Add column</a></li>
-<li><a href="/dev-blog/#connecting-to-the-mysql">Connecting to the MySQL</a></li>
+<li><a href="#add-column">Add column</a></li>
+<li><a href="#connecting-to-the-mysql">Connecting to the MySQL</a></li>
 </ul>
 <h3>Add column</h3>
 <p>Adding a new column in the existing table.</p>
@@ -67,8 +67,8 @@ $ git push origin master</code></pre>
 <pre><code class="hljs language-console"><span class="hljs-meta">$ </span><span class="bash">mysql -h 123.456.7.89 -P 3306 -u root -p</span></code></pre>
 <h1>kubernetes</h1>
 <ul>
-<li><a href="/dev-blog/#mount-secret-file">Mount secret file</a></li>
-<li><a href="/dev-blog/#mount-ssl">Mount SSL</a></li>
+<li><a href="#mount-secret-file">Mount secret file</a></li>
+<li><a href="#mount-ssl">Mount SSL</a></li>
 </ul>
 <h3>Mount secret file</h3>
 <pre><code class="hljs language-bash">$ kubectl create secret generic {secret name} --from-file={file path}</code></pre>
@@ -76,8 +76,8 @@ $ git push origin master</code></pre>
 <pre><code class="hljs language-bash">$ kubectl create secret tls {secret name} --key {key file path} --cert {cert file path}</code></pre>
 <h1>docker</h1>
 <ul>
-<li><a href="/dev-blog/#build-image">Build image</a></li>
-<li><a href="/dev-blog/#push-image">Push image</a></li>
+<li><a href="#build-image">Build image</a></li>
+<li><a href="#push-image">Push image</a></li>
 </ul>
 <h3>Build image</h3>
 <p>Build a docker image with a specified docker file.</p>
@@ -87,8 +87,8 @@ $ git push origin master</code></pre>
 <pre><code class="hljs language-bash">$ docker push {docker image name}</code></pre>
 <h1>argo</h1>
 <ul>
-<li><a href="/dev-blog/#create-cron-workflow">Create cron workflow</a></li>
-<li><a href="/dev-blog/#submit-workflow">Submit workflow</a></li>
+<li><a href="#create-cron-workflow">Create cron workflow</a></li>
+<li><a href="#submit-workflow">Submit workflow</a></li>
 </ul>
 <h3>Create cron workflow</h3>
 <p>Create cron workflow with argo cli.</p>
