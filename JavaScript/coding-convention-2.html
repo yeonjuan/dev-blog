@@ -1,12 +1,12 @@
 <h1>코딩 컨벤션 업무를 하며 알게 된 것들 - 2</h1>
-<p>이전 글에 이어서 Javascript 코딩 컨벤션 관련 업무를 하며 <a href="https://eslint.org/"></a> 규칙을 통해 알게 된 점을 정리해 보았습니다.</p>
+<p>이전 글에 이어서 Javascript 코딩 컨벤션 관련 업무를 하며 <a href="https://eslint.org/">ESLint</a> 규칙을 통해 알게 된 점을 정리해 보았습니다.</p>
 <ul>
 <li><strong>1. no-prototype-builtins</strong></li>
 <li><strong>2. no-return-await</strong></li>
 <li><strong>3. comma-dangle</strong></li>
 </ul>
 <h2>1. no-prototype-builtins</h2>
-<p><a href="https://eslint.org/docs/rules/no-prototype-builtins"></a></p>
+<p><a href="https://eslint.org/docs/rules/no-prototype-builtins">ESLint: no-prototype-builtins</a></p>
 <p>이 규칙은 Object.prototype의 builtin으로 제공되는 메서드를 객체에서 직접 호출하지 않도록 하는 규칙입니다.</p>
 <p>Object.prototype의 builtin 메서드는 <code>hasOwnProperty</code>, <code>isPrototypeOf</code> 등이 있습니다. 이 메서드를 호출하는 방법은 다음과 같은 방법이 있습니다.</p>
 <ul>
@@ -55,7 +55,7 @@ Object.prototype.hasOwnProperty.call(obj, 'name'); // true
 </li>
 </ol>
 <h2>2. no-return-await</h2>
-<p><a href="https://eslint.org/docs/rules/no-return-await"></a></p>
+<p><a href="https://eslint.org/docs/rules/no-return-await">ESLint: no-return-await</a></p>
 <p>이 규칙은 <code>async function</code> 내부에서 <code>return await</code>을 하지 않도록 하는 규칙입니다. 예를 들어 다음과 같은 경우 입니다.</p>
 <pre><code class="language-js">async function getSomePromise() {
   /* ... */
@@ -109,8 +109,8 @@ async function asyncCall() {
 </code></pre>
 <p>바로 위와 같이 <code>try catch</code>로 return await을 감쌀 때입니다. await 뒤에 온 promise가 reject될 경우 Error를 throw 합니다. 그리고 그 에러 처리를 try catch를 통해 async 함수 내부에서 처리할 수 있습니다. 때문에 no-return-await 규칙을 사용하더라도 try catch로 감싼 경우는 통과하게 됩니다.</p>
 <h2>3. comma-dangle</h2>
-<p><a href="https://eslint.org/docs/rules/comma-dangle"></a></p>
-<p>이 규칙은 <a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Trailing_commas"></a>를 사용하도록 설정할 수 있는 규칙입니다. trailing-comma는 object나 array의 값, function의 매개변수 등을 나타낼 때 마지막에 콤마(,)를 하나 더 추가하는 규칙입니다.</p>
+<p><a href="https://eslint.org/docs/rules/comma-dangle">ESLint: comma-dangle</a></p>
+<p>이 규칙은 <a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Trailing_commas">trailing-comma</a>를 사용하도록 설정할 수 있는 규칙입니다. trailing-comma는 object나 array의 값, function의 매개변수 등을 나타낼 때 마지막에 콤마(,)를 하나 더 추가하는 규칙입니다.</p>
 <p>예를 들어 다음과 같이 마지막 프로퍼티나 매개변수 뒤에 콤마(,)를 하나 더 추가하는 것을 말합니다.</p>
 <pre><code class="language-js">const obj = {
   foo: 'foo',

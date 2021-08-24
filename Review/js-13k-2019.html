@@ -1,15 +1,15 @@
 <h1>Js13kGames 2019 참가 후기</h1>
 <ul>
-<li><a href="#Js13kGames"></a></li>
-<li><a href="#왜"></a></li>
-<li><a href="#아이디어"></a></li>
-<li><a href="#이미지"></a></li>
-<li><a href="#사운드"></a></li>
-<li><a href="#폰트"></a></li>
-<li><a href="#결과-및-느낀-점"></a></li>
+<li><a href="#Js13kGames">Js13kGames?</a></li>
+<li><a href="#왜">왜?</a></li>
+<li><a href="#아이디어">아이디어</a></li>
+<li><a href="#이미지">이미지</a></li>
+<li><a href="#사운드">사운드</a></li>
+<li><a href="#폰트">폰트</a></li>
+<li><a href="#결과-및-느낀-점">결과 및 느낀점</a></li>
 </ul>
 <h2>Js13kGames?</h2>
-<p><a href="http://js13kgames.com/"></a></p>
+<p><a href="http://js13kgames.com/">Js13kGames</a></p>
 <p>Js13kGames는 2012년부터 매년 1회씩 개최된 HTML5 Game 개발자를 위한 대회입니다.
 대회의 조건은 파일 크기를 13kb 이내로 제출해야 한다는 것과, 브라우저 상에서 동작해야 한다는 조건이 있습니다.</p>
 <p>대회가 시작하면 게임 대회의 테마가 공개됩니다.
@@ -40,7 +40,7 @@
 <p>적당한 효과음을 찾았지만 13kb 이내에 효과음을 그대로 게임에 넣기에는 파일 크기가 너무 컸습니다. 때문에 사이트에서 간편하게 음악파일을  줄일 수 있는 audio-compressor와 같은 사이트를 이용해서 음악 파일을 줄였습니다.</p>
 <h3>배경음악</h3>
 <p>배경음 소스는 많이 찾을 수 있었지만 배경음은 아무리 줄여도 파일크기가 너무 컸습니다. 때문에 다른 해결책을 찾아야 했습니다.</p>
-<p><a href="https://github.com/kevincennis/TinyMusic"></a> 이라는 라이브러리를 이용하면 WebAudio를 이용하여 소리를 만들어 낼 수 있습니다. 이 라이브러리는 문자열 배열 형태의 음악 코드를 web audio로 재생시켜 줍니다.</p>
+<p><a href="https://github.com/kevincennis/TinyMusic">TinyMusic</a> 이라는 라이브러리를 이용하면 WebAudio를 이용하여 소리를 만들어 낼 수 있습니다. 이 라이브러리는 문자열 배열 형태의 음악 코드를 web audio로 재생시켜 줍니다.</p>
 <h2>게임 배경음악 악보</h2>
 <p>아무 음악이나 사용하면 저작권 문제도 있을 것 같아 음악을 전공하는 친구에게 부탁하여 곡을 받고, 이를 TinyMusic으로 재생시키기 위해 아래와 같이 변환했습니다.</p>
 <pre><code class="language-js">import TinyMusic from "./TinyMusic";
@@ -66,7 +66,7 @@ bgMusic.play(); // 재생 시작
 </code></pre>
 <h2>폰트</h2>
 <p>처음에는 웹 브라우저의 기본 폰트를 사용하려 했으나, 디자인과도 맞지 않고. 모든 사용자에게 동일한 폰트를 보여주는 것이 좋겠다고 생각했습니다.</p>
-<p>하지만 폰트 파일은 크기가 크기 때문에 이 역시 <a href="https://github.com/PaulBGD/PixelFont"></a>라는 라이브러리를 이용해 해결했습니다.</p>
+<p>하지만 폰트 파일은 크기가 크기 때문에 이 역시 <a href="https://github.com/PaulBGD/PixelFont">Pixel Font</a>라는 라이브러리를 이용해 해결했습니다.</p>
 <p>이 라이브러리는 내부적으로 모든 알파벳의 모양을 boolean의 2차원 배열로 가지고 있고, 이를 Canvas에 사각형으로 그리도록 도와줍니다.</p>
 <pre><code class="language-js">var A = [
     [false, true, false],
@@ -80,7 +80,7 @@ bgMusic.play(); // 재생 시작
 <h2>결과 및 느낀 점</h2>
 <h3>결과</h3>
 <p><img src="./assets/js13k2019/result.png" alt="result"></p>
-<p>상당히 잘 만든 게임들이 많이 보여서 아마 순위권에는 들지 못할 것 같다고 생각했는데 운이 좋게 <em>7등</em>을 하게 되었습니다!! 이후 <a href="https://github.blog/2019-10-08-js13k-2019-highlights/#7th-back-attacker"></a>에도 소개되는 경험을 하게 되었습니다.</p>
+<p>상당히 잘 만든 게임들이 많이 보여서 아마 순위권에는 들지 못할 것 같다고 생각했는데 운이 좋게 <em>7등</em>을 하게 되었습니다!! 이후 <a href="https://github.blog/2019-10-08-js13k-2019-highlights/#7th-back-attacker">Github 블로그</a>에도 소개되는 경험을 하게 되었습니다.</p>
 <p>게임에 대해 이곳저곳에 평가를 구했습니다. 좋은 평가로는 <code>참신한 아이디어</code>가 있었으며, 발전을 주는 피드백으로는 <code>1 종류밖에 없는 몬스터 타입</code> , <code>잘못 설계된 듯한 스테이지</code>, <code>반복적인 게임 배경</code> 등이 있었습니다.</p>
 <h3>느낀 점</h3>
 <h4>코드 퀄리티</h4>
@@ -103,4 +103,4 @@ this.head.offsetX = 5;
 이런 부분을 미리미리 잘 처리해 두었다면 더 적은 파일 크기로 완성할 수 있었을 것 같고  그럼 더 재밌는 스테이지(보스전?)를 넣을 수 있었을 것 같아 아쉽습니다.</p>
 <h2>끝</h2>
 <p>마지막으로 게임이 궁금하신 분들은 아래 링크에서 플레이할 수 있으며, 모바일은 지원하지 않고 Chorme 과 FireFox에서만 동작합니다.</p>
-<p><a href="https://js13kgames.com/entries/back-attacker"></a></p>
+<p><a href="https://js13kgames.com/entries/back-attacker">Play Back Attacker</a></p>

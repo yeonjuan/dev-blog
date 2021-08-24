@@ -7,9 +7,9 @@
 <p>2개월 전 즈음, 회사 내 팀원들과 <code>null</code> vs <code>undefined</code>로 이야기를 나눈 적이 있었습니다. 이야기를 나누기 전에는 당연하듯 <code>null</code> 을 사용했었고 <code>undefined</code>를 사용해야겠다는 생각 자체를 안 했었습니다.</p>
 <p>그런데 최근 들어 <code>undefined</code>를 사용하는 코드를 종종 보게 되었고 <code>null</code> vs <code>undefined</code>에 대한 고민이 다시 생기게 되어 간략히 정리해 보았습니다.</p>
 <ul>
-<li><a href="#오픈소스-null-vs-undefined"></a></li>
-<li><a href="#null-선호"></a></li>
-<li><a href="#undefined-선호"></a></li>
+<li><a href="#오픈소스-null-vs-undefined">오픈소스 null vs undefined</a></li>
+<li><a href="#null-선호">null 선호</a></li>
+<li><a href="#undefined-선호">undefined 선호</a></li>
 </ul>
 <h2>오픈소스 null vs undefined</h2>
 <p>먼저 오픈소스들에서는 <code>null</code> 과 <code>undefined</code> 중 어떤 값을 선호하는지 찾아보았습니다. 모든 오픈소스를 둘러볼 수는 없기에 관심있는 프로젝트만 살펴보았습니다.</p>
@@ -52,7 +52,7 @@
 </table>
 <p>찾아본 프로젝트 수가 적어서 큰 의미는 없지만 조사한 프로젝트에서는, JavaScript는 <code>null</code>, TypeScript는 <code>undefined</code> 를 사용하는 경우가 보입니다. 여기서 조금 놀랐는데, 당연히 모두 <code>null</code>을 사용하고 있을 줄 알았습니다.  근거 없음 :)</p>
 <ul>
-<li><a href="https://github.com/eslint/eslint/blob/master/lib/rules/utils/ast-utils.js#L87-L99"></a></li>
+<li><a href="https://github.com/eslint/eslint/blob/master/lib/rules/utils/ast-utils.js#L87-L99">ESLint - example</a></li>
 </ul>
 <pre><code class="language-js">function getUpperFunction(node) {
     for (let currentNode = node; currentNode; currentNode = currentNode.parent) {
@@ -64,7 +64,7 @@
 }
 </code></pre>
 <ul>
-<li><a href="https://github.com/microsoft/TypeScript/blob/7b942b4fa875f2877a90d201cf146e6196b0c07b/src/compiler/watchUtilities.ts#L42-L46"></a></li>
+<li><a href="https://github.com/microsoft/TypeScript/blob/7b942b4fa875f2877a90d201cf146e6196b0c07b/src/compiler/watchUtilities.ts#L42-L46">TypeScript - example</a></li>
 </ul>
 <pre><code class="language-ts"> export function createCachedDirectoryStructureHost(host: DirectoryStructureHost, /* ...*/): CachedDirectoryStructureHost | undefined {
         if (!host.getDirectories || !host.readDirectory) {
@@ -119,7 +119,7 @@ foo();
 <p>때문에 중첩된 스코프에서 <code>undefined</code> 식별자에는 다른 값이 할당될 수 있습니다. (전역스코프에선 안됩니당)</p>
 <h1>undefined 선호</h1>
 <h2>1. Optional Chaining</h2>
-<p><a href="https://github.com/tc39/proposal-optional-chaining"></a> 은 프로퍼티 접근에서 참조가 nullish(<code>null</code> or <code>undefined</code>)일 경우에 더 이상 참조하지 않고 반환값을 <code>undefined</code>로 종결짓습니다.</p>
+<p><a href="https://github.com/tc39/proposal-optional-chaining">ECMA Propsal 4의 Optional Chaining</a> 은 프로퍼티 접근에서 참조가 nullish(<code>null</code> or <code>undefined</code>)일 경우에 더 이상 참조하지 않고 반환값을 <code>undefined</code>로 종결짓습니다.</p>
 <pre><code class="language-js">function getBaz() {
   return foo?.bar?.baz?.();
 }
@@ -131,7 +131,7 @@ foo();
 </code></pre>
 <p>반면 <code>null</code>만을 사용하게 된다면 Optional Chaining이 <code>undefined</code>를 반환하기 때문에 반환값을 <code>null</code>로 바꿔주는 처리가 필요합니다.</p>
 <blockquote>
-<p>실제로 <a href="https://github.com/typescript-eslint/typescript-eslint/pull/2156/files#diff-bcb5a3b3b1ba2154d91dbf1ebd8c54d2R56"></a>, 이 경험을 했었는데 다소 어색했습니다.</p>
+<p>실제로 <a href="https://github.com/typescript-eslint/typescript-eslint/pull/2156/files#diff-bcb5a3b3b1ba2154d91dbf1ebd8c54d2R56">typescript-eslint 에서 코드를 작성할 때</a>, 이 경험을 했었는데 다소 어색했습니다.</p>
 </blockquote>
 <h2>2. typeof</h2>
 <p><code>undefined</code>의 타입은 Undefined 이고 <code>null</code>의 타입은 Null 입니다. 그럼에도 <code>typeof</code> 연산자는 <code>null</code> 값에 대해서 "object"를 반환합니다.</p>
@@ -163,7 +163,7 @@ foo(null);  // null
 <p>알아보기 전에는 딱히 고민 없이 <code>null</code> 을 사용해야 한다고 생각했었습니다. 이는 첫 프로그래밍 언어가 C였기 때문에 당연히 그렇게 생각했던 것 같습니다.</p>
 <p>알아보면서 놀란 점은 <code>undefined</code> 사용을 권장하는 경우가 은근히 많다는 사실이었습니다.</p>
 <ul>
-<li><a href="https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines#null-and-undefined"></a></li>
-<li><a href="https://www.youtube.com/watch?v=PSGEjv3Tqo0&#x26;t=563s"></a></li>
+<li><a href="https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines#null-and-undefined">TypeScript Coding guidelines - Use undefined. Do not use null.</a></li>
+<li><a href="https://www.youtube.com/watch?v=PSGEjv3Tqo0&#x26;t=563s">Douglas Crockford - I have stopped using null</a></li>
 </ul>
 <p>개인적으로는 <code>null</code> 을 사용해야 한다는 입장에서, <code>undefined</code> 든 <code>null</code> 이든 하나의 컨벤션에 따라 일관되게만 작성하면 된다는 입장을 가지게 되었습니다.</p>

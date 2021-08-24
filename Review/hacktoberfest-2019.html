@@ -1,13 +1,13 @@
 <h1>Hacktoberfest 2019 참가 후기</h1>
 <p><img src="./assets/hacktoberfest2019/profile.png" alt="profile"></p>
 <ul>
-<li><a href="#Hacktoberfest-2019"></a></li>
-<li><a href="#기여한-프로젝트"></a></li>
-<li><a href="#기여한-방법"></a></li>
-<li><a href="#느낀-점"></a></li>
+<li><a href="#Hacktoberfest-2019">Hacktoberfest 2019</a></li>
+<li><a href="#기여한-프로젝트">기여한 프로젝트</a></li>
+<li><a href="#기여한-방법">기여한 방법</a></li>
+<li><a href="#느낀-점">느낀 점</a></li>
 </ul>
 <h2>Hacktoberfest 2019</h2>
-<p><a href="https://hacktoberfest.digitalocean.com/"></a></p>
+<p><a href="https://hacktoberfest.digitalocean.com/">Hacktoberfest</a></p>
 <p>우연히 DigitalOcean에서 주최하는 Hacktoberfest라는 행사를 알게 되었습니다. Hacktoberfest는 매년 10월(October)에 열리는 행사로 이번에 6회 차를 맞이하였습니다.</p>
 <p>오픈소스에 PR을 4번 이상하게 되면 티셔츠를 주는 행사로 Github 계정이 있다면 참여하실 수 있습니다. PR을 해야 하는 정해진 레포는 없습니다. 즉 어떤 저장소에나 PR을 해도 되지만, 이번 기회에 평소에 업무를 하며 자주 사용해본 오픈소스에 기여해봐야겠다고 생각했습니다.</p>
 <p>행사에 참여한 뒤 오픈소스에 기여한 경험을 정리해 보았습니다.</p>
@@ -15,7 +15,7 @@
 <p><img src="./assets/hacktoberfest2019/contribute-list.png" alt="기여한 프로젝트들"></p>
 <p>총 3개의 프로젝트에 7개 PR을 날렸고, 그중에 6개가 머지되었습니다. 주로 사소한 버그나, 작은 기능 추가를 하였습니다. 기여할 프로젝트로 스타가 많은 유명한 프로젝트들을 선정해도 되지만, 개인적으로 평소 잘 모르던 프로젝트에 기여하려니 지식도 없고 어떻게 시작해야 할지 감도 잘 안 왔던 것 같습니다. 그래서, 최근에 업무 중에 사용해보았거나 리서치해본 프로젝트 위주로 기여를 시도했습니다.</p>
 <h3>ESLint</h3>
-<p><a href="https://github.com/eslint/eslint"></a></p>
+<p><a href="https://github.com/eslint/eslint">ESLint 프로젝트</a></p>
 <p>이 프로젝트는 JavaScript의 린팅 툴로 개발단계에서 일관된 코드 스타일, 버그 등을 찾아내기 위해 쓰입니다.</p>
 <h4>기여한 내용</h4>
 <p>함수 매개변수 comma-dangle 옵션 적용
@@ -24,14 +24,14 @@ keyword-spacing에서 기본값이 옵션을 덮는 문제
 주로 사소한 버그를 수정했습니다. 막상 수정한 코드는 한 줄에서 두줄 정도이고 테스트 케이스를 훨씬 많이 추가했습니다. 주로 리뷰로 받은 피드백도 테스트 케이스를 더 추가해달라는 부분이었는데 다양한 옵션에서 테스트 케이스가 필요하다던 가, 추후 이 수정을 다른 사람이 잘못 수정하지 못하도록 방어하는 테스트 케이스를 요구받았습니다.</p>
 <p>hacktoberfest 행사를 고려해서 Hacktoberfest라는 라벨을 만들어 두었는데, 주로 이 라벨이 달려있던 이슈들을 보고 해결할만한 것을 찾았습니다. 커밋 메시지에 대한 규칙이 빡빡하게 정해져 있어서 적당하게 메시지를 짓는 데에 어려움을 많이 겪었던 것 같습니다.</p>
 <h3>ESLint-plugin-jsdoc</h3>
-<p><a href="https://github.com/gajus/eslint-plugin-jsdoc"></a></p>
+<p><a href="https://github.com/gajus/eslint-plugin-jsdoc">ESLint-plugin-jsdoc 프로젝트</a></p>
 <p>이 프로젝트는 JSDOC 형태의 코멘트를 사용할 때 빠진 부분은 없는지 잘못된 포맷은 없는지를 검사해주는 eslint의 플러그인입니다.</p>
 <h4>기여한 내용</h4>
 <p>require-param fixer 추가
 추가한 fixer 리팩터링
 eslint 에는 eslint --fix와 같이 실행 시 자동으로 린트에 걸리는 부분을 수정해주는 autofix 기능이 있습니다. 그리고 내부적으로 그 기능을 수행하는 로직을 Fixer라고 부릅니다. eslint-plugin-jsdoc 에도 Fixer가 있는데, 저는 JSDOC 에다가 매개 변수 항목을 넣지 않았을 때 자동으로 추가해 주는 코드를 추가했습니다. 아직 destructuring 형태의 매개변수에 대해서는 기능을 지원을 하고 있지 않은데, 추후에 시간이 나면 도전해봐야겠습니다.</p>
 <h3>Lighthouse</h3>
-<p><a href="https://github.com/GoogleChrome/lighthouse"></a></p>
+<p><a href="https://github.com/GoogleChrome/lighthouse">Lighthouse 프로젝트</a></p>
 <p>이 프로젝트는 웹 성능을 측정하는 툴로서 성능을 저하시키거나 SEO, 웹 접근성에 대해 충고해주는 역할을 합니다. 웹 성능 측정과 관련한 업무를 하며 알게 된 오픈소스입니다.</p>
 <h4>기여한 내용</h4>
 <p>SEO link-text audit에 한국어 지원 추가
