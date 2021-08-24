@@ -11,16 +11,16 @@
 </ul>
 <p><strong>truthy</strong>와 <strong>falsy</strong> 개념은 JavaScript의 값이 특정 문법, 연산에서 <strong>true</strong>나 <strong>false</strong>로 동작한다는 것을 말해줍니다.</p>
 <p>그럼 ECMA 스펙에서 어떤 부분이 <strong>falsy</strong>와 <strong>truthy</strong> 개념을 만들어 내는지 살펴 보겠습니다.
-스펙 문서는 <a href="https://tc39.es/ecma262/2020/">ECMA 2020</a> 기준입니다.</p>
+스펙 문서는 <a href="https://tc39.es/ecma262/2020/"></a> 기준입니다.</p>
 <h2>ToBoolean</h2>
-<p>ECMA 스펙에서 어떤 값을 <strong>true</strong>, <strong>false</strong>로 변환하는 연산은 <a href="https://tc39.es/ecma262/2020/#sec-toboolean">7.1.2 ToBoolean</a>에 정의되어 있습니다.
+<p>ECMA 스펙에서 어떤 값을 <strong>true</strong>, <strong>false</strong>로 변환하는 연산은 <a href="https://tc39.es/ecma262/2020/#sec-toboolean"></a>에 정의되어 있습니다.
 이 연산은 추상 연산(Abstract Operation)으로 ECMASCript 언어의 런타임 스펙을 정의할 때 사용되는데, 값을 불리언 값으로 변환하는 역할을 합니다.</p>
 <blockquote>
 <h4>추상 연산(Abstract Operation)</h4>
 <p>스펙을 위해 정의된 연산으로, 스펙 내에서만 존재하며 실제로 구현되어 있는 연산은 아닙니다.</p>
 </blockquote>
 <p>ToBoolean 스펙을 일부 번역한 내용을 살펴보겠습니다.</p>
-<p><a href="https://tc39.es/ecma262/2020/#sec-toboolean">7.1.2 ToBoolean ( <em>argument</em> )</a></p>
+<p><a href="https://tc39.es/ecma262/2020/#sec-toboolean"></a></p>
 <blockquote>
 <h3>7.1.2 ToBoolean ( <em>argument</em> )</h3>
 <p>추상 연산 ToBoolean 은 <em>argument</em>를 인자로 받고, <strong>Table 10</strong> 에 따라 <em>argument</em> 를 Boolean 타입 값으로 변환한다:</p>
@@ -46,7 +46,7 @@ ToBoolean은 Not 연산자(!), if, while, for, 삼항 연산자 ...등의 런타
 <ul>
 <li>참고: 아래에서 ToBoolean 앞의 <strong>!</strong> 표시는 해당 연산이 추상 연산이라는 표시입니다.</li>
 </ul>
-<p><a href="https://tc39.es/ecma262/2020/#sec-logical-not-operator">12.5.9  Logical NOT Operator ( ! )</a></p>
+<p><a href="https://tc39.es/ecma262/2020/#sec-logical-not-operator"></a></p>
 <blockquote>
 <p><strong>12.5.9 NOT 논리 연산자</strong><br>
 ...<br>
@@ -63,7 +63,7 @@ ToBoolean은 Not 연산자(!), if, while, for, 삼항 연산자 ...등의 런타
 <pre><code class="language-js">console.log( !"a" ); // false
 console.log( !null ); // true
 </code></pre>
-<p><a href="https://tc39.es/ecma262/2020/#sec-logical-not-operator">13.6 The if Statement</a></p>
+<p><a href="https://tc39.es/ecma262/2020/#sec-logical-not-operator"></a></p>
 <blockquote>
 <p><strong>13.6 if 문</strong><br>
 ...<br>
