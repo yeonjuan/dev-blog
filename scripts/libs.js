@@ -196,16 +196,28 @@ export function applyTemplate(
     description,
     title
   } = {}) {
+  
+  const descriptionElem = description ? `<meta name="description" content="${description}">` : '';
+  const titleElem = `<title>${(!title || title.trim() === 'dev-blog') ? 'dev-blog' : `${title} - deb-blog`}</title>`;
+  // --color-markdown-table-border: #e0e3e6;
+  // --color-markdown-table-tr-border: #c6cbd2;
   return `
+<!DOCTYPE html>
 <html lang="ko">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    ${description ? `<meta name="description" content="${description}">` : ''}
-    ${title ? `<title>${title} - deb-blog</title>` : ''}
+    ${descriptionElem}
+    ${titleElem}
+    <link rel="stylesheet" href="/dev-blog/styles/global.css">
     <link rel="stylesheet" href="/dev-blog/highlight/default.min.css">
   </head>
   <body>
+    <header>
+      <nav>
+        <a href="/dev-blog">dev-blog</a>
+      </nav>
+    </header>
     <article>
       ${content}
     </article>
