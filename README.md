@@ -43,7 +43,7 @@ description: JavaScript development blogs
 ## Course
 
 - [FrontEnd Masters](https://frontendmasters.com/)
-    - [Design Systems with React and Storybook](./Course/FrontEndMasters/design-systems-with-react-and-storybook)
+    - [Design Systems with React and Storybook](./Course/FrontEndMasters/design-systems-with-react-and-storybook.md)
     - [Advanced React Patterns](./Course/FrontEndMasters/advanced-react-patterns.md)
     - [Functional JavaScript First Steps](./Course/FrontEndMasters/functional-javascript-first-steps.md)
     - [Hardcore Functional Programming](./Course/FrontEndMasters/hardcore-functional-programming-in-javascript.md)
