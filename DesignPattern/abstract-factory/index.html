@@ -1,64 +1,78 @@
-<h1>추상 팩터리 (Abstract Factory)</h1>
+
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    
+    <link rel="stylesheet" href="/dev-blog/highlight/default.min.css">
+  </head>
+  <body>
+    <article>
+      <h1>추상 팩터리 (Abstract Factory)</h1>
 <p>상세화된 서브클래스를 정의하지 않고도 서로 관련성이 있거나 독립적인 여러 객체의 군을 생성하기 위한 인터페이스를 제공합니다.</p>
-<pre><code class="language-ts">interface IPrinter {
-  print (): void;
+<pre><code class="hljs language-ts"><span class="hljs-keyword">interface</span> IPrinter {
+  print (): <span class="hljs-built_in">void</span>;
 }
-interface IReader {
-  read (): void;
+<span class="hljs-keyword">interface</span> IReader {
+  read (): <span class="hljs-built_in">void</span>;
 }
-interface IFactory {
+<span class="hljs-keyword">interface</span> IFactory {
   createPrinter (): IPrinter;
   createReader (): IReader;
 }
 
-// Foo 제품군
-class FooPrinter implements IPrinter {
-  print () {/* Foo 에서 요구하는 print 로직 */}
+<span class="hljs-comment">// Foo 제품군</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title hljs-class">FooPrinter</span> <span class="hljs-keyword">implements</span> IPrinter {
+  print () {<span class="hljs-comment">/* Foo 에서 요구하는 print 로직 */</span>}
 }
-class FooReader implements IReader {
-  read () {/* Foo 에서 요구하는 read 로직 */}
+<span class="hljs-keyword">class</span> <span class="hljs-title hljs-class">FooReader</span> <span class="hljs-keyword">implements</span> IReader {
+  read () {<span class="hljs-comment">/* Foo 에서 요구하는 read 로직 */</span>}
 }
-class FooFactory implements IFactory {
+<span class="hljs-keyword">class</span> <span class="hljs-title hljs-class">FooFactory</span> <span class="hljs-keyword">implements</span> IFactory {
   createPrinter () {
-    return new FooPrinter();
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title hljs-class">FooPrinter</span>();
   }
   createReader () {
-    return new FooReader();
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title hljs-class">FooReader</span>();
   }
 }
 
-// Bar 제품군
-class BarPrinter implements IPrinter {
-  print () {/* Bar 에서 요구하는 print 로직 */}}
+<span class="hljs-comment">// Bar 제품군</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title hljs-class">BarPrinter</span> <span class="hljs-keyword">implements</span> IPrinter {
+  print () {<span class="hljs-comment">/* Bar 에서 요구하는 print 로직 */</span>}}
 }
-class BarReader implements IReader {
-  read () {/* Bar 에서 요구하는 read 로직 */}
+<span class="hljs-keyword">class</span> <span class="hljs-title hljs-class">BarReader</span> <span class="hljs-keyword">implements</span> IReader {
+  read () {<span class="hljs-comment">/* Bar 에서 요구하는 read 로직 */</span>}
 }
-class BarFactory implements IFactory {
+<span class="hljs-keyword">class</span> <span class="hljs-title hljs-class">BarFactory</span> <span class="hljs-keyword">implements</span> IFactory {
   createPrinter () {
-    return new FooReader();
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title hljs-class">FooReader</span>();
   }
   createReader () {
-    return new BarReader();
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title hljs-class">BarReader</span>();
   }
 }
 
-class Runner {
-  private printer: IPrinter;
-  private reader: IReader;
+<span class="hljs-keyword">class</span> <span class="hljs-title hljs-class">Runner</span> {
+  <span class="hljs-keyword">private</span> <span class="hljs-attr">printer</span>: IPrinter;
+  <span class="hljs-keyword">private</span> <span class="hljs-attr">reader</span>: IReader;
 
-  constructor (factory: IFactory) {
-    this.printer = factory.createPrinter();
-    this.reader = factory.createReader();
+  <span class="hljs-title hljs-function">constructor</span> (<span class="hljs-attr">factory</span>: IFactory) {
+    <span class="hljs-variable hljs-language">this</span>.<span class="hljs-property">printer</span> = factory.<span class="hljs-title hljs-function">createPrinter</span>();
+    <span class="hljs-variable hljs-language">this</span>.<span class="hljs-property">reader</span> = factory.<span class="hljs-title hljs-function">createReader</span>();
   }
 
-  readAndPrint() {
-    const input = this.reader.read();
-    this.print(input);
+  <span class="hljs-title hljs-function">readAndPrint</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> input = <span class="hljs-variable hljs-language">this</span>.<span class="hljs-property">reader</span>.<span class="hljs-title hljs-function">read</span>();
+    <span class="hljs-variable hljs-language">this</span>.<span class="hljs-title hljs-function">print</span>(input);
   }
-}
-</code></pre>
+}</code></pre>
 <h2>참고</h2>
 <ul>
 <li>GOF 의 디자인 패턴</li>
 </ul>
+
+    </article>
+  </body>
+</html>

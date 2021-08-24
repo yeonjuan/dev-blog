@@ -1,11 +1,25 @@
-<h1>Debounce</h1>
-<pre><code class="language-js">function debounce(fn, delay) {
-  let timer;
-  return function () {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      fn.apply(this, arguments);
+
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    
+    <link rel="stylesheet" href="/dev-blog/highlight/default.min.css">
+  </head>
+  <body>
+    <article>
+      <h1>Debounce</h1>
+<pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title hljs-function">debounce</span>(<span class="hljs-params">fn, delay</span>) {
+  <span class="hljs-keyword">let</span> timer;
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+    <span class="hljs-built_in">clearTimeout</span>(timer);
+    timer = <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =></span> {
+      fn.<span class="hljs-title hljs-function">apply</span>(<span class="hljs-variable hljs-language">this</span>, <span class="hljs-variable hljs-language">arguments</span>);
     },delay);
   }
-}
-</code></pre>
+}</code></pre>
+
+    </article>
+  </body>
+</html>

@@ -1,4 +1,15 @@
-<h1>Advanced React Patterns</h1>
+
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    
+    <link rel="stylesheet" href="/dev-blog/highlight/default.min.css">
+  </head>
+  <body>
+    <article>
+      <h1>Advanced React Patterns</h1>
 <blockquote>
 <p><a href="https://frontendmasters.com/courses/advanced-react-patterns/">FrontEnd Masters: Advanced React Patterns</a> 수강후 정리한 글. 강의 예제는 class형 컴포넌트로 되어있는데 Functional 컴포넌트로 예제를 수정해 정리함</p>
 </blockquote>
@@ -8,42 +19,40 @@
 <ul>
 <li>
 <p>Usage</p>
-<pre><code class="language-jsx">const Usage = ({onToggle = (on) => console.log('toggle:' + on)}) => {
-  return (
-    &#x3C;Toggle onToggle={onToggle}>
-      &#x3C;Toggle.On>The button is on&#x3C;/Toggle.On>
-      &#x3C;Toggle.Off>The button is off&#x3C;/Toggle.Off>
-      &#x3C;Toggle.Button />
-    &#x3C;/Toggle>
+<pre><code class="hljs language-jsx"><span class="hljs-keyword">const</span> <span class="hljs-title hljs-function">Usage</span> = (<span class="hljs-params">{onToggle = (on) => <span class="hljs-variable hljs-language">console</span>.log(<span class="hljs-string">'toggle:'</span> + on)}</span>) => {
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&#x3C;<span class="hljs-name">Toggle</span> <span class="hljs-attr">onToggle</span>=<span class="hljs-string">{onToggle}</span>></span>
+      <span class="hljs-tag">&#x3C;<span class="hljs-name">Toggle.On</span>></span>The button is on<span class="hljs-tag">&#x3C;/<span class="hljs-name">Toggle.On</span>></span>
+      <span class="hljs-tag">&#x3C;<span class="hljs-name">Toggle.Off</span>></span>The button is off<span class="hljs-tag">&#x3C;/<span class="hljs-name">Toggle.Off</span>></span>
+      <span class="hljs-tag">&#x3C;<span class="hljs-name">Toggle.Button</span> /></span>
+    <span class="hljs-tag">&#x3C;/<span class="hljs-name">Toggle</span>></span></span>
   );
-}
-</code></pre>
+}</code></pre>
 </li>
 <li>
 <p>Implementation</p>
-<pre><code class="language-jsx">const Toggle = (props) => {
-  const [on, setOn] = useState(false);
-  const toggle = () => setOn(prev => !prev);
-  useEffect(() => props.onToggle(on), [on]);
+<pre><code class="hljs language-jsx"><span class="hljs-keyword">const</span> <span class="hljs-title hljs-function">Toggle</span> = (<span class="hljs-params">props</span>) => {
+  <span class="hljs-keyword">const</span> [on, setOn] = <span class="hljs-title hljs-function">useState</span>(<span class="hljs-literal">false</span>);
+  <span class="hljs-keyword">const</span> <span class="hljs-title hljs-function">toggle</span> = (<span class="hljs-params"></span>) => <span class="hljs-title hljs-function">setOn</span>(<span class="hljs-function"><span class="hljs-params">prev</span> =></span> !prev);
+  <span class="hljs-title hljs-function">useEffect</span>(<span class="hljs-function">() =></span> props.<span class="hljs-title hljs-function">onToggle</span>(on), [on]);
 
-  return React.Children.map(props.children, child => {
-    return React.cloneElement(child, {
+  <span class="hljs-keyword">return</span> <span class="hljs-title hljs-class">React</span>.<span class="hljs-property">Children</span>.<span class="hljs-title hljs-function">map</span>(props.<span class="hljs-property">children</span>, <span class="hljs-function"><span class="hljs-params">child</span> =></span> {
+    <span class="hljs-keyword">return</span> <span class="hljs-title hljs-class">React</span>.<span class="hljs-title hljs-function">cloneElement</span>(child, {
       on,
       toggle,
     });
   });
 }
 
-Toggle.On = (props) => {
-  return props.on ? props.children : null;
+<span class="hljs-title hljs-class">Toggle</span>.<span class="hljs-property">On</span> = <span class="hljs-function">(<span class="hljs-params">props</span>) =></span> {
+  <span class="hljs-keyword">return</span> props.<span class="hljs-property">on</span> ? props.<span class="hljs-property">children</span> : <span class="hljs-literal">null</span>;
 }
-Toggle.Off = (props) => {
-  return props.on ? null : props.children;
+<span class="hljs-title hljs-class">Toggle</span>.<span class="hljs-property">Off</span> = <span class="hljs-function">(<span class="hljs-params">props</span>) =></span> {
+  <span class="hljs-keyword">return</span> props.<span class="hljs-property">on</span> ? <span class="hljs-literal">null</span> : props.<span class="hljs-property">children</span>;
 }
-Toggle.Button = (props) => {
-  return &#x3C;Switch on={props.on} onClick={props.toggle}/>;
-}
-</code></pre>
+<span class="hljs-title hljs-class">Toggle</span>.<span class="hljs-property">Button</span> = <span class="hljs-function">(<span class="hljs-params">props</span>) =></span> {
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&#x3C;<span class="hljs-name">Switch</span> <span class="hljs-attr">on</span>=<span class="hljs-string">{props.on}</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{props.toggle}/</span>></span></span>;
+}</code></pre>
 </li>
 </ul>
 <h3>Compound Component (Context API)</h3>
@@ -51,45 +60,43 @@ Toggle.Button = (props) => {
 <ul>
 <li>
 <p>Usage</p>
-<pre><code class="language-jsx">const Usage = ({onToggle = (on) => console.log('toggle:' + on)}) => {
-  return (
-    &#x3C;Toggle onToggle={onToggle}>
-      &#x3C;Toggle.On>The button is on&#x3C;/Toggle.On>
-      &#x3C;Toggle.Off>The button is off&#x3C;/Toggle.Off>
-      &#x3C;div>
-        &#x3C;Toggle.Button />
-      &#x3C;/div>
-    &#x3C;/Toggle>
+<pre><code class="hljs language-jsx"><span class="hljs-keyword">const</span> <span class="hljs-title hljs-function">Usage</span> = (<span class="hljs-params">{onToggle = (on) => <span class="hljs-variable hljs-language">console</span>.log(<span class="hljs-string">'toggle:'</span> + on)}</span>) => {
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&#x3C;<span class="hljs-name">Toggle</span> <span class="hljs-attr">onToggle</span>=<span class="hljs-string">{onToggle}</span>></span>
+      <span class="hljs-tag">&#x3C;<span class="hljs-name">Toggle.On</span>></span>The button is on<span class="hljs-tag">&#x3C;/<span class="hljs-name">Toggle.On</span>></span>
+      <span class="hljs-tag">&#x3C;<span class="hljs-name">Toggle.Off</span>></span>The button is off<span class="hljs-tag">&#x3C;/<span class="hljs-name">Toggle.Off</span>></span>
+      <span class="hljs-tag">&#x3C;<span class="hljs-name">div</span>></span>
+        <span class="hljs-tag">&#x3C;<span class="hljs-name">Toggle.Button</span> /></span>
+      <span class="hljs-tag">&#x3C;/<span class="hljs-name">div</span>></span>
+    <span class="hljs-tag">&#x3C;/<span class="hljs-name">Toggle</span>></span></span>
   );
-}
-</code></pre>
+}</code></pre>
 </li>
 <li>
 <p>Implementation</p>
-<pre><code class="language-jsx">const ToggleContext = React.createContext({on: false, toggle: () => {}});
+<pre><code class="hljs language-jsx"><span class="hljs-keyword">const</span> <span class="hljs-title hljs-class">ToggleContext</span> = <span class="hljs-title hljs-class">React</span>.<span class="hljs-title hljs-function">createContext</span>({<span class="hljs-attr">on</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">toggle</span>: <span class="hljs-function">() =></span> {}});
 
-const Toggle = (props) => {
-  const [on, setOn] = useState(false);
-  const toggle = () => setOn(prev => !prev);
-  useEffect(() => props.onToggle(on), [on]);
+<span class="hljs-keyword">const</span> <span class="hljs-title hljs-function">Toggle</span> = (<span class="hljs-params">props</span>) => {
+  <span class="hljs-keyword">const</span> [on, setOn] = <span class="hljs-title hljs-function">useState</span>(<span class="hljs-literal">false</span>);
+  <span class="hljs-keyword">const</span> <span class="hljs-title hljs-function">toggle</span> = (<span class="hljs-params"></span>) => <span class="hljs-title hljs-function">setOn</span>(<span class="hljs-function"><span class="hljs-params">prev</span> =></span> !prev);
+  <span class="hljs-title hljs-function">useEffect</span>(<span class="hljs-function">() =></span> props.<span class="hljs-title hljs-function">onToggle</span>(on), [on]);
 
-  return &#x3C;ToggleContext.Provider value={{on, toggle}}>
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&#x3C;<span class="hljs-name">ToggleContext.Provider</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{{on,</span> <span class="hljs-attr">toggle</span>}}></span>
     {props.children}
-  &#x3C;/ToggleContext.Provider>;
+  <span class="hljs-tag">&#x3C;/<span class="hljs-name">ToggleContext.Provider</span>></span></span>;
 }
 
-Toggle.On = (props) => &#x3C;ToggleContext.Consumer>
+<span class="hljs-title hljs-class">Toggle</span>.<span class="hljs-property">On</span> = <span class="hljs-function">(<span class="hljs-params">props</span>) =></span> <span class="xml"><span class="hljs-tag">&#x3C;<span class="hljs-name">ToggleContext.Consumer</span>></span>
   {({on}) => (on ? props.children : null)}
-&#x3C;/ToggleContext.Consumer>;
+<span class="hljs-tag">&#x3C;/<span class="hljs-name">ToggleContext.Consumer</span>></span></span>;
 
-Toggle.Off = (props) => &#x3C;ToggleContext.Consumer>
+<span class="hljs-title hljs-class">Toggle</span>.<span class="hljs-property">Off</span> = <span class="hljs-function">(<span class="hljs-params">props</span>) =></span> <span class="xml"><span class="hljs-tag">&#x3C;<span class="hljs-name">ToggleContext.Consumer</span>></span>
   {({on}) => (on ? null : props.children)}
-&#x3C;/ToggleContext.Consumer>;
+<span class="hljs-tag">&#x3C;/<span class="hljs-name">ToggleContext.Consumer</span>></span></span>;
 
-Toggle.Button = (props) => &#x3C;ToggleContext.Consumer>
-  {({on, toggle}) => &#x3C;Switch  {...props} on={on} onClick={toggle} />}
-&#x3C;/ToggleContext.Consumer>
-</code></pre>
+<span class="hljs-title hljs-class">Toggle</span>.<span class="hljs-property">Button</span> = <span class="hljs-function">(<span class="hljs-params">props</span>) =></span> <span class="xml"><span class="hljs-tag">&#x3C;<span class="hljs-name">ToggleContext.Consumer</span>></span>
+  {({on, toggle}) => <span class="hljs-tag">&#x3C;<span class="hljs-name">Switch</span>  {<span class="hljs-attr">...props</span>} <span class="hljs-attr">on</span>=<span class="hljs-string">{on}</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{toggle}</span> /></span>}
+<span class="hljs-tag">&#x3C;/<span class="hljs-name">ToggleContext.Consumer</span>></span></span></code></pre>
 </li>
 </ul>
 <h2>Render Props</h2>
@@ -98,25 +105,27 @@ render 함수의 인자로는 사용자가 필요한 상태값과 상태를 변�
 <ul>
 <li>
 <p>Usage</p>
-<pre><code class="language-jsx">const Usage = (props) => {
-    return &#x3C;Toggle onToggle={props.onToggle}>
+<pre><code class="hljs language-jsx"><span class="hljs-keyword">const</span> <span class="hljs-title hljs-function">Usage</span> = (<span class="hljs-params">props</span>) => {
+    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&#x3C;<span class="hljs-name">Toggle</span> <span class="hljs-attr">onToggle</span>=<span class="hljs-string">{props.onToggle}</span>></span>
       {
         ({on, toggle}) => (
-          &#x3C;div>
+          <span class="hljs-tag">&#x3C;<span class="hljs-name">div</span>></span>
             { on ? 'This button is on' : 'This button is off'}
-            &#x3C;Switch on={on} onClick={toggle}>
-          &#x3C;/div>
+            <span class="hljs-tag">&#x3C;<span class="hljs-name">Switch</span> <span class="hljs-attr">on</span>=<span class="hljs-string">{on}</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{toggle}</span>></span>
+          <span class="hljs-tag">&#x3C;/<span class="hljs-name">div</span>></span>
         )
       }
-    &#x3C;/Toggle>
-}
-</code></pre>
+    <span class="hljs-tag">&#x3C;/<span class="hljs-name">Toggle</span>></span>
+}</span></code></pre>
 </li>
 <li>
 <p>Implementation</p>
-<pre><code class="language-jsx">// TODO
-</code></pre>
+<pre><code class="hljs language-jsx"><span class="hljs-comment">// TODO</span></code></pre>
 </li>
 </ul>
 <h2>Controlling State</h2>
 <h2>Provider Pattern</h2>
+
+    </article>
+  </body>
+</html>

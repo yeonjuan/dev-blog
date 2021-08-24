@@ -1,4 +1,15 @@
-<h1>falsy &#x26; truthy</h1>
+
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    
+    <link rel="stylesheet" href="/dev-blog/highlight/default.min.css">
+  </head>
+  <body>
+    <article>
+      <h1>falsy &#x26; truthy</h1>
 <p><strong>falsy</strong> 와 <strong>truthy</strong>는 ECMA 스펙에 등장하는 단어는 아닙니다. JavaScript 동작을 이해하기 쉽게 하기위해 사용되는 단어입니다.
 번역해보면 <strong>truthy</strong>는 "참 같은 값", <strong>falsy</strong>는 "거짓 같은 값" 정도로 해석되며, 다음과 같이 정리할 수 있습니다.</p>
 <p><strong>falsy</strong>: 불리언 값으로 평가되는 문맥에서, <strong>false</strong>로 평가되는 값.</p>
@@ -60,9 +71,8 @@ ToBoolean은 Not 연산자(!), if, while, for, 삼항 연산자 ...등의 런타
 </blockquote>
 <p>2번 단계에서 평가된 표현식의 값을 ToBoolean 을 통해 불리언 타입으로 바꾸는 것을 확인할 수 있습니다.
 그리고 그 값이 <strong>true</strong>면 <strong>false</strong>, 아니면 <strong>true</strong>를 반환합니다.</p>
-<pre><code class="language-js">console.log( !"a" ); // false
-console.log( !null ); // true
-</code></pre>
+<pre><code class="hljs language-js"><span class="hljs-variable hljs-language">console</span>.<span class="hljs-title hljs-function">log</span>( !<span class="hljs-string">"a"</span> ); <span class="hljs-comment">// false</span>
+<span class="hljs-variable hljs-language">console</span>.<span class="hljs-title hljs-function">log</span>( !<span class="hljs-literal">null</span> ); <span class="hljs-comment">// true</span></code></pre>
 <p><a href="https://tc39.es/ecma262/2020/#sec-logical-not-operator">13.6 The if Statement</a></p>
 <blockquote>
 <p><strong>13.6 if 문</strong><br>
@@ -80,10 +90,9 @@ b. Completion(UpdateEmpty(stmtCompletion, undefined)) 를 반환한다.</li>
 </blockquote>
 <p>if 문 런타임 스펙의 2번 단계에서도 평가된 표현식의 값에 <strong>ToBoolean</strong> 연산을 수행해 값을 불리언 타입으로 바꿉니다.
 그리고 그 값이 <strong>false</strong> 면 종료하고, 아니면 if 문의 <em>Statement</em> 를 실행하는 것을 알 수 있습니다.</p>
-<pre><code class="language-js">if ("") console.log("출력 X");
+<pre><code class="hljs language-js"><span class="hljs-keyword">if</span> (<span class="hljs-string">""</span>) <span class="hljs-variable hljs-language">console</span>.<span class="hljs-title hljs-function">log</span>(<span class="hljs-string">"출력 X"</span>);
 
-if ([]) console.log("출력 O"); // "출력 O"
-</code></pre>
+<span class="hljs-keyword">if</span> ([]) <span class="hljs-variable hljs-language">console</span>.<span class="hljs-title hljs-function">log</span>(<span class="hljs-string">"출력 O"</span>); <span class="hljs-comment">// "출력 O"</span></code></pre>
 <p>스펙에 따라 실행되면서 ToBoolean 에 의해 값들이 불리언 값으로 변환됩니다.
 이런 스펙이 개발자 관점에서는 특정 문맥에서 불리언처럼 동작하는 <strong>truthy</strong>, <strong>falsy</strong> 개념을 만들어 내는 것을 알 수 있습니다.</p>
 <h2>Summary</h2>
@@ -110,3 +119,7 @@ if ([]) console.log("출력 O"); // "출력 O"
 </li>
 </ul>
 <p>많은 글에서 <strong>truthy</strong>, <strong>falsy</strong>에 대해 설명하고 있고 이미 알고 있던 내용이었지만, 스펙에서 직접 확인하니 마음이 편안해졌습니다. 😚</p>
+
+    </article>
+  </body>
+</html>

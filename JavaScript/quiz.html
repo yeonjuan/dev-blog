@@ -1,12 +1,22 @@
-<h2>Q-1. 다음 코드의 결과는 무엇일까요?</h2>
-<pre><code class="language-js">const foo = {
-    name: 'Foo'
-}
-const bar = Object.create(foo);
-delete bar.name;
 
-console.log(bar.name); // ?
-</code></pre>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    
+    <link rel="stylesheet" href="/dev-blog/highlight/default.min.css">
+  </head>
+  <body>
+    <article>
+      <h2>Q-1. 다음 코드의 결과는 무엇일까요?</h2>
+<pre><code class="hljs language-js"><span class="hljs-keyword">const</span> foo = {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'Foo'</span>
+}
+<span class="hljs-keyword">const</span> bar = <span class="hljs-title hljs-class">Object</span>.<span class="hljs-title hljs-function">create</span>(foo);
+<span class="hljs-keyword">delete</span> bar.<span class="hljs-property">name</span>;
+
+<span class="hljs-variable hljs-language">console</span>.<span class="hljs-title hljs-function">log</span>(bar.<span class="hljs-property">name</span>); <span class="hljs-comment">// ?</span></code></pre>
 <details><summary>Q-1 답안 보기</summary>
 <p>
 <h3>정답: "Foo"</h3>
@@ -14,44 +24,42 @@ console.log(bar.name); // ?
 <p>결과를 이해하기 위해서는 <strong>1. delete</strong>와 <strong>2 Object.create</strong> 를 이해해야합니다.</p>
 <h4>1. delete</h4>
 <p><code>delete</code> 연산자는 대상 객체의 <strong>고유 프로퍼티를 삭제</strong>합니다.</p>
-<pre><code class="language-js">const obj = {
-    prop1: 'prop1', 
-    prop2: 'prop2',
+<pre><code class="hljs language-js"><span class="hljs-keyword">const</span> obj = {
+    <span class="hljs-attr">prop1</span>: <span class="hljs-string">'prop1'</span>, 
+    <span class="hljs-attr">prop2</span>: <span class="hljs-string">'prop2'</span>,
 }
-delete obj.prop1;
-console.log(obk); // {prop2: "prop2"}
-</code></pre>
+<span class="hljs-keyword">delete</span> obj.<span class="hljs-property">prop1</span>;
+<span class="hljs-variable hljs-language">console</span>.<span class="hljs-title hljs-function">log</span>(obk); <span class="hljs-comment">// {prop2: "prop2"}</span></code></pre>
 <p><strong>교유 프로퍼티를 삭제</strong> 한다는 뜻은 프로토 타입 체인으로 연결된 프로퍼티는 제거하지 않는다는 걸 의미합니다.</p>
-<pre><code class="language-js">const obj ={
-    toString: () => 'shadowed',
+<pre><code class="hljs language-js"><span class="hljs-keyword">const</span> obj ={
+    <span class="hljs-attr">toString</span>: <span class="hljs-function">() =></span> <span class="hljs-string">'shadowed'</span>,
 }
-console.log(obj.toString()); // shadowed
-delete obj.toString;
-console.log(obj.toString()); // [object Object]
-</code></pre>
+<span class="hljs-variable hljs-language">console</span>.<span class="hljs-title hljs-function">log</span>(obj.<span class="hljs-title hljs-function">toString</span>()); <span class="hljs-comment">// shadowed</span>
+<span class="hljs-keyword">delete</span> obj.<span class="hljs-property">toString</span>;
+<span class="hljs-variable hljs-language">console</span>.<span class="hljs-title hljs-function">log</span>(obj.<span class="hljs-title hljs-function">toString</span>()); <span class="hljs-comment">// [object Object]</span></code></pre>
 <h4>2. Object.create</h4>
 <p><code>Object.create</code> 는 첫 번째 인자를 프로토타입으로 하는 객체를 생성합니다.</p>
 <p>즉 프로터타입 체이닝을 통해서 인자의 프로퍼티에 접근할 수 있지만, 그 값은 생성된 객체의 고유한 프로퍼티가 아닙니다.</p>
-<pre><code class="language-js">const obj = {
-    prop1: 'prop1'
+<pre><code class="hljs language-js"><span class="hljs-keyword">const</span> obj = {
+    <span class="hljs-attr">prop1</span>: <span class="hljs-string">'prop1'</span>
 }
-const newObj = Object.create(obj);
+<span class="hljs-keyword">const</span> newObj = <span class="hljs-title hljs-class">Object</span>.<span class="hljs-title hljs-function">create</span>(obj);
 
-newObj.prop1; // 'prop1'
-newObj.hasOwnProperty('prop1'); // false
-</code></pre>
+newObj.<span class="hljs-property">prop1</span>; <span class="hljs-comment">// 'prop1'</span>
+newObj.<span class="hljs-title hljs-function">hasOwnProperty</span>(<span class="hljs-string">'prop1'</span>); <span class="hljs-comment">// false</span></code></pre>
 <h4>문제 해설</h4>
 <p><code>Object.create</code> 로 <strong>foo</strong> 를 프로토타입으로 한 <strong>bar</strong> 객체를 생성합니다.</p>
-<pre><code class="language-js">const foo = {
-    name: 'Foo'
+<pre><code class="hljs language-js"><span class="hljs-keyword">const</span> foo = {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'Foo'</span>
 };
-const bar = Object.create(foo); 
-</code></pre>
+<span class="hljs-keyword">const</span> bar = <span class="hljs-title hljs-class">Object</span>.<span class="hljs-title hljs-function">create</span>(foo); </code></pre>
 <p><code>delete</code> 로 <strong>bar</strong> 의 고유 프로퍼티 <strong>name</strong> 을 제거합니다. 하지만 <strong>bar</strong> 에는 <strong>name</strong> 프로퍼티가 없기 때문에 아무 변화도 일어나지 않습니다.</p>
-<pre><code class="language-js">delete bar.name
-</code></pre>
+<pre><code class="hljs language-js"><span class="hljs-keyword">delete</span> bar.<span class="hljs-property">name</span></code></pre>
 <p><code>bar.name</code>에 접근하면 프로토타입 체이닝을 통해 <strong>foo</strong>의 <strong>name</strong> 으로 접근됩니다.</p>
-<pre><code class="language-js">console.log(bar.name);  // 'Foo'
-</code></pre>
+<pre><code class="hljs language-js"><span class="hljs-variable hljs-language">console</span>.<span class="hljs-title hljs-function">log</span>(bar.<span class="hljs-property">name</span>);  <span class="hljs-comment">// 'Foo'</span></code></pre>
 </p>
 </details>
+
+    </article>
+  </body>
+</html>

@@ -1,4 +1,15 @@
-<h1>node 패키지 브라우저에서 사용하기 (with Webpack 4)</h1>
+
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    
+    <link rel="stylesheet" href="/dev-blog/highlight/default.min.css">
+  </head>
+  <body>
+    <article>
+      <h1>node 패키지 브라우저에서 사용하기 (with Webpack 4)</h1>
 <p>웹팩을 사용해서, <code>fs</code>, <code>path</code>와 같은 NodeJS Built-In 모듈을 사용하는 패키지를 브라우저에서 동작하도록 땜질식(?)으로 번들링해본 후기입니다.<br>
 간단한 결론만 원하신다면 <a href="/dev-blog/#summary">Summary</a> 를 참고하세요.</p>
 <h2>이유</h2>
@@ -29,19 +40,18 @@ Module not found: Error: Can't resolve 'fs' in '...project/node_modules/@eslint/
 <ul>
 <li>
 <p><a href="https://github.com/yeonjuan/typescript-eslint-demo/blob/master/webpack.base.config.js#L20-L34">webpack.config.js</a></p>
-<pre><code class="language-js">module.exports = {
-  rules: [
-    //...
+<pre><code class="hljs language-js"><span class="hljs-variable hljs-language">module</span>.<span class="hljs-property">exports</span> = {
+  <span class="hljs-attr">rules</span>: [
+    <span class="hljs-comment">//...</span>
     {
-      test: [
-        /\/eslint\/.*\/cli-engine/,
-        // ...
+      <span class="hljs-attr">test</span>: [
+        <span class="hljs-regexp">/\/eslint\/.*\/cli-engine/</span>,
+        <span class="hljs-comment">// ...</span>
       ],
-      use: "null-loader"
+      <span class="hljs-attr">use</span>: <span class="hljs-string">"null-loader"</span>
     }
   ]
-}
-</code></pre>
+}</code></pre>
 </li>
 </ul>
 <p>번들시 <code>null-loader</code> 에 <code>test</code> 에 설정한 모듈은 비어있는 모듈이 됩니다. 아무런 기능이 없는 모듈이 번들되게 되지만 실제로 런타임에는 사용되지 않기 때문에 동작에 아무런 문제가 되지 않습니다.</p>
@@ -50,16 +60,15 @@ Module not found: Error: Can't resolve 'fs' in '...project/node_modules/@eslint/
 <p>typescript-eslint 에서는 설정에 따라 tsconfig.json 파일의 경로를 반환하는 용도로 <a href="https://www.npmjs.com/package/globby">globby</a>를 사용하고 있었고, globby 는 내부에서 <code>fs</code> 를 사용하고 있습니다. 때문에 typescript-eslint 를 번들시  globby 에서 <code>fs</code>를 찾지 못한다는 에러가 발생하게 됩니다.</p>
 <ul>
 <li><a href="https://github.com/typescript-eslint/typescript-eslint/blob/90a587845088da1b205e4d7d77dbc3f9447b1c5a/packages/typescript-estree/src/parser.ts">@typescript-eslint/parser</a>
-<pre><code class="language-ts">import { sync as globSync } from 'globby';
+<pre><code class="hljs language-ts"><span class="hljs-keyword">import</span> { sync <span class="hljs-keyword">as</span> globSync } <span class="hljs-keyword">from</span> <span class="hljs-string">'globby'</span>;
 
-//...
-function prepareAndTransformProjects() {
-  //...
-  globSync([...globbedProjects, ...ignoreListInput], {
-    cwd: extra.tsconfigRootDir,
+<span class="hljs-comment">//...</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title hljs-function">prepareAndTransformProjects</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-comment">//...</span>
+  <span class="hljs-title hljs-function">globSync</span>([...globbedProjects, ...ignoreListInput], {
+    <span class="hljs-attr">cwd</span>: extra.<span class="hljs-property">tsconfigRootDir</span>,
   });
-}
-</code></pre>
+}</code></pre>
 </li>
 </ul>
 <p>이 경우 <a href="https://webpack.js.org/plugins/normal-module-replacement-plugin/">NormalModuleReplacementPlugin</a>를 사용할 수 있습니다. NormalModuleReplacementPlugin 은 웹팩 번들시에 특정 모듈을 내가 정의한 커스텀 모듈로 교체해 사용할 수 있습니다</p>
@@ -67,31 +76,29 @@ function prepareAndTransformProjects() {
 <ul>
 <li>
 <p><a href="https://github.com/typescript-eslint/typescript-eslint/blob/90a587845088da1b205e4d7d77dbc3f9447b1c5a/packages/typescript-estree/src/parser.ts#L2">/src/modules/globby.js</a></p>
-<pre><code class="language-js">// src/modules/globby.js
-module.exports = {
-  sync() {
-    return ["./tsconfig.json"];
+<pre><code class="hljs language-js"><span class="hljs-comment">// src/modules/globby.js</span>
+<span class="hljs-variable hljs-language">module</span>.<span class="hljs-property">exports</span> = {
+  <span class="hljs-title hljs-function">sync</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">return</span> [<span class="hljs-string">"./tsconfig.json"</span>];
   },
-};
-</code></pre>
+};</code></pre>
 </li>
 </ul>
 <p>이후 웹팩 설정에서 <code>plugins</code> 에 NormalModuleReplacementPlugin로 해당 모듈을 대체할 커스텀 모듈로 대체합니다.</p>
 <ul>
 <li>
 <p><a href="https://github.com/yeonjuan/typescript-eslint-demo/blob/master/webpack.base.config.js#L76-L78">webpack.config.js</a></p>
-<pre><code class="language-js">const webpack = require('webpack');
+<pre><code class="hljs language-js"><span class="hljs-keyword">const</span> webpack = <span class="hljs-built_in">require</span>(<span class="hljs-string">'webpack'</span>);
 
-module.exports = {
-  //...
-  plugins: [
-    new webpack.NormalModuleReplacementPlugin(
-      /globby/, // 교체 대상 모듈
-      "src/modules/globby.js" // 대신 사용할 모듈
+<span class="hljs-variable hljs-language">module</span>.<span class="hljs-property">exports</span> = {
+  <span class="hljs-comment">//...</span>
+  <span class="hljs-attr">plugins</span>: [
+    <span class="hljs-keyword">new</span> webpack.<span class="hljs-title hljs-class">NormalModuleReplacementPlugin</span>(
+      <span class="hljs-regexp">/globby/</span>, <span class="hljs-comment">// 교체 대상 모듈</span>
+      <span class="hljs-string">"src/modules/globby.js"</span> <span class="hljs-comment">// 대신 사용할 모듈</span>
     ),
   ]
-}
-</code></pre>
+}</code></pre>
 </li>
 </ul>
 <p>이제 웹팩으로 번들시 typescript-eslint 내부에서 import 해서 사용하는 globby 는 제 프로젝트에 있는 <code>src/modules/globby.js</code> 로 대체되게 됩니다.</p>
@@ -108,3 +115,7 @@ module.exports = {
 <p>어찌 되었든 완성된 Online Demo 를 <a href="https://github.com/eslint/eslint/issues/13758#issuecomment-709353258">ESLint 메인테이너분도 사용해 주시기도 하고</a>, <a href="https://github.com/typescript-eslint/typescript-eslint/issues/2703#issuecomment-715685452">저도 이슈를 재현하고 사용자와 공유하는데</a> 사용중이라 만든 보람은 느껴지는 프로젝트였습니다.</p>
 <h2>Summary</h2>
 <p><code>fs</code>, <code>path</code> 와 같은 NodeJS 모듈을 사용하는 패키지를 웹팩으로 번들하는 경우, 런타임에 필요없는 모듈은 <a href="https://webpack.js.org/loaders/null-loader/">null-loader</a>, 런타임에도 필요한 모듈은 <a href="https://webpack.js.org/plugins/normal-module-replacement-plugin/">NormalModuleReplacementPlugin</a> 를 활용해 보세요.</p>
+
+    </article>
+  </body>
+</html>

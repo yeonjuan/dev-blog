@@ -1,20 +1,34 @@
-<h1>useOnClickOutside</h1>
-<pre><code class="language-js">import { useEffect } from "react";
 
-const useOnClickOutside = (ref, handler) => {
-  useEffect(() => {
-    const listener = (event) => {
-      if (!ref.current || ref.current.contains(event.target)) {
-        return;
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    
+    <link rel="stylesheet" href="/dev-blog/highlight/default.min.css">
+  </head>
+  <body>
+    <article>
+      <h1>useOnClickOutside</h1>
+<pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { useEffect } <span class="hljs-keyword">from</span> <span class="hljs-string">"react"</span>;
+
+<span class="hljs-keyword">const</span> <span class="hljs-title hljs-function">useOnClickOutside</span> = (<span class="hljs-params">ref, handler</span>) => {
+  <span class="hljs-title hljs-function">useEffect</span>(<span class="hljs-function">() =></span> {
+    <span class="hljs-keyword">const</span> <span class="hljs-title hljs-function">listener</span> = (<span class="hljs-params">event</span>) => {
+      <span class="hljs-keyword">if</span> (!ref.<span class="hljs-property">current</span> || ref.<span class="hljs-property">current</span>.<span class="hljs-title hljs-function">contains</span>(event.<span class="hljs-property">target</span>)) {
+        <span class="hljs-keyword">return</span>;
       }
-      handler(event);
+      <span class="hljs-title hljs-function">handler</span>(event);
     };
-    document.addEventListener("mousedown", listener);
-    document.addEventListener("touchstart", listener);
-    return () => {
-      document.removeEventListener("mousedown", listener);
-      document.removeEventListener("touchstart", listener);
+    <span class="hljs-variable hljs-language">document</span>.<span class="hljs-title hljs-function">addEventListener</span>(<span class="hljs-string">"mousedown"</span>, listener);
+    <span class="hljs-variable hljs-language">document</span>.<span class="hljs-title hljs-function">addEventListener</span>(<span class="hljs-string">"touchstart"</span>, listener);
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =></span> {
+      <span class="hljs-variable hljs-language">document</span>.<span class="hljs-title hljs-function">removeEventListener</span>(<span class="hljs-string">"mousedown"</span>, listener);
+      <span class="hljs-variable hljs-language">document</span>.<span class="hljs-title hljs-function">removeEventListener</span>(<span class="hljs-string">"touchstart"</span>, listener);
     };
   }, [ref, handler]);
-};
-</code></pre>
+};</code></pre>
+
+    </article>
+  </body>
+</html>

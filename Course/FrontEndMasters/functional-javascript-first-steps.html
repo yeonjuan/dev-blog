@@ -1,4 +1,15 @@
-<h1>Functional JavaScript First Steps</h1>
+
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    
+    <link rel="stylesheet" href="/dev-blog/highlight/default.min.css">
+  </head>
+  <body>
+    <article>
+      <h1>Functional JavaScript First Steps</h1>
 <blockquote>
 <p><a href="https://frontendmasters.com/courses/functional-first-steps">FrontEnd Masters: Functional JavaScript First Steps</a> 수강후 정리한 글.</p>
 </blockquote>
@@ -33,25 +44,24 @@
 </ul>
 </li>
 </ul>
-<pre><code class="language-js">// Not pure
-let name = 'Alonzo';
+<pre><code class="hljs language-js"><span class="hljs-comment">// Not pure</span>
+<span class="hljs-keyword">let</span> name = <span class="hljs-string">'Alonzo'</span>;
 
-function greet() {
-  console.log(`Hello, ${name}!`);
+<span class="hljs-keyword">function</span> <span class="hljs-title hljs-function">greet</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-variable hljs-language">console</span>.<span class="hljs-title hljs-function">log</span>(<span class="hljs-string">`Hello, <span class="hljs-subst">${name}</span>!`</span>);
 }
 
-greet(); // Hello Alonzo!
-name = 'Alan';
-greet(); // Alonzo, Alan
-// 입력이 같지만 다른 결과
+<span class="hljs-title hljs-function">greet</span>(); <span class="hljs-comment">// Hello Alonzo!</span>
+name = <span class="hljs-string">'Alan'</span>;
+<span class="hljs-title hljs-function">greet</span>(); <span class="hljs-comment">// Alonzo, Alan</span>
+<span class="hljs-comment">// 입력이 같지만 다른 결과</span>
 
-// Pure
-function greet(name) {
-  return `Hello, ${name}!`;
+<span class="hljs-comment">// Pure</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title hljs-function">greet</span>(<span class="hljs-params">name</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-string">`Hello, <span class="hljs-subst">${name}</span>!`</span>;
 }
-greet('Alonzo'); // "Hello Alonzo!"
-greet('Alan'); // "Hello Alan!"
-</code></pre>
+<span class="hljs-title hljs-function">greet</span>(<span class="hljs-string">'Alonzo'</span>); <span class="hljs-comment">// "Hello Alonzo!"</span>
+<span class="hljs-title hljs-function">greet</span>(<span class="hljs-string">'Alan'</span>); <span class="hljs-comment">// "Hello Alan!"</span></code></pre>
 <h3>Why functional programming</h3>
 <ul>
 <li>순수 함수를 통해 결과가 예측 가능해져 안전함</li>
@@ -91,24 +101,22 @@ greet('Alan'); // "Hello Alan!"
 <p>iteration:</p>
 </li>
 </ul>
-<pre><code class="language-js">function sum (numbers) {
-  let total = 0;
-  for (let i = 0; i &#x3C; numbers.length; i++) {
+<pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title hljs-function">sum</span> (numbers) {
+  <span class="hljs-keyword">let</span> total = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &#x3C; numbers.<span class="hljs-property">length</span>; i++) {
     total += numbers[i];
   }
-  return total;
-}
-</code></pre>
+  <span class="hljs-keyword">return</span> total;
+}</code></pre>
 <ul>
 <li>recursion:</li>
 </ul>
-<pre><code class="language-js">function sum(numbers) {
-  if (numbers.length === 1){
-    return numbers[0];
+<pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title hljs-function">sum</span>(<span class="hljs-params">numbers</span>) {
+  <span class="hljs-keyword">if</span> (numbers.<span class="hljs-property">length</span> === <span class="hljs-number">1</span>){
+    <span class="hljs-keyword">return</span> numbers[<span class="hljs-number">0</span>];
   }
-  return numbers[0] + sum(numbers.slice(1));
-}
-</code></pre>
+  <span class="hljs-keyword">return</span> numbers[<span class="hljs-number">0</span>] + <span class="hljs-title hljs-function">sum</span>(numbers.<span class="hljs-title hljs-function">slice</span>(<span class="hljs-number">1</span>));
+}</code></pre>
 <h3>Performance: iteration vs recursion</h3>
 <ul>
 <li>call stack</li>
@@ -123,15 +131,14 @@ greet('Alan'); // "Hello Alan!"
 <ul>
 <li>내부 함수를 반환함으로써 스코프를 기억하게 할 수 있다.</li>
 </ul>
-<pre><code class="language-js">function makeAdjectifier(adjective) {
-  return function (noun) {
-    return adjective + " " + noun;
+<pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title hljs-function">makeAdjectifier</span>(<span class="hljs-params">adjective</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> (<span class="hljs-params">noun</span>) {
+    <span class="hljs-keyword">return</span> adjective + <span class="hljs-string">" "</span> + noun;
   }
 }
 
-const coolify = makeAdjectifier("cool");
-coolify("workshop"); // "cool workshop";
-
+<span class="hljs-keyword">const</span> coolify = <span class="hljs-title hljs-function">makeAdjectifier</span>(<span class="hljs-string">"cool"</span>);
+<span class="hljs-title hljs-function">coolify</span>(<span class="hljs-string">"workshop"</span>); <span class="hljs-comment">// "cool workshop";</span>
 </code></pre>
 <h2>Currying</h2>
 <h2>Function composition</h2>
@@ -139,17 +146,16 @@ coolify("workshop"); // "cool workshop";
 <li>간단한 함수들로 복잡한 함수를 생성</li>
 </ul>
 <h3>pipeline</h3>
-<pre><code class="language-js">function pipeline(...functions) {
-  const pipe = (arg) => functions.reduce((ret, func) => func(ret), arg);
-  return function(input) {
-    return pipe(input);
+<pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title hljs-function">pipeline</span>(<span class="hljs-params">...functions</span>) {
+  <span class="hljs-keyword">const</span> <span class="hljs-title hljs-function">pipe</span> = (<span class="hljs-params">arg</span>) => functions.<span class="hljs-title hljs-function">reduce</span>(<span class="hljs-function">(<span class="hljs-params">ret, func</span>) =></span> <span class="hljs-title hljs-function">func</span>(ret), arg);
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span>(<span class="hljs-params">input</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-title hljs-function">pipe</span>(input);
   };
 }
 
 
-const somePipe = pipeline(func1, func2, ...);
-const output = somePipe(input);
-</code></pre>
+<span class="hljs-keyword">const</span> somePipe = <span class="hljs-title hljs-function">pipeline</span>(func1, func2, ...);
+<span class="hljs-keyword">const</span> output = <span class="hljs-title hljs-function">somePipe</span>(input);</code></pre>
 <h3>Immutability</h3>
 <ul>
 <li>
@@ -165,3 +171,7 @@ const output = somePipe(input);
 </ul>
 </li>
 </ul>
+
+    </article>
+  </body>
+</html>

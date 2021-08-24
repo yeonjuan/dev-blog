@@ -1,4 +1,15 @@
-<h1>Js13kGames 2019 참가 후기</h1>
+
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    
+    <link rel="stylesheet" href="/dev-blog/highlight/default.min.css">
+  </head>
+  <body>
+    <article>
+      <h1>Js13kGames 2019 참가 후기</h1>
 <ul>
 <li><a href="/dev-blog/#Js13kGames">Js13kGames?</a></li>
 <li><a href="/dev-blog/#왜">왜?</a></li>
@@ -43,39 +54,37 @@
 <p><a href="https://github.com/kevincennis/TinyMusic">TinyMusic</a> 이라는 라이브러리를 이용하면 WebAudio를 이용하여 소리를 만들어 낼 수 있습니다. 이 라이브러리는 문자열 배열 형태의 음악 코드를 web audio로 재생시켜 줍니다.</p>
 <h2>게임 배경음악 악보</h2>
 <p>아무 음악이나 사용하면 저작권 문제도 있을 것 같아 음악을 전공하는 친구에게 부탁하여 곡을 받고, 이를 TinyMusic으로 재생시키기 위해 아래와 같이 변환했습니다.</p>
-<pre><code class="language-js">import TinyMusic from "./TinyMusic";
-/*
+<pre><code class="hljs language-js"><span class="hljs-keyword">import</span> <span class="hljs-title hljs-class">TinyMusic</span> <span class="hljs-keyword">from</span> <span class="hljs-string">"./TinyMusic"</span>;
+<span class="hljs-comment">/*
  A~F[숫자] 는 음.
  w, h ,e 는 음의 길이.
-*/
-const NOTES = [
-  'Gb4  w', 'B3  h', 'Db4  h', 'D4  e', 'E4  e', 'D4  e', 'C4  h', 'B3  h',
-  'Gb4  w', 'B3  h', 'Db4  h', 'D4  e', 'E4  e', 'D4  e', 'F4  h', 'G4  h',
-  'Gb4  w', 'B3  h', 'Db4  h', 'D4  e', 'E4  e', 'D4  e','C4  h', 'B3  h',
-  'Gb4  w', 'G4  h', 'F4  h', 'E4  w', 'D4  h', 'E4  h',
+*/</span>
+<span class="hljs-keyword">const</span> <span class="hljs-variable hljs-constant">NOTES</span> = [
+  <span class="hljs-string">'Gb4  w'</span>, <span class="hljs-string">'B3  h'</span>, <span class="hljs-string">'Db4  h'</span>, <span class="hljs-string">'D4  e'</span>, <span class="hljs-string">'E4  e'</span>, <span class="hljs-string">'D4  e'</span>, <span class="hljs-string">'C4  h'</span>, <span class="hljs-string">'B3  h'</span>,
+  <span class="hljs-string">'Gb4  w'</span>, <span class="hljs-string">'B3  h'</span>, <span class="hljs-string">'Db4  h'</span>, <span class="hljs-string">'D4  e'</span>, <span class="hljs-string">'E4  e'</span>, <span class="hljs-string">'D4  e'</span>, <span class="hljs-string">'F4  h'</span>, <span class="hljs-string">'G4  h'</span>,
+  <span class="hljs-string">'Gb4  w'</span>, <span class="hljs-string">'B3  h'</span>, <span class="hljs-string">'Db4  h'</span>, <span class="hljs-string">'D4  e'</span>, <span class="hljs-string">'E4  e'</span>, <span class="hljs-string">'D4  e'</span>,<span class="hljs-string">'C4  h'</span>, <span class="hljs-string">'B3  h'</span>,
+  <span class="hljs-string">'Gb4  w'</span>, <span class="hljs-string">'G4  h'</span>, <span class="hljs-string">'F4  h'</span>, <span class="hljs-string">'E4  w'</span>, <span class="hljs-string">'D4  h'</span>, <span class="hljs-string">'E4  h'</span>,
 ];
 
-const audioContext = new AudioContext();
-const tempo = 240; // 템포
-const bgMusic = new TinyMusic.Sequence(audioContext, tempo, BG_MUSIC_NOTES);
+<span class="hljs-keyword">const</span> audioContext = <span class="hljs-keyword">new</span> <span class="hljs-title hljs-class">AudioContext</span>();
+<span class="hljs-keyword">const</span> tempo = <span class="hljs-number">240</span>; <span class="hljs-comment">// 템포</span>
+<span class="hljs-keyword">const</span> bgMusic = <span class="hljs-keyword">new</span> <span class="hljs-title hljs-class">TinyMusic</span>.<span class="hljs-title hljs-class">Sequence</span>(audioContext, tempo, <span class="hljs-variable hljs-constant">BG_MUSIC_NOTES</span>);
 
-bgMusic.loop = true; // 반복 재생 true
+bgMusic.<span class="hljs-property">loop</span> = <span class="hljs-literal">true</span>; <span class="hljs-comment">// 반복 재생 true</span>
 
-bgMusic.play(); // 재생 시작
-
+bgMusic.<span class="hljs-title hljs-function">play</span>(); <span class="hljs-comment">// 재생 시작</span>
 </code></pre>
 <h2>폰트</h2>
 <p>처음에는 웹 브라우저의 기본 폰트를 사용하려 했으나, 디자인과도 맞지 않고. 모든 사용자에게 동일한 폰트를 보여주는 것이 좋겠다고 생각했습니다.</p>
 <p>하지만 폰트 파일은 크기가 크기 때문에 이 역시 <a href="https://github.com/PaulBGD/PixelFont">Pixel Font</a>라는 라이브러리를 이용해 해결했습니다.</p>
 <p>이 라이브러리는 내부적으로 모든 알파벳의 모양을 boolean의 2차원 배열로 가지고 있고, 이를 Canvas에 사각형으로 그리도록 도와줍니다.</p>
-<pre><code class="language-js">var A = [
-    [false, true, false],
-    [true, false, true],
-    [true, false, true],
-    [true, true, true],
-    [true, false, true]
-];
-</code></pre>
+<pre><code class="hljs language-js"><span class="hljs-keyword">var</span> A = [
+    [<span class="hljs-literal">false</span>, <span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>],
+    [<span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>, <span class="hljs-literal">true</span>],
+    [<span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>, <span class="hljs-literal">true</span>],
+    [<span class="hljs-literal">true</span>, <span class="hljs-literal">true</span>, <span class="hljs-literal">true</span>],
+    [<span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>, <span class="hljs-literal">true</span>]
+];</code></pre>
 <p><img src="./assets/js13k2019/font.png" alt="font"></p>
 <h2>결과 및 느낀 점</h2>
 <h3>결과</h3>
@@ -88,12 +97,11 @@ bgMusic.play(); // 재생 시작
 <p>대표적으로 퀄리티를 떨어뜨리는 요소는, '매직넘버'와 '잘못된 구조'입니다.</p>
 <h4>매직 넘버</h4>
 <p>Canvas에 그려지는 요소를 눈대중으로 맞추다 보니 아래와 같은 코드가 많습니다.</p>
-<pre><code class="language-js">this.ox = x  + width / 2 + Math.cos(rad) * 21;
-this.oy =  y + 7 + Math.sin(rad) * 21;
-// ...
-this.head.offsetY = 8;
-this.head.offsetX = 5;
-</code></pre>
+<pre><code class="hljs language-js"><span class="hljs-variable hljs-language">this</span>.<span class="hljs-property">ox</span> = x  + width / <span class="hljs-number">2</span> + <span class="hljs-title hljs-class">Math</span>.<span class="hljs-title hljs-function">cos</span>(rad) * <span class="hljs-number">21</span>;
+<span class="hljs-variable hljs-language">this</span>.<span class="hljs-property">oy</span> =  y + <span class="hljs-number">7</span> + <span class="hljs-title hljs-class">Math</span>.<span class="hljs-title hljs-function">sin</span>(rad) * <span class="hljs-number">21</span>;
+<span class="hljs-comment">// ...</span>
+<span class="hljs-variable hljs-language">this</span>.<span class="hljs-property">head</span>.<span class="hljs-property">offsetY</span> = <span class="hljs-number">8</span>;
+<span class="hljs-variable hljs-language">this</span>.<span class="hljs-property">head</span>.<span class="hljs-property">offsetX</span> = <span class="hljs-number">5</span>;</code></pre>
 <p>제가 짰는데도 나중에 보니 이게 무슨 숫자인지 헷갈리고 버그가 있어도 찾아 해결하는데 시간이 오래 걸렸습니다.</p>
 <p>또한 여러 곳에 동일하게 쓰인 숫자를 바꾸려고 할 때 일부를 빼먹게 되어 문제가 생기는 경우도 빈번했습니다.</p>
 <p>조금 귀찮더라도 미리미리 상수로 잘 정의했다면 더 수월했을 것 같아 아쉽습니다.</p>
@@ -104,3 +112,7 @@ this.head.offsetX = 5;
 <h2>끝</h2>
 <p>마지막으로 게임이 궁금하신 분들은 아래 링크에서 플레이할 수 있으며, 모바일은 지원하지 않고 Chorme 과 FireFox에서만 동작합니다.</p>
 <p><a href="https://js13kgames.com/entries/back-attacker">Play Back Attacker</a></p>
+
+    </article>
+  </body>
+</html>
