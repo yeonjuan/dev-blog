@@ -1,0 +1,102 @@
+<h1>Cheatsheet</h1>
+<h2>Table of Contents</h2>
+<ol>
+<li><a href="#node">node</a></li>
+<li><a href="#git">git</a></li>
+<li><a href="#mysql">mysql</a></li>
+<li><a href="#kubernetes">kubernetes</a></li>
+<li><a href="#docker">docker</a></li>
+<li><a href="#argo">argo</a></li>
+</ol>
+<h1>node</h1>
+<ul>
+<li><a href="#dns-lookup">DNS lookup</a></li>
+<li><a href="#remove-directory">Remove directory</a></li>
+</ul>
+<h3>DNS lookup</h3>
+<p>Simple dns lookup.</p>
+<pre><code class="language-js">const dns = require('dns');
+
+dns.lookup('google.com', (err, address, family) => {
+  // DNS server IP
+  console.log(address); // 172.217.25.110
+
+  // IPv4 or IPv6
+  console.log(address, family); // 4
+});
+</code></pre>
+<h3>Remove directory</h3>
+<p>Removes the entire directory recursively.</p>
+<pre><code class="language-js">const fs = require('fs');
+fs.rmdirSync('directory/path', { recursive: true })
+</code></pre>
+<h1>git</h1>
+<ul>
+<li><a href="#delete-remote-tag">Delete remote tag</a></li>
+<li><a href="#sync-forked-repo">Sync forked repo</a></li>
+</ul>
+<h3>Delete remote tag</h3>
+<p>Delete remote tag.</p>
+<pre><code class="language-bash">$ git push --delete origin {tagname}
+</code></pre>
+<h3>Sync forked repo</h3>
+<p>Sync forked repo.</p>
+<pre><code class="language-bash">$ git remote add upstream {upstream github.git}
+$ git fetch upstream
+$ git checkout master
+$ git merge upstream/master
+$ git push origin master
+</code></pre>
+<h1>mysql</h1>
+<ul>
+<li><a href="#add-column">Add column</a></li>
+<li><a href="#connecting-to-the-mysql">Connecting to the MySQL</a></li>
+</ul>
+<h3>Add column</h3>
+<p>Adding a new column in the existing table.</p>
+<pre><code class="language-sql">ALTER TABLE table_name ADD COLUMN column_name VARCHAR(200) NOT NULL;
+</code></pre>
+<h3>Connecting to the MySQL</h3>
+<p>Connecting to the MySQL using command.</p>
+<pre><code class="language-console">$ mysql -h 123.456.7.89 -P 3306 -u root -p
+</code></pre>
+<h1>kubernetes</h1>
+<ul>
+<li><a href="#mount-secret-file">Mount secret file</a></li>
+<li><a href="#mount-ssl">Mount SSL</a></li>
+</ul>
+<h3>Mount secret file</h3>
+<pre><code class="language-bash">$ kubectl create secret generic {secret name} --from-file={file path}
+</code></pre>
+<h3>Mount SSL</h3>
+<pre><code class="language-bash">$ kubectl create secret tls {secret name} --key {key file path} --cert {cert file path}
+</code></pre>
+<h1>docker</h1>
+<ul>
+<li><a href="#build-image">Build image</a></li>
+<li><a href="#push-image">Push image</a></li>
+</ul>
+<h3>Build image</h3>
+<p>Build a docker image with a specified docker file.</p>
+<pre><code class="language-bash">$ docker build -t {image name} -f {docker file path} {path}
+</code></pre>
+<h3>Push image</h3>
+<p>Push docker image.</p>
+<pre><code class="language-bash">$ docker push {docker image name}
+</code></pre>
+<h1>argo</h1>
+<ul>
+<li><a href="#create-cron-workflow">Create cron workflow</a></li>
+<li><a href="#submit-workflow">Submit workflow</a></li>
+</ul>
+<h3>Create cron workflow</h3>
+<p>Create cron workflow with argo cli.</p>
+<pre><code class="language-bash">$ argo cron create {cron-workflow.yaml}
+</code></pre>
+<h3>Submit workflow</h3>
+<p>Submit workflow with argo cli.</p>
+<pre><code class="language-bash">$ argo submit {workflow.yaml}
+</code></pre>
+<h3>Access the argo workflow ui</h3>
+<pre><code class="language-bash">$ kubectl -n argo port-forward svc/argo-server 2746:2746
+</code></pre>

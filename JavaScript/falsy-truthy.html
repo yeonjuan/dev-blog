@@ -1,0 +1,112 @@
+<h1>falsy &#x26; truthy</h1>
+<p><strong>falsy</strong> 와 <strong>truthy</strong>는 ECMA 스펙에 등장하는 단어는 아닙니다. JavaScript 동작을 이해하기 쉽게 하기위해 사용되는 단어입니다.
+번역해보면 <strong>truthy</strong>는 "참 같은 값", <strong>falsy</strong>는 "거짓 같은 값" 정도로 해석되며, 다음과 같이 정리할 수 있습니다.</p>
+<p><strong>falsy</strong>: 불리언 값으로 평가되는 문맥에서, <strong>false</strong>로 평가되는 값.</p>
+<ul>
+<li>undefined, null, false, 0, -0, NaN, ""(빈문자열), 0n 등이 있음 (ECMA 2020 기준)</li>
+</ul>
+<p><strong>truthy</strong>: 불리언 값으로 평가되는 문맥에서, <strong>true</strong>로 평가되는 값.</p>
+<ul>
+<li><strong>falsy</strong>를 제외한 값들</li>
+</ul>
+<p><strong>truthy</strong>와 <strong>falsy</strong> 개념은 JavaScript의 값이 특정 문법, 연산에서 <strong>true</strong>나 <strong>false</strong>로 동작한다는 것을 말해줍니다.</p>
+<p>그럼 ECMA 스펙에서 어떤 부분이 <strong>falsy</strong>와 <strong>truthy</strong> 개념을 만들어 내는지 살펴 보겠습니다.
+스펙 문서는 <a href="https://tc39.es/ecma262/2020/">ECMA 2020</a> 기준입니다.</p>
+<h2>ToBoolean</h2>
+<p>ECMA 스펙에서 어떤 값을 <strong>true</strong>, <strong>false</strong>로 변환하는 연산은 <a href="https://tc39.es/ecma262/2020/#sec-toboolean">7.1.2 ToBoolean</a>에 정의되어 있습니다.
+이 연산은 추상 연산(Abstract Operation)으로 ECMASCript 언어의 런타임 스펙을 정의할 때 사용되는데, 값을 불리언 값으로 변환하는 역할을 합니다.</p>
+<blockquote>
+<h4>추상 연산(Abstract Operation)</h4>
+<p>스펙을 위해 정의된 연산으로, 스펙 내에서만 존재하며 실제로 구현되어 있는 연산은 아닙니다.</p>
+</blockquote>
+<p>ToBoolean 스펙을 일부 번역한 내용을 살펴보겠습니다.</p>
+<p><a href="https://tc39.es/ecma262/2020/#sec-toboolean">7.1.2 ToBoolean ( <em>argument</em> )</a></p>
+<blockquote>
+<h3>7.1.2 ToBoolean ( <em>argument</em> )</h3>
+<p>추상 연산 ToBoolean 은 <em>argument</em>를 인자로 받고, <strong>Table 10</strong> 에 따라 <em>argument</em> 를 Boolean 타입 값으로 변환한다:</p>
+<h4>Table 10: ToBoolean 변환</h4>
+<p>| <em>argument</em> 타입 | 결과 |
+| --- | --- |
+| Undefined | <strong>false</strong> 반환 |
+| Null | <strong>false</strong> 반환 |
+| Boolean | <em>argument</em> 를 그대로 반환 |
+| Number | <em>argument</em> 가 0, -0, NaN 이면 <strong>false</strong>, 그 외 <strong>true</strong> 반환 |
+| String | <em>argument</em> 가 빈 문자열(길이가 0인)이면 <strong>false</strong>; 아니면 <strong>true</strong> 반환 |
+| Symbol | <strong>true</strong> 반환 |
+| BigInt | <em>argument</em> 가 <strong>0n</strong> 이면 <strong>false</strong> 반환, 그외 <strong>true</strong> 반환 |
+| Object | <strong>true</strong> 반환 |</p>
+</blockquote>
+<p>ToBoolean(<em>argument</em>)의 <em>argument</em> 타입과 값에 따라 <strong>true</strong>를 반환하는지, <strong>false</strong>를 반환하는지 정의되어 있습니다.</p>
+<p>값으로 정리해보면, undefined, null, false, 0, -0, NaN, ""(빈문자열), 0n 의 8개의 값만 <strong>false</strong>로 변환되고, 그 외의 값은 <strong>true</strong>로 변환되는 것을 알 수 있습니다.
+우리가 이미 알고 있는 <strong>truthy</strong>, <strong>falsy</strong> 에 해당하는 값들과 일치합니다.</p>
+<p>왠지 <strong>false</strong>로 변환될 것 같은 [], {} 도 Object 타입이기 때문에 <strong>true</strong>로 변환되는 값인 걸 알 수 있습니다.</p>
+<h2>런타임 스펙에서 사용되는 ToBoolean</h2>
+<p>이제 런타임 스펙에서 ToBoolean이 사용되는 모습을 살펴보겠습니다.
+ToBoolean은 Not 연산자(!), if, while, for, 삼항 연산자 ...등의 런타임 스펙에서 특정 값을 불리언 타입 값으로 변환하는데 사용됩니다.</p>
+<ul>
+<li>참고: 아래에서 ToBoolean 앞의 <strong>!</strong> 표시는 해당 연산이 추상 연산이라는 표시입니다.</li>
+</ul>
+<p><a href="https://tc39.es/ecma262/2020/#sec-logical-not-operator">12.5.9  Logical NOT Operator ( ! )</a></p>
+<blockquote>
+<p><strong>12.5.9 NOT 논리 연산자</strong><br>
+...<br>
+<em>UnaryExpression</em>: ! <em>UnaryExpression</em></p>
+<ol>
+<li><em>expr</em> 는 <em>UnaryExpression</em> 을 평가한 결과이다.</li>
+<li><em>oldValue</em> 은 !<strong>ToBoolean</strong>(? GetValue(<em>expr</em>)) 이다.</li>
+<li><em>oldValue</em> 가 true면, false를 반환한다.</li>
+<li>true를 반환한다.</li>
+</ol>
+</blockquote>
+<p>2번 단계에서 평가된 표현식의 값을 ToBoolean 을 통해 불리언 타입으로 바꾸는 것을 확인할 수 있습니다.
+그리고 그 값이 <strong>true</strong>면 <strong>false</strong>, 아니면 <strong>true</strong>를 반환합니다.</p>
+<pre><code class="language-js">console.log( !"a" ); // false
+console.log( !null ); // true
+</code></pre>
+<p><a href="https://tc39.es/ecma262/2020/#sec-logical-not-operator">13.6 The if Statement</a></p>
+<blockquote>
+<p><strong>13.6 if 문</strong><br>
+...<br>
+<em>IfStatement</em> : if ( <em>Expression</em> ) <em>Statement</em></p>
+<ol>
+<li><em>exprRef</em> 는 Expression을 평가한 결과이다.</li>
+<li><em>exprValue</em> 는 !<strong>ToBoolean</strong>(? GetValue(exprRef)) 이다.</li>
+<li><em>exprValue</em> 가 false 이면<br>
+a. NormalCompletion(undefined)를 반환한다.</li>
+<li>아니면<br>
+a. <em>stmtCompletion</em> 은 <em>Statement</em> 를 평가한 결과이다.<br>
+b. Completion(UpdateEmpty(stmtCompletion, undefined)) 를 반환한다.</li>
+</ol>
+</blockquote>
+<p>if 문 런타임 스펙의 2번 단계에서도 평가된 표현식의 값에 <strong>ToBoolean</strong> 연산을 수행해 값을 불리언 타입으로 바꿉니다.
+그리고 그 값이 <strong>false</strong> 면 종료하고, 아니면 if 문의 <em>Statement</em> 를 실행하는 것을 알 수 있습니다.</p>
+<pre><code class="language-js">if ("") console.log("출력 X");
+
+if ([]) console.log("출력 O"); // "출력 O"
+</code></pre>
+<p>스펙에 따라 실행되면서 ToBoolean 에 의해 값들이 불리언 값으로 변환됩니다.
+이런 스펙이 개발자 관점에서는 특정 문맥에서 불리언처럼 동작하는 <strong>truthy</strong>, <strong>falsy</strong> 개념을 만들어 내는 것을 알 수 있습니다.</p>
+<h2>Summary</h2>
+<ol>
+<li>
+<p><strong>truthy</strong>, <strong>falsy</strong>는 ECMA 스펙의 추상 연산 ToBoolean과 이 연산을 사용하는 런타임 스펙들에 의해 만들어집니다.</p>
+</li>
+<li>
+<p>사실 아래 두 가지 내용만 알아두면 충분합니다.</p>
+</li>
+</ol>
+<ul>
+<li>
+<p><strong>falsy</strong>: 불리언 값으로 평가되는 문맥에서(ex 조건문), <strong>false</strong> 로 평가되는 값.</p>
+<ul>
+<li>undefined, null, false, 0, -0, NaN, ""(빈문자열), 0n</li>
+</ul>
+</li>
+<li>
+<p><strong>truthy</strong>: 불리언 값으로 평가되는 문맥에서(ex 조건문), <strong>true</strong> 로 평가되는 값.</p>
+<ul>
+<li><strong>falsy</strong> 가 아닌 나머지</li>
+</ul>
+</li>
+</ul>
+<p>많은 글에서 <strong>truthy</strong>, <strong>falsy</strong>에 대해 설명하고 있고 이미 알고 있던 내용이었지만, 스펙에서 직접 확인하니 마음이 편안해졌습니다. 😚</p>

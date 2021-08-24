@@ -1,0 +1,122 @@
+<h1>Advanced React Patterns</h1>
+<blockquote>
+<p><a href="https://frontendmasters.com/courses/advanced-react-patterns/">FrontEnd Masters: Advanced React Patterns</a> 수강후 정리한 글. 강의 예제는 class형 컴포넌트로 되어있는데 Functional 컴포넌트로 예제를 수정해 정리함</p>
+</blockquote>
+<h2>Compound Components</h2>
+<h3>Compound Components (Basic)</h3>
+<p>사용하는 측에서 컴포넌트를 조합해서 사용하도록 한다. 컴포넌트의 재사용성을 높힌다.</p>
+<ul>
+<li>
+<p>Usage</p>
+<pre><code class="language-jsx">const Usage = ({onToggle = (on) => console.log('toggle:' + on)}) => {
+  return (
+    &#x3C;Toggle onToggle={onToggle}>
+      &#x3C;Toggle.On>The button is on&#x3C;/Toggle.On>
+      &#x3C;Toggle.Off>The button is off&#x3C;/Toggle.Off>
+      &#x3C;Toggle.Button />
+    &#x3C;/Toggle>
+  );
+}
+</code></pre>
+</li>
+<li>
+<p>Implementation</p>
+<pre><code class="language-jsx">const Toggle = (props) => {
+  const [on, setOn] = useState(false);
+  const toggle = () => setOn(prev => !prev);
+  useEffect(() => props.onToggle(on), [on]);
+
+  return React.Children.map(props.children, child => {
+    return React.cloneElement(child, {
+      on,
+      toggle,
+    });
+  });
+}
+
+Toggle.On = (props) => {
+  return props.on ? props.children : null;
+}
+Toggle.Off = (props) => {
+  return props.on ? null : props.children;
+}
+Toggle.Button = (props) => {
+  return &#x3C;Switch on={props.on} onClick={props.toggle}/>;
+}
+</code></pre>
+</li>
+</ul>
+<h3>Compound Component (Context API)</h3>
+<p>Context API 를 이용하는 방법</p>
+<ul>
+<li>
+<p>Usage</p>
+<pre><code class="language-jsx">const Usage = ({onToggle = (on) => console.log('toggle:' + on)}) => {
+  return (
+    &#x3C;Toggle onToggle={onToggle}>
+      &#x3C;Toggle.On>The button is on&#x3C;/Toggle.On>
+      &#x3C;Toggle.Off>The button is off&#x3C;/Toggle.Off>
+      &#x3C;div>
+        &#x3C;Toggle.Button />
+      &#x3C;/div>
+    &#x3C;/Toggle>
+  );
+}
+</code></pre>
+</li>
+<li>
+<p>Implementation</p>
+<pre><code class="language-jsx">const ToggleContext = React.createContext({on: false, toggle: () => {}});
+
+const Toggle = (props) => {
+  const [on, setOn] = useState(false);
+  const toggle = () => setOn(prev => !prev);
+  useEffect(() => props.onToggle(on), [on]);
+
+  return &#x3C;ToggleContext.Provider value={{on, toggle}}>
+    {props.children}
+  &#x3C;/ToggleContext.Provider>;
+}
+
+Toggle.On = (props) => &#x3C;ToggleContext.Consumer>
+  {({on}) => (on ? props.children : null)}
+&#x3C;/ToggleContext.Consumer>;
+
+Toggle.Off = (props) => &#x3C;ToggleContext.Consumer>
+  {({on}) => (on ? null : props.children)}
+&#x3C;/ToggleContext.Consumer>;
+
+Toggle.Button = (props) => &#x3C;ToggleContext.Consumer>
+  {({on, toggle}) => &#x3C;Switch  {...props} on={on} onClick={toggle} />}
+&#x3C;/ToggleContext.Consumer>
+</code></pre>
+</li>
+</ul>
+<h2>Render Props</h2>
+<p>자식 컴포넌트로 render 함수를 사용할 수 있도록 한다.
+render 함수의 인자로는 사용자가 필요한 상태값과 상태를 변경할 수 있는 액션 함수를 제공한다.</p>
+<ul>
+<li>
+<p>Usage</p>
+<pre><code class="language-jsx">const Usage = (props) => {
+    return &#x3C;Toggle onToggle={props.onToggle}>
+      {
+        ({on, toggle}) => (
+          &#x3C;div>
+            { on ? 'This button is on' : 'This button is off'}
+            &#x3C;Switch on={on} onClick={toggle}>
+          &#x3C;/div>
+        )
+      }
+    &#x3C;/Toggle>
+}
+</code></pre>
+</li>
+<li>
+<p>Implementation</p>
+<pre><code class="language-jsx">// TODO
+</code></pre>
+</li>
+</ul>
+<h2>Controlling State</h2>
+<h2>Provider Pattern</h2>
