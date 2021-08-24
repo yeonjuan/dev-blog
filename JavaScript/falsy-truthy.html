@@ -26,16 +26,12 @@
 <h2>ToBoolean</h2>
 <p>ECMA 스펙에서 어떤 값을 <strong>true</strong>, <strong>false</strong>로 변환하는 연산은 <a href="https://tc39.es/ecma262/2020/#sec-toboolean">7.1.2 ToBoolean</a>에 정의되어 있습니다.
 이 연산은 추상 연산(Abstract Operation)으로 ECMASCript 언어의 런타임 스펙을 정의할 때 사용되는데, 값을 불리언 값으로 변환하는 역할을 합니다.</p>
-<blockquote>
-<h4>추상 연산(Abstract Operation)</h4>
-<p>스펙을 위해 정의된 연산으로, 스펙 내에서만 존재하며 실제로 구현되어 있는 연산은 아닙니다.</p>
-</blockquote>
+<p><strong>추상 연산(Abstract Operation)</strong> : 스펙을 위해 정의된 연산으로, 스펙 내에서만 존재하며 실제로 구현되어 있는 연산은 아닙니다.</p>
 <p>ToBoolean 스펙을 일부 번역한 내용을 살펴보겠습니다.</p>
 <p><a href="https://tc39.es/ecma262/2020/#sec-toboolean">7.1.2 ToBoolean ( <em>argument</em> )</a></p>
-<blockquote>
-<h3>7.1.2 ToBoolean ( <em>argument</em> )</h3>
-<p>추상 연산 ToBoolean 은 <em>argument</em>를 인자로 받고, <strong>Table 10</strong> 에 따라 <em>argument</em> 를 Boolean 타입 값으로 변환한다:</p>
-<h4>Table 10: ToBoolean 변환</h4>
+<p><strong>7.1.2 ToBoolean ( <em>argument</em> )</strong>
+추상 연산 ToBoolean 은 <em>argument</em>를 인자로 받고, <strong>Table 10</strong> 에 따라 <em>argument</em> 를 Boolean 타입 값으로 변환한다:</p>
+<p><strong>Table 10: ToBoolean 변환</strong></p>
 <p>| <em>argument</em> 타입 | 결과 |
 | --- | --- |
 | Undefined | <strong>false</strong> 반환 |
@@ -46,7 +42,6 @@
 | Symbol | <strong>true</strong> 반환 |
 | BigInt | <em>argument</em> 가 <strong>0n</strong> 이면 <strong>false</strong> 반환, 그외 <strong>true</strong> 반환 |
 | Object | <strong>true</strong> 반환 |</p>
-</blockquote>
 <p>ToBoolean(<em>argument</em>)의 <em>argument</em> 타입과 값에 따라 <strong>true</strong>를 반환하는지, <strong>false</strong>를 반환하는지 정의되어 있습니다.</p>
 <p>값으로 정리해보면, undefined, null, false, 0, -0, NaN, ""(빈문자열), 0n 의 8개의 값만 <strong>false</strong>로 변환되고, 그 외의 값은 <strong>true</strong>로 변환되는 것을 알 수 있습니다.
 우리가 이미 알고 있는 <strong>truthy</strong>, <strong>falsy</strong> 에 해당하는 값들과 일치합니다.</p>
@@ -58,26 +53,21 @@ ToBoolean은 Not 연산자(!), if, while, for, 삼항 연산자 ...등의 런타
 <li>참고: 아래에서 ToBoolean 앞의 <strong>!</strong> 표시는 해당 연산이 추상 연산이라는 표시입니다.</li>
 </ul>
 <p><a href="https://tc39.es/ecma262/2020/#sec-logical-not-operator">12.5.9  Logical NOT Operator ( ! )</a></p>
-<blockquote>
-<p><strong>12.5.9 NOT 논리 연산자</strong><br>
-...<br>
-<em>UnaryExpression</em>: ! <em>UnaryExpression</em></p>
+<p><strong>12.5.9 NOT 논리 연산자</strong></p>
+<p><em>UnaryExpression</em>: ! <em>UnaryExpression</em></p>
 <ol>
 <li><em>expr</em> 는 <em>UnaryExpression</em> 을 평가한 결과이다.</li>
 <li><em>oldValue</em> 은 !<strong>ToBoolean</strong>(? GetValue(<em>expr</em>)) 이다.</li>
 <li><em>oldValue</em> 가 true면, false를 반환한다.</li>
 <li>true를 반환한다.</li>
 </ol>
-</blockquote>
 <p>2번 단계에서 평가된 표현식의 값을 ToBoolean 을 통해 불리언 타입으로 바꾸는 것을 확인할 수 있습니다.
 그리고 그 값이 <strong>true</strong>면 <strong>false</strong>, 아니면 <strong>true</strong>를 반환합니다.</p>
 <pre><code class="hljs language-js"><span class="hljs-variable hljs-language">console</span>.<span class="hljs-title hljs-function">log</span>( !<span class="hljs-string">"a"</span> ); <span class="hljs-comment">// false</span>
 <span class="hljs-variable hljs-language">console</span>.<span class="hljs-title hljs-function">log</span>( !<span class="hljs-literal">null</span> ); <span class="hljs-comment">// true</span></code></pre>
 <p><a href="https://tc39.es/ecma262/2020/#sec-logical-not-operator">13.6 The if Statement</a></p>
-<blockquote>
-<p><strong>13.6 if 문</strong><br>
-...<br>
-<em>IfStatement</em> : if ( <em>Expression</em> ) <em>Statement</em></p>
+<p><strong>13.6 if 문</strong></p>
+<p><em>IfStatement</em> : if ( <em>Expression</em> ) <em>Statement</em></p>
 <ol>
 <li><em>exprRef</em> 는 Expression을 평가한 결과이다.</li>
 <li><em>exprValue</em> 는 !<strong>ToBoolean</strong>(? GetValue(exprRef)) 이다.</li>
@@ -87,7 +77,6 @@ a. NormalCompletion(undefined)를 반환한다.</li>
 a. <em>stmtCompletion</em> 은 <em>Statement</em> 를 평가한 결과이다.<br>
 b. Completion(UpdateEmpty(stmtCompletion, undefined)) 를 반환한다.</li>
 </ol>
-</blockquote>
 <p>if 문 런타임 스펙의 2번 단계에서도 평가된 표현식의 값에 <strong>ToBoolean</strong> 연산을 수행해 값을 불리언 타입으로 바꿉니다.
 그리고 그 값이 <strong>false</strong> 면 종료하고, 아니면 if 문의 <em>Statement</em> 를 실행하는 것을 알 수 있습니다.</p>
 <pre><code class="hljs language-js"><span class="hljs-keyword">if</span> (<span class="hljs-string">""</span>) <span class="hljs-variable hljs-language">console</span>.<span class="hljs-title hljs-function">log</span>(<span class="hljs-string">"출력 X"</span>);
