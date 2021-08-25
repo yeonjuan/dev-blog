@@ -15,3 +15,9 @@ table, th, td {
 tr {
   border-top: 1px solid #c6cbd2;
 }
+a {
+  color: #3366cc;
+}
+a:visited {
+  color: #6b4bA1;
+}
