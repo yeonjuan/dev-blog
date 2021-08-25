@@ -212,6 +212,15 @@ export function applyTemplate(
     ${titleElem}
     <link rel="stylesheet" href="/dev-blog/styles/global.css">
     <link rel="stylesheet" href="/dev-blog/highlight/default.min.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-ZBZX7LMVNE');
+    </script>
   </head>
   <body>
     <header>
