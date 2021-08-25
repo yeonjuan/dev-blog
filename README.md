@@ -1,6 +1,7 @@
-<!--
+<!--meta
 title: dev-blog
-description: JavaScript development blogs
+description: JavaScript development blog
+keywords: JavaScript, dev blog, Development, 프론트 엔드
 -->
 
 # dev-blog

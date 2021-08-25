@@ -194,20 +194,21 @@ export function applyTemplate(
   content,
   {
     description,
-    title
+    title,
+    keywords,
   } = {}) {
   
-  const descriptionElem = description ? `<meta name="description" content="${description}">` : '';
+  const metaDescription = description ? `<meta name="description" content="${description}">` : '';
+  const metaKeywords = keywords ? `<meta name="keywords" content="${keywords}">` : '';
   const titleElem = `<title>${(!title || title.trim() === 'dev-blog') ? 'dev-blog' : `${title} - deb-blog`}</title>`;
-  // --color-markdown-table-border: #e0e3e6;
-  // --color-markdown-table-tr-border: #c6cbd2;
   return `
 <!DOCTYPE html>
 <html lang="ko">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    ${descriptionElem}
+    ${metaDescription}
+    ${metaKeywords}
     ${titleElem}
     <link rel="stylesheet" href="/dev-blog/styles/global.css">
     <link rel="stylesheet" href="/dev-blog/highlight/default.min.css">
@@ -224,4 +225,22 @@ export function applyTemplate(
   </body>
 </html>
 `
+}
+
+
+const META_REGEX = /<!--meta([\s\S]*?)-->/;
+/**
+ * @param {string} markdown 
+ */
+export function extractMeta (markdown) {
+  const matched = markdown.match(META_REGEX);
+  if (!matched) return null;
+  const [, metaString] = matched;
+  const metaLines = metaString.trim().split('\n');
+  const meta = metaLines.reduce((result, keyValue) => {
+    const [key, value] = keyValue.split(':');
+    result[key.trim()] = value.trim();
+    return result;
+  }, {});
+  return meta;
 }
