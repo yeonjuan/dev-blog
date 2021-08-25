@@ -35,11 +35,9 @@ keywords: JavaScript, dev blog, Development, 프론트 엔드
 * [코딩 컨벤션 업무를 하며 알게 된 것들 - 1](./JavaScript/coding-convention-1.md)
 * [코딩 컨벤션 업무를 하며 알게 된 것들 - 2](./JavaScript/coding-convention-2.md)
 
-## Code Snippet
+## Study
 
-- [debounce](./CodeSnippet/debounce.md)
-- [throttle](./CodeSnippet/throttle.md)
-- [useOnClickOutside - react](./CodeSnippet/useOnClickOutside.md)
+- [HTML](./Study/HTML/README.md)
 
 ## Course
 
