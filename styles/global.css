@@ -1,8 +1,14 @@
 * {
   box-sizing: border-box;
 }
+html {
+  margin: 0px;
+  padding: 0px;
+}
 body {
   font-family: sans-serif;
+  margin: 0px;
+  padding: 0px;
 }
 table {
   border-collapse: collapse;
@@ -25,4 +31,15 @@ a:visited {
 article {
   padding: 12px 12px 15px;
 }
-
+h1 {
+  font-size: 1.5em;
+}
+h2 {
+  font-size: 1.3em;
+}
+h3 {
+  font-size: 1.1em;
+}
+nav {
+  padding: 12px;
+}
