@@ -17,7 +17,12 @@ tr {
 }
 a {
   color: #3366cc;
+  text-decoration: none;
 }
 a:visited {
   color: #6b4bA1;
 }
+article {
+  padding: 12px 12px 15px;
+}
+
