@@ -50,6 +50,7 @@ nav.toc-heading { display: none; }
 @media only screen and (min-width: 1024px) {
   nav.toc-heading { position: sticky; position: -webkit-sticky; top: 0px; display: block; right: 0px; width: 300px; height: fit-content;}
   nav.toc-heading ul { list-style: none;}
+  nav.toc-heading ul ul { padding: 12px 0 0 20px;}
   nav.toc-heading li { line-height: 16px; padding-bottom: 8px;}
   nav.toc-heading li + li {margin-top: .25em;}
   nav.toc-heading > ul { border-left: 1px solid #e0e0e0; padding: 10px 0 2px 15px;}
