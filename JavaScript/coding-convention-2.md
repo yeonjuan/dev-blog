@@ -12,7 +12,7 @@ keywords: 코딩 컨벤션, ESLint, StyleGuide
 2. no-return-await
 3. comma-dangle
 
-## 1\. no-prototype-builtins
+## 1. no-prototype-builtins
 
 [ESLint: no-prototype-builtins](https://eslint.org/docs/rules/no-prototype-builtins) 규칙은 Object.prototype의 builtin으로 제공되는 메서드를 객체에서 직접 호출하지 않도록 하는 규칙입니다. Object.prototype의 builtin 메서드는 `hasOwnProperty`, `isPrototypeOf` 등이 있고 다음과 같은 방법으로 호출할 수 있습니다.
 
@@ -68,7 +68,7 @@ no-prototype-builtins 규칙에서 객체에서 builtin 메서드를 직접 호�
     이런 이유로 no-prototype-builtins 규칙은 builtin 메서드 사용시 Object.prototype을 활용하도록 권합니다.
     
 
-## 2\. no-return-await
+## 2. no-return-await
 
 [ESLint: no-return-await](https://eslint.org/docs/rules/no-return-await) 규칙은 `async function` 내부에서 `return await`을 하지 않도록 하는 규칙입니다. 예를 들어 다음과 같은 경우 입니다.
 
@@ -134,7 +134,7 @@ async function asyncCall() {
 
 바로 위와 같이 `try catch`로 return await을 감쌀 때입니다. await 뒤에 온 promise가 reject될 경우 Error를 throw 합니다. 그리고 그 에러 처리를 try catch를 통해 async 함수 내부에서 처리할 수 있습니다. 때문에 no-return-await 규칙을 사용하더라도 try catch로 감싼 경우는 통과하게 됩니다.
 
-## 3\. comma-dangle
+## 3. comma-dangle
 
 [ESLint: comma-dangle](https://eslint.org/docs/rules/comma-dangle) 규칙은 [trailing-comma](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Trailing_commas)를 사용하도록 설정할 수 있는 규칙입니다. trailing-comma는 object나 array의 값, function의 매개변수 등을 나타낼 때 마지막에 콤마(,)를 하나 더 추가하는 것을 뜻합니다. 아래는 trailing-comma의 예시 입니다.
 

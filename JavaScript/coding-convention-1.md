@@ -3,7 +3,7 @@
 최근 Javascript 코딩 컨벤션 관련 업무를 하고 있습니다. 업무를 하기 전에는, 만들어져 있던 Linter를 사용하기만 했었습니다. 어떤규칙들이 있는지, 왜 이런 규칙이 있는지 자세하게 알아본 적이 없었습니다.  
 이번 업무를 통해 [Airbnb](https://github.com/airbnb/javascript)나 [StandardJS](https://standardjs.com/) 등 유명한 가이드의 규칙을 자세히 살펴보았습니다. 또 ESLint에는 어떤 규칙들이 있는지, 왜 이런 규칙이 있는지 찾아보는 좋은 계기가 되었습니다. ESLint 규칙을 찾아보면서 몰랐던 내용이나, 흥미로운 내용을 따로 정리해 보았습니다.
 
-## 1\. no-octal
+## 1. no-octal
 
 [ESLint: no-octal](https://eslint.org/docs/rules/no-octal)
 
@@ -28,7 +28,7 @@ console.log(091); // 91
 
 -   "0"-prefixed octal literals 은 strict 모드나 ES6 이후 버전에서는 SyntaxError 에러를 발생시킵니다.\*
 
-## 2\. yoda
+## 2. yoda
 
 [ESLint: yoda](https://eslint.org/docs/rules/yoda)
 
@@ -73,17 +73,15 @@ if ('red' = color) {
 ```
 
 조건문을 요다처럼 쓰다가 실수를 한다면, 이 코드는 에러를 발생시키기 때문에 좀더 빠르게 에러를 잡아낼 수 있습니다.  
-  
 
 -   개발 툴도 좋아지고 다른 lint 규칙으로 yodish의 장점을 커버할 수 있기 때문에 많은 곳에서 yoda를 규칙을 never(사용 못 하도록)로 설정합니다.
 
-## 3\. no-magic-numbers
+## 3. no-magic-numbers
 
 [ESLint: no-magic-numbers](https://eslint.org/docs/rules/no-magic-numbers)
 
 no-magic-numbers 규칙은 매직넘버(magic number)를 사용하지 못하도록 하는 규칙입니다. 이 내용은 **클린 코드라는 책의 냄새와 휴리스틱** 부분에도 나오는 내용으로 소프트웨어 개발에서 **오래된 규칙**이라고 합니다. 또한 코드 리뷰를 받을 때 제 코드에서 종종 나온 내용이기도 합니다:)  
   
-
 -   ESLinter 에서는 숫자만 매직넘버로 거르지만 '매직넘버' 라는 용어는 숫자뿐만 아니라 의미가 불분명한 모든 토큰을 가리킵니다.
 -   [What is a magic number, and why is it bad? - stackoverflow](https://stackoverflow.com/questions/47882/what-is-a-magic-number-and-why-is-it-bad)
 
