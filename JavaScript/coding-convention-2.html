@@ -26,19 +26,21 @@
       </nav>
     </header>
     <article>
-      <!--meta
+      <div class="container">
+        <div class="content">
+          <!--meta
 title: 코딩 컨벤션 업무를 하며 알게 된 것들
 description: 코딩 컨벤션, 스타일가이드를 만들며 알게된 내용에 대해 정리한 글.
 keywords: 코딩 컨벤션, ESLint, StyleGuide
 -->
-<h1>코딩 컨벤션 업무를 하며 알게 된 것들 - 2</h1>
+<h1 id="코딩-컨벤션-업무를-하며-알게-된-것들---2">코딩 컨벤션 업무를 하며 알게 된 것들 - 2</h1>
 <p>이전 글에 이어서 Javascript 코딩 컨벤션 관련 업무를 하며 <a href="https://eslint.org/">ESLint</a> 규칙을 통해 알게 된 점을 정리해 보았습니다.</p>
 <ol>
 <li>no-prototype-builtins</li>
 <li>no-return-await</li>
 <li>comma-dangle</li>
 </ol>
-<h2>1. no-prototype-builtins</h2>
+<h2 id="1-no-prototype-builtins">1. no-prototype-builtins</h2>
 <p><a href="https://eslint.org/docs/rules/no-prototype-builtins">ESLint: no-prototype-builtins</a> 규칙은 Object.prototype의 builtin으로 제공되는 메서드를 객체에서 직접 호출하지 않도록 하는 규칙입니다. Object.prototype의 builtin 메서드는 <code>hasOwnProperty</code>, <code>isPrototypeOf</code> 등이 있고 다음과 같은 방법으로 호출할 수 있습니다.</p>
 <ol>
 <li>객체에서 직접 호출하는 방법</li>
@@ -82,7 +84,7 @@ obj.<span class="hljs-title hljs-function">hasOwnProperty</span>(<span class="hl
 이런 이유로 no-prototype-builtins 규칙은 builtin 메서드 사용시 Object.prototype을 활용하도록 권합니다.</p>
 </li>
 </ol>
-<h2>2. no-return-await</h2>
+<h2 id="2-no-return-await">2. no-return-await</h2>
 <p><a href="https://eslint.org/docs/rules/no-return-await">ESLint: no-return-await</a> 규칙은 <code>async function</code> 내부에서 <code>return await</code>을 하지 않도록 하는 규칙입니다. 예를 들어 다음과 같은 경우 입니다.</p>
 <pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title hljs-function">getSomePromise</span>(<span class="hljs-params"></span>) {
   <span class="hljs-comment">/* ... */</span>
@@ -131,7 +133,7 @@ obj.<span class="hljs-title hljs-function">hasOwnProperty</span>(<span class="hl
   }
 }</code></pre>
 <p>바로 위와 같이 <code>try catch</code>로 return await을 감쌀 때입니다. await 뒤에 온 promise가 reject될 경우 Error를 throw 합니다. 그리고 그 에러 처리를 try catch를 통해 async 함수 내부에서 처리할 수 있습니다. 때문에 no-return-await 규칙을 사용하더라도 try catch로 감싼 경우는 통과하게 됩니다.</p>
-<h2>3. comma-dangle</h2>
+<h2 id="3-comma-dangle">3. comma-dangle</h2>
 <p><a href="https://eslint.org/docs/rules/comma-dangle">ESLint: comma-dangle</a> 규칙은 <a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Trailing_commas">trailing-comma</a>를 사용하도록 설정할 수 있는 규칙입니다. trailing-comma는 object나 array의 값, function의 매개변수 등을 나타낼 때 마지막에 콤마(,)를 하나 더 추가하는 것을 뜻합니다. 아래는 trailing-comma의 예시 입니다.</p>
 <pre><code class="hljs language-js"><span class="hljs-keyword">const</span> obj = {
   <span class="hljs-attr">foo</span>: <span class="hljs-string">'foo'</span>,
@@ -158,6 +160,19 @@ trailing-comma를 사용시 추가, 삭제가 된 라인만 표시되게 되어 
 <li>IE6/7/9 Quirks mode 에서는 trailing-comma 가 문제를 일으킬 수 있습니다.</li>
 </ul>
 
+        </div>
+        
+  <nav class="toc-heading">
+    
+<ul>
+<li><a href="#1-no-prototype-builtins"> 1\. no-prototype-builtins</a></li>
+<li><a href="#2-no-return-await"> 2\. no-return-await</a></li>
+<li><a href="#3-comma-dangle"> 3\. comma-dangle</a></li>
+</ul>
+
+  </nav>
+  
+      </div>
     </article>
   </body>
 </html>

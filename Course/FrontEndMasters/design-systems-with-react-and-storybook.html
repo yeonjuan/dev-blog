@@ -26,12 +26,14 @@
       </nav>
     </header>
     <article>
-      <h1>Design Systems with React &#x26; Storybook</h1>
+      <div class="container">
+        <div class="content">
+          <h1 id="design-systems-with-react--storybook">Design Systems with React &#x26; Storybook</h1>
 <blockquote>
 <p><a href="https://frontendmasters.com/courses/design-systems/">FrontEnd Masters: Design Systems with React &#x26; Storybook</a> 수강후 정리한 글.</p>
 </blockquote>
-<h2>디자인 시스템</h2>
-<h3>왜 디자인 시스템이 중요한가.</h3>
+<h2 id="디자인-시스템">디자인 시스템</h2>
+<h3 id="왜-디자인-시스템이-중요한가">왜 디자인 시스템이 중요한가.</h3>
 <ul>
 <li><strong>접근성</strong>: 애플리케이션에서 환경에 상관없이 모든 유저가 같은 결과를 얻을 수 있어야 한다.</li>
 <li><strong>일관성</strong>: 제품들이 같은 브랜드 정체성안에 일부인 것 처럼 보여야 한다.</li>
@@ -41,20 +43,20 @@
 <li><strong>유연성</strong>: 디자인 시스템은 다양한 사용 케이스를 지원해야한다.</li>
 <li><strong>속도</strong>: 한번 디자인 시스템을 구성하면 이후 제품을 만드는 속도가 줄어든다.</li>
 </ul>
-<h3>디자인 시스템의 약점</h3>
+<h3 id="디자인-시스템의-약점">디자인 시스템의 약점</h3>
 <ul>
 <li><strong>시간</strong>: 디자인 시스템을 만드는 일은 시간이 많이든다.</li>
 <li><strong>개선</strong>: 디자인시스템은 절대 완벽해 질 수 없음</li>
 <li><strong>유지</strong>: 변화되는 제품을 위해 디자인 시스템도 유지보수가 이루어 져야함</li>
 <li><strong>투자</strong>: 디자이너, 개발자, 프러덕트 매니저가 필요함</li>
 </ul>
-<h3>디자인 시스템의 기본 3가지</h3>
+<h3 id="디자인-시스템의-기본-3가지">디자인 시스템의 기본 3가지</h3>
 <ul>
 <li>Design Language</li>
 <li>Component Library</li>
 <li>Style Guide</li>
 </ul>
-<h4>Design Language</h4>
+<h4 id="design-language">Design Language</h4>
 <p>브랜드의 성격 / 정체성과 이에 상응하는 디자인 에셋</p>
 <ul>
 <li>
@@ -70,7 +72,7 @@
 </ul>
 </li>
 </ul>
-<h4>Component Library</h4>
+<h4 id="component-library">Component Library</h4>
 <p>여러 프레임워크나 라이브러리로 만들수 있음</p>
 <ul>
 <li>
@@ -89,16 +91,16 @@
 </ul>
 </li>
 </ul>
-<h4>StyleGuide</h4>
+<h4 id="styleguide">StyleGuide</h4>
 <p>Design Language 를 위한 문서. UI Kit, Component library</p>
-<h2>디자인 시스템 만들기</h2>
+<h2 id="디자인-시스템-만들기">디자인 시스템 만들기</h2>
 <ol>
 <li>디자인 원칙 정의하기</li>
 <li>UI Audit</li>
 <li>디자인 체크리스트</li>
 <li>워크플로우 정의하기</li>
 </ol>
-<h3>1. 디자인 원칙정의 하기</h3>
+<h3 id="1-디자인-원칙정의-하기">1. 디자인 원칙정의 하기</h3>
 <ul>
 <li>디자인 원칙: 제품을 만드는데 원동력이 되는 기초 (사용자가 제품을 사용할 때 어떤 기분을 느끼게 하고 싶은지)
 <ul>
@@ -106,13 +108,13 @@
 </ul>
 </li>
 </ul>
-<h3>2. UI Audit</h3>
+<h3 id="2-ui-audit">2. UI Audit</h3>
 <ul>
 <li>어떤 컴포넌트를 만들지 말지, 진행 우선순위 등을 정해야 함</li>
 <li>영향도, 노력, 유지 보수 용이성, 디자인 시스템의 로드맵등을 고려해야함</li>
 </ul>
-<h3>3. 체크리스트</h3>
-<h4>디자인 체크리스트</h4>
+<h3 id="3-체크리스트">3. 체크리스트</h3>
+<h4 id="디자인-체크리스트">디자인 체크리스트</h4>
 <ol>
 <li><strong>Accessibility</strong>: 모든 사용자가 주변 환경에 관계 없이 해당 컴포넌트를 사용할 수 있는가?</li>
 <li><strong>Interaction</strong>: 사용자가 어떻게 컴포넌트와 상호작용 하는지?</li>
@@ -122,7 +124,7 @@
 <li><strong>Customization</strong>: 어떤 부분이 커스터마이징이 가능하고, 어떤 부분은 불가능 한지?</li>
 <li><strong>Screen Resolution</strong>: 다양한 스크린 크기에서 컴포넌트가 어떻게 보여져야 하는지?</li>
 </ol>
-<h4>개발 체크리스트</h4>
+<h4 id="개발-체크리스트">개발 체크리스트</h4>
 <ol>
 <li><strong>Accessibility</strong>: 모든 사용자가 주변 환경에 관계 없이 해당 컴포넌트를 사용할 수 있는가?</li>
 <li><strong>Responsiveness</strong>: 컴포넌트가 반드시 브라우저, 스크린 크기에 반응 해야하는가?</li>
@@ -131,7 +133,7 @@
 <li><strong>Error Handling, Prop Validation</strong>: 컴포넌트가 깨지는 상황에서 어떻게 반응하는가?</li>
 <li><strong>Browser Compatibility</strong>: 브라우저 지원율, 폴리필이 필요한가?</li>
 </ol>
-<h2>흔한 실수</h2>
+<h2 id="흔한-실수">흔한 실수</h2>
 <ul>
 <li>Starting for scale: 확장성은 좋다. 하지만 필요할 때 진행하는 게 좋다.</li>
 <li>Educating before Building: 만들기 전에 디자인 시스템에 대해 팀을 교육시키는 것은 좋지 않다.</li>
@@ -139,6 +141,46 @@
 <li>Not document decision: 결정된 건 문서화해라.</li>
 </ul>
 
+        </div>
+        
+  <nav class="toc-heading">
+    
+<ul>
+<li><a href="#디자인-시스템"> 디자인 시스템</a>
+<ul>
+<li><a href="#왜-디자인-시스템이-중요한가"> 왜 디자인 시스템이 중요한가.</a></li>
+<li><a href="#디자인-시스템의-약점"> 디자인 시스템의 약점</a></li>
+<li><a href="#디자인-시스템의-기본-3가지"> 디자인 시스템의 기본 3가지</a>
+<ul>
+<li><a href="#design-language"> Design Language</a></li>
+<li><a href="#component-library"> Component Library</a></li>
+<li><a href="#styleguide"> StyleGuide</a></li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><a href="#디자인-시스템-만들기"> 디자인 시스템 만들기</a>
+<ul>
+<li><a href="#1-디자인-원칙정의-하기"> 1. 디자인 원칙정의 하기</a></li>
+<li><a href="#2-ui-audit"> 2. UI Audit</a></li>
+<li><a href="#3-체크리스트"> 3. 체크리스트</a>
+<ul>
+<li><a href="#디자인-체크리스트"> 디자인 체크리스트</a></li>
+<li><a href="#개발-체크리스트"> 개발 체크리스트</a></li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+<li><a href="#흔한-실수"> 흔한 실수</a></li>
+</ul>
+
+  </nav>
+  
+      </div>
     </article>
   </body>
 </html>

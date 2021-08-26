@@ -26,7 +26,9 @@
       </nav>
     </header>
     <article>
-      <h2>Q-1. 다음 코드의 결과는 무엇일까요?</h2>
+      <div class="container">
+        <div class="content">
+          <h2 id="q-1-다음-코드의-결과는-무엇일까요">Q-1. 다음 코드의 결과는 무엇일까요?</h2>
 <pre><code class="hljs language-js"><span class="hljs-keyword">const</span> foo = {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'Foo'</span>
 }
@@ -36,10 +38,10 @@
 <span class="hljs-variable hljs-language">console</span>.<span class="hljs-title hljs-function">log</span>(bar.<span class="hljs-property">name</span>); <span class="hljs-comment">// ?</span></code></pre>
 <details><summary>Q-1 답안 보기</summary>
 <p>
-<h3>정답: "Foo"</h3>
-<h3>해설:</h3>
+<h3 id="정답-foo">정답: "Foo"</h3>
+<h3 id="해설">해설:</h3>
 <p>결과를 이해하기 위해서는 <strong>1. delete</strong>와 <strong>2 Object.create</strong> 를 이해해야합니다.</p>
-<h4>1. delete</h4>
+<h4 id="1-delete">1. delete</h4>
 <p><code>delete</code> 연산자는 대상 객체의 <strong>고유 프로퍼티를 삭제</strong>합니다.</p>
 <pre><code class="hljs language-js"><span class="hljs-keyword">const</span> obj = {
     <span class="hljs-attr">prop1</span>: <span class="hljs-string">'prop1'</span>, 
@@ -54,7 +56,7 @@
 <span class="hljs-variable hljs-language">console</span>.<span class="hljs-title hljs-function">log</span>(obj.<span class="hljs-title hljs-function">toString</span>()); <span class="hljs-comment">// shadowed</span>
 <span class="hljs-keyword">delete</span> obj.<span class="hljs-property">toString</span>;
 <span class="hljs-variable hljs-language">console</span>.<span class="hljs-title hljs-function">log</span>(obj.<span class="hljs-title hljs-function">toString</span>()); <span class="hljs-comment">// [object Object]</span></code></pre>
-<h4>2. Object.create</h4>
+<h4 id="2-objectcreate">2. Object.create</h4>
 <p><code>Object.create</code> 는 첫 번째 인자를 프로토타입으로 하는 객체를 생성합니다.</p>
 <p>즉 프로터타입 체이닝을 통해서 인자의 프로퍼티에 접근할 수 있지만, 그 값은 생성된 객체의 고유한 프로퍼티가 아닙니다.</p>
 <pre><code class="hljs language-js"><span class="hljs-keyword">const</span> obj = {
@@ -64,7 +66,7 @@
 
 newObj.<span class="hljs-property">prop1</span>; <span class="hljs-comment">// 'prop1'</span>
 newObj.<span class="hljs-title hljs-function">hasOwnProperty</span>(<span class="hljs-string">'prop1'</span>); <span class="hljs-comment">// false</span></code></pre>
-<h4>문제 해설</h4>
+<h4 id="문제-해설">문제 해설</h4>
 <p><code>Object.create</code> 로 <strong>foo</strong> 를 프로토타입으로 한 <strong>bar</strong> 객체를 생성합니다.</p>
 <pre><code class="hljs language-js"><span class="hljs-keyword">const</span> foo = {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'Foo'</span>
@@ -77,6 +79,28 @@ newObj.<span class="hljs-title hljs-function">hasOwnProperty</span>(<span class=
 </p>
 </details>
 
+        </div>
+        
+  <nav class="toc-heading">
+    
+<ul>
+<li><a href="#q-1-다음-코드의-결과는-무엇일까요"> Q-1. 다음 코드의 결과는 무엇일까요?</a>
+<ul>
+<li><a href="#정답-foo"> 정답: "Foo"</a></li>
+<li><a href="#해설"> 해설:</a>
+<ul>
+<li><a href="#1-delete"> 1. delete</a></li>
+<li><a href="#2-objectcreate"> 2. Object.create</a></li>
+<li><a href="#문제-해설"> 문제 해설</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </nav>
+  
+      </div>
     </article>
   </body>
 </html>

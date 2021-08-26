@@ -26,8 +26,10 @@
       </nav>
     </header>
     <article>
-      <h1>Cheatsheet</h1>
-<h2>Table of Contents</h2>
+      <div class="container">
+        <div class="content">
+          <h1 id="cheatsheet">Cheatsheet</h1>
+<h2 id="table-of-contents">Table of Contents</h2>
 <ol>
 <li><a href="#node">node</a></li>
 <li><a href="#git">git</a></li>
@@ -36,12 +38,12 @@
 <li><a href="#docker">docker</a></li>
 <li><a href="#argo">argo</a></li>
 </ol>
-<h1>node</h1>
+<h1 id="node">node</h1>
 <ul>
 <li><a href="#dns-lookup">DNS lookup</a></li>
 <li><a href="#remove-directory">Remove directory</a></li>
 </ul>
-<h3>DNS lookup</h3>
+<h3 id="dns-lookup">DNS lookup</h3>
 <p>Simple dns lookup.</p>
 <pre><code class="hljs language-js"><span class="hljs-keyword">const</span> dns = <span class="hljs-built_in">require</span>(<span class="hljs-string">'dns'</span>);
 
@@ -52,70 +54,97 @@ dns.<span class="hljs-title hljs-function">lookup</span>(<span class="hljs-strin
   <span class="hljs-comment">// IPv4 or IPv6</span>
   <span class="hljs-variable hljs-language">console</span>.<span class="hljs-title hljs-function">log</span>(address, family); <span class="hljs-comment">// 4</span>
 });</code></pre>
-<h3>Remove directory</h3>
+<h3 id="remove-directory">Remove directory</h3>
 <p>Removes the entire directory recursively.</p>
 <pre><code class="hljs language-js"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>);
 fs.<span class="hljs-title hljs-function">rmdirSync</span>(<span class="hljs-string">'directory/path'</span>, { <span class="hljs-attr">recursive</span>: <span class="hljs-literal">true</span> })</code></pre>
-<h1>git</h1>
+<h1 id="git">git</h1>
 <ul>
 <li><a href="#delete-remote-tag">Delete remote tag</a></li>
 <li><a href="#sync-forked-repo">Sync forked repo</a></li>
 </ul>
-<h3>Delete remote tag</h3>
+<h3 id="delete-remote-tag">Delete remote tag</h3>
 <p>Delete remote tag.</p>
 <pre><code class="hljs language-bash">$ git push --delete origin {tagname}</code></pre>
-<h3>Sync forked repo</h3>
+<h3 id="sync-forked-repo">Sync forked repo</h3>
 <p>Sync forked repo.</p>
 <pre><code class="hljs language-bash">$ git remote add upstream {upstream github.git}
 $ git fetch upstream
 $ git checkout master
 $ git merge upstream/master
 $ git push origin master</code></pre>
-<h1>mysql</h1>
+<h1 id="mysql">mysql</h1>
 <ul>
 <li><a href="#add-column">Add column</a></li>
 <li><a href="#connecting-to-the-mysql">Connecting to the MySQL</a></li>
 </ul>
-<h3>Add column</h3>
+<h3 id="add-column">Add column</h3>
 <p>Adding a new column in the existing table.</p>
 <pre><code class="hljs language-sql"><span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> table_name <span class="hljs-keyword">ADD</span> <span class="hljs-keyword">COLUMN</span> column_name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">200</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>;</code></pre>
-<h3>Connecting to the MySQL</h3>
+<h3 id="connecting-to-the-mysql">Connecting to the MySQL</h3>
 <p>Connecting to the MySQL using command.</p>
 <pre><code class="hljs language-console"><span class="hljs-meta">$ </span><span class="bash">mysql -h 123.456.7.89 -P 3306 -u root -p</span></code></pre>
-<h1>kubernetes</h1>
+<h1 id="kubernetes">kubernetes</h1>
 <ul>
 <li><a href="#mount-secret-file">Mount secret file</a></li>
 <li><a href="#mount-ssl">Mount SSL</a></li>
 </ul>
-<h3>Mount secret file</h3>
+<h3 id="mount-secret-file">Mount secret file</h3>
 <pre><code class="hljs language-bash">$ kubectl create secret generic {secret name} --from-file={file path}</code></pre>
-<h3>Mount SSL</h3>
+<h3 id="mount-ssl">Mount SSL</h3>
 <pre><code class="hljs language-bash">$ kubectl create secret tls {secret name} --key {key file path} --cert {cert file path}</code></pre>
-<h1>docker</h1>
+<h1 id="docker">docker</h1>
 <ul>
 <li><a href="#build-image">Build image</a></li>
 <li><a href="#push-image">Push image</a></li>
 </ul>
-<h3>Build image</h3>
+<h3 id="build-image">Build image</h3>
 <p>Build a docker image with a specified docker file.</p>
 <pre><code class="hljs language-bash">$ docker build -t {image name} -f {docker file path} {path}</code></pre>
-<h3>Push image</h3>
+<h3 id="push-image">Push image</h3>
 <p>Push docker image.</p>
 <pre><code class="hljs language-bash">$ docker push {docker image name}</code></pre>
-<h1>argo</h1>
+<h1 id="argo">argo</h1>
 <ul>
 <li><a href="#create-cron-workflow">Create cron workflow</a></li>
 <li><a href="#submit-workflow">Submit workflow</a></li>
 </ul>
-<h3>Create cron workflow</h3>
+<h3 id="create-cron-workflow">Create cron workflow</h3>
 <p>Create cron workflow with argo cli.</p>
 <pre><code class="hljs language-bash">$ argo cron create {cron-workflow.yaml}</code></pre>
-<h3>Submit workflow</h3>
+<h3 id="submit-workflow">Submit workflow</h3>
 <p>Submit workflow with argo cli.</p>
 <pre><code class="hljs language-bash">$ argo submit {workflow.yaml}</code></pre>
-<h3>Access the argo workflow ui</h3>
+<h3 id="access-the-argo-workflow-ui">Access the argo workflow ui</h3>
 <pre><code class="hljs language-bash">$ kubectl -n argo port-forward svc/argo-server 2746:2746</code></pre>
 
+        </div>
+        
+  <nav class="toc-heading">
+    
+<ul>
+<li><a href="#table-of-contents"> Table of Contents</a>
+<ul>
+<li><a href="#dns-lookup"> DNS lookup</a></li>
+<li><a href="#remove-directory"> Remove directory</a></li>
+<li><a href="#delete-remote-tag"> Delete remote tag</a></li>
+<li><a href="#sync-forked-repo"> Sync forked repo</a></li>
+<li><a href="#add-column"> Add column</a></li>
+<li><a href="#connecting-to-the-mysql"> Connecting to the MySQL</a></li>
+<li><a href="#mount-secret-file"> Mount secret file</a></li>
+<li><a href="#mount-ssl"> Mount SSL</a></li>
+<li><a href="#build-image"> Build image</a></li>
+<li><a href="#push-image"> Push image</a></li>
+<li><a href="#create-cron-workflow"> Create cron workflow</a></li>
+<li><a href="#submit-workflow"> Submit workflow</a></li>
+<li><a href="#access-the-argo-workflow-ui"> Access the argo workflow ui</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav>
+  
+      </div>
     </article>
   </body>
 </html>
