@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "publish": "npm run build && gh-pages -d build",
-    "build": "node ./scripts/build"
+    "build": "node ./scripts/build",
+    "build:dev": "phase=dev node ./scripts/build"
   },
   "type": "module",
   "repository": {
@@ -21,10 +22,15 @@
   "devDependencies": {
     "gh-pages": "^3.2.3",
     "glob": "^7.1.7",
+    "mdast-util-to-hast": "^11.2.0",
     "rehype-highlight": "^5.0.0",
     "remark-highlight.js": "^7.0.1",
     "remark-html": "^14.0.0",
     "remark-parse": "^10.0.0",
+    "remark-slug": "^7.0.0",
     "unified": "^10.1.0"
+  },
+  "dependencies": {
+    "markdown-toc": "^1.2.0"
   }
 }

@@ -3,73 +3,13 @@ import {parse} from 'node:path';
 import {unified} from 'unified'
 import remarkParse from 'remark-parse'
 import remarkHtml from 'remark-html'
+import {all} from 'mdast-util-to-hast';
 import remarkHighlight from 'remark-highlight.js';
+import remarkSlug from 'remark-slug'
+import toc from 'markdown-toc';
+import * as html from './html.js';
 
-const own = {}.hasOwnProperty
-
-/**
- * @type {Handler}
- * @param {MdastNode} node
- */
- export function one(h, node, parent) {
-  const type = node && node.type
-  /** @type {Handler} */
-  let fn
-
-  // Fail on non-nodes.
-  if (!type) {
-    throw new Error('Expected node, got `' + node + '`')
-  }
-
-  if (own.call(h.handlers, type)) {
-    fn = h.handlers[type]
-  } else if (h.passThrough && h.passThrough.includes(type)) {
-    fn = returnNode
-  } else {
-    fn = h.unknownHandler
-  }
-
-  return (typeof fn === 'function' ? fn : unknown)(h, node, parent)
-}
-
-
-export function all(h, parent) {
-  /** @type {Array.<Content>} */
-  const values = []
-
-  if ('children' in parent) {
-    const nodes = parent.children
-    let index = -1
-
-    while (++index < nodes.length) {
-      const result = one(h, nodes[index], parent)
-
-      if (result) {
-        if (index && nodes[index - 1].type === 'break') {
-          if (!Array.isArray(result) && result.type === 'text') {
-            result.value = result.value.replace(/^\s+/, '')
-          }
-
-          if (!Array.isArray(result) && result.type === 'element') {
-            const head = result.children[0]
-
-            if (head && head.type === 'text') {
-              head.value = head.value.replace(/^\s+/, '')
-            }
-          }
-        }
-
-        if (Array.isArray(result)) {
-          values.push(...result)
-        } else {
-          values.push(result)
-        }
-      }
-    }
-  }
-
-  return values
-}
+const prefix = process.env.phase === 'dev' ? '' : '/dev-blog';
 
 function isExternalUrl (url) {
   return url.startsWith('http');
@@ -77,18 +17,35 @@ function isExternalUrl (url) {
 
 function convertLinkUrl (url) {
   if (url.startsWith('#')) return url;
-  return '/dev-blog' + url.replace('./', '/').replace(/.md$/, '.html');
+  return prefix + url.replace('./', '/').replace(/.md$/, '.html');
 }
 
 /**
  * @param {string} markdown 
- * @returns {Promise<string>}
+ * @returns {Promise<{meta: object, html: string}>}
  */
 export function mdToHTML (markdown) {
+  let meta = {};
+  const contentList = toc(markdown).json;
+  function visit(node) {
+    if (node.type === 'html' && node.value.trim().startsWith('<!--meta')) {
+      meta = extractMeta(node.value) || {};
+    }
+  }
   return new Promise((resolve) => {
     unified()
     .use(remarkParse)
+    .use(remarkSlug)
     .use(remarkHighlight)
+    .use(function () {
+      function transformer (tree) {
+        visit(tree);
+        if (Array.isArray(tree.children)) {
+          tree.children.forEach(child => transformer(child));
+        }
+      }
+      return transformer;
+    })
     .use(remarkHtml, {
       handlers: {
         link(h, node) {
@@ -97,12 +54,19 @@ export function mdToHTML (markdown) {
               ? node.url
               :  convertLinkUrl(node.url)
           }, all(h, node));
+        },
+        heading (h, node) {
+          return h(node, `h${node.depth}`, all(h, node));
         }
       }
     })
     .process(markdown)
     .then((html) => {
-      resolve(String(html));
+      meta.contentList = contentList;
+      resolve({
+        html: String(html),
+        meta,
+      });
     })  
   });
 }
@@ -192,26 +156,22 @@ export function copyFile (src, dest) {
  */
 export function applyTemplate(
   content,
-  {
-    description,
-    title,
-    keywords,
-  } = {}) {
-  
-  const metaDescription = description ? `<meta name="description" content="${description}">` : '';
-  const metaKeywords = keywords ? `<meta name="keywords" content="${keywords}">` : '';
-  const titleElem = `<title>${(!title || title.trim() === 'dev-blog') ? 'dev-blog' : `${title} - deb-blog`}</title>`;
+  meta = {}) {
+  const description = meta.description ? html.meta('description', meta.description) : '';
+  const keywords = meta.keywords ? html.meta('keywords', meta.keywords) : '';
+  const title = html.title(meta.title);
+  const toc = meta.disableContentList ? '' : html.toc(meta.contentList);
   return `
 <!DOCTYPE html>
 <html lang="ko">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    ${metaDescription}
-    ${metaKeywords}
-    ${titleElem}
-    <link rel="stylesheet" href="/dev-blog/styles/global.css">
-    <link rel="stylesheet" href="/dev-blog/highlight/default.min.css">
+    ${description}
+    ${keywords}
+    ${title}
+    <link rel="stylesheet" href="${prefix}/styles/global.css">
+    <link rel="stylesheet" href="${prefix}/highlight/default.min.css">
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
     <script>
@@ -229,13 +189,17 @@ export function applyTemplate(
       </nav>
     </header>
     <article>
-      ${content}
+      <div class="container">
+        <div class="content">
+          ${content}
+        </div>
+        ${toc}
+      </div>
     </article>
   </body>
 </html>
 `
 }
-
 
 const META_REGEX = /<!--meta([\s\S]*?)-->/;
 /**

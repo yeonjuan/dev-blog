@@ -1,4 +1,3 @@
-import nodeFs from 'node:fs'
 import {join, parse} from 'node:path';
 import {mdToHTML, readFile, mkdirIfNotExist, rmdir, writeFile, log, isMarkdown, isDirectory, copyFile, applyTemplate, extractMeta} from './libs.js';
 import glob from 'glob';
@@ -7,6 +6,7 @@ const IGNORE = [
   'node_modules/**',
   "scripts/**",
   "build/**",
+  "dev-build/**",
   "package.json",
   "package-lock.json"
 ];
@@ -25,17 +25,12 @@ function cleanOutput () {
 async function onEachFile (file) {
   let outputPath = join(OUTPUT, file);
 
-  if (file)
-
   if (isMarkdown(file)) {
     const parsed = parse(file);
     const markdown = readFile(file);
-    const html = await mdToHTML(markdown);
+    const {html, meta} = await mdToHTML(markdown);
     const name = parsed.name === 'README' ? 'index' : parsed.name;
-    outputPath = join(OUTPUT, parsed.dir, `${name}.html`);
-
-    const meta = extractMeta(markdown) || {};
- 
+    outputPath = join(OUTPUT, parsed.dir, `${name}.html`); 
     log('convert', `${file} => ${outputPath}`);
     writeFile(outputPath, applyTemplate(html, meta));
   } else if (isDirectory(file)) {
