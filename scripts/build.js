@@ -1,5 +1,6 @@
 import {join, parse} from 'node:path';
-import {mdToHTML, readFile, mkdirIfNotExist, rmdir, writeFile, log, isMarkdown, isDirectory, copyFile, applyTemplate, extractMeta} from './libs.js';
+import {readFile, mkdirIfNotExist, rmdir, writeFile, log, isMarkdown, isDirectory, copyFile, applyTemplate} from './libs.js';
+import convertMarkdown from './convert-markdown.js';
 import glob from 'glob';
 
 const IGNORE = [
@@ -28,7 +29,8 @@ async function onEachFile (file) {
   if (isMarkdown(file)) {
     const parsed = parse(file);
     const markdown = readFile(file);
-    const {html, meta} = await mdToHTML(markdown);
+    // const {html, meta} = await mdToHTML(markdown);
+    const {html, meta} = await convertMarkdown(markdown, { relPath: file });
     const name = parsed.name === 'README' ? 'index' : parsed.name;
     outputPath = join(OUTPUT, parsed.dir, `${name}.html`); 
     log('convert', `${file} => ${outputPath}`);

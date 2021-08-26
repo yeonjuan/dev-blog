@@ -1,75 +1,7 @@
 import {readFileSync, existsSync, mkdirSync, rmdirSync, writeFileSync, statSync, copyFileSync} from 'node:fs';
 import {parse} from 'node:path';
-import {unified} from 'unified'
-import remarkParse from 'remark-parse'
-import remarkHtml from 'remark-html'
-import {all} from 'mdast-util-to-hast';
-import remarkHighlight from 'remark-highlight.js';
-import remarkSlug from 'remark-slug'
-import toc from 'markdown-toc';
 import * as html from './html.js';
-
-const prefix = process.env.phase === 'dev' ? '' : '/dev-blog';
-
-function isExternalUrl (url) {
-  return url.startsWith('http');
-}
-
-function convertLinkUrl (url) {
-  if (url.startsWith('#')) return url;
-  return prefix + url.replace('./', '/').replace(/.md$/, '.html');
-}
-
-/**
- * @param {string} markdown 
- * @returns {Promise<{meta: object, html: string}>}
- */
-export function mdToHTML (markdown) {
-  let meta = {};
-  const contentList = toc(markdown).json;
-  function visit(node) {
-    if (node.type === 'html' && node.value.trim().startsWith('<!--meta')) {
-      meta = extractMeta(node.value) || {};
-    }
-  }
-  return new Promise((resolve) => {
-    unified()
-    .use(remarkParse)
-    .use(remarkSlug)
-    .use(remarkHighlight)
-    .use(function () {
-      function transformer (tree) {
-        visit(tree);
-        if (Array.isArray(tree.children)) {
-          tree.children.forEach(child => transformer(child));
-        }
-      }
-      return transformer;
-    })
-    .use(remarkHtml, {
-      handlers: {
-        link(h, node) {
-          return h(node, 'a', {
-            href: isExternalUrl(node.url || '')
-              ? node.url
-              :  convertLinkUrl(node.url)
-          }, all(h, node));
-        },
-        heading (h, node) {
-          return h(node, `h${node.depth}`, all(h, node));
-        }
-      }
-    })
-    .process(markdown)
-    .then((html) => {
-      meta.contentList = contentList;
-      resolve({
-        html: String(html),
-        meta,
-      });
-    })  
-  });
-}
+import {PATH_PREFIX} from './constants.js';
 
 /**
  * @param {string} path 
@@ -170,8 +102,8 @@ export function applyTemplate(
     ${description}
     ${keywords}
     ${title}
-    <link rel="stylesheet" href="${prefix}/styles/global.css">
-    <link rel="stylesheet" href="${prefix}/highlight/default.min.css">
+    <link rel="stylesheet" href="${PATH_PREFIX}/styles/global.css">
+    <link rel="stylesheet" href="${PATH_PREFIX}/highlight/default.min.css">
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
     <script>
@@ -185,7 +117,7 @@ export function applyTemplate(
   <body>
     <header>
       <nav>
-        <a href="/dev-blog">dev-blog</a>
+        <a href="${PATH_PREFIX ? PATH_PREFIX : '/'}">dev-blog</a>
       </nav>
     </header>
     <article>
@@ -199,21 +131,4 @@ export function applyTemplate(
   </body>
 </html>
 `
-}
-
-const META_REGEX = /<!--meta([\s\S]*?)-->/;
-/**
- * @param {string} markdown 
- */
-export function extractMeta (markdown) {
-  const matched = markdown.match(META_REGEX);
-  if (!matched) return null;
-  const [, metaString] = matched;
-  const metaLines = metaString.trim().split('\n');
-  const meta = metaLines.reduce((result, keyValue) => {
-    const [key, value] = keyValue.split(':');
-    result[key.trim()] = value.trim();
-    return result;
-  }, {});
-  return meta;
 }
