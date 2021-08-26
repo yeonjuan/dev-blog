@@ -78,8 +78,8 @@ export default function convertMarkdown (
     }
     const pared = parse(info.relPath);
     return PATH_PREFIX + url.replace('./', pared.dir ? '/' + pared.dir + '/' : '/')
+      .replace('README.md', '/')
       .replace(/.md$/, '.html')
-      .replace('README', 'index');
   }
 
   function visit(node) {

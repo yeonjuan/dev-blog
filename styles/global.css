@@ -43,10 +43,11 @@ h3 {
 nav {
   padding: 12px;
 }
+img { max-width: 100%; height: auto;}
 
 nav.toc-heading { display: none; }
-.container { display: flex; flex-flow: row nowrap; }
-
+.container { display: flex; flex-flow: row nowrap; overflow: auto;}
+.content { overflow: auto;}
 @media only screen and (min-width: 1024px) {
   nav.toc-heading { position: sticky; position: -webkit-sticky; top: 0px; display: block; right: 0px; width: 300px; height: fit-content;}
   nav.toc-heading ul { list-style: none;}
