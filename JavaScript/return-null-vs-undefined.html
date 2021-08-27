@@ -4,9 +4,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
-    
-    <title>dev-blog</title>
+    <meta name="description" content="null, undefined 중 어떤 것을 사용하면 좋을지 고민한 글.">
+    <meta name="keywords" content="null vs undefined">
+    <title>return null vs undefined - deb-blog</title>
     <link rel="stylesheet" href="/dev-blog/styles/global.css">
     <link rel="stylesheet" href="/dev-blog/highlight/default.min.css">
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -28,7 +28,12 @@
     <article>
       <div class="container">
         <div class="content">
-          <h1 id="return-null-vs-undefined">return <code>null</code> vs <code>undefined</code></h1>
+          <!--meta
+title: return null vs undefined
+description: null, undefined 중 어떤 것을 사용하면 좋을지 고민한 글.
+keywords: null vs undefined
+-->
+<h1 id="return-null-vs-undefined">return <code>null</code> vs <code>undefined</code></h1>
 <h2 id="들어가기-전에">들어가기 전에</h2>
 <p>보통 어떤 값을 반환하는 함수에서 마땅히 반환할 값이 없을 때 <code>null</code> 또는 <code>undefined</code> 을 사용하곤 합니다.</p>
 <pre><code class="hljs language-js"><span class="hljs-variable hljs-language">document</span>.<span class="hljs-title hljs-function">getElementById</span>(<span class="hljs-string">'empty'</span>); <span class="hljs-comment">// null</span>
