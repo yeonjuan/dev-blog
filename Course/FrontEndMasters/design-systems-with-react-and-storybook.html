@@ -32,7 +32,7 @@
 <blockquote>
 <p><a href="https://frontendmasters.com/courses/design-systems/">FrontEnd Masters: Design Systems with React &#x26; Storybook</a> 수강후 정리한 글.</p>
 </blockquote>
-<h2 id="디자인-시스템">디자인 시스템</h2>
+<h2 id="디자인-시스템-기초">디자인 시스템 기초</h2>
 <h3 id="왜-디자인-시스템이-중요한가">왜 디자인 시스템이 중요한가.</h3>
 <ul>
 <li><strong>접근성</strong>: 애플리케이션에서 환경에 상관없이 모든 유저가 같은 결과를 얻을 수 있어야 한다.</li>
@@ -93,14 +93,14 @@
 </ul>
 <h4 id="styleguide">StyleGuide</h4>
 <p>Design Language 를 위한 문서. UI Kit, Component library</p>
-<h2 id="디자인-시스템-만들기">디자인 시스템 만들기</h2>
+<h3 id="디자인-시스템-만들기">디자인 시스템 만들기</h3>
 <ol>
 <li>디자인 원칙 정의하기</li>
 <li>UI Audit</li>
 <li>디자인 체크리스트</li>
 <li>워크플로우 정의하기</li>
 </ol>
-<h3 id="1-디자인-원칙정의-하기">1. 디자인 원칙정의 하기</h3>
+<h4 id="1-디자인-원칙정의-하기">1. 디자인 원칙정의 하기</h4>
 <ul>
 <li>디자인 원칙: 제품을 만드는데 원동력이 되는 기초 (사용자가 제품을 사용할 때 어떤 기분을 느끼게 하고 싶은지)
 <ul>
@@ -108,13 +108,13 @@
 </ul>
 </li>
 </ul>
-<h3 id="2-ui-audit">2. UI Audit</h3>
+<h4 id="2-ui-audit">2. UI Audit</h4>
 <ul>
 <li>어떤 컴포넌트를 만들지 말지, 진행 우선순위 등을 정해야 함</li>
 <li>영향도, 노력, 유지 보수 용이성, 디자인 시스템의 로드맵등을 고려해야함</li>
 </ul>
-<h3 id="3-체크리스트">3. 체크리스트</h3>
-<h4 id="디자인-체크리스트">디자인 체크리스트</h4>
+<h4 id="3-체크리스트">3. 체크리스트</h4>
+<h5 id="디자인-체크리스트">디자인 체크리스트</h5>
 <ol>
 <li><strong>Accessibility</strong>: 모든 사용자가 주변 환경에 관계 없이 해당 컴포넌트를 사용할 수 있는가?</li>
 <li><strong>Interaction</strong>: 사용자가 어떻게 컴포넌트와 상호작용 하는지?</li>
@@ -124,7 +124,7 @@
 <li><strong>Customization</strong>: 어떤 부분이 커스터마이징이 가능하고, 어떤 부분은 불가능 한지?</li>
 <li><strong>Screen Resolution</strong>: 다양한 스크린 크기에서 컴포넌트가 어떻게 보여져야 하는지?</li>
 </ol>
-<h4 id="개발-체크리스트">개발 체크리스트</h4>
+<h5 id="개발-체크리스트">개발 체크리스트</h5>
 <ol>
 <li><strong>Accessibility</strong>: 모든 사용자가 주변 환경에 관계 없이 해당 컴포넌트를 사용할 수 있는가?</li>
 <li><strong>Responsiveness</strong>: 컴포넌트가 반드시 브라우저, 스크린 크기에 반응 해야하는가?</li>
@@ -133,20 +133,33 @@
 <li><strong>Error Handling, Prop Validation</strong>: 컴포넌트가 깨지는 상황에서 어떻게 반응하는가?</li>
 <li><strong>Browser Compatibility</strong>: 브라우저 지원율, 폴리필이 필요한가?</li>
 </ol>
-<h2 id="흔한-실수">흔한 실수</h2>
+<h3 id="흔한-실수">흔한 실수</h3>
 <ul>
 <li>Starting for scale: 확장성은 좋다. 하지만 필요할 때 진행하는 게 좋다.</li>
 <li>Educating before Building: 만들기 전에 디자인 시스템에 대해 팀을 교육시키는 것은 좋지 않다.</li>
 <li>Not discussing workflow: 새로운 컴포넌트에 대한 요구가 들어왔을 떄 어떻게 할것인가? 와 같이 디자인 시스템에 대한 워크플로우에 대해 논의햐야함</li>
 <li>Not document decision: 결정된 건 문서화해라.</li>
 </ul>
+<h2 id="디자인-기초">디자인 기초</h2>
+<h3 id="color-값">Color 값</h3>
+<dl>
+  <dt>Hex</dt>
+  <dd>16 진수로 나타낸 색상 값. 각 값은 0-9, A-F 범위에 속한다. (예: #F0F030)</dd>
+  <dt>RGB</dt>
+  <dd>가산 색상 모델을 사용, Red, Green, Blue 의 조합으로 색상값을 나타냄</dd>
+  <dt>RGBA</dt>
+  <dd>RGB 에 alpha 값이 포함된 모델, alpha 값은 투명도를 나타낸다.</dd>  
+  <dt>CYMK</dt>
+  <dd>감산 색상 모델을 사용해 색상값을 나타냄</dd>  
+</dl>
+<h3 id="color-파레트-만들기">Color 파레트 만들기</h3>
 
         </div>
         
   <nav class="toc-heading">
     
 <ul>
-<li><a href="#디자인-시스템"> 디자인 시스템</a>
+<li><a href="#디자인-시스템-기초"> 디자인 시스템 기초</a>
 <ul>
 <li><a href="#왜-디자인-시스템이-중요한가"> 왜 디자인 시스템이 중요한가.</a></li>
 <li><a href="#디자인-시스템의-약점"> 디자인 시스템의 약점</a></li>
@@ -155,9 +168,6 @@
 <li><a href="#design-language"> Design Language</a></li>
 <li><a href="#component-library"> Component Library</a></li>
 <li><a href="#styleguide"> StyleGuide</a></li>
-
-</ul>
-</li>
 
 </ul>
 </li>
@@ -176,6 +186,15 @@
 </ul>
 </li>
 <li><a href="#흔한-실수"> 흔한 실수</a></li>
+
+</ul>
+</li>
+<li><a href="#디자인-기초"> 디자인 기초</a>
+<ul>
+<li><a href="#color-값"> Color 값</a></li>
+<li><a href="#color-파레트-만들기"> Color 파레트 만들기</a></li>
+</ul>
+</li>
 </ul>
 
   </nav>

@@ -49,7 +49,7 @@ nav.toc-heading { display: none; }
 .container { display: flex; flex-flow: row nowrap; overflow: auto;}
 .content { overflow: auto;}
 @media only screen and (min-width: 1024px) {
-  nav.toc-heading { position: sticky; position: -webkit-sticky; top: 0px; display: block; right: 0px; width: 300px; height: fit-content;}
+  nav.toc-heading { position: fixed; top: 50px; display: block; right: 0px; width: 300px; height: fit-content;}
   nav.toc-heading ul { list-style: none;}
   nav.toc-heading ul ul { padding: 12px 0 0 20px;}
   nav.toc-heading li { line-height: 16px; padding-bottom: 8px;}
@@ -59,3 +59,6 @@ nav.toc-heading { display: none; }
   nav.toc-heading a:hover { color: #000; }
   .content { width: calc(100% - 300px);}
 }
+
+header {background: #232f3e; color: #fff; height: 50px; }
+header a:visited {color: inherit;}

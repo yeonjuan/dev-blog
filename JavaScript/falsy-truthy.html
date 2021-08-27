@@ -31,14 +31,14 @@
           <h1 id="falsy--truthy">falsy &#x26; truthy</h1>
 <p><strong>falsy</strong> 와 <strong>truthy</strong>는 ECMA 스펙에 등장하는 단어는 아닙니다. JavaScript 동작을 이해하기 쉽게 하기위해 사용되는 단어입니다.
 번역해보면 <strong>truthy</strong>는 "참 같은 값", <strong>falsy</strong>는 "거짓 같은 값" 정도로 해석되며, 다음과 같이 정리할 수 있습니다.</p>
-<p><strong>falsy</strong>: 불리언 값으로 평가되는 문맥에서, <strong>false</strong>로 평가되는 값.</p>
-<ul>
-<li>undefined, null, false, 0, -0, NaN, ""(빈문자열), 0n 등이 있음 (ECMA 2020 기준)</li>
-</ul>
-<p><strong>truthy</strong>: 불리언 값으로 평가되는 문맥에서, <strong>true</strong>로 평가되는 값.</p>
-<ul>
-<li><strong>falsy</strong>를 제외한 값들</li>
-</ul>
+<dl>
+  <dt><strong>falsy</strong></dt>
+  <dd>불리언 값으로 평가되는 문맥에서, **false**로 평가되는 값.</dd>
+  <dd>undefined, null, false, 0, -0, NaN, ""(빈문자열), 0n 등이 있음 (ECMA 2020 기준)</dd>
+  <dt><strong>truthy</strong></dt>
+  <dd>불리언 값으로 평가되는 문맥에서, **true**로 평가되는 값</dd>
+  <dd>falsy를 제외한 값들</dd>
+</dl>
 <p><strong>truthy</strong>와 <strong>falsy</strong> 개념은 JavaScript의 값이 특정 문법, 연산에서 <strong>true</strong>나 <strong>false</strong>로 동작한다는 것을 말해줍니다.</p>
 <p>그럼 ECMA 스펙에서 어떤 부분이 <strong>falsy</strong>와 <strong>truthy</strong> 개념을 만들어 내는지 살펴 보겠습니다.
 스펙 문서는 <a href="https://tc39.es/ecma262/2020/">ECMA 2020</a> 기준입니다.</p>
@@ -51,16 +51,48 @@
 <p><strong>7.1.2 ToBoolean ( <em>argument</em> )</strong>
 추상 연산 ToBoolean 은 <em>argument</em>를 인자로 받고, <strong>Table 10</strong> 에 따라 <em>argument</em> 를 Boolean 타입 값으로 변환한다:</p>
 <p><strong>Table 10: ToBoolean 변환</strong></p>
-<p>| <em>argument</em> 타입 | 결과 |
-| --- | --- |
-| Undefined | <strong>false</strong> 반환 |
-| Null | <strong>false</strong> 반환 |
-| Boolean | <em>argument</em> 를 그대로 반환 |
-| Number | <em>argument</em> 가 0, -0, NaN 이면 <strong>false</strong>, 그 외 <strong>true</strong> 반환 |
-| String | <em>argument</em> 가 빈 문자열(길이가 0인)이면 <strong>false</strong>; 아니면 <strong>true</strong> 반환 |
-| Symbol | <strong>true</strong> 반환 |
-| BigInt | <em>argument</em> 가 <strong>0n</strong> 이면 <strong>false</strong> 반환, 그외 <strong>true</strong> 반환 |
-| Object | <strong>true</strong> 반환 |</p>
+<table>
+<thead>
+<tr>
+<th>argument 타입</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Undefined</td>
+<td><strong>false</strong> 반환</td>
+</tr>
+<tr>
+<td>Null</td>
+<td><strong>false</strong> 반환</td>
+</tr>
+<tr>
+<td>Boolean</td>
+<td><em>argument</em> 를 그대로 반환</td>
+</tr>
+<tr>
+<td>Number</td>
+<td><em>argument</em> 가 0, -0, NaN 이면 <strong>false</strong>, 그 외 <strong>true</strong> 반환</td>
+</tr>
+<tr>
+<td>String</td>
+<td><em>argument</em> 가 빈 문자열(길이가 0인)이면 <strong>false</strong>; 아니면 <strong>true</strong> 반환</td>
+</tr>
+<tr>
+<td>Symbol</td>
+<td><strong>true</strong> 반환</td>
+</tr>
+<tr>
+<td>BigInt</td>
+<td><em>argument</em> 가 <strong>0n</strong> 이면 <strong>false</strong> 반환, 그외 <strong>true</strong> 반환</td>
+</tr>
+<tr>
+<td>Object</td>
+<td><strong>true</strong> 반환</td>
+</tr>
+</tbody>
+</table>
 <p>ToBoolean(<em>argument</em>)의 <em>argument</em> 타입과 값에 따라 <strong>true</strong>를 반환하는지, <strong>false</strong>를 반환하는지 정의되어 있습니다.</p>
 <p>값으로 정리해보면, undefined, null, false, 0, -0, NaN, ""(빈문자열), 0n 의 8개의 값만 <strong>false</strong>로 변환되고, 그 외의 값은 <strong>true</strong>로 변환되는 것을 알 수 있습니다.
 우리가 이미 알고 있는 <strong>truthy</strong>, <strong>falsy</strong> 에 해당하는 값들과 일치합니다.</p>

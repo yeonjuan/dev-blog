@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    
+    <title>dev-blog</title>
+    <link rel="stylesheet" href="/dev-blog/styles/global.css">
+    <link rel="stylesheet" href="/dev-blog/highlight/default.min.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-ZBZX7LMVNE');
+    </script>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="/dev-blog">dev-blog</a>
+      </nav>
+    </header>
+    <article>
+      <div class="container">
+        <div class="content">
+          <h1 id="bem">BeM</h1>
+<h2 id="bem-명명-규칙">BEM 명명 규칙</h2>
+<p><strong>Block</strong>: 재사용 가능한 독립적인 블록</p>
+<p><strong>Element</strong>: 블록을 구성하는 종속적인 하위 요소</p>
+<p><strong>Modifier</strong>: 블록 또는 요소의 변형 (모양, 산태, 동작)</p>
+<p><a href="https://en.bem.info/methodology/quick-start/">https://en.bem.info/methodology/quick-start/</a></p>
+<h2 id="bem-특징">BEM 특징</h2>
+<ol>
+<li>의미론적 클래스 선택자를 사용</li>
+<li>다른 형식의 선택자 사용을 제한</li>
+<li>전역에서 유일한 이름 권장</li>
+<li>낮은 선택자 특이성 유지</li>
+<li>HTML/CSS 연결이 느슨</li>
+</ol>
+<h2 id="bem-형식">BEM 형식</h2>
+<pre><code class="hljs language-css"><span class="hljs-selector-class">.block</span> { <span class="hljs-comment">/* ... */</span>}
+<span class="hljs-selector-class">.block__element</span> { <span class="hljs-comment">/* ... */</span>}
+<span class="hljs-selector-class">.block__element--modifier</span> { <span class="hljs-comment">/* ... */</span>}
+<span class="hljs-selector-class">.block--modifier</span> { <span class="hljs-comment">/* ... */</span>}</code></pre>
+<ul>
+<li>
+<p>예시</p>
+<p><strong>Good</strong></p>
+<pre><code class="hljs language-html"><span class="hljs-tag">&#x3C;<span class="hljs-name">button</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"btn"</span>></span>
+<span class="hljs-tag">&#x3C;<span class="hljs-name">button</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"btn btn--submit"</span>></span></code></pre>
+<p><strong>Bad</strong></p>
+<pre><code class="hljs language-html"><span class="hljs-tag">&#x3C;<span class="hljs-name">button</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"btn--submit"</span>></span> <span class="hljs-comment">&#x3C;!-- Block 클래스 이름이 누락됨 --></span></code></pre>
+</li>
+</ul>
+
+        </div>
+        
+  <nav class="toc-heading">
+    
+<ul>
+<li><a href="#bem-명명-규칙"> BEM 명명 규칙</a></li>
+<li><a href="#bem-특징"> BEM 특징</a></li>
+<li><a href="#bem-형식"> BEM 형식</a></li>
+</ul>
+
+  </nav>
+  
+      </div>
+    </article>
+  </body>
+</html>
