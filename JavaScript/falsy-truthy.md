@@ -1,3 +1,9 @@
+<!--meta
+title: falsy & truthy
+description: falsy 와 truthy 개념을 스펙을 통해 알아본 글.
+keywords: falsy, truthy, boolean
+-->
+
 # falsy & truthy
 
 **falsy** 와 **truthy**는 ECMA 스펙에 등장하는 단어는 아닙니다. JavaScript 동작을 이해하기 쉽게 하기위해 사용되는 단어입니다.

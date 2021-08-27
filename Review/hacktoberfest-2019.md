@@ -1,12 +1,12 @@
+<!--meta
+title: Hacktoberfest 2019 참가 후기
+description: Hacktoberfest 2019에 참가한 후기
+keywords: Hacktoberfest, Hacktoberfest 2019, 오픈소스, OpenSource
+-->
+
 # Hacktoberfest 2019 참가 후기
 
 ![profile](./assets/hacktoberfest2019/profile.png)
-
-* [Hacktoberfest 2019](#Hacktoberfest-2019)
-* [기여한 프로젝트](#기여한-프로젝트)
-* [기여한 방법](#기여한-방법)
-* [느낀 점](#느낀-점)
-
 
 ## Hacktoberfest 2019
 

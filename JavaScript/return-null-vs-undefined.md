@@ -1,3 +1,9 @@
+<!--meta
+title: return null vs undefined
+description: null, undefined 중 어떤 것을 사용하면 좋을지 고민한 글.
+keywords: null vs undefined
+-->
+
 # return `null` vs `undefined`
 
 ## 들어가기 전에
