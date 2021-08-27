@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="CSS box-sizing 정리">
+    <meta name="keywords" content="box-sizing, CSS, content-box, border-box">
+    <title>box-sizing - CSS - dev-blog - deb-blog</title>
+    <link rel="stylesheet" href="/dev-blog/styles/global.css">
+    <link rel="stylesheet" href="/dev-blog/highlight/default.min.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-ZBZX7LMVNE');
+    </script>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="/dev-blog">dev-blog</a>
+      </nav>
+    </header>
+    <article>
+      <div class="container">
+        <div class="content">
+          <!--meta
+title: box-sizing - CSS - dev-blog
+description: CSS box-sizing 정리
+keywords: box-sizing, CSS, content-box, border-box
+-->
+<h1 id="box-sizing">box-sizing</h1>
+<p>box-sizing 속성을 통해 요소의 너비와 높이를 어떤 것을 기준으로 계산할지 지정할 수 있다.
+box-sizing 속성은 값으로 <code>content-box</code>(기본값) 또는 <code>border-box</code> 을 가진다.</p>
+<h2 id="content-box">content-box</h2>
+<p><img src="./assets/box-sizing-content-box.png" alt="content-box"></p>
+<p>width, height 값에 padding 과 border 영역은 포함되지 않도록 한다.</p>
+<h2 id="border-box">border-box</h2>
+<p><img src="./assets/box-sizing-border-box.png" alt="border-box"></p>
+<p>width, height 값에 padding 과 border 영역도 포함된다.</p>
+
+        </div>
+        
+  <nav class="toc-heading">
+    
+<ul>
+<li><a href="#content-box"> content-box</a></li>
+<li><a href="#border-box"> border-box</a></li>
+</ul>
+
+  </nav>
+  
+      </div>
+    </article>
+  </body>
+</html>
