@@ -24,6 +24,7 @@
     "glob": "^7.1.7",
     "mdast-util-to-hast": "^11.2.0",
     "rehype-highlight": "^5.0.0",
+    "remark-gfm": "^2.0.0",
     "remark-highlight.js": "^7.0.1",
     "remark-html": "^14.0.0",
     "remark-parse": "^10.0.0",

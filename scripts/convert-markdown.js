@@ -10,6 +10,7 @@ import {all} from 'mdast-util-to-hast';
 import remarkHighlight from 'remark-highlight.js';
 import remarkSlug from 'remark-slug';
 import toc from 'markdown-toc';
+import remarkGfm from 'remark-gfm';
 import {PATH_PREFIX} from './constants.js';
 
 /**
@@ -109,6 +110,7 @@ export default function convertMarkdown (
 
     unified()
     .use(remarkParse)
+    .use(remarkGfm)
     .use(remarkSlug)
     .use(remarkHighlight)
     .use(visitor)

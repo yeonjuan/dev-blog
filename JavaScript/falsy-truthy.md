@@ -3,11 +3,15 @@
 **falsy** 와 **truthy**는 ECMA 스펙에 등장하는 단어는 아닙니다. JavaScript 동작을 이해하기 쉽게 하기위해 사용되는 단어입니다.
 번역해보면 **truthy**는 "참 같은 값", **falsy**는 "거짓 같은 값" 정도로 해석되며, 다음과 같이 정리할 수 있습니다.
 
-**falsy**: 불리언 값으로 평가되는 문맥에서, **false**로 평가되는 값.
-  * undefined, null, false, 0, -0, NaN, ""(빈문자열), 0n 등이 있음 (ECMA 2020 기준)
+<dl>
+  <dt><strong>falsy</strong></dt>
+  <dd>불리언 값으로 평가되는 문맥에서, **false**로 평가되는 값.</dd>
+  <dd>undefined, null, false, 0, -0, NaN, ""(빈문자열), 0n 등이 있음 (ECMA 2020 기준)</dd>
 
-**truthy**: 불리언 값으로 평가되는 문맥에서, **true**로 평가되는 값.
-  * **falsy**를 제외한 값들
+  <dt><strong>truthy</strong></dt>
+  <dd>불리언 값으로 평가되는 문맥에서, **true**로 평가되는 값</dd>
+  <dd>falsy를 제외한 값들</dd>
+</dl>
 
 **truthy**와 **falsy** 개념은 JavaScript의 값이 특정 문법, 연산에서 **true**나 **false**로 동작한다는 것을 말해줍니다.
 
@@ -30,7 +34,7 @@ ToBoolean 스펙을 일부 번역한 내용을 살펴보겠습니다.
 
 **Table 10: ToBoolean 변환**
 
-| *argument* 타입 | 결과 |
+| argument 타입 | 결과 |
 | --- | --- |
 | Undefined | **false** 반환 |
 | Null | **false** 반환 |
