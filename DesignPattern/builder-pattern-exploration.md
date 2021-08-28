@@ -1,3 +1,9 @@
+<!--meta
+title: JavaScript 빌더(Builder) 탐구
+description: JavaScript 빌더 패턴에 대한 글을 번역한 글.
+keywords: Builder Pattern, 빌더 패턴, JavaScript 빌더 패턴
+-->
+
 # JavaScript 빌더(Builder) 탐구
 
 > 이 글은 [An Exploration of JavaScript Builders](http://ryanogles.by/an-exploration-of-javascript-builders/)를 원작자(Ryan Oglesby)의 허락을 받아 번역하였습니다.
