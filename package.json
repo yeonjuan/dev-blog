@@ -26,7 +26,7 @@
     "rehype-highlight": "^5.0.0",
     "remark-gfm": "^2.0.0",
     "remark-highlight.js": "^7.0.1",
-    "remark-html": "^14.0.0",
+    "remark-html": "^14.0.1",
     "remark-parse": "^10.0.0",
     "remark-slug": "^7.0.0",
     "unified": "^10.1.0"
