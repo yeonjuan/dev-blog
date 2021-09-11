@@ -6,6 +6,8 @@ keywords: HTML, HTML picture, WebP
 
 # picture
 
+## picture 요소
+
 `picture` 요소는 `img`를 포함하는 컨테이너이다. 사용자의 화면 해상도나, 뷰포트 크기 등을 기반으로 브라우저에 보일 리소스를 정하기 위한 힌트를 줄 수 있다.
 
 다음과 같이 `source` 와 `img`를 활용해 사용자 환경에 따라 브라우저가 사용할 리소스를 지정한다.
