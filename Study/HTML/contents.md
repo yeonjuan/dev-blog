@@ -1,4 +1,10 @@
-# HTML 콘텐츠 분류
+<!--meta
+title: HTML 컨텐츠 분류
+description: HTML 컨텐츠 분류에 대해 정리한 글
+keywords: HTML, HTML content, HTML 컨텐츠
+-->
+
+# HTML 컨텐츠 분류
 
 ## HTML 컨텐츠 분류
 
