@@ -7,7 +7,7 @@ keywords: JavaScript, dev blog, Development, 프론트 엔드
 # dev-blog
 
 ## YeonJuAn 👋
-- 💼 Kakao FE플랫폼 (2019.01 ~)
+- 💼 Kakao FE플랫폼 (2019.01 ~ 2021.09)
 
 ## Project
 
