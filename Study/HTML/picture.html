@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="picture 요소에 대해 정리한 글">
+    <meta name="keywords" content="HTML, HTML picture, WebP">
+    <title>picture 요소 - deb-blog</title>
+    <link rel="stylesheet" href="/dev-blog/styles/global.css">
+    <link rel="stylesheet" href="/dev-blog/highlight/default.min.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-ZBZX7LMVNE');
+    </script>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="/dev-blog">dev-blog</a>
+      </nav>
+    </header>
+    <article>
+      <div class="container">
+        <div class="content">
+          <!--meta
+title: picture 요소
+description: picture 요소에 대해 정리한 글
+keywords: HTML, HTML picture, WebP
+-->
+<h1 id="picture">picture</h1>
+<p><code>picture</code> 요소는 <code>img</code>를 포함하는 컨테이너이다. 사용자의 화면 해상도나, 뷰포트 크기 등을 기반으로 브라우저에 보일 리소스를 정하기 위한 힌트를 줄 수 있다.</p>
+<p>다음과 같이 <code>source</code> 와 <code>img</code>를 활용해 사용자 환경에 따라 브라우저가 사용할 리소스를 지정한다.</p>
+<pre><code class="hljs language-html"><span class="hljs-tag">&#x3C;<span class="hljs-name">picture</span>></span>
+    <span class="hljs-tag">&#x3C;<span class="hljs-name">source</span> <span class="hljs-attr">media</span>=<span class="hljs-string">"(min-width: 650px)"</span> <span class="hljs-attr">srcset</span>=<span class="hljs-string">"/image-for-650.jpg"</span>></span>
+    <span class="hljs-tag">&#x3C;<span class="hljs-name">source</span> <span class="hljs-attr">media</span>=<span class="hljs-string">"(min-width: 400px)"</span> <span class="hljs-attr">srcset</span>=<span class="hljs-string">"/image-for-400.jpg"</span>></span>
+    <span class="hljs-tag">&#x3C;<span class="hljs-name">source</span> <span class="hljs-attr">media</span>=<span class="hljs-string">"(min-width: 300px)"</span> <span class="hljs-attr">srcset</span>=<span class="hljs-string">"/image-for-400.jpg"</span>></span>
+    <span class="hljs-tag">&#x3C;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"/image-for-fallback"</span>></span>
+<span class="hljs-tag">&#x3C;/<span class="hljs-name">picture</span>></span></code></pre>
+<p>브라우저는 <code>source</code> 요소의 media 속성값을 확인해, 처음으로 조건에 만족하는 <code>source</code>를 이미지로 채택해 사용하며 나머지 요소는 무시한다.
+모든 <code>source</code> 조건에 만족하지 않을 경우, <code>img</code>의 src 속성이 가리키는 리소스를 사용한다.</p>
+<h2 id="picture-를-이용한-webp-지원">picture 를 이용한 WebP 지원</h2>
+<p>WebP는 구글에서 개발한 이미지 포맷으로 웹사이트의 트래픽 감소 및 로딩 속도 단축을 위한 목표로 제시된 포맷이다.
+WebP는 일부 브라우저에서는 미지원 상태이다. 미지원 브라우저에서는 다른 이미지 포맷 (png, jpeg) 등을 표시하기 위해 <code>picture</code>를 활용할 수 있다.</p>
+<p>다음과 같이 사용하면 WebP를 지원하지 않는 브라우저에서는 <code>img</code>의 src 속성이 가리키는 리소스가 사용된다.</p>
+<pre><code class="hljs language-html"><span class="hljs-tag">&#x3C;<span class="hljs-name">picture</span>></span>
+  <span class="hljs-tag">&#x3C;<span class="hljs-name">source</span> <span class="hljs-attr">srcset</span>=<span class="hljs-string">"image.webp"</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"image/webp"</span>></span>
+  <span class="hljs-tag">&#x3C;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"image.png"</span>></span>
+<span class="hljs-tag">&#x3C;/<span class="hljs-name">picture</span>></span></code></pre>
+
+        </div>
+        
+  <nav class="toc-heading">
+    
+<ul>
+<li><a href="#picture-를-이용한-webp-지원"> picture 를 이용한 WebP 지원</a></li>
+
+  </nav>
+  
+      </div>
+    </article>
+  </body>
+</html>
