@@ -93,6 +93,7 @@ export function applyTemplate(
   const keywords = meta.keywords ? html.meta('keywords', meta.keywords) : '';
   const title = html.title(meta.title);
   const toc = meta.disableContentList ? '' : html.toc(meta.contentList);
+  const gnb = html.gnb();
   return `
 <!DOCTYPE html>
 <html lang="ko">
@@ -102,6 +103,11 @@ export function applyTemplate(
     ${description}
     ${keywords}
     ${title}
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="favicon/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="icon" href="favicon/favicon.ico">
     <link rel="stylesheet" href="${PATH_PREFIX}/styles/global.css">
     <link rel="stylesheet" href="${PATH_PREFIX}/highlight/default.min.css">
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -115,11 +121,7 @@ export function applyTemplate(
     </script>
   </head>
   <body>
-    <header>
-      <nav>
-        <a href="${PATH_PREFIX ? PATH_PREFIX : '/'}">dev-blog</a>
-      </nav>
-    </header>
+    ${gnb}
     <article>
       <div class="container">
         <div class="content">

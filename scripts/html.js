@@ -1,3 +1,5 @@
+import {PATH_PREFIX} from './constants.js';
+
 /**
  * @param {string} name 
  * @param {string} content
@@ -57,4 +59,15 @@ export function toc (input) {
     ${result.join('')}
   </nav>
   `
+}
+
+
+export function gnb () {
+  return `
+  <header>
+    <nav>
+      <a href="${PATH_PREFIX ? PATH_PREFIX : '/'}" class="logo">dev-blog</a>
+    </nav>
+  </header>
+  `;
 }
