@@ -44,7 +44,7 @@ keywords: title 요소
 <h2 id="title-요소">title 요소</h2>
 <p>title 요소는 문서의 제목이나 이름을 나타내는 요소이다.
 title 요소는 head 요소 아래에 단 1개만 사용해야 하며 태그 내에는 공백 문자로만 이뤄지지 않은 문자열이 들어가야 한다.</p>
-<p><strong>👍 Bad</strong></p>
+<p><strong>👎 Bad</strong></p>
 <pre><code class="hljs language-html"><span class="hljs-comment">&#x3C;!-- 잘못된 위치 --></span>
 <span class="hljs-tag">&#x3C;<span class="hljs-name">body</span>></span>
   <span class="hljs-tag">&#x3C;<span class="hljs-name">title</span>></span> <span class="hljs-tag">&#x3C;/<span class="hljs-name">title</span>></span>
@@ -58,16 +58,15 @@ title 요소는 head 요소 아래에 단 1개만 사용해야 하며 태그 내
   <span class="hljs-tag">&#x3C;<span class="hljs-name">title</span>></span> Page A <span class="hljs-tag">&#x3C;/<span class="hljs-name">title</span>></span>
   <span class="hljs-tag">&#x3C;<span class="hljs-name">title</span>></span> Nice Page <span class="hljs-tag">&#x3C;/<span class="hljs-name">title</span>></span>
 <span class="hljs-tag">&#x3C;/<span class="hljs-name">body</span>></span></code></pre>
-<p><strong>👌 Good</strong></p>
-<pre><code class="hljs language-html"><span class="hljs-comment">&#x3C;!-- 잘못된 위치 --></span>
-<span class="hljs-tag">&#x3C;<span class="hljs-name">head</span>></span>
+<p><strong>👍 Good</strong></p>
+<pre><code class="hljs language-html"><span class="hljs-tag">&#x3C;<span class="hljs-name">head</span>></span>
   <span class="hljs-tag">&#x3C;<span class="hljs-name">title</span>></span> Page A<span class="hljs-tag">&#x3C;/<span class="hljs-name">title</span>></span>
 <span class="hljs-tag">&#x3C;/<span class="hljs-name">head</span>></span>
 </code></pre>
-<h2 id="title-seo">title SEO</h2>
+<h2 id="seo">SEO</h2>
 <p>title 요소는 검색엔진은 title 요소의 값을 주요 키워드로 사용하며 검색 결과로 보여지기 때문에 SEO 에 중요한 요소중 하나이다.</p>
 <h2 id="title-구분자">title 구분자</h2>
-<p>보통 <code>-</code>, <code>|</code> 등을 활용하여 타이틀에 여러 키워드를 구분하여 사용한다. 더 구체적인 페이지 키워드가 앞쪽에 오도록 사용한다.</p>
+<p>보통 <code>-</code>, <code>|</code> 등을 활용하여 타이틀에 여러 키워드를 구분하여 사용한다. 문서를 설명 하는 더 구체적인 키워드가 앞쪽에 오도록 사용한다.</p>
 <p><strong>예시</strong></p>
 <ul>
 <li>
@@ -86,7 +85,7 @@ title 요소는 head 요소 아래에 단 1개만 사용해야 하며 태그 내
     
 <ul>
 <li><a href="#title-요소"> title 요소</a></li>
-<li><a href="#title-seo"> title SEO</a></li>
+<li><a href="#seo"> SEO</a></li>
 <li><a href="#title-구분자"> title 구분자</a></li>
 </ul>
 
