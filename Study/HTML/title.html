@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="title 요소에 대해 정리한 글">
+    <meta name="keywords" content="title 요소">
+    <title>title 요소 - deb-blog</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="favicon/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="icon" href="favicon/favicon.ico">
+    <link rel="stylesheet" href="/dev-blog/styles/global.css">
+    <link rel="stylesheet" href="/dev-blog/highlight/default.min.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-ZBZX7LMVNE');
+    </script>
+  </head>
+  <body>
+    
+  <header>
+    <nav>
+      <a href="/dev-blog" class="logo">dev-blog</a>
+    </nav>
+  </header>
+  
+    <article>
+      <div class="container">
+        <div class="content">
+          <!--meta
+title: title 요소
+description: title 요소에 대해 정리한 글
+keywords: title 요소
+-->
+<h1 id="title">title</h1>
+<h2 id="title-요소">title 요소</h2>
+<p>title 요소는 문서의 제목이나 이름을 나타내는 요소이다.
+title 요소는 head 요소 아래에 단 1개만 사용해야 하며 태그 내에는 공백 문자로만 이뤄지지 않은 문자열이 들어가야 한다.</p>
+<p><strong>👍 Bad</strong></p>
+<pre><code class="hljs language-html"><span class="hljs-comment">&#x3C;!-- 잘못된 위치 --></span>
+<span class="hljs-tag">&#x3C;<span class="hljs-name">body</span>></span>
+  <span class="hljs-tag">&#x3C;<span class="hljs-name">title</span>></span> <span class="hljs-tag">&#x3C;/<span class="hljs-name">title</span>></span>
+<span class="hljs-tag">&#x3C;/<span class="hljs-name">body</span>></span>
+
+<span class="hljs-comment">&#x3C;!-- 빈 문자열 --></span>
+<span class="hljs-tag">&#x3C;<span class="hljs-name">title</span>></span> <span class="hljs-tag">&#x3C;/<span class="hljs-name">title</span>></span>
+
+<span class="hljs-comment">&#x3C;!-- 2개 이상의 title --></span>
+<span class="hljs-tag">&#x3C;<span class="hljs-name">body</span>></span>
+  <span class="hljs-tag">&#x3C;<span class="hljs-name">title</span>></span> Page A <span class="hljs-tag">&#x3C;/<span class="hljs-name">title</span>></span>
+  <span class="hljs-tag">&#x3C;<span class="hljs-name">title</span>></span> Nice Page <span class="hljs-tag">&#x3C;/<span class="hljs-name">title</span>></span>
+<span class="hljs-tag">&#x3C;/<span class="hljs-name">body</span>></span></code></pre>
+<p><strong>👌 Good</strong></p>
+<pre><code class="hljs language-html"><span class="hljs-comment">&#x3C;!-- 잘못된 위치 --></span>
+<span class="hljs-tag">&#x3C;<span class="hljs-name">head</span>></span>
+  <span class="hljs-tag">&#x3C;<span class="hljs-name">title</span>></span> Page A<span class="hljs-tag">&#x3C;/<span class="hljs-name">title</span>></span>
+<span class="hljs-tag">&#x3C;/<span class="hljs-name">head</span>></span>
+</code></pre>
+<h2 id="title-seo">title SEO</h2>
+<p>title 요소는 검색엔진은 title 요소의 값을 주요 키워드로 사용하며 검색 결과로 보여지기 때문에 SEO 에 중요한 요소중 하나이다.</p>
+<h2 id="title-구분자">title 구분자</h2>
+<p>보통 <code>-</code>, <code>|</code> 등을 활용하여 타이틀에 여러 키워드를 구분하여 사용한다. 더 구체적인 페이지 키워드가 앞쪽에 오도록 사용한다.</p>
+<p><strong>예시</strong></p>
+<ul>
+<li>
+<p>Google</p>
+<p><img src="./assets/google-title-ex.png" alt="google 예시"></p>
+</li>
+<li>
+<p>W3C</p>
+<p><img src="./assets/w3c-title-ex.png" alt="w3c 예시"></p>
+</li>
+</ul>
+
+        </div>
+        
+  <nav class="toc-heading">
+    
+<ul>
+<li><a href="#title-요소"> title 요소</a></li>
+<li><a href="#title-seo"> title SEO</a></li>
+<li><a href="#title-구분자"> title 구분자</a></li>
+</ul>
+
+  </nav>
+  
+      </div>
+    </article>
+  </body>
+</html>
