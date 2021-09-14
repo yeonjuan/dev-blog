@@ -77,3 +77,82 @@ class BookPersistenceManager {
 
 개방-폐쇄 원칙(Open-Closed Principle)은 _클래스나 모듈은 확장에 열려있고 변경에는 닫혀 있어야 한다_ 는 원칙이다.
 
+## Liskov Substitution Principle
+
+리스코프 치환 원칙 (Liskov Substitution Principle) 은 _A클래스를 상속받은 B 라는 클래스가 있을 때, A 클래스를 사용하는 곳에 B 클래스의 인스턴스를 사용하더라도 의도되로 동작해야 한다_ 는 것을 뜻한다.
+
+
+## Interface Segregation Principle
+
+인터페이스 분리 원칙 (Interface Segregation Principle)은 _클라이언트가 사용하지 않는 메서드에 의존하지 않아야 한다_ 는 원칙이다.
+
+**✗ Bad**
+
+예를 들어 아래와 같이 `fax, scan, print` 메서드를 가진 인터페이스 Printer 가 있다고 할 때, `fax, scan` 구현을 필요로 하지 않는 구체 클래스가 있다면 ISP 를 위반한다고 볼 수 있다.
+
+```ts
+interface Printer {
+  fax(): void;
+  scan(): void;
+  print(): void;
+}
+
+class NewPrinter implements Printer {
+  fax() {
+    // implementation
+  }
+  scan() {
+    // implementation
+  }
+  print() {
+    // implementation
+  }
+}
+
+class OldPrinter implements Printer {
+  fax() { /* not supported in old printer */}
+  scan() { /* not supported in old printer */}
+  print() {
+    // implementation
+  }
+} 
+```
+
+**✗ Good**
+
+대신 인터페이스 역할 별로 작게 분리하여 사용한다.
+
+```ts
+interface Printer {
+  print(): void;
+}
+
+interface Scanner {
+  scan(): void;
+}
+
+interface Fax {
+  fax(): void;
+}
+
+
+class NewPrinter implements Printer, Scanner, Fax {
+  print() {
+    // implementation
+  }
+  scan() {
+    // implementation
+  }
+  fax() {
+    // implementation
+  }
+}
+
+class OldPrinter implements Printer {
+  print() {
+    // implementation
+  }
+} 
+```
+
+즉, 인터페이스는 역할별 필요한 단위로 작게 유지해야 한다는 원칙이다.
