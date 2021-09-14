@@ -9,93 +9,123 @@
 
 <url>
   <loc>https://yeonjuan.github.io/dev-blog/</loc>
-  <lastmod>2021-08-25T05:11:58+00:00</lastmod>
+  <lastmod>2021-09-14T14:59:45+00:00</lastmod>
   <priority>1.00</priority>
 </url>
 <url>
   <loc>https://yeonjuan.github.io/dev-blog/JavaScript/falsy-truthy.html</loc>
-  <lastmod>2021-08-25T05:11:58+00:00</lastmod>
+  <lastmod>2021-09-14T14:59:45+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://yeonjuan.github.io/dev-blog/JavaScript/return-null-vs-undefined.html</loc>
-  <lastmod>2021-08-25T05:11:58+00:00</lastmod>
+  <lastmod>2021-09-14T14:59:45+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://yeonjuan.github.io/dev-blog/DesignPattern/builder-pattern-exploration.html</loc>
-  <lastmod>2021-08-25T05:11:58+00:00</lastmod>
+  <lastmod>2021-09-14T14:59:45+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://yeonjuan.github.io/dev-blog/Review/2020-oss-contributhon.html</loc>
-  <lastmod>2021-08-25T05:11:58+00:00</lastmod>
+  <lastmod>2021-09-14T14:59:45+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://yeonjuan.github.io/dev-blog/JavaScript/node-module-on-browser.html</loc>
-  <lastmod>2021-08-25T05:11:58+00:00</lastmod>
+  <lastmod>2021-09-14T14:59:45+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://yeonjuan.github.io/dev-blog/Review/js-13k-2019.html</loc>
-  <lastmod>2021-08-25T05:11:58+00:00</lastmod>
+  <lastmod>2021-09-14T14:59:45+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://yeonjuan.github.io/dev-blog/Review/hacktoberfest-2019.html</loc>
-  <lastmod>2021-08-25T05:11:58+00:00</lastmod>
+  <lastmod>2021-09-14T14:59:45+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://yeonjuan.github.io/dev-blog/JavaScript/coding-convention-1.html</loc>
-  <lastmod>2021-08-25T05:11:58+00:00</lastmod>
+  <lastmod>2021-09-14T14:59:45+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://yeonjuan.github.io/dev-blog/JavaScript/coding-convention-2.html</loc>
-  <lastmod>2021-08-25T05:11:58+00:00</lastmod>
+  <lastmod>2021-09-14T14:59:45+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://yeonjuan.github.io/dev-blog/CodeSnippet/debounce.html</loc>
-  <lastmod>2021-08-25T05:11:58+00:00</lastmod>
+  <loc>https://yeonjuan.github.io/dev-blog/Study/HTML/</loc>
+  <lastmod>2021-09-14T14:59:45+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://yeonjuan.github.io/dev-blog/CodeSnippet/throttle.html</loc>
-  <lastmod>2021-08-25T05:11:58+00:00</lastmod>
+  <loc>https://yeonjuan.github.io/dev-blog/Study/CSS/</loc>
+  <lastmod>2021-09-14T14:59:45+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://yeonjuan.github.io/dev-blog/CodeSnippet/useOnClickOutside.html</loc>
-  <lastmod>2021-08-25T05:11:58+00:00</lastmod>
+  <loc>https://yeonjuan.github.io/dev-blog/Study/ChromeDevTools/</loc>
+  <lastmod>2021-09-14T14:59:45+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://yeonjuan.github.io/dev-blog/Study/DesignPattern/</loc>
+  <lastmod>2021-09-14T14:59:45+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://yeonjuan.github.io/dev-blog/Course/FrontEndMasters/design-systems-with-react-and-storybook.html</loc>
-  <lastmod>2021-08-25T05:11:58+00:00</lastmod>
+  <lastmod>2021-09-14T14:59:45+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://yeonjuan.github.io/dev-blog/Course/FrontEndMasters/advanced-react-patterns.html</loc>
-  <lastmod>2021-08-25T05:11:58+00:00</lastmod>
+  <lastmod>2021-09-14T14:59:45+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://yeonjuan.github.io/dev-blog/Course/FrontEndMasters/functional-javascript-first-steps.html</loc>
-  <lastmod>2021-08-25T05:11:58+00:00</lastmod>
+  <lastmod>2021-09-14T14:59:45+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://yeonjuan.github.io/dev-blog/Course/FrontEndMasters/hardcore-functional-programming-in-javascript.html</loc>
-  <lastmod>2021-08-25T05:11:58+00:00</lastmod>
+  <lastmod>2021-09-14T14:59:45+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://yeonjuan.github.io/dev-blog/Book/composing-software.html</loc>
-  <lastmod>2021-08-25T05:11:58+00:00</lastmod>
-  <priority>0.80</priority>
+  <loc>https://yeonjuan.github.io/dev-blog/Study/HTML/contents.html</loc>
+  <lastmod>2021-09-14T14:59:45+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://yeonjuan.github.io/dev-blog/Study/HTML/title.html</loc>
+  <lastmod>2021-09-14T14:59:45+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://yeonjuan.github.io/dev-blog/Study/HTML/picture.html</loc>
+  <lastmod>2021-09-14T14:59:45+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://yeonjuan.github.io/dev-blog/Study/CSS/box-sizing.html</loc>
+  <lastmod>2021-09-14T14:59:45+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://yeonjuan.github.io/dev-blog/Study/CSS/position.html</loc>
+  <lastmod>2021-09-14T14:59:45+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://yeonjuan.github.io/dev-blog/Study/DesignPattern/solid.html</loc>
+  <lastmod>2021-09-14T14:59:45+00:00</lastmod>
+  <priority>0.64</priority>
 </url>
 
 
