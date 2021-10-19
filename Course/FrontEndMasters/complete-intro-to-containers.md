@@ -175,3 +175,27 @@ $ docker info
 ```bash
 $ docker image list
 ```
+
+## Dockerfile
+
+```dockerfile
+FROM node:12-stretch  # node:12-stretch 를 기본 이미지로 사용
+
+CMD ["node", "-e", "console.log(\"omg hi lol\")"] # CMD 를 통해 명령어를 실행 가능하다.
+CMD ["node", "-e", "console.log(\"last\")"] # 단, CMD 중에서 맨 마지막에 위치한 CMD 만 동작한다. (overwrite)
+```
+
+이미지 빌드 후 실행
+
+```
+$ docker build .
+$ docker run {image}
+
+last
+```
+
+`--tag` 옵션으로 이미지에 이름을 붙혀서 빌드할 수 있다.
+
+```
+$ docker build --tag my-node-app .
+```
