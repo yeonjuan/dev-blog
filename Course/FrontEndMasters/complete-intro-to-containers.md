@@ -7,6 +7,8 @@
 - [NodeJS on Docker](#nodejs-on-docker)
 - [Tags](#tags)
 - [Docker CLI](#docker-cli)
+- [Build a Node.js App](#build-a-nodejs-app)
+- [Run a Node.js App](#run-a-nodejs-app)
 
 ## Containers
 
@@ -199,3 +201,50 @@ last
 ```
 $ docker build --tag my-node-app .
 ```
+
+## Build a NodeJS App
+
+- 프로젝트
+
+  ```
+  /my-node-app
+    Dockerfile
+    index.js
+  ```
+
+- Dockerfile
+
+  ```Dockerfile
+  FROM node:12-stretch
+  COPY index.js index.js
+  CMD ["node", "index.js"]
+  ```
+
+- index.js
+
+  ```js
+  const http = require("http");
+  http
+    .createServer((req, res) => {
+      console.log("request received");
+      res.end("hello", "utf-8");
+    })
+    .listen(3000);
+  console.log("server started");
+  ```
+
+프로젝트 루트에서 아래 명령어로 이미지를 빌드하고 실행한다.
+
+- 빌드
+
+  ```bash
+  $ docker build -t my-node-app .
+  ```
+
+- 실행
+
+  localhost:3000 으로 접속하면 서버가 실행되는 것을 확인할 수 있다.
+
+  ```bash
+  $ docker run --init --rm --publish 3000:3000 my-node-app
+  ```
