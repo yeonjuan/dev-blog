@@ -9,6 +9,9 @@
 - [Docker CLI](#docker-cli)
 - [Build a Node.js App](#build-a-nodejs-app)
 - [Run a Node.js App](#run-a-nodejs-app)
+- [Add Dependencies to a Node.js App](#add-dependencies-to-a-nodejs-app)
+- [EXPOSE](#expose)
+- [Layer](#layer)
 
 ## Containers
 
@@ -248,3 +251,75 @@ $ docker build --tag my-node-app .
   ```bash
   $ docker run --init --rm --publish 3000:3000 my-node-app
   ```
+
+# Add Dependencies to a NodeJS App
+
+`npm ci` 로 의존성 모듈을 설치한다.
+
+```dockerfile
+FROM node:12-stretch
+
+USER node
+
+RUN mkdir /home/node/code # user node 로 디렉터리를 생성
+
+WORKDIR /home/node/code
+
+COPY --chown=node:node . .
+
+RUN npm ci # 의존 모듈을 설치한다.
+
+CMD ["node", "index.js"]
+```
+
+# Expose
+
+```dockerfile
+FROM node:12-stretch
+
+USER node
+
+RUN mkdir /home/node/code
+
+WORKDIR /home/node/code
+
+COPY --chown=node:node . .
+
+RUN npm ci
+
+EXPOSE 3000
+
+CMD ["node", "index.js"]
+```
+
+`-p` 옵션으로 host 의 4000 포트를 컨테이너의 3000 포트와 맵핑시킬 수 있다.
+
+```bash
+$ docker run -p 4000:3000 my-node-app
+```
+
+# Layer
+
+Dockerfile 에서 변경이 없는 부분은 캐싱이 된다.
+때문에 Dockerfile 명령어 순서를 적절히 사용해서 빌드 속도를 올릴 수 있다.
+
+```dockerfile
+FROM node:12-stretch
+
+USER node
+
+RUN mkdir /home/node/code
+
+WORKDIR /home/node/code
+
+# package.json, package-lock.json 이 변경되지 않을 경우 다시 빌드할 때 이 부분까지 캐싱이 적용된다.
+COPY --chown=node:node package-lock.json package.json ./
+
+RUN npm ci
+
+COPY --chown=node:node . .
+
+EXPOSE 3000
+
+CMD ["node", "index.js"]
+```
