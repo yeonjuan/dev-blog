@@ -162,6 +162,21 @@ keywords: SOLID 원칙
   }
 } </code></pre>
 <p>즉, 인터페이스는 역할별 필요한 단위로 작게 유지해야 한다는 원칙이다.</p>
+<h2 id="dependency-inversion-principle">Dependency Inversion Principle</h2>
+<p>의존관계 역전 원칙(Dependency Inversion Principle)은 <em>상위 모듈이 하위 모듈과 의존 관계를 맺을 때 추상화에 의존해야 한다</em> 는 원칙이다.</p>
+<p><strong>✗ Bad</strong></p>
+<pre><code class="hljs language-ts"><span class="hljs-keyword">class</span> <span class="hljs-title hljs-class">OldPrinter</span> {
+  getPrinterName () {
+    <span class="hljs-keyword">return</span> <span class="hljs-string">'old printer'</span>;
+  }
+
+  print () {
+
+  }
+}
+
+<span class="hljs-keyword">class</span> 
+</code></pre>
 
         </div>
         
@@ -172,6 +187,7 @@ keywords: SOLID 원칙
 <li><a href="#open-closed-principle"> Open-Closed Principle</a></li>
 <li><a href="#liskov-substitution-principle"> Liskov Substitution Principle</a></li>
 <li><a href="#interface-segregation-principle"> Interface Segregation Principle</a></li>
+<li><a href="#dependency-inversion-principle"> Dependency Inversion Principle</a></li>
 </ul>
 
   </nav>

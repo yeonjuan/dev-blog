@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    
+    <title>dev-blog</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="favicon/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="icon" href="favicon/favicon.ico">
+    <link rel="stylesheet" href="/dev-blog/styles/global.css">
+    <link rel="stylesheet" href="/dev-blog/highlight/default.min.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-ZBZX7LMVNE');
+    </script>
+  </head>
+  <body>
+    
+  <header>
+    <nav>
+      <a href="/dev-blog" class="logo">dev-blog</a>
+    </nav>
+  </header>
+  
+    <article>
+      <div class="container">
+        <div class="content">
+          <h1 id="introduction-to-bash-vim-regex">Introduction to Bash, Vim, Regex</h1>
+<h2 id="using-shell">Using Shell</h2>
+<ul>
+<li>
+<p>어떤 쉘을 쓰는지 확인</p>
+<pre><code class="hljs language-bash"><span class="hljs-built_in">echo</span> <span class="hljs-variable">$SHELL</span>
+<span class="hljs-comment"># /bin/bash</span></code></pre>
+</li>
+<li>
+<p>디렉터리내 파일 리스트</p>
+<pre><code class="hljs language-bash">ls
+ls /dir/path</code></pre>
+</li>
+<li>
+<p>현재 디렉터리 확인</p>
+<pre><code class="hljs language-bash"><span class="hljs-built_in">pwd</span></code></pre>
+</li>
+<li>
+<p>현재 디렉터리 이동</p>
+<pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /dir/path
+<span class="hljs-built_in">cd</span> - <span class="hljs-comment"># cd 로 변경되기 바로 전 디렉터리로 이동</span></code></pre>
+</li>
+<li>
+<p>별칭 지정</p>
+<pre><code class="hljs language-bash"><span class="hljs-built_in">alias</span> ls=<span class="hljs-string">'ls-l'</span></code></pre>
+</li>
+<li>
+<p>별칭 확인</p>
+<pre><code class="hljs language-bash"><span class="hljs-built_in">alias</span></code></pre>
+</li>
+<li>
+<p>특별한 디렉터리</p>
+<ul>
+<li><code>..</code>: 상위(부모) 디렉터리</li>
+<li><code>.</code>: 현재 디렉터리</li>
+<li><code>~</code>: 홈 디렉터리</li>
+</ul>
+</li>
+<li>
+<p>문자열 이어 붙히기</p>
+<pre><code class="hljs language-bash">cat test.txt test2.txt</code></pre>
+</li>
+<li>
+<p>복사</p>
+<pre><code class="hljs language-bash">cp {<span class="hljs-built_in">source</span> file} {target file}
+cp -r {<span class="hljs-built_in">source</span> directory} {target directory} <span class="hljs-comment"># 디렉터리 내용을 포함해서 복사</span></code></pre>
+</li>
+</ul>
+<h3 id="mv"><code>mv</code></h3>
+<p>파일, 디렉터리의 이름을 바꾸거나 덮어쓰는데 사용</p>
+<pre><code class="hljs language-bash">mv message.txt msg.txt
+<span class="hljs-comment"># message.txt -> msg.txt</span>
+<span class="hljs-comment"># msg.txt 가 이미 있을 경우 덮어씀</span></code></pre>
+<h3 id="mkdir"><code>mkdir</code></h3>
+<p>새로운 디렉터리를 만드는데 사용</p>
+<pre><code class="hljs language-bash">mkdir foo <span class="hljs-comment"># foo 디렉터리 생성</span>
+mkdir -p a/b/c/d <span class="hljs-comment"># 디렉터리가 없으면 생성, 있으면 해당 디렉터리 사용</span></code></pre>
+<h2 id="rm"><code>rm</code></h2>
+<p>파일, 디렉터리를 삭제하는데 사용</p>
+<pre><code class="hljs language-bash">rm file <span class="hljs-comment"># 파일 삭제</span>
+rm -r directory <span class="hljs-comment"># 디렉터리 삭제</span></code></pre>
+<h2 id="wc"><code>wc</code></h2>
+<h2 id="writing-reading-file">writing, reading file</h2>
+<pre><code class="hljs language-bash"><span class="hljs-built_in">echo</span> hello there > hello.txt <span class="hljs-comment"># hello.txt 파일에 'hello there' 을 쓴다.</span></code></pre>
+<pre><code class="hljs language-bash"><span class="hljs-built_in">echo</span> hello there 2 >> hello.txt <span class="hljs-comment"># 'hello there 2' 를 hello.txt 뒤에 이어 붙힌다.</span></code></pre>
+<h2 id="pipe-">pipe <code>|</code></h2>
+<pre><code class="hljs language-bash">ls -l | wc -l <span class="hljs-comment"># 디렉터리에 있는 파일 갯수 출력</span></code></pre>
+<h1 id="curl">curl</h1>
+
+        </div>
+        
+  <nav class="toc-heading">
+    
+<ul>
+<li><a href="#using-shell"> Using Shell</a>
+<ul>
+<li><a href="#mv"> `mv`</a></li>
+<li><a href="#mkdir"> `mkdir`</a></li>
+
+</ul>
+</li>
+<li><a href="#rm"> `rm`</a></li>
+<li><a href="#wc"> `wc`</a></li>
+<li><a href="#writing-reading-file"> writing, reading file</a></li>
+<li><a href="#pipe-"> pipe `|`</a></li>
+</ul>
+
+  </nav>
+  
+      </div>
+    </article>
+  </body>
+</html>

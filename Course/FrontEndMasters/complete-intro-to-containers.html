@@ -1,0 +1,295 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Frontend Masters = Complete Intro to Containers를 수강후 정리한 글">
+    <meta name="keywords" content="Docker, Node, NodeJS, Container">
+    <title>Complete Intro to Containers (feat - deb-blog</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="favicon/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="icon" href="favicon/favicon.ico">
+    <link rel="stylesheet" href="/dev-blog/styles/global.css">
+    <link rel="stylesheet" href="/dev-blog/highlight/default.min.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-ZBZX7LMVNE');
+    </script>
+  </head>
+  <body>
+    
+  <header>
+    <nav>
+      <a href="/dev-blog" class="logo">dev-blog</a>
+    </nav>
+  </header>
+  
+    <article>
+      <div class="container">
+        <div class="content">
+          <!--meta
+title: Complete Intro to Containers (feat: Docker)
+description: Frontend Masters = Complete Intro to Containers를 수강후 정리한 글
+keywords: Docker, Node, NodeJS, Container
+-->
+<h1 id="complete-intro-to-containers-feat-docker">Complete Intro to Containers (feat. Docker)</h1>
+<blockquote>
+<p><a href="https://frontendmasters.com/courses/complete-intro-containers">Complete Intro to Containers (feat. Docker)</a> 수강후 정리한 글.</p>
+</blockquote>
+<ul>
+<li><a href="#containers">Containers</a></li>
+<li><a href="#docker">Docker</a></li>
+<li><a href="#nodejs-on-docker">NodeJS on Docker</a></li>
+<li><a href="#tags">Tags</a></li>
+<li><a href="#docker-cli">Docker CLI</a></li>
+<li><a href="#build-a-nodejs-app">Build a Node.js App</a></li>
+<li><a href="#run-a-nodejs-app">Run a Node.js App</a></li>
+<li><a href="#add-dependencies-to-a-nodejs-app">Add Dependencies to a Node.js App</a></li>
+<li><a href="#expose">EXPOSE</a></li>
+<li><a href="#layer">Layer</a></li>
+<li><a href="#Dcoker-ignore">Docker ignore</a></li>
+</ul>
+<h2 id="containers">Containers</h2>
+<h3 id="왜-컨테이너가-필요한가">왜 컨테이너가 필요한가?</h3>
+<p><strong>Bare Metal</strong></p>
+<p>Bare Metal 이란 별도의 추상화(가상화) 없이 직접 프로세서에서 실행되는 것을 뜻한다.
+성능에 민감하고 서버 관리 인력이 충분한 경우 웹 서버를 Bare Metal로 관리하는 것이 유용할 수도 있다.</p>
+<p>하지만 유연성이 많이 떨어진다. 서버 확장, 운영체제 업데이트, 하드웨어 드라이버 등 대응, 관리해야 할 요소가 많다.</p>
+<p><strong>Virtual Machines</strong></p>
+<p>Virtual Machine 은 Bare Metal의 다음 단계로 Bare Metal 과 사용자 사이에 추상화 층을 더한 것이다.
+예를 들어 물리 머신 하나에서 하나의 Linux 인스턴스를 실행하는 것 대신 여러 개의 Linus 게스트 인스턴스를 실행할 수 있다.</p>
+<p><strong>Public Cloud</strong></p>
+<p>Microsoft Azure 나 Amazon 와 같이 기업에서 제공하는 퍼블릭 클라우드 서비스를 통해 VM 을 획득할 수 있다.
+비용에 따라 미리 할당된 메모리나 컴퓨터 성능을 사용한다.
+직접 물리 서버를 관리할 필요는 없어졌지만 모든 소프트웨어는 직접 관리해야 한다.</p>
+<p><strong>Container</strong></p>
+<p>chroot, cgroup 을 사용하여 프로세스 그룹을 서로 구분해 보안과 리소스 관리를 더 안전하게 한다.</p>
+<h2 id="docker">Docker</h2>
+<p>아래 명령어로 <code>alpine:3.10</code> 버전의 이미지를 pull 받아 실행 시킬 수 있다. 실행시킨후 쉘에 연결된다. (<code>alpine</code> 은 경량화된 버전을 뜻한다.)</p>
+<pre><code class="hljs language-bash">$ docker run --interactive --tty alpine:3.10
+<span class="hljs-comment"># or</span>
+$ docker run -it alpine:3.10</code></pre>
+<p>아래 명령어로 백드라운드에서 도커를 실행 시킬 수 있다.</p>
+<pre><code class="hljs language-bash">$ docker run --detach -it ubuntu:bionic
+<span class="hljs-comment"># or</span>
+$ docker run -dit ubuntu:bionic</code></pre>
+<p><code>docker ps</code> 를 통해 백그라운드에서 실행되는 컨테이너를 확인할 수 있다.</p>
+<pre><code class="hljs language-bash">$ docker ps
+
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+527265773c63        ubuntu:bionic       <span class="hljs-string">"bash"</span>              5 seconds ago       Up 5 seconds                            brave_euler</code></pre>
+<p><code>docker kill</code> 을 통해 실행되는 컨테이너를 종료시킬 수 있다.</p>
+<pre><code class="hljs language-bash">$ docker <span class="hljs-built_in">kill</span> {CONTAINER_ID}</code></pre>
+<p>아래 명령어로 모든 컨테이너를 종료시킬 수 있다.</p>
+<pre><code>$ docker kill $(docker ps -q)
+</code></pre>
+<h2 id="nodejs-on-docker">NodeJS on Docker</h2>
+<p>아래 명령어로 node v 12, Debian 이미지를 실행 시킨다.</p>
+<pre><code class="hljs language-bash">docker run -it node:12-stretch</code></pre>
+<p>node REPL 이 실행되기 때문에 바로 nodejs 스크립트를 실행시킬 수 있다.</p>
+<pre><code class="hljs language-js"><span class="hljs-variable hljs-language">console</span>.<span class="hljs-title hljs-function">log</span>(<span class="hljs-string">"x"</span>);
+> <span class="hljs-string">"x"</span></code></pre>
+<p>아래 명령어로 bash 를 실행 시킬 수 있다.</p>
+<pre><code class="hljs language-bash">$ docker run -it node:12-stretch bash
+
+$ node -v
+v12.13.1</code></pre>
+<h2 id="tags">Tags</h2>
+<p>이미지에 태그를 지정하지 않으면 배포된 최근 버전을 의미하는 <code>latest</code> 태그를 사용하게 된다.
+<a href="https://hub.docker.com/">docker hub</a> 에서 이미지가 제공하는 태그 목록을 확인할 수 있다.</p>
+<h2 id="docker-cli">Docker CLI</h2>
+<p><strong>pull</strong></p>
+<p>이미지를 받아올 수 있다.</p>
+<pre><code class="hljs language-bash">$ docker pull {image}</code></pre>
+<p><strong>inspect</strong></p>
+<p>이미지에 대한 여러 정보를 확인할 수 있다.</p>
+<pre><code class="hljs language-bash">$ docker inspect {image}
+
+[
+    {
+        //...
+        <span class="hljs-string">"Cmd"</span>: [ <span class="hljs-comment"># 실행하는 CMD</span>
+                <span class="hljs-string">"/bin/sh"</span>,
+                <span class="hljs-string">"-c"</span>,
+                <span class="hljs-string">"#(nop) "</span>,
+                <span class="hljs-string">"CMD [\"node\"]"</span>
+            ],</code></pre>
+<p><strong>pause/unpause</strong></p>
+<p>pause, unpause 를 통해 프로세스를 멈추고 다시 실행할 수 있다.</p>
+<pre><code class="hljs language-bash">$ docker pause {container id}
+$ docker unpause {container id}</code></pre>
+<p><strong>kill</strong></p>
+<pre><code class="hljs language-bash">$ docker <span class="hljs-built_in">kill</span> {container id} <span class="hljs-comment"># 실행중인 특정 도커 컨테이너를 제거한다.</span>
+$ docker <span class="hljs-built_in">kill</span> $(docker ps -q) <span class="hljs-comment"># 실행중인 모든 도커 컨테이너를 제거한다.</span></code></pre>
+<p><strong>run/exec</strong></p>
+<ul>
+<li>
+<p>run: 새로운 컨테이너를 실행한다.</p>
+<pre><code class="hljs language-bash">docker run [OPTIONS] IMAGE [COMMAND] [ARG...]</code></pre>
+</li>
+<li>
+<p>exec: 현재 실행중인 컨테이너에 명령을 내린다.</p>
+<pre><code class="hljs language-bash">$ docker <span class="hljs-built_in">exec</span> [OPTIONS] CONTAINER COMMAND [ARG...]</code></pre>
+</li>
+</ul>
+<p><strong>info</strong></p>
+<p>Docker 호스팅 시스템에 대한 정보를 출력한다.</p>
+<pre><code>$ docker info
+</code></pre>
+<p><strong>image list</strong></p>
+<p>도커 이미지 목록을 출력한다.</p>
+<pre><code class="hljs language-bash">$ docker image list</code></pre>
+<h2 id="dockerfile">Dockerfile</h2>
+<pre><code class="hljs language-dockerfile"><span class="hljs-keyword">FROM</span> node:<span class="hljs-number">12</span>-stretch  <span class="hljs-comment"># node:12-stretch 를 기본 이미지로 사용</span>
+
+<span class="hljs-keyword">CMD</span><span class="bash"> [<span class="hljs-string">"node"</span>, <span class="hljs-string">"-e"</span>, <span class="hljs-string">"console.log(\"omg hi lol\")"</span>] <span class="hljs-comment"># CMD 를 통해 명령어를 실행 가능하다.</span></span>
+<span class="hljs-keyword">CMD</span><span class="bash"> [<span class="hljs-string">"node"</span>, <span class="hljs-string">"-e"</span>, <span class="hljs-string">"console.log(\"last\")"</span>] <span class="hljs-comment"># 단, CMD 중에서 맨 마지막에 위치한 CMD 만 동작한다. (overwrite)</span></span></code></pre>
+<p>이미지 빌드 후 실행</p>
+<pre><code>$ docker build .
+$ docker run {image}
+
+last
+</code></pre>
+<p><code>--tag</code> 옵션으로 이미지에 이름을 붙혀서 빌드할 수 있다.</p>
+<pre><code>$ docker build --tag my-node-app .
+</code></pre>
+<h2 id="build-a-nodejs-app">Build a NodeJS App</h2>
+<ul>
+<li>
+<p>프로젝트</p>
+<pre><code>/my-node-app
+  Dockerfile
+  index.js
+</code></pre>
+</li>
+<li>
+<p>Dockerfile</p>
+<pre><code class="hljs language-Dockerfile"><span class="hljs-keyword">FROM</span> node:<span class="hljs-number">12</span>-stretch
+<span class="hljs-keyword">COPY</span><span class="bash"> index.js index.js</span>
+<span class="hljs-keyword">CMD</span><span class="bash"> [<span class="hljs-string">"node"</span>, <span class="hljs-string">"index.js"</span>]</span></code></pre>
+</li>
+<li>
+<p>index.js</p>
+<pre><code class="hljs language-js"><span class="hljs-keyword">const</span> http = <span class="hljs-built_in">require</span>(<span class="hljs-string">"http"</span>);
+http
+  .<span class="hljs-title hljs-function">createServer</span>(<span class="hljs-function">(<span class="hljs-params">req, res</span>) =></span> {
+    <span class="hljs-variable hljs-language">console</span>.<span class="hljs-title hljs-function">log</span>(<span class="hljs-string">"request received"</span>);
+    res.<span class="hljs-title hljs-function">end</span>(<span class="hljs-string">"hello"</span>, <span class="hljs-string">"utf-8"</span>);
+  })
+  .<span class="hljs-title hljs-function">listen</span>(<span class="hljs-number">3000</span>);
+<span class="hljs-variable hljs-language">console</span>.<span class="hljs-title hljs-function">log</span>(<span class="hljs-string">"server started"</span>);</code></pre>
+</li>
+</ul>
+<p>프로젝트 루트에서 아래 명령어로 이미지를 빌드하고 실행한다.</p>
+<ul>
+<li>
+<p>빌드</p>
+<pre><code class="hljs language-bash">$ docker build -t my-node-app .</code></pre>
+</li>
+<li>
+<p>실행</p>
+<p>localhost:3000 으로 접속하면 서버가 실행되는 것을 확인할 수 있다.</p>
+<pre><code class="hljs language-bash">$ docker run --init --rm --publish 3000:3000 my-node-app</code></pre>
+</li>
+</ul>
+<h1 id="add-dependencies-to-a-nodejs-app">Add Dependencies to a NodeJS App</h1>
+<p><code>npm ci</code> 로 의존성 모듈을 설치한다.</p>
+<pre><code class="hljs language-dockerfile"><span class="hljs-keyword">FROM</span> node:<span class="hljs-number">12</span>-stretch
+
+<span class="hljs-keyword">USER</span> node
+
+<span class="hljs-keyword">RUN</span><span class="bash"> mkdir /home/node/code <span class="hljs-comment"># user node 로 디렉터리를 생성</span></span>
+
+<span class="hljs-keyword">WORKDIR</span><span class="bash"> /home/node/code</span>
+
+<span class="hljs-keyword">COPY</span><span class="bash"> --chown=node:node . .</span>
+
+<span class="hljs-keyword">RUN</span><span class="bash"> npm ci <span class="hljs-comment"># 의존 모듈을 설치한다.</span></span>
+
+<span class="hljs-keyword">CMD</span><span class="bash"> [<span class="hljs-string">"node"</span>, <span class="hljs-string">"index.js"</span>]</span></code></pre>
+<h2 id="expose">Expose</h2>
+<pre><code class="hljs language-dockerfile"><span class="hljs-keyword">FROM</span> node:<span class="hljs-number">12</span>-stretch
+
+<span class="hljs-keyword">USER</span> node
+
+<span class="hljs-keyword">RUN</span><span class="bash"> mkdir /home/node/code</span>
+
+<span class="hljs-keyword">WORKDIR</span><span class="bash"> /home/node/code</span>
+
+<span class="hljs-keyword">COPY</span><span class="bash"> --chown=node:node . .</span>
+
+<span class="hljs-keyword">RUN</span><span class="bash"> npm ci</span>
+
+<span class="hljs-keyword">EXPOSE</span> <span class="hljs-number">3000</span>
+
+<span class="hljs-keyword">CMD</span><span class="bash"> [<span class="hljs-string">"node"</span>, <span class="hljs-string">"index.js"</span>]</span></code></pre>
+<p><code>-p</code> 옵션으로 host 의 4000 포트를 컨테이너의 3000 포트와 맵핑시킬 수 있다.</p>
+<pre><code class="hljs language-bash">$ docker run -p 4000:3000 my-node-app</code></pre>
+<h2 id="layer">Layer</h2>
+<p>Dockerfile 에서 변경이 없는 부분은 캐싱이 된다.
+때문에 Dockerfile 명령어 순서를 적절히 사용해서 빌드 속도를 올릴 수 있다.</p>
+<pre><code class="hljs language-dockerfile"><span class="hljs-keyword">FROM</span> node:<span class="hljs-number">12</span>-stretch
+
+<span class="hljs-keyword">USER</span> node
+
+<span class="hljs-keyword">RUN</span><span class="bash"> mkdir /home/node/code</span>
+
+<span class="hljs-keyword">WORKDIR</span><span class="bash"> /home/node/code</span>
+
+<span class="hljs-comment"># package.json, package-lock.json 이 변경되지 않을 경우 다시 빌드할 때 이 부분까지 캐싱이 적용된다.</span>
+<span class="hljs-keyword">COPY</span><span class="bash"> --chown=node:node package-lock.json package.json ./</span>
+
+<span class="hljs-keyword">RUN</span><span class="bash"> npm ci</span>
+
+<span class="hljs-keyword">COPY</span><span class="bash"> --chown=node:node . .</span>
+
+<span class="hljs-keyword">EXPOSE</span> <span class="hljs-number">3000</span>
+
+<span class="hljs-keyword">CMD</span><span class="bash"> [<span class="hljs-string">"node"</span>, <span class="hljs-string">"index.js"</span>]</span></code></pre>
+<h2 id="docker-ignore">Docker ignore</h2>
+<p><code>.gitignore</code> 처럼 무시할 파일 목록을 작성할 수 있음</p>
+<ul>
+<li>
+<p><code>.dockerignore</code></p>
+<pre><code>.git/
+node_modules/
+</code></pre>
+</li>
+</ul>
+
+        </div>
+        
+  <nav class="toc-heading">
+    
+<ul>
+<li><a href="#containers"> Containers</a>
+<ul>
+<li><a href="#왜-컨테이너가-필요한가"> 왜 컨테이너가 필요한가?</a></li>
+
+</ul>
+</li>
+<li><a href="#docker"> Docker</a></li>
+<li><a href="#nodejs-on-docker"> NodeJS on Docker</a></li>
+<li><a href="#tags"> Tags</a></li>
+<li><a href="#docker-cli"> Docker CLI</a></li>
+<li><a href="#dockerfile"> Dockerfile</a></li>
+<li><a href="#build-a-nodejs-app"> Build a NodeJS App</a></li>
+<li><a href="#expose"> Expose</a></li>
+<li><a href="#layer"> Layer</a></li>
+<li><a href="#docker-ignore"> Docker ignore</a></li>
+</ul>
+
+  </nav>
+  
+      </div>
+    </article>
+  </body>
+</html>
