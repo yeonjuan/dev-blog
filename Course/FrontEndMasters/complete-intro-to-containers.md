@@ -1,3 +1,9 @@
+<!--meta
+title: Complete Intro to Containers (feat: Docker)
+description: Frontend Masters = Complete Intro to Containers를 수강후 정리한 글
+keywords: Docker, Node, NodeJS, Container
+-->
+
 # Complete Intro to Containers (feat. Docker)
 
 > [Complete Intro to Containers (feat. Docker)](https://frontendmasters.com/courses/complete-intro-containers) 수강후 정리한 글.
@@ -12,6 +18,7 @@
 - [Add Dependencies to a Node.js App](#add-dependencies-to-a-nodejs-app)
 - [EXPOSE](#expose)
 - [Layer](#layer)
+- [Docker ignore](#Dcoker-ignore)
 
 ## Containers
 
@@ -272,7 +279,7 @@ RUN npm ci # 의존 모듈을 설치한다.
 CMD ["node", "index.js"]
 ```
 
-# Expose
+## Expose
 
 ```dockerfile
 FROM node:12-stretch
@@ -298,7 +305,7 @@ CMD ["node", "index.js"]
 $ docker run -p 4000:3000 my-node-app
 ```
 
-# Layer
+## Layer
 
 Dockerfile 에서 변경이 없는 부분은 캐싱이 된다.
 때문에 Dockerfile 명령어 순서를 적절히 사용해서 빌드 속도를 올릴 수 있다.
@@ -323,3 +330,14 @@ EXPOSE 3000
 
 CMD ["node", "index.js"]
 ```
+
+## Docker ignore
+
+`.gitignore` 처럼 무시할 파일 목록을 작성할 수 있음
+
+- `.dockerignore`
+
+  ```
+  .git/
+  node_modules/
+  ```
