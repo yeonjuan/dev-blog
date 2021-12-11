@@ -1,0 +1,126 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    
+    <title>dev-blog</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="favicon/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="icon" href="favicon/favicon.ico">
+    <link rel="stylesheet" href="/dev-blog/styles/global.css">
+    <link rel="stylesheet" href="/dev-blog/highlight/default.min.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-ZBZX7LMVNE');
+    </script>
+  </head>
+  <body>
+    
+  <header>
+    <nav>
+      <a href="/dev-blog" class="logo">dev-blog</a>
+    </nav>
+  </header>
+  
+    <article>
+      <div class="container">
+        <div class="content">
+          <h1 id="rust">Rust</h1>
+<h2 id="rust-시작하기">Rust 시작하기</h2>
+<p>Rust 를 사용하기 위해서 필요한 rustup을 설치한다.</p>
+<h3 id="rustup">rustup</h3>
+<p>Rustup 은 Rust 의 버전과 관련 도구를 관리하는 명령어 도구이다. Rustup 을 설치하기 위해서 아래 명령어를 사용한다.</p>
+<ul>
+<li>
+<p>Rustup 설치 (mac os)</p>
+<pre><code class="hljs language-bash">curl --proto <span class="hljs-string">'=https'</span> --tlsv1.2 -sSf https://sh.rustup.rs | sh</code></pre>
+<p>이후 다음 명령어로 Rust 를 시스템 PATH 변수에 등록한다.</p>
+<pre><code class="hljs language-bash"><span class="hljs-built_in">source</span> /Users/yeonjuan/.cargo/env</code></pre>
+</li>
+</ul>
+<p>rustup update 명령어를 통해 Rust 를 최신 버전으로 업데이트할 수 있다.</p>
+<ul>
+<li>
+<p>Rust 버전 업데이트</p>
+<pre><code class="hljs language-bash">rustup update</code></pre>
+</li>
+</ul>
+<p>rustup doc 명령어를 통해 Rust 관련 문서를 브라우저에서 볼 수 있다.</p>
+<ul>
+<li>
+<p>Rust 문서</p>
+<pre><code class="hljs language-bash">rustup doc</code></pre>
+</li>
+</ul>
+<h3 id="cargo">Cargo</h3>
+<p>Rustup 을 설치하면 Cargo 도 같이 설치된다. Cargo 는 Rust 빌드/패키지 관리 도구이다. 기본적인 Cargo 명령어는 아래와 같다.</p>
+<pre><code class="hljs language-bash"><span class="hljs-comment"># 프로젝트 생성</span>
+cargo new hello-world
+
+<span class="hljs-comment"># 프로젝트 빌드</span>
+cargo build
+
+<span class="hljs-comment"># 프로젝트 실행</span>
+cargo run
+
+<span class="hljs-comment"># 프로젝트 테스트</span>
+cargo <span class="hljs-built_in">test</span>
+
+<span class="hljs-comment"># 프로젝트 문서 생성</span>
+cargo doc
+
+<span class="hljs-comment"># 라이브러리 배포</span>
+cargo publish
+
+<span class="hljs-comment"># 빌드 없이 컴파일 오류 체크</span>
+cargo check
+
+<span class="hljs-comment"># 최적화해서 컴파일</span>
+cargo build --release</code></pre>
+<h2 id="rust-hello-world">Rust "Hello, world!"</h2>
+<p>아래 명령어로 hello-world 프로젝트를 생성한다.</p>
+<pre><code class="hljs language-bash">cargo new hello-world
+<span class="hljs-built_in">cd</span> hello-world</code></pre>
+<p>"Hello, world!" 를 출력하는 rust 코드를 작성한다.</p>
+<pre><code class="hljs language-rs"><span class="hljs-comment">// src/main.rs</span>
+<span class="hljs-keyword">fn</span> <span class="hljs-title hljs-function">main</span>() {
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">"Hello, world!"</span>);
+}</code></pre>
+<p>cargo run 명령어를 통해 실행한다.</p>
+<pre><code>cargo run
+    Finished dev [unoptimized + debuginfo] target(s) in 0.01s
+     Running `target/debug/hello-world`
+Hello, world!
+</code></pre>
+
+        </div>
+        
+  <nav class="toc-heading">
+    
+<ul>
+<li><a href="#rust-시작하기"> Rust 시작하기</a>
+<ul>
+<li><a href="#rustup"> rustup</a></li>
+<li><a href="#cargo"> Cargo</a></li>
+
+</ul>
+</li>
+<li><a href="#rust-hello-world"> Rust "Hello, world!"</a></li>
+</ul>
+
+  </nav>
+  
+      </div>
+    </article>
+  </body>
+</html>
