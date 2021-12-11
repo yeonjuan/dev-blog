@@ -44,6 +44,7 @@ keywords: JavaScript, dev blog, Development, 프론트 엔드
 - [CSS](./Study/CSS/README.md)
 - [ChromeDevTools](./Study/ChromeDevTools/README.md)
 - [DesignPattern](./Study/DesignPattern/README.md)
+- [Rust](./Study/Rust/README.md)
 
 ## Course
 
