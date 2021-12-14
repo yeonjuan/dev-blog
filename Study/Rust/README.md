@@ -9,3 +9,4 @@ keywords: rust
 - [Rust](./rust.md)
 - [변수와 상수](./variables-constants.md)
 - [데이터 타입](./data-type.md)
+- [함수](./functions.md)
