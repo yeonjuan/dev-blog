@@ -8,6 +8,7 @@ keywords: JavaScript, dev blog, Development, 프론트 엔드
 
 ## YeonJuAn 👋
 
+- 💼 LINE+ UIT (2021.09 ~ )
 - 💼 Kakao FE플랫폼 (2019.01 ~ 2021.09)
 
 ## Project
