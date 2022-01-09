@@ -46,7 +46,103 @@ Rust 데이터 타입은 스칼라(Scalar), 컴파운드(Compound) 라는 부분
 <h2 id="스칼라-scalar">스칼라 (Scalar)</h2>
 <p>스칼라 타입은 하나의 값을 나타내며 정수, 부동 소수점, 불리언, 문자 타입이 존재한다.</p>
 <p><strong>정수 타입</strong></p>
-<p>|</p>
+<table>
+<thead>
+<tr>
+<th>bits</th>
+<th>signed</th>
+<th>unsigned</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8 bits</td>
+<td>i8</td>
+<td>u8</td>
+<td></td>
+</tr>
+<tr>
+<td>16 bits</td>
+<td>i16</td>
+<td>u16</td>
+<td></td>
+</tr>
+<tr>
+<td>32 bits</td>
+<td>i32</td>
+<td>u32</td>
+<td>기본 정수 타입</td>
+</tr>
+<tr>
+<td>64 bits</td>
+<td>i64</td>
+<td>u64</td>
+<td></td>
+</tr>
+<tr>
+<td>아키텍쳐에 따라 결정</td>
+<td>isize</td>
+<td>usize</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>부동 소수점</strong></p>
+<table>
+<thead>
+<tr>
+<th>bits</th>
+<th>부동 소수점 타입</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>32 bits</td>
+<td>f32</td>
+<td></td>
+</tr>
+<tr>
+<td>63 bits</td>
+<td>f64</td>
+<td>기본 부동 소수 타입</td>
+</tr>
+</tbody>
+</table>
+<p><strong>불리언</strong></p>
+<p><code>bool</code> 키워드를 사용한다.</p>
+<pre><code class="hljs language-rs"><span class="hljs-keyword">fn</span> <span class="hljs-title hljs-function">main</span>() {
+  <span class="hljs-keyword">let</span> <span class="hljs-keyword"></span><span class="hljs-variable">isTrue</span>: <span class="hljs-type">bool</span> = <span class="hljs-literal">true</span>;
+  <span class="hljs-keyword">let</span> <span class="hljs-keyword"></span><span class="hljs-variable">isFalse</span>: <span class="hljs-type">bool</span> = <span class="hljs-literal">false</span>;
+}</code></pre>
+<p><strong>문자타입</strong></p>
+<pre><code class="hljs language-rs"><span class="hljs-keyword">fn</span> <span class="hljs-title hljs-function">main</span> () {
+  <span class="hljs-keyword">let</span> <span class="hljs-keyword"></span><span class="hljs-variable">c</span>: <span class="hljs-type">char</span> = <span class="hljs-string">'a'</span>
+}</code></pre>
+<h2 id="컴파운드-타입">컴파운드 타입</h2>
+<p>컴파운드 타입은 여러 값이 그룹화된 타입이다.</p>
+<h2 id="튜플-타입">튜플 타입</h2>
+<pre><code class="hljs language-rs"><span class="hljs-keyword">fn</span> <span class="hljs-title hljs-function">main</span>() {
+  <span class="hljs-keyword">let</span> <span class="hljs-keyword"></span><span class="hljs-variable">tup</span>: (<span class="hljs-type">i32</span>, <span class="hljs-type">f64</span>) = (<span class="hljs-number">500</span>, <span class="hljs-number">6.4</span>);
+
+  <span class="hljs-comment">// 인덱스로 접근</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-keyword"></span><span class="hljs-variable">first</span> = tup[<span class="hljs-number">0</span>];
+  <span class="hljs-keyword">let</span> <span class="hljs-keyword"></span><span class="hljs-variable">second</span> = tup[<span class="hljs-number">1</span>];
+
+  <span class="hljs-comment">// 구조 분해</span>
+  <span class="hljs-keyword">let</span> (first, second) = tup;
+}</code></pre>
+<h2 id="배열-타입">배열 타입</h2>
+<p>러스트의 배열은 고정된 길이를 가진다.
+유동성있는 배열을 사용하려면 벡터타입을 사용한다.</p>
+<pre><code class="hljs language-rs"><span class="hljs-keyword">fn</span> <span class="hljs-title hljs-function">main</span>() {
+  <span class="hljs-keyword">let</span> <span class="hljs-keyword"></span><span class="hljs-variable">arr</span> = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>];
+  <span class="hljs-keyword">let</span> <span class="hljs-keyword"></span><span class="hljs-variable">arr</span> = [<span class="hljs-type">i32</span>; <span class="hljs-number">5</span>] = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>];
+
+<span class="hljs-comment">// ㅇㄴ덱스로 접근</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-keyword"></span><span class="hljs-variable">first</span> = arr[<span class="hljs-number">0</span>];
+}</code></pre>
 
         </div>
         
@@ -54,6 +150,10 @@ Rust 데이터 타입은 스칼라(Scalar), 컴파운드(Compound) 라는 부분
     
 <ul>
 <li><a href="#스칼라-scalar"> 스칼라 (Scalar)</a></li>
+<li><a href="#컴파운드-타입"> 컴파운드 타입</a></li>
+<li><a href="#튜플-타입"> 튜플 타입</a></li>
+<li><a href="#배열-타입"> 배열 타입</a></li>
+</ul>
 
   </nav>
   

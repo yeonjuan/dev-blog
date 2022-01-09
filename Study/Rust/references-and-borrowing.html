@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    
+    <title>dev-blog</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="favicon/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="icon" href="favicon/favicon.ico">
+    <link rel="stylesheet" href="/dev-blog/styles/global.css">
+    <link rel="stylesheet" href="/dev-blog/highlight/default.min.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-ZBZX7LMVNE');
+    </script>
+  </head>
+  <body>
+    
+  <header>
+    <nav>
+      <a href="/dev-blog" class="logo">dev-blog</a>
+    </nav>
+  </header>
+  
+    <article>
+      <div class="container">
+        <div class="content">
+          <h1 id="대여와-참조">대여와 참조</h1>
+<h2 id="대여">대여</h2>
+<p><code>&#x26;</code> 문법을 사용해서 레퍼런스가 값을 참조하지만 소유하지는 않도록 할수 있다. 이를 <code>대여(borrowing)</code>이라고 한다.</p>
+<pre><code class="hljs language-rs"><span class="hljs-keyword">fn</span> <span class="hljs-title hljs-function">main</span>() {
+    <span class="hljs-keyword">let</span> <span class="hljs-keyword"></span><span class="hljs-variable">s1</span> = String::<span class="hljs-title hljs-function hljs-invoke">from</span>(<span class="hljs-string">"hello"</span>);
+
+    <span class="hljs-keyword">let</span> <span class="hljs-keyword"></span><span class="hljs-variable">len</span> = <span class="hljs-title hljs-function hljs-invoke">calculate_length</span>(&#x26;s1);
+
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">"The length of '{}' is {}."</span>, s1, len);
+}
+
+<span class="hljs-keyword">fn</span> <span class="hljs-title hljs-function">calculate_length</span>(s: &#x26;<span class="hljs-type">String</span>) <span class="hljs-punctuation">-></span> <span class="hljs-type">usize</span> {
+    s.<span class="hljs-title hljs-function hljs-invoke">len</span>()
+}</code></pre>
+<p>대여한 레퍼런스에 대한 값을 수정하려고 하면 에러가 발생한다.</p>
+<pre><code class="hljs language-rs"><span class="hljs-keyword">fn</span> <span class="hljs-title hljs-function">main</span>() {
+    <span class="hljs-keyword">let</span> <span class="hljs-keyword"></span><span class="hljs-variable">s</span> = String::<span class="hljs-title hljs-function hljs-invoke">from</span>(<span class="hljs-string">"hello"</span>);
+
+    <span class="hljs-title hljs-function hljs-invoke">change</span>(&#x26;s);
+}
+
+<span class="hljs-keyword">fn</span> <span class="hljs-title hljs-function">change</span>(some_string: &#x26;<span class="hljs-type">String</span>) {
+    some_string.<span class="hljs-title hljs-function hljs-invoke">push_str</span>(<span class="hljs-string">", world"</span>); <span class="hljs-comment">// Error</span>
+}</code></pre>
+<h2 id="수정가능한-참조">수정가능한 참조</h2>
+<p><code>mut</code> 키워드를 통해서 수정가능한 참조값을 넘겨줄 수 있다.</p>
+<pre><code class="hljs language-rs"><span class="hljs-keyword">fn</span> <span class="hljs-title hljs-function">main</span>() {
+    <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">s</span> = String::<span class="hljs-title hljs-function hljs-invoke">from</span>(<span class="hljs-string">"hello"</span>);
+
+    <span class="hljs-title hljs-function hljs-invoke">change</span>(&#x26;<span class="hljs-keyword">mut</span> s);
+}
+
+<span class="hljs-keyword">fn</span> <span class="hljs-title hljs-function">change</span>(some_string: &#x26;<span class="hljs-keyword">mut</span> <span class="hljs-type">String</span>) {
+    some_string.<span class="hljs-title hljs-function hljs-invoke">push_str</span>(<span class="hljs-string">", world"</span>);
+}</code></pre>
+<p>한번에 단 하나의 수정가능한 참조만 가질수 있다는 제한이 있다.</p>
+<pre><code class="hljs language-rs"> <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">s</span> = String::<span class="hljs-title hljs-function hljs-invoke">from</span>(<span class="hljs-string">"hello"</span>);
+
+  <span class="hljs-keyword">let</span> <span class="hljs-keyword"></span><span class="hljs-variable">r1</span> = &#x26;<span class="hljs-keyword">mut</span> s;  <span class="hljs-comment">// Error</span>
+  <span class="hljs-keyword">let</span> <span class="hljs-keyword"></span><span class="hljs-variable">r2</span> = &#x26;<span class="hljs-keyword">mut</span> s;  <span class="hljs-comment">// Error</span>
+
+  <span class="hljs-built_in">println!</span>(<span class="hljs-string">"{}, {}"</span>, r1, r2);</code></pre>
+
+        </div>
+        
+  <nav class="toc-heading">
+    
+<ul>
+<li><a href="#대여"> 대여</a></li>
+<li><a href="#수정가능한-참조"> 수정가능한 참조</a></li>
+</ul>
+
+  </nav>
+  
+      </div>
+    </article>
+  </body>
+</html>

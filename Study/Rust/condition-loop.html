@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    
+    <title>dev-blog</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="favicon/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="icon" href="favicon/favicon.ico">
+    <link rel="stylesheet" href="/dev-blog/styles/global.css">
+    <link rel="stylesheet" href="/dev-blog/highlight/default.min.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-ZBZX7LMVNE');
+    </script>
+  </head>
+  <body>
+    
+  <header>
+    <nav>
+      <a href="/dev-blog" class="logo">dev-blog</a>
+    </nav>
+  </header>
+  
+    <article>
+      <div class="container">
+        <div class="content">
+          <h1 id="조건문과-반복문">조건문과 반복문</h1>
+<h2 id="조건문-if">조건문: <code>if</code></h2>
+<pre><code class="hljs language-rs"><span class="hljs-keyword">fn</span> <span class="hljs-title hljs-function">main</span>() {
+  <span class="hljs-keyword">let</span> <span class="hljs-keyword"></span><span class="hljs-variable">num</span> = <span class="hljs-number">1</span>;
+
+  <span class="hljs-keyword">if</span> num &#x3C;= <span class="hljs-number">1</span> {
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">"num &#x3C;= 1"</span>);
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">"num > 1"</span>);
+  }
+}</code></pre>
+<p>조건문은 마지막 표현식의 값을 반환한다.</p>
+<pre><code class="hljs language-rs"><span class="hljs-keyword">fn</span> <span class="hljs-title hljs-function">main</span>() {
+    <span class="hljs-keyword">let</span> <span class="hljs-keyword"></span><span class="hljs-variable">num</span> = <span class="hljs-number">3</span>;
+
+    <span class="hljs-keyword">let</span> <span class="hljs-keyword"></span><span class="hljs-variable">result</span> = <span class="hljs-keyword">if</span> num % <span class="hljs-number">2</span> == <span class="hljs-number">1</span> {
+      <span class="hljs-string">"odd"</span>
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-string">"event"</span>
+    };
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">"{}"</span>, result); <span class="hljs-comment">// "odd"</span>
+  }
+</code></pre>
+<h2 id="조건문-else-if">조건문: <code>else-if</code></h2>
+<pre><code class="hljs language-rs"><span class="hljs-keyword">fn</span> <span class="hljs-title hljs-function">main</span>() {
+  <span class="hljs-keyword">let</span> <span class="hljs-keyword"></span><span class="hljs-variable">num</span> = <span class="hljs-number">1</span>;
+
+  <span class="hljs-keyword">if</span> num == <span class="hljs-number">1</span> {
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">"num = 1"</span>);
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> num == <span class="hljs-number">2</span> {
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">"num = 2"</span>);
+  }
+}</code></pre>
+<h2 id="반복문-loop">반복문: <code>loop</code></h2>
+<p><code>loop</code> 키워드를 통해서 계속 반복해서 코드를 실행할 수 있다. <code>loop</code> 를 종료하도록 명시해주지 않으면 계속 반복 실행된다.</p>
+<pre><code class="hljs language-rs"><span class="hljs-keyword">fn</span> <span class="hljs-title hljs-function">main</span>() {
+  <span class="hljs-keyword">loop</span> {
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">"무한 반복"</span>);
+  }
+}</code></pre>
+<p><code>break</code> 를 통해서 반복을 종료할 수 있다. <code>break</code> 뒤에 리턴하려는 값을 명시하면 <code>loop</code>의 결과값으로 활용할 수 있다.</p>
+<pre><code class="hljs language-rs"><span class="hljs-keyword">fn</span> <span class="hljs-title hljs-function">main</span>() {
+  <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">cnt</span> = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> <span class="hljs-keyword"></span><span class="hljs-variable">result</span> = <span class="hljs-keyword">loop</span> {
+    cnt += <span class="hljs-number">1</span>;
+
+    <span class="hljs-keyword">if</span> cnt >= <span class="hljs-number">10</span> {
+      <span class="hljs-keyword">break</span> cnt;
+    }
+  };
+  <span class="hljs-built_in">println!</span>(<span class="hljs-string">"{}"</span>, cnt);
+}</code></pre>
+<h2 id="조건-반복문-while">조건 반복문: <code>while</code></h2>
+<p><code>while</code> 을 통해 조건이 일치하는 동안 반복되는 루프를 작성할 수 있다.</p>
+<pre><code class="hljs language-rs"><span class="hljs-keyword">fn</span> <span class="hljs-title hljs-function">main</span>() {
+  <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">number</span> = <span class="hljs-number">10</span>;
+  <span class="hljs-keyword">while</span> number > <span class="hljs-number">0</span> {
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">"{}"</span>, number);
+    number = number - <span class="hljs-number">1</span>;
+  }
+}</code></pre>
+<h2 id="컬렉션의-요소-순회-for">컬렉션의 요소 순회: <code>for</code></h2>
+<p><code>for</code> 를 이용해 컬렉션의 요소를 순회할 수 있다.</p>
+<pre><code class="hljs language-rs"><span class="hljs-keyword">fn</span> <span class="hljs-title hljs-function">main</span>() {
+  <span class="hljs-keyword">let</span> <span class="hljs-keyword"></span><span class="hljs-variable">arr</span> = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>];
+  <span class="hljs-keyword">for</span> <span class="hljs-variable">num</span> <span class="hljs-keyword">in</span> arr.<span class="hljs-title hljs-function hljs-invoke">iter</span>() {
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">"{}"</span>, num);
+  }
+}</code></pre>
+
+        </div>
+        
+  <nav class="toc-heading">
+    
+<ul>
+<li><a href="#조건문-if"> 조건문: `if`</a></li>
+<li><a href="#조건문-else-if"> 조건문: `else-if`</a></li>
+<li><a href="#반복문-loop"> 반복문: `loop`</a></li>
+<li><a href="#조건-반복문-while"> 조건 반복문: `while`</a></li>
+<li><a href="#컬렉션의-요소-순회-for"> 컬렉션의 요소 순회: `for`</a></li>
+</ul>
+
+  </nav>
+  
+      </div>
+    </article>
+  </body>
+</html>
