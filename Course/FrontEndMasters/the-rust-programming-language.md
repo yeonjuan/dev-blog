@@ -223,3 +223,64 @@ let message = if cats > 1 {
   "Need more cats!"
 };
 ```
+
+# Collections
+
+## Tuples
+
+튜플은 런타임에 메모리 크기가 고정되어 있다.
+
+```rs
+// 튜플 선언
+let point: (i64, i64, i64) = (0, 0, 0);
+
+// 개별 값 사용
+let x = point.0;
+let y = point.1;
+let z = point.2;
+
+// 디스트럭터링
+let (x, y, z) = point;
+
+let mut point: (i64, i64, i64) = (0, 0, 0);
+point.0 = 1;
+```
+
+### Unit
+
+아무런 값도 가지지 않는 특별한 튜플.
+
+```rs
+let unit: () = ();
+```
+
+왜 아무런 값을 가지지 않은 튜플이 존재할까?. 마치 JavaScript `void` 같은 개념으로 반환값이 없는 함수에서 사용된다.
+
+```rs
+fn main() {
+
+}
+
+fn main() -> () {
+}
+```
+
+## Structs
+
+```rs
+struct Point {
+  x: i64,
+  y: i64,
+  z: i64,
+}
+
+fn new_point(x: i64, y: i64, z: i64) -> Point {
+  Point {x: x, y: y, z: z}
+}
+
+let point = Point {x: 1, y: 2, z: 3};
+let x = point.x;
+
+// 디스트럭쳐링
+let Point {x, y, z} = point;
+```
