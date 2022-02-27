@@ -284,3 +284,174 @@ let x = point.x;
 // 디스트럭쳐링
 let Point {x, y, z} = point;
 ```
+
+## Array
+
+러스트의 array 는 고정된 길이를 가진다.
+
+```rs
+let mut years: [i32; 3] = [1995, 2000, 2005]; // 길이는 3으로 고정된다.
+
+let first_year = years[0];
+let [_, second_year, third_year] = years;
+
+years[2] = 2010;
+```
+
+배열 순회
+
+```rs
+let mut years: [i32; 3] = [1995, 2000, 2005];
+
+for year in years.iter() {
+  println!("Next year: {}", year);
+}
+```
+
+# Pattern Matching
+
+## Enum
+
+```rs
+enum Color {
+  Green,
+  Yellow,
+  Red
+}
+```
+
+enum 에 struct 데이터를 추가할 수도 있다.
+
+```rs
+enum Color {
+  Green,
+  Yellow,
+  Red,
+  Custom {
+    red: u8,
+    green: u8,
+    blue: u8
+  }
+}
+
+let purple: Color = Color::Custom {
+  red: 100, green: 0, blue: 250
+};
+```
+
+enum 에 tuple 데이터를 추가할 수도 있다.
+
+```rs
+enum Color {
+  Green,
+  Yellow,
+  Red,
+  Custom (u8, u8,u8)
+}
+
+let purple: Color = (100,  0,  250);
+```
+
+## match
+
+```rs
+let current_color = Color::Yellow;
+
+match current_color {
+  Color::Green => {
+
+  },
+  Color::Yellow => {
+
+  },
+  Color::Custom { red, green, blue } => { // Color::Custom 일 경우 디스트럭처링도 한번에 할 수 있다.
+    println!("{} {} {}", red, green, blue);
+  }
+}
+```
+
+match 는 값을 반환할 수 있다.
+
+```rs
+let color_str = match current_color {
+  Color::Green => {
+    "Green"
+  },
+  Color::Yellow => {
+    "Yellow"
+  },
+}
+```
+
+`_` 로 매칭되지 않는 케이스를 처리할 수 있다.
+
+```rs
+let color_str = match current_color {
+  Color::Green => {
+    "Green"
+  },
+  Color::Yellow => {
+    "Yellow"
+  },
+  _ => {
+    "Something elese"
+  }
+}
+```
+
+## Methods
+
+enum 에 메서드를 정의할 수 있다.
+
+```rs
+enum Color {...}
+
+impl Color {
+  fn rgb(color: Color) -> (u8, u8, u8) {
+    ...
+  }
+  fn new(r: u8, g: u8, b: u8) => Color {
+    ...
+  }
+}
+
+
+let red = Color::new(250, 0, 0);
+let (r, g, b) = Color::rgb(red);
+```
+
+## Type Parameters
+
+rust 에는 null 혹은 undefined 가 없다. 대신 값이 없을 수도 있는 경우를 standard library 의 `Option<T>` 를 통해 처리한다.
+
+```rs
+enum Option<T> {
+  None,
+  Some(T),
+}
+
+let last_char: Option<char> = my_string.pop();
+```
+
+```rs
+enum Result<O, E> {
+  Ok<O>,
+  Err<E>
+}
+let success: Result<i64, String> = Ok(42);
+let failure: Result<i64, String> = Err(str);
+```
+
+# Vectors
+
+```rs
+let mut years: Vec<i32> = vec![1995, 2000, 2005];
+years.push(2010); // vector 는 런타임에 크기를 변경 할 수 있다.
+```
+
+```rs
+let length: usize = years.len();
+// usize 값은 시스템에 따라서 u32 혹은 u64 일 수 있다.
+// 32-bit system: u32
+// 62-bit system: u64
+```
