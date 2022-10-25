@@ -1,9 +1,3 @@
-<!--meta
-title: dev-blog
-description: JavaScript development blog
-keywords: JavaScript, dev blog, Development, 프론트 엔드
--->
-
 # dev-blog
 
 ## YeonJuAn 👋
@@ -13,6 +7,7 @@ keywords: JavaScript, dev blog, Development, 프론트 엔드
 
 ## Project
 
+- [ES HTML Parser](https://github.com/yeonjuan/es-html-parser): HTML parser.
 - [HTML ESLint](https://github.com/yeonjuan/html-eslint): ESLint plugin for HTML.
 - [js13k-2019 back attacker](https://github.com/yeonjuan/js13k-2019-back): js13kgames competition 2019
 - [TypeScript ESlint Playground](https://github.com/yeonjuan/typescript-eslint-demo): typescript-eslint online playground
@@ -38,23 +33,3 @@ keywords: JavaScript, dev blog, Development, 프론트 엔드
 - [ESLint 조금 더 잘 활용하기 - kakao tech](https://tech.kakao.com/2019/12/05/make-better-use-of-eslint/)
 - [코딩 컨벤션 업무를 하며 알게 된 것들 - 1](./JavaScript/coding-convention-1.md)
 - [코딩 컨벤션 업무를 하며 알게 된 것들 - 2](./JavaScript/coding-convention-2.md)
-
-## Study
-
-- [HTML](./Study/HTML/README.md)
-- [CSS](./Study/CSS/README.md)
-- [ChromeDevTools](./Study/ChromeDevTools/README.md)
-- [DesignPattern](./Study/DesignPattern/README.md)
-- [Rust](./Study/Rust/README.md)
-
-## Course
-
-- [Design Systems with React and Storybook](./Course/FrontEndMasters/design-systems-with-react-and-storybook.md)
-- [Advanced React Patterns](./Course/FrontEndMasters/advanced-react-patterns.md)
-- [Functional JavaScript First Steps](./Course/FrontEndMasters/functional-javascript-first-steps.md)
-- [Hardcore Functional Programming](./Course/FrontEndMasters/hardcore-functional-programming-in-javascript.md)
-- [Complete Intro to Containers](./Course/FrontEndMasters/complete-intro-to-containers.md)
-
-## Book
-
-- [Composing Software](./Book/composing-software.md)
