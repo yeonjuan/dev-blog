@@ -14,6 +14,9 @@
 
 ## Posts
 
+### 2022
+- [사용자가 페이지를 떠날 때 안정적으로 HTTP 요청 보내기(번역)](./Browser/send-an-http-request-on-page-exit.md)
+
 ### 2021
 
 - [주니어 FE 개발자 오픈소스 성장기 - kakao tech](https://tech.kakao.com/2021/06/16/frontend-growth-10/)
