@@ -13,7 +13,9 @@
 - [TypeScript ESlint Playground](https://github.com/yeonjuan/typescript-eslint-demo): typescript-eslint online playground
 
 ## Posts
-- [용자가 페이지를 떠날 때 안정적으로 HTTP 요청 보내기(번역)](./Browser/send-an-http-request-on-page-exit.md)
+
+### 2022
+- [사용자가 페이지를 떠날 때 안정적으로 HTTP 요청 보내기(번역)](./Browser/send-an-http-request-on-page-exit.md)
 
 ### 2021
 
