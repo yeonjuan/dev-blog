@@ -15,7 +15,9 @@
 ## Posts
 
 ### 2022
-- [사용자가 페이지를 떠날 때 안정적으로 HTTP 요청 보내기(번역)](./Browser/send-an-http-request-on-page-exit.md)
+
+- [JavaScript JSON 파서 (번역)](./JavaScript/json-parser-with-javascript.md)
+- [사용자가 페이지를 떠날 때 안정적으로 HTTP 요청 보내기 (번역)](./Browser/send-an-http-request-on-page-exit.md)
 
 ### 2021
 
