@@ -51,7 +51,7 @@ JSON 파서를 작성하는데 필요한 지식과 기술은 JS 파서를 작성
 
 - 왼쪽에 [구문 다이어그램 (또는 철도 다이어그램)](https://en.wikipedia.org/wiki/Syntax_diagram)
 
-![](https://www.json.org/img/object.png)
+![](./assets/json-parser-object.webp)
 *이미지 출처: https://www.json.org/img/object.png*
 
 - 오른쪽에 [Backus–Naur 표기법](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form)의 변형인, [McKeeman 표기법](https://www.crockford.com/mckeeman.html)
@@ -82,7 +82,7 @@ object
 
 첫 번째 철도 다이어그램을 살펴보겠습니다:
 
-![](https://www.json.org/img/object.png)
+![](./assets/json-parser-object.webp)
 *이미지 출처: https://www.json.org/img/object.png*
 
 이것이 JSON에서 **"object"** 에 대한 문법입니다.
@@ -241,7 +241,7 @@ function fakeParseJSON(str) {
 
 이제 "object" 문법을 구현하는 것을 보았으니 "array" 문법에 도전해 볼 차례입니다.
 
-![](https://www.json.org/img/array.png)
+![](./assets/json-parser-array.webp)
 *이미지 출처: https://www.json.org/img/array.png*
 
 ```js
@@ -272,7 +272,7 @@ function fakeParseJSON(str) {
 
 이제, 조금 더 흥미로운 문법인 "value"로 넘어갑니다:
 
-![](https://www.json.org/img/value.png)
+![](./assets/json-parser-value.webp)
 *이미지 출처: https://www.json.org/img/value.png*
 
 value는 "whitespace"로 시작하고, "string", "number", "object", "array", "true", "false" 또는 "null" 모두 다음에 오고, "whitespace"로 끝이 납니다.
