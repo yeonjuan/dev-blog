@@ -14,6 +14,10 @@
 
 ## Posts
 
+### 2023
+
+- [Well-Known symbols (번역)](./JavaScript/well-known-symbols.md)
+
 ### 2022
 
 - [JavaScript JSON 파서 (번역)](./JavaScript/json-parser-with-javascript.md)
