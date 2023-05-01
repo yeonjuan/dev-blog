@@ -11,12 +11,16 @@
 - [HTML ESLint](https://github.com/yeonjuan/html-eslint): ESLint plugin for HTML.
 - [js13k-2019 back attacker](https://github.com/yeonjuan/js13k-2019-back): js13kgames competition 2019
 - [TypeScript ESlint Playground](https://github.com/yeonjuan/typescript-eslint-demo): typescript-eslint online playground
+- [parse-git-diff](https://github.com/yeonjuan/parse-git-diff): A parser for git diff
 
 ## Posts
 
 ### 2023
 
+- [커스텀 프로퍼티를 이용해 CSS 와 자바스크립트 간 데이터 공유하기](./JavaScript/sharing-data-between-css-and-javascript-using-custom-properties.md)
+- [정말 리액트에서 useMemo를 사용해야 할까요? 알아봅시다.(번역)](./JavaScript/should-you-really-use-usememo.md)
 - [Well-Known symbols (번역)](./JavaScript/well-known-symbols.md)
+- [Next.js에서 HTML 페이로드 줄이기 (번역)](./JavaScript/reduce-html-payload-with-nextjs.md)
 
 ### 2022
 
