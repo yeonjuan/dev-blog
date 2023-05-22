@@ -83,7 +83,7 @@ export default function App() {
 먼저 새로운 Next.js 앱을 만들고, React Router를 설치한 다음 (`npm install react-router-dom`), 위 라우터 코드를 `pages/index.tsx`에 붙여 넣어 보겠습니다.
 그리고 `next dev`를 실행하면 즉시 `Invariant failed: Browser history needs a DOM ` 에러가 발생합니다.
 
-![](https://colinhacks.com/nextjs_no_dom.png)
+![](./assets/nextjs_no_dom.png)
 
 이는 Next.js가 개발 모드에서 개발 서버에 페이지를 미리 렌더링하려고 시도하기 때문에 발생합니다.
 반면 React Router는 브라우저에서 제공하는 전역 `window` 객체에 접근이 필요합니다.
@@ -109,7 +109,7 @@ export default App;
 
 페이지를 다시 로드하면 새로운 오류가 표시됩니다.
 
-![](https://colinhacks.com/hydration_failed.png)
+![](./assets/hydration_failed.png)
 
 Next.js 앱의 페이지를 로드하면 Next.js는 1) 서버에서 사전 렌더링을 시도하고 2) 결과를 브라우저로 전송한 다음 3) 브라우저에서 페이지를 "re-hydrates" 합니다. Re-hydration은 브라우저에서 다시 렌더링하고 서버에서 렌더링한 버전과 비교하는 것을 의미합니다.
 두 버전이 일치하지 않으면 React는 오류를 발생시킵니다.
@@ -196,7 +196,7 @@ module.exports = {
 주의할 점: 들어오는 요청이 pages 디렉터리의 기존 페이지에 해당하는 경우 Next.js는 이 rewrite 규칙을 무시합니다.
 예를 들어, 나중에 `pages/about.tsx`를 추가하면 Next.js는 홈페이지에 `/about`을 다시 작성하는 것을 멈춥니다.
 
-![](https://colinhacks.com/nextjs_pages.png)
+![](./assets/nextjs_pages.png)
 
 정말 멋진 기능입니다! 우선, 추가 구성없이 API Routes를 사용할 수 있습니다.
 하지만 더 중요한 것은 SPA, SSR, SSG 패러다임을 마음대로 섞어서 사용할 수 있다는 점입니다!
