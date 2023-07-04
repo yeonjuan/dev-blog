@@ -2,7 +2,7 @@
 
 > 원문: https://www.totaltypescript.com/typescript-5-2-new-keyword-using
 
-![](https://www.totaltypescript.com/_next/image?url=https%3A%2F%2Fcdn.sanity.io%2Fimages%2Fz9io1e0u%2Fproduction%2F75dfe1bf6658e858e66fa5f43ceaa4594a12afa6-1920x1080.png&w=3840&q=100)
+![](./assets/using-keyword-thumbnail.webp)
 
 타입스크립트 5.2에서 새로운 키워드인 'using'이 도입되었습니다. 이는 `Symbol.dispose` 함수를 통해 스코프를 벗어날 때 모든 것을 폐기하는 데 사용할 수 있습니다.
 
@@ -133,4 +133,4 @@ const getConnection = async () => {
 } // 자동으로 연결이 닫힙니다!
 ```
 
-![](https://res.cloudinary.com/total-typescript/image/upload/v1687173860/await-using_lalzrw.jpg)
+![](./assets/await-using_lalzrw.jpeg)
