@@ -2,12 +2,12 @@
 
 > 원문: https://kurtextrem.de/posts/svg-in-js
 
-작년 12월에 ["우리가 CSS-in-JS와 헤어지는 이유"](https://kofearticle.substack.com/p/korean-fe-article-css-in-js?utm_source=%2Fsearch%2Fcss-in-js&utm_medium=reader2)라는 글을 통해 더 이상 JS 번들 안에 CSS를 넣지 않으려는 이슈를 설명했었습니다.
+작년 12월에 ["우리가 CSS-in-JS와 헤어지는 이유"](https://kofearticle.substack.com/p/korean-fe-article-css-in-js?utm_source=%2Fsearch%2Fcss-in-js&utm_medium=reader2)라는 글을 통해 더 이상 JS 번들 안에 CSS를 넣지 않으려는 이유를 설명했었습니다.
 하지만, 오늘날 JS 번들에 CSS만 들어가는 것은 아닙니다. [Preact](https://preactjs.com/)의 저자 [Jason Miller](https://jasonformat.com/)의 글에서 알 수 있듯이 SVG도 JS 번들에 들어갑니다.
 
 > [Jason Miller 트윗](https://twitter.com/_developit/status/1382838799420514317)
 >
-> SVG를 JSX로 import 하지 마세요. 가장 가장 비용이 많이 드는 스프라이트 시트입니다. 다른 기술보다 최소 3배 이상 비용이 들고 런타임(렌더링) 성능과 메모리 사용 모두 해칩니다. 유명한 사이트의 번들을 살펴보면 거의 50%가 SVG 아이콘(250kb)이 차지하고 대부분 사용되지 않습니다.
+> SVG를 JSX로 import 하지 마세요. 가장 비용이 많이 드는 스프라이트 시트입니다. 다른 기술보다 최소 3배 이상 비용이 들고 런타임(렌더링) 성능과 메모리 사용 모두 해칩니다. 유명한 사이트의 번들을 살펴보면 거의 50%가 SVG 아이콘(250kb)이 차지하고 대부분 사용되지 않습니다.
 > ![](./assets/svg-twitter.png)
 
 JS 안의 SVG에는 비용이 들고 SVG는 JS 번들의 소유물이 아닙니다
@@ -37,7 +37,7 @@ JS 번들을 작고 성능 좋게 유지하면서 JSX에서 SVG를 사용하는 
 ## 어떻게 `<svg>`가 자바스크립트에 포함되게 되나요?
 
 먼저 SVG가 자바스크립트 소스 코드 내에 어떻게 포함되게 되는지 알아봅시다.
-일반적으로 이 작업은 JSX의 일부로 작성됩니다.
+대게 이 작업은 JSX의 일부로 작성됩니다.
 
 ```jsx
 <svg viewBox="0 0 300 300">
@@ -68,7 +68,7 @@ export default (props) => (
 );
 ```
 
-> ⚠️ 전체 SVG 컨텐츠를 반환하는 직접 작성한 리액트 컴포넌트는 앞서 말씀드렸던 이유와 함께 svgr에 비해 마이그레이션 하기 어렵기 때문에 안티 패턴입니다. SVG는 항상 `.svg` 파일에만 넣도록 합니다.
+> ⚠️ 전체 SVG 컨텐츠를 반환하는 직접 작성한 리액트 컴포넌트는 앞선 이유와 함께 svgr에 비해 마이그레이션 하기 어렵기 때문에 안티 패턴입니다. SVG는 항상 `.svg` 파일에만 넣도록 합니다.
 
 렌더링된 결과는 다음과 같습니다:
 
@@ -90,9 +90,9 @@ export default (props) => (
 
 ### 파싱 & 컴파일
 
-자바스크립트 파싱 & 컴파일은 공짜가 아닙니다 - 번들에 더 많이 넣을수록 자바스크립트 엔진이 소스코드를 처리하는 시간이 더 오래 걸립니다.
+자바스크립트 파싱과 컴파일은 공짜가 아닙니다. 번들에 더 많이 넣을수록 자바스크립트 엔진이 소스코드를 처리하는 시간이 더 오래 걸립니다.
 
-빠른 M2 노트북에서는 그 차이가 분명하지 않을 수 있지만, 마이크로소프트 엣지 팀의 [Alex Russel](https://infrequently.org/)이 매년 보고하는 것처럼 [성능 불평등의 격차](https://infrequently.org/2022/12/performance-baseline-2023/)가 있습니다.
+빠른 M2 노트북에서는 그 차이가 크지 않을 수 있지만, 마이크로소프트 엣지 팀의 [Alex Russel](https://infrequently.org/)이 매년 보고하는 것처럼 [성능 불평등의 격차](https://infrequently.org/2022/12/performance-baseline-2023/)가 있습니다.
 그의 말처럼 전 세계 75퍼센트 이상 사용자를 이해하기에는 삼성 갤럭시 A50과 노키아 G11이 가장 적합한 기기입니다.
 웹 개발은 부유한 지역뿐 아니라 모든 사람을 위한 포용적인 것이어야 합니다.
 
@@ -106,7 +106,8 @@ SVG를 JS 번들 밖으로 옮기면 파싱 및 컴파일 단계에서 벗어나
 아래에서 이것이 왜 유익한지 알아보겠습니다.
 
 ![](https://kurtextrem.de/assets/posts/2/js-exec.png)
-<sub>Chromium에서 자바스크립트 다운로드 및 실행 시각화. 파싱 및 컴파일은 메인 스레드를 차단하지 않습니다.<a href="https://v8.dev/blog/cost-of-javascript-2019">web.dev</a></sub>
+
+<sub>크로미움에서 자바스크립트 다운로드 및 실행 시각화. 파싱 및 컴파일은 메인 스레드를 차단하지 않습니다.<a href="https://v8.dev/blog/cost-of-javascript-2019">web.dev</a></sub>
 
 파싱과 컴파일은 실행 직전에 일어납니다.
 그래서 자바스크립트를 다운로드하고 실행할 준비가 되면 **파싱**에 걸리는 **시간**과 **컴파일**에 걸리는 시간은 **사용자가 상호작용을 기다리는 시간**입니다.
@@ -180,6 +181,8 @@ const App = () => <img src={HeartIcon} loading="lazy" />;
 > - `<img>`를 사용하면 내장된 지연-로딩을 위해 `loading="lazy"` 와 같은 속성을 사용하거나 패치 우선순위를 바꾸기 위해 `importance="high"`를 사용할 수 있습니다⚡️
 >
 > - DPR(Device-Pixel-Ratio) > 1x 스크린에서 복잡한 SVG 애니메이션의 경우 `<img>`는 인라인 SVG보다 더 적은 CPU를 사용합니다.
+
+<a name="img-warn"></a>
 
 > ⚠️ `<img>` 주의 사항:
 >
@@ -378,8 +381,8 @@ const App = () => (
 
 하지만 이 접근 방식을 사용하면 LCP 요소에 사용되는 CSS 배경 이미지와 동일한 단점이 있습니다.
 브라우저는 SVG를 검색하고 다운로드하기 전에 CSS를 먼저 다운로드하고 실행해야 하므로 SVG가 의미 있게 표시될 때 까지 시간이 길어지게 됩니다.
-이 문제는 '<<link rel="preload" as="image">`를 사용하거나 CSS를 인라인으로 처리하여 완화할 수 있습니다.
-또한 [`<img>` 의 모든 주의 사항]()은 SVG에도 적용됩니다 (mask도 DOM의 일부가 아님).
+이 문제는 `<<link rel="preload" as="image">`를 사용하거나 CSS를 인라인으로 처리하여 완화할 수 있습니다.
+또한 [`<img>` 의 모든 주의 사항](#img-warn)은 SVG에도 적용됩니다 (mask도 DOM의 일부가 아님).
 한 가지 장점은 요소가 숨겨져 있으면(`display: none`으로) 브라우저에서 mask 이미지를 다운로드하지 않는다는 것입니다.
 
 <a name="section5"></a>
@@ -452,7 +455,7 @@ app.get("/", function () {
 
 ## 정리
 
-설명한 기술을 사용해 자바스크립트 번들을 더 작고 성능 좋게 만들 수 있으므로 오래된 장치의 속도를 줄이고 더 포괄적인 인터넷을 만들 수 있습니다.
+설명한 기술을 사용해 자바스크립트 번들을 더 작고 성능 좋게 만들 수 있으므로 오래된 장치의 속도를 줄이고 더 포용적인 인터넷을 만들 수 있습니다.
 
 웹 성능과 관련한 주제에 대해서는 이 외에도 더 쉬운 방법 또는 더 최적화가 필요한 것들이 있을 수 있습니다.
 때문에 SVG 최적화에 뛰어들기 전에 SVG-in-JS가 가장 큰 원인이 아닐수 있다는 점을 명심하세요. 측정하고나서 최적화 하세요.
