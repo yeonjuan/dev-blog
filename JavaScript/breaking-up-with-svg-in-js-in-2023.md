@@ -15,7 +15,7 @@ JS 번들을 작고 성능 좋게 유지하면서 JSX에서 SVG를 사용하는 
 
 ## 목차
 
-- [어떻게 `<svg>`가 자바스크립트에 포함되게 되나요?](#%EC%96%B4%EB%96%BB%EA%B2%8C-%EA%B0%80-%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8%EC%97%90-%ED%8F%AC%ED%95%A8%EB%90%98%EA%B2%8C-%EB%90%98%EB%82%98%EC%9A%94)
+- [어떻게 `<svg>`가 자바스크립트에 포함되게 되나요?](#section1)
 - [성능 딥 다이브: SVG-in-JS 가 안티 패턴인 이유](#%EC%84%B1%EB%8A%A5-%EB%94%A5-%EB%8B%A4%EC%9D%B4%EB%B8%8C-svg-in-js-%EA%B0%80-%EC%95%88%ED%8B%B0-%ED%8C%A8%ED%84%B4%EC%9D%B8-%EC%9D%B4%EC%9C%A0)
   - [파싱 & 컴파일](#%ED%8C%8C%EC%8B%B1--%EC%BB%B4%ED%8C%8C%EC%9D%BC)
 - [메모리 사용](#%EB%A9%94%EB%AA%A8%EB%A6%AC-%EC%82%AC%EC%9A%A9)
@@ -29,6 +29,8 @@ JS 번들을 작고 성능 좋게 유지하면서 JSX에서 SVG를 사용하는 
 - [정리](#%EC%A0%95%EB%A6%AC)
 
 ## 어떻게 `<svg>`가 자바스크립트에 포함되게 되나요?
+
+<a name="section1"></a>
 
 먼저 SVG가 자바스크립트 소스 코드 내에 어떻게 포함되게 되는지 알아봅시다.
 일반적으로 이 작업은 JSX의 일부로 작성됩니다.
