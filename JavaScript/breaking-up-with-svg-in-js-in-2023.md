@@ -3,15 +3,15 @@
 > 원문: https://kurtextrem.de/posts/svg-in-js
 
 작년 12월에 ["우리가 CSS-in-JS와 헤어지는 이유"](https://kofearticle.substack.com/p/korean-fe-article-css-in-js?utm_source=%2Fsearch%2Fcss-in-js&utm_medium=reader2)라는 글을 통해 더 이상 JS 번들 안에 CSS를 넣지 않으려는 이슈를 설명했었습니다.
-하지만, 오늘날 JS 번들에 CSS만 들어가는 것은 아니며 [Preact](https://preactjs.com/)의 저자 [Json Miller](https://jasonformat.com/)의 글에서 알 수 있듯이 SVG도 JS 번들에 들어갑니다.
+하지만, 오늘날 JS 번들에 CSS만 들어가는 것은 아닙니다. [Preact](https://preactjs.com/)의 저자 [Jason Miller](https://jasonformat.com/)의 글에서 알 수 있듯이 SVG도 JS 번들에 들어갑니다.
 
 > [Jason Miller 트윗](https://twitter.com/_developit/status/1382838799420514317)
 >
-> SVG를 JSX로 import 하지 마세요. 가장 비용이 많이 드는 스프라이트 시트 형식입니다. 다른 기술보다 최소 3배 이상 비용이 들며, 런타임(렌더링) 성능과 메모리 사용량 모두에 해를 끼칩니다. 이 인기 사이트의 이 번들은 거의 50%가 SVG 아이콘(250kb)이며 대부분이 사용되지 않습니다.
+> SVG를 JSX로 import 하지 마세요. 가장 가장 비용이 많이 드는 스프라이트 시트입니다. 다른 기술보다 최소 3배 이상 비용이 들고 런타임(렌더링) 성능과 메모리 사용 모두 해칩니다. 유명한 사이트의 번들을 살펴보면 거의 50%가 SVG 아이콘(250kb)이 차지하고 대부분 사용되지 않습니다.
 > ![](./assets/svg-twitter.png)
 
 JS 안의 SVG에는 비용이 들고 SVG는 JS 번들의 소유물이 아닙니다
-SVG-in-HTML로 돌아갈 때입니다.
+`SVG-in-HTML`로 돌아갈 때입니다.
 JS 번들을 작고 성능 좋게 유지하면서 JSX에서 SVG를 사용하는 더 나은 방법들에 대해 알아보겠습니다.
 
 ## 목차
@@ -23,9 +23,9 @@ JS 번들을 작고 성능 좋게 유지하면서 JSX에서 SVG를 사용하는 
 - [JS 번들에서 SVG를 제거하는 모범 사례](#section4)
   - [`<img>`로 SVG 로딩하기](#section4-1)
   - [SVG 스프라이트 - `<use>`를 사용하기](#section4-2)
-    - [더 많은 JS 제거하기: `fill`, `stroke`, `width`, `height` 와 같은 것에 CSS & `currentcolor` 사용](section4-2-1)
+    - [JS 더 많이 제거하기: `fill`, `stroke`, `width`, `height` 와 같은 것에 CSS & `currentcolor` 사용](section4-2-1)
     - [서버 컴포넌트 (리액트)](#section4-2-2)
-  - [CORS 의 경우: CSS를 사용하세요.](#section-4-3)
+  - [CORS의 경우: CSS를 사용하세요.](#section-4-3)
 - [성능 vs 로딩 시간: 인라인을 할 것인가, 말 것인가?](#section5)
   - [JS 번들을 오염시키지 않고 SVG 인라인화하기](#section5-1)
 - [정리](#section6)
@@ -58,7 +58,7 @@ const App = () => <HeartIcon fill="red" />;
 이는 SVG 태그의 속성(`fill="red"` 같은)을 손쉽게 추가할 수 있도록 해줍니다.
 
 ```jsx
-// svgr을 거친 HeartIcon.svg (단순화 및 JSX 변환 전) - ⚠️️ 복사하지 마시오
+// svgr을 거친 HeartIcon.svg (단순화 및 JSX 변환 전) - ⚠️️ 복사하지 마세요
 export default (props) => (
   <svg viewBox="0 0 300 300" {...props}  {/* ⬅️ props spread 를 사용 했습니다*/}>
     <g>
@@ -68,9 +68,9 @@ export default (props) => (
 );
 ```
 
-> ⚠️ 전체 SVG 컨텐츠를 반환하는 직접 작성한 리액트 컴포넌트는 앞서 말씀드렸던 이유와 함께 svgr에 비해 마이그레이션 하기 여렵기 때문에 안티 패턴입니다. SVG는 항상 `.svg` 파일에만 넣도록 합니다.
+> ⚠️ 전체 SVG 컨텐츠를 반환하는 직접 작성한 리액트 컴포넌트는 앞서 말씀드렸던 이유와 함께 svgr에 비해 마이그레이션 하기 어렵기 때문에 안티 패턴입니다. SVG는 항상 `.svg` 파일에만 넣도록 합니다.
 
-렌더링 된 뒤, 결과는 다음과 같습니다:
+렌더링된 결과는 다음과 같습니다:
 
 ```jsx
 <svg viewBox="0 0 300 300" fill="red"><!-- ⬅️ 차이점은 `fill` 속성 -->
@@ -78,7 +78,7 @@ export default (props) => (
 </svg>
 ```
 
-물론 편리하고 사용하기 쉽지만 사용 편의성을 사용자가 지불해야 하는 단점을 수반합니다...
+물론 편리하고 사용하기 쉽지만 사용 편의성에 대한 비용을 사용자가 지불해야 하는 단점을 수반합니다...
 
 <a name="section2"></a>
 
@@ -93,7 +93,7 @@ export default (props) => (
 자바스크립트 파싱 & 컴파일은 공짜가 아닙니다 - 번들에 더 많이 넣을수록 자바스크립트 엔진이 소스코드를 처리하는 시간이 더 오래 걸립니다.
 
 빠른 M2 노트북에서는 그 차이가 분명하지 않을 수 있지만, 마이크로소프트 엣지 팀의 [Alex Russel](https://infrequently.org/)이 매년 보고하는 것처럼 [성능 불평등의 격차](https://infrequently.org/2022/12/performance-baseline-2023/)가 있습니다.
-그의 말처럼 전 세계 75퍼센트 이상 사용자를 이해하기에는 삼성 갤럭시 A50과 노카아 G11이 가장 적합한 기기입니다.
+그의 말처럼 전 세계 75퍼센트 이상 사용자를 이해하기에는 삼성 갤럭시 A50과 노키아 G11이 가장 적합한 기기입니다.
 웹 개발은 부유한 지역뿐 아니라 모든 사람을 위한 포용적인 것이어야 합니다.
 
 > 바이트 단위의 자바스크립트는 같은 크기의 이미지나 웹 폰트보다 브라우저 처리 비용이 더 많이 듭니다.
@@ -106,12 +106,13 @@ SVG를 JS 번들 밖으로 옮기면 파싱 및 컴파일 단계에서 벗어나
 아래에서 이것이 왜 유익한지 알아보겠습니다.
 
 ![](https://kurtextrem.de/assets/posts/2/js-exec.png)
+<sub>Chromium에서 자바스크립트 다운로드 및 실행 시각화. 파싱 및 컴파일은 메인 스레드를 차단하지 않습니다.<a href="https://v8.dev/blog/cost-of-javascript-2019">web.dev</a></sub>
 
-파싱 & 컴파일은 실행 직전에 일어납니다.
+파싱과 컴파일은 실행 직전에 일어납니다.
 그래서 자바스크립트를 다운로드하고 실행할 준비가 되면 **파싱**에 걸리는 **시간**과 **컴파일**에 걸리는 시간은 **사용자가 상호작용을 기다리는 시간**입니다.
 
-리액트의 경우 그 위에 하이드레이션도 필요합니다. 다운로드 + 파싱 + 컴파일 + 하이드레이션은 상호작용 가능해 지기까지의 시간입니다.
-컴포넌트 트리가 클 수 록 더 많은 하이드레이션이 필요합니다.
+리액트의 경우 그 위에 하이드레이션도 필요합니다. 다운로드 + 파싱 + 컴파일 + 하이드레이션은 상호작용이 가능해 지기까지의 시간입니다.
+컴포넌트 트리가 클 수록 하이드레이션에 더 많은 시간이 소요됩니다.
 이 주제에 대해서는 Add Osmani의 ["JavaScript 최적화 시작하기"](https://web.dev/optimizing-content-efficiency-javascript-startup-optimization/#parsecompile) 문서에서 자세히 다루고 있습니다.
 
 > 참고로 압축은 처리 시간에도 긍정적인 영향을 미칠 수 있지만, JS 엔진은 압축되지 않은 소스 코드에서도 작동한다는 점을 잊지 마세요.
@@ -123,7 +124,7 @@ SVG를 JS 번들 밖으로 옮기면 파싱 및 컴파일 단계에서 벗어나
 
 ## 메모리 사용
 
-파싱 된 내용은 페이지가 유지되는 동안 자바스크립트 메모리 힙에 보관되어야 하며, 대부분 브라우저에 있는 다양한 메모리 캐시 안에 저장됩니다.
+파싱된 내용은 페이지가 유지되는 동안 자바스크립트 메모리 힙에 보관되어야 하며, 대부분 브라우저에 있는 다양한 메모리 캐시 안에 저장됩니다.
 갤럭시 A50에는 5기가 바이트의 RAM이 탑재되어 있으며, 해당 기기에서 실행되는 애플리케이션이 웹 사이트뿐만은 아니므로 남은 공간이 많지 않습니다.
 사용자를 배려하세요.
 
@@ -166,7 +167,7 @@ const config = {
 [Astro](https://astro.build/)와 같은 다른 프레임워크는 이를 자동적으로 수행합니다.
 `svg` 파일은 JS 파일처럼 압축될 수 있으므로 인프라에 Brotli/Gzip 압축이 적용되어 있는지 확인하세요.
 
-그러면 SVG 를 참조하는 것이 일반적인(PNG/JPG/...) 이미지들처럼 쉬워집니다.
+그러면 SVG를 참조하는 것이 일반적인(PNG/JPG/...) 이미지들처럼 쉬워집니다.
 
 ```js
 import HeartIcon from "./HeartIcon.svg";
@@ -178,11 +179,11 @@ const App = () => <img src={HeartIcon} loading="lazy" />;
 >
 > - `<img>`를 사용하면 내장된 지연-로딩을 위해 `loading="lazy"` 와 같은 속성을 사용하거나 패치 우선순위를 바꾸기 위해 `importance="high"`를 사용할 수 있습니다⚡️
 >
-> - DPR > 1x 스크린에서 복잡한 SVG 애니메이션의 경우 `<img>`는 인라인 SVG보다 더 적은 CPU를 사용합니다.
+> - DPR(Device-Pixel-Ratio) > 1x 스크린에서 복잡한 SVG 애니메이션의 경우 `<img>`는 인라인 SVG보다 더 적은 CPU를 사용합니다.
 
 > ⚠️ `<img>` 주의 사항:
 >
-> - 현재 페이지에서 값을 상속받지 않기 때문에 `currentColor` CSS 값 및 CSS 커스텀 props (`--variable`)을 사용은 어렵습니다. (SVG 파일은 DOM의 일부가 아닌 외부 리소스로 취급됩니다)<sup>[3](#footnote_3)</sup>
+> - 현재 페이지에서 값을 상속받지 않기 때문에 `currentColor` CSS 값 및 CSS 커스텀 props (`--variable`) 사용은 어렵습니다. (SVG 파일은 DOM의 일부가 아닌 외부 리소스로 취급됩니다)<sup>[3](#footnote_3)</sup>
 >
 > - 크로미움: SVG 애니메이션은 최대 60Hz까지 실행되며 DPR = 1x 스크린에서 더 많은 CPU를 사용합니다.<sup>[2](#footnote_2)</sup>
 >
@@ -217,8 +218,8 @@ const App = () => (
 ```
 
 사이트에 많은 SVG가 있는 경우 모두 하나의 파일에 넣을 수 있습니다. **SVG 스프라이트** 는 `<symbol>` 태그를 사용하여 빌드됩니다.
-ID 를 부여해야 사용(`<use>`)할 수 있습니다(말 그대로).
-스타일링, currentcolor 등은 모두 이전과 동일하게 작동합니다.
+말 그대로 ID 를 부여해야 사용(`<use>`)할 수 있습니다.
+스타일링, [currentcolor](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#currentcolor_keyword) 등은 모두 이전과 동일하게 작동합니다.
 
 ```xml
 <!-- icons.svg -->
@@ -354,11 +355,11 @@ const App = () => (
 
 <a name="section4-3"></a>
 
-### CORS 의 경우: CSS를 사용하세요.
+### CORS(교차 출처 리소스 공유)의 경우: CSS를 사용하세요.
 
-> SVG의 <use> 요소는 현재 교차 출처 권한을 요청할 수 있는 방법이 없습니다. 이는 교차 출처에서 전혀 작동하지 않습니다.
-
-- [O’Reilly Media book by Amelia Bellamy-Royds, Kurt Cagle, and Dudley Storey](https://oreillymedia.github.io/Using_SVG/extras/ch10-cors.html#:~:text=SVG%20%3Cuse%3E%20elements%20don%E2%80%99t%20currently%20have%20any%20way%20to%20ask%20for%20cross%2Dorigin%20permissions.%20They%20just%20don%E2%80%99t%20work%20cross%2Dorigin%2C%20at%20all.)
+> SVG의 <use> 요소는 현재 교차 출처 권한을 요청할 수 있는 방법이 없습니다. **이는 교차 출처에서 전혀 작동하지 않습니다**.
+>
+> -- [O’Reilly Media book by Amelia Bellamy-Royds, Kurt Cagle, and Dudley Storey](https://oreillymedia.github.io/Using_SVG/extras/ch10-cors.html#:~:text=SVG%20%3Cuse%3E%20elements%20don%E2%80%99t%20currently%20have%20any%20way%20to%20ask%20for%20cross%2Dorigin%20permissions.%20They%20just%20don%E2%80%99t%20work%20cross%2Dorigin%2C%20at%20all.)
 
 `<use>`로 외부 에셋을 사용하려면 동일한 도메인에서 (스프라이트)SVG를 로드해야 합니다. CDN을 사용하는 경우 인용 제한에 부딪히게 됩니다.
 
@@ -377,6 +378,9 @@ const App = () => (
 
 하지만 이 접근 방식을 사용하면 LCP 요소에 사용되는 CSS 배경 이미지와 동일한 단점이 있습니다.
 브라우저는 SVG를 검색하고 다운로드하기 전에 CSS를 먼저 다운로드하고 실행해야 하므로 SVG가 의미 있게 표시될 때 까지 시간이 길어지게 됩니다.
+이 문제는 '<<link rel="preload" as="image">`를 사용하거나 CSS를 인라인으로 처리하여 완화할 수 있습니다.
+또한 [`<img>` 의 모든 주의 사항]()은 SVG에도 적용됩니다 (mask도 DOM의 일부가 아님).
+한 가지 장점은 요소가 숨겨져 있으면(`display: none`으로) 브라우저에서 mask 이미지를 다운로드하지 않는다는 것입니다.
 
 <a name="section5"></a>
 
@@ -387,17 +391,25 @@ const App = () => (
 또한, 인라인 SVG는 DOM의 일부이기 때문에 브라우저 계산량을 증가시키게 됩니다.
 그래서, 자바스크립트 엔진이 처리해야 하는 양을 줄이되, HTML 응답의 다운로드 시간을 많이 느리게 하거나 DOM을 부풀리고 싶지는 않습니다.
 
-그러므로, 우리는 인라인할 항목에 대한 몇가지 규칙을 정할 수 있습니다.
+그러므로, 우리는 인라인할 항목에 대한 몇 가지 규칙을 정할 수 있습니다.
 
-1. 로고는 높은 우선순위를 가집니다, 로고는 사용자가 당신의 브랜드를 인식할 수 있도록 합니다. [어떤 웹사이트들은 로고 로딩 속도를 측정하기도 합니다.](https://www.speedcurve.com/blog/element-timing-one-true-metric/#:~:text=What%20is%20Element%20Timing%3F) (비록 이것이 LPC요소가 아니더라도 말이죠). LCP 요소가 SEO에는 중요한 요인이지만(코어 웹 바이탈 이므로), 시각적 완성도는 대부분의 사용자에게 "웹 사이트를 지금 사용할 수 있다"는 것을 의미합니다. 또한 시각적'깜빡임'또는 CLS를 방지합니다.
+1. 로고는 높은 우선순위를 가집니다. 로고는 사용자가 당신의 브랜드를 인식할 수 있도록 합니다. [어떤 웹사이트들은 로고 로딩 속도를 측정하기도 합니다.](https://www.speedcurve.com/blog/element-timing-one-true-metric/#:~:text=What%20is%20Element%20Timing%3F) (비록 이것이 LPC요소가 아니더라도 말이죠). LCP 요소가 SEO에는 중요한 요인이지만([코어 웹 바이탈](https://web.dev/learn-core-web-vitals/) 이므로), 시각적 완성도는 대부분의 사용자에게 "웹 사이트를 지금 사용할 수 있다"는 것을 의미합니다. 또한 시각적 '깜빡임' 또는 CLS를 방지합니다.
 
-2. 다음으로는, 뷰포트에 있는 아이콘, 예를 들어 검색 또는 햄버거 아이콘입니다. 이들은 보통 사용자가 터치하곤 합니다 그래서 늦게 로딩될 경우 사용자 경험에 영향을 미칩니다. 이쯤 되면 중요 CSS와 유사점을 발견할 수 있을 것입니다. 폴드 위쪽의 모든 것이 더 중요하고, 폴드 아래쪽의 모든 것은 그다지 중요하지 않습니다.
+2. 다음은 검색 또는 햄버거 아이콘같이 뷰포트에 있는 아이콘입니다. 이들은 보통 사용자가 터치하는 아이콘입니다. 그래서 늦게 로딩될 경우 사용자 경험에 영향을 미칩니다. 이쯤 되면 중요 CSS와 유사점을 발견할 수 있을 것입니다. 폴드 위쪽의 모든 것이 더 중요하고, 폴드 아래쪽의 모든 것은 그다지 중요하지 않습니다.
 
-3. 나머지, 인라인 하지말고 가능하면 지연-로딩 합니다.
+3. 나머지는 인라인 하지말고 가능하면 지연-로딩 합니다.
 
 > 경험상 critical CSS와 비슷한 예산을 권장합니다.
-> Astro는 파일 인라이닝 임계값으로 **4 kB**를 사용합니다.
-> 일반적으로 상단 회면의 모든 것(CSS, SVG, JS, 콘텐츠)은 **14 kB**(압축되었을 때) 이하로 유지해야 합니다.
+> Astro는 파일 인라이닝 임계값으로 **4 kB**를 사용합니다.<sup>[1](#footnote_7)</sup>
+> 일반적으로 상단 회면의 모든 것(CSS, SVG, JS, 콘텐츠)은 **14 kB**(압축되었을 때)<sup>[1](#footnote_8)</sup> 이하로 유지해야 합니다.
+
+인라이닝 방법은, [Cloudfour의 SVG 아이콘 벤치마크](https://cloudfour.com/thinks/svg-icon-stress-test/#image-element-with-data-uri)에서 가장 빠른 기술을 사용하거나 `<img src="data:image/svg+xml,%3Csvg xmlns='..."`
+주의 사항에 해당한다면 `<svg>`를 직접 삽입하세요.
+
+예산을 초과하는 경우 먼저 벤치마킹하고 필요한 경우 인라인하지 않는 기술을 사용하고 `<link rel="preload" as="image">`를 사용하여 리소스 우선순위를 높여 보세요.
+
+인라인을 사용하기로 결정하고 캐싱 이점을 극대화하려면 첫 번째 방문자에게는 아이콘을 인라인하고, 백그라운드에서 스프라이트 SVG를 미리 가져오고(`<link rel="prefetch">`),
+이후 방문자에게는 서버에서 쿠키 값을 확인하여 스프라이트 SVG만 로드할 수 있습니다 (예: 서버에서 쿠키 값을 확인함).
 
 <a name="section5-1"></a>
 
@@ -432,7 +444,7 @@ app.get("/", function () {
 <svg><use href="#heart"></svg>
 ```
 
-하지만 주의할 점은 이제 ID가 SVG 파일 내부에만 적용되는 것이 아니라 전역적으로 적용된다는 점입니다.
+<sub>하지만 주의할 점은 이제 ID가 SVG 파일 내부에만 적용되는 것이 아니라 전역적으로 적용된다는 점입니다.</sub>
 
 짜잔, SVG-in-HTML입니다. 페이지/출력별로 사용된 모든 ID를 추출하도록 확장할 수 있으므로 모든 SVG가 아닌 실제로 사용된 SVG만 추출할 수 있습니다. 사용된 스타일은 중요한 CSS에 대해 이 작업을 수행하는 좋은 예입니다.
 
@@ -440,7 +452,7 @@ app.get("/", function () {
 
 ## 정리
 
-설명한 기술을 사용해 자바스크립트 번들을 더 작고 성능 좋게 만들 수 있으므로 오래된 장치의 속도를 줄이고 더 포괄저인 인터넷을 만들 수 있습니다.
+설명한 기술을 사용해 자바스크립트 번들을 더 작고 성능 좋게 만들 수 있으므로 오래된 장치의 속도를 줄이고 더 포괄적인 인터넷을 만들 수 있습니다.
 
 웹 성능과 관련한 주제에 대해서는 이 외에도 더 쉬운 방법 또는 더 최적화가 필요한 것들이 있을 수 있습니다.
 때문에 SVG 최적화에 뛰어들기 전에 SVG-in-JS가 가장 큰 원인이 아닐수 있다는 점을 명심하세요. 측정하고나서 최적화 하세요.
@@ -470,7 +482,7 @@ JS 번들을 더 작게 만드는 다른 방법으로는 리액트 대신 [Preac
 
 ## 각주 & 주석
 
-이 포스팅에 대해 소중한 피드백을 주신 [Barry Pollard](https://www.tunetheweb.com/) 와 [Kevin Farrugia ](https://imkev.dev/)에게 감사드립니다.
+<sub>이 포스팅에 대해 소중한 피드백을 주신 [Barry Pollard](https://www.tunetheweb.com/) 와 [Kevin Farrugia](https://imkev.dev/)에게 감사드립니다.</sub>
 
 <a name="footnote_1">1</a>: [웹팩 문서](https://webpack.js.org/guides/asset-modules/#resource-assets). 대체제로, 하나의 SVG에 대해 `new URL('path/to/svg.svg', import.meta.url)`를 사용할 수 도 있습니다. svgr을 계속 사용하기를 원한다면 [svgr 문서](https://react-svgr.com/docs/webpack/)에서도 어떻게 URL을 얻는지 설명하고 있습니다.
 
