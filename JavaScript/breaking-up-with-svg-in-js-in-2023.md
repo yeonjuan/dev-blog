@@ -176,21 +176,18 @@ import HeartIcon from "./HeartIcon.svg";
 const App = () => <img src={HeartIcon} loading="lazy" />;
 ```
 
-> 💡️ 성능 팁:
->
-> - `<img>`를 사용하면 내장된 지연-로딩을 위해 `loading="lazy"` 와 같은 속성을 사용하거나 패치 우선순위를 바꾸기 위해 `importance="high"`를 사용할 수 있습니다⚡️
->
-> - DPR(Device-Pixel-Ratio) > 1x 스크린에서 복잡한 SVG 애니메이션의 경우 `<img>`는 인라인 SVG보다 더 적은 CPU를 사용합니다.
+💡️ 성능 팁:
+
+- `<img>`를 사용하면 내장된 지연-로딩을 위해 `loading="lazy"` 와 같은 속성을 사용하거나 패치 우선순위를 바꾸기 위해 `importance="high"`를 사용할 수 있습니다⚡️
+- DPR(Device-Pixel-Ratio) > 1x 스크린에서 복잡한 SVG 애니메이션의 경우 `<img>`는 인라인 SVG보다 더 적은 CPU를 사용합니다.
 
 <a name="img-warn"></a>
 
-> ⚠️ `<img>` 주의 사항:
->
-> - 현재 페이지에서 값을 상속받지 않기 때문에 `currentColor` CSS 값 및 CSS 커스텀 props (`--variable`) 사용은 어렵습니다. (SVG 파일은 DOM의 일부가 아닌 외부 리소스로 취급됩니다)<sup>[3](#footnote_3)</sup>
->
-> - 크로미움: SVG 애니메이션은 최대 60Hz까지 실행되며 DPR = 1x 스크린에서 더 많은 CPU를 사용합니다.<sup>[2](#footnote_2)</sup>
->
-> - SVG에 포함된 `<a>` 태그는 클릭될 수 없습니다.
+⚠️ `<img>` 주의 사항:
+
+- 현재 페이지에서 값을 상속받지 않기 때문에 `currentColor` CSS 값 및 CSS 커스텀 props (`--variable`) 사용은 어렵습니다. (SVG 파일은 DOM의 일부가 아닌 외부 리소스로 취급됩니다)<sup>[3](#footnote_3)</sup>
+- 크로미움: SVG 애니메이션은 최대 60Hz까지 실행되며 DPR = 1x 스크린에서 더 많은 CPU를 사용합니다.<sup>[2](#footnote_2)</sup>
+- SVG에 포함된 `<a>` 태그는 클릭될 수 없습니다.
 
 저는 이렇게 하나의 뷰포트 밖에 있는 SVG를 사용하는 것을 **권장**합니다.
 하지만 스타일링이 필요하거나 개수가 많다면 다른 선택지 중 하나를 선택하는 것이 좋습니다.
@@ -343,7 +340,7 @@ const App = () => (
 `<use>` 태그에 적용되는 모든 CSS 속성은 참조된 `<svg>/<symbol>` 태그에 자동으로 스타일을 적용합니다.
 따라서 `<path>` 요소의 색상을 건드리지 않으면서 `.heart` 에 `stroke`를 추가할 수 있습니다.
 
-> ⚠️️ 주의: `<use>` 의 너비와 높이는 원본 `<svg>` 에 viewBox 속성 (또는 [`<view>`](https://css-tricks.com/svg-fragment-identifiers-work/#aa-adding-those-special-viewboxs-into-the-svg-itself))가 있어야 합니다.
+⚠️️ 주의: `<use>` 의 너비와 높이는 원본 `<svg>` 에 viewBox 속성 (또는 [`<view>`](https://css-tricks.com/svg-fragment-identifiers-work/#aa-adding-those-special-viewboxs-into-the-svg-itself))가 있어야 합니다.
 
 <a name="section4-2-2"></a>
 
@@ -354,7 +351,7 @@ const App = () => (
 이렇게 하면 SVG가 더 이상 브라우저에 제공되는 자바스크립트 번들에 포함되지 않습니다.
 서버에만 유지하기 위해 파일에 "use client"를 추가하지 않으면 되기 때문에 간단합니다.
 
-> 💡️ 모든 SVG를 서버 컴포넌트로 만들면 HTML 응답에 인라인 처리되고 여기에도 단점이 있기 때문에 [인라인 챕터](#성능-vs-로딩-시간-인라인을-할-것인가-말-것인가)를 꼭 읽어 보세요.
+💡️ 모든 SVG를 서버 컴포넌트로 만들면 HTML 응답에 인라인 처리되고 여기에도 단점이 있기 때문에 [인라인 챕터](#성능-vs-로딩-시간-인라인을-할-것인가-말-것인가)를 꼭 읽어 보세요.
 
 <a name="section4-3"></a>
 
@@ -381,7 +378,7 @@ const App = () => (
 
 하지만 이 접근 방식을 사용하면 LCP 요소에 사용되는 CSS 배경 이미지와 동일한 단점이 있습니다.
 브라우저는 SVG를 검색하고 다운로드하기 전에 CSS를 먼저 다운로드하고 실행해야 하므로 SVG가 의미 있게 표시될 때 까지 시간이 길어지게 됩니다.
-이 문제는 `<<link rel="preload" as="image">`를 사용하거나 CSS를 인라인으로 처리하여 완화할 수 있습니다.
+이 문제는 `<link rel="preload" as="image">`를 사용하거나 CSS를 인라인으로 처리하여 완화할 수 있습니다.
 또한 [`<img>` 의 모든 주의 사항](#img-warn)은 SVG에도 적용됩니다 (mask도 DOM의 일부가 아님).
 한 가지 장점은 요소가 숨겨져 있으면(`display: none`으로) 브라우저에서 mask 이미지를 다운로드하지 않는다는 것입니다.
 
