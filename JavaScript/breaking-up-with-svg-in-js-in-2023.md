@@ -2,12 +2,13 @@
 
 > 원문: https://kurtextrem.de/posts/svg-in-js
 
-작년 12월에 ["왜 우리는 CSS-in-JS와 헤어져야 하는가"](https://dev.to/srmagura/why-were-breaking-up-wiht-css-in-js-4g9b)라는 글을 통해 더 이상 JS 번들 안에 CSS를 넣지 않으려는 이슈를 설명했었습니다.
+작년 12월에 ["우리가 CSS-in-JS와 헤어지는 이유"](https://kofearticle.substack.com/p/korean-fe-article-css-in-js?utm_source=%2Fsearch%2Fcss-in-js&utm_medium=reader2)라는 글을 통해 더 이상 JS 번들 안에 CSS를 넣지 않으려는 이슈를 설명했었습니다.
 하지만, 오늘날 JS 번들에 CSS만 들어가는 것은 아니며 [Preact](https://preactjs.com/)의 저자 [Json Miller](https://jasonformat.com/)의 글에서 알 수 있듯이 SVG도 JS 번들에 들어갑니다.
 
 > [Jason Miller 트윗](https://twitter.com/_developit/status/1382838799420514317)
 >
-> SVG를 JSX로 import 하지 마세요. 가장 비싼 형태의 스프라이트 시트입니다. 다른 기술보다 최소 3배 이상 비용이 들고 런타임(렌더링) 성능과 메모리 사용을 모두 해칩니다. 인기 사이트의 이 번들은 거의 50%가 SVG 아이콘(250kb)이며 대부분이 사용되지 않습니다.
+> SVG를 JSX로 import 하지 마세요. 가장 비용이 많이 드는 스프라이트 시트 형식입니다. 다른 기술보다 최소 3배 이상 비용이 들며, 런타임(렌더링) 성능과 메모리 사용량 모두에 해를 끼칩니다. 이 인기 사이트의 이 번들은 거의 50%가 SVG 아이콘(250kb)이며 대부분이 사용되지 않습니다.
+> ![](./assets/svg-twitter.png)
 
 JS 안의 SVG에는 비용이 들고 SVG는 JS 번들의 소유물이 아닙니다
 SVG-in-HTML로 돌아갈 때입니다.
@@ -242,13 +243,13 @@ ID 를 부여해야 사용(`<use>`)할 수 있습니다(말 그대로).
 <svg><use href="icons.svg#icon2" /></svg>
 ```
 
-직접 SVG 스프라이트를 작성하는 데는 시간이 걸리지만 [➡️도구 챕터]()에서 이를 자동화하는 오픈소스 솔루션을 모아두었으니 걱정하지 마세요.
+직접 SVG 스프라이트를 작성하는 데는 시간이 걸리지만 [➡️도구 챕터](#section7)에서 이를 자동화하는 오픈소스 솔루션을 모아두었으니 걱정하지 마세요.
 
 > ⚠️ `<use>` 주의사항:
 >
-> - `<mask>`와 `<clippath>`는 외부에서 로드해온 SVG에서 동작하지 않습니다. ➡️ 인라인화로 해결하세요.
+> - `<mask>`와 `<clippath>`는 외부에서 로드해온 SVG에서 동작하지 않습니다. [➡️ 인라인화](#section5)로 해결하세요.
 >
-> - SVG는 `<use>`를 사용할 때 CDN에서 로드될 수 없습니다. ➡️ CORS 챕터
+> - SVG는 `<use>`를 사용할 때 CDN에서 로드될 수 없습니다. [➡️ CORS 챕터](#section-4-3)
 
 <a name="section4-2-1"></a>
 
@@ -366,11 +367,11 @@ const App = () => (
 - 이 문제를 피하는 방법은 `<img>` 챕터에서 설명한 방법을 따르는 것입니다. 그러나 이렇게 하면 `currentColor`가 동작하지 않습니다.
 - 한 가지 색상만 적용해야 하는 경우 직접 최적화할 때 가장 성능이 좋은 방법으로 필터가 포함된 `<img>`를 사용하거나, 적은 노력을 들여서 이미지를 마스크 합니다.
 
-```css
+```scss
 .heart {
-mask-image: url("somecdn.com/HeartIcon.svg#heart");
-/_ ⬇️ 'color' the SVG _/
-background-color: currentcolor;
+  mask-image: url("somecdn.com/HeartIcon.svg#heart");
+  /* ⬇️ 'color' the SVG */
+  background-color: currentcolor;
 }
 ```
 
@@ -477,7 +478,7 @@ JS 번들을 더 작게 만드는 다른 방법으로는 리액트 대신 [Preac
 
 <a name="footnote_3">3</a>: Alfredo Lopez는 그의 동료중 한명이 보여준 교묘한 꼼수를 알려주었습니다. 동적으로 `<style>:root { --color: green }</style>`를 SVG에 넣기 위해 쿼리 매개변수를 사용할 수 있습니다. (예: `HeartIcon.svg?color=green`) 그래서 CSS 커스텀 props를 사용할 수 있습니다. (이 기술에 대한 블로그 게시물이 뜨면 여기에 링크하겠습니다.)
 
-<a name="footnote_4">4/</a>: [크로미움 코멘트](https://bugs.chromium.org/p/chromium/issues/detail?id=1458806#c3)
+<a name="footnote_4">4</a>: [크로미움 코멘트](https://bugs.chromium.org/p/chromium/issues/detail?id=1458806#c3)
 
 <a name="footnote_5">5</a>: [스택오버플로우 참고](https://stackoverflow.com/questions/72027981/mask-tag-in-svg-is-ignored-if-used-from-an-external-svg-sprite-file/72044790#72044790)
 
