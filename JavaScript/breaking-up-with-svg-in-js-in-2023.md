@@ -16,21 +16,24 @@ JS 번들을 작고 성능 좋게 유지하면서 JSX에서 SVG를 사용하는 
 ## 목차
 
 - [어떻게 `<svg>`가 자바스크립트에 포함되게 되나요?](#section1)
-- [성능 딥 다이브: SVG-in-JS 가 안티 패턴인 이유](#%EC%84%B1%EB%8A%A5-%EB%94%A5-%EB%8B%A4%EC%9D%B4%EB%B8%8C-svg-in-js-%EA%B0%80-%EC%95%88%ED%8B%B0-%ED%8C%A8%ED%84%B4%EC%9D%B8-%EC%9D%B4%EC%9C%A0)
-  - [파싱 & 컴파일](#%ED%8C%8C%EC%8B%B1--%EC%BB%B4%ED%8C%8C%EC%9D%BC)
-- [메모리 사용](#%EB%A9%94%EB%AA%A8%EB%A6%AC-%EC%82%AC%EC%9A%A9)
-- [JS 번들에서 SVG를 제거하는 모범 사례](#js-%EB%B2%88%EB%93%A4%EC%97%90%EC%84%9C-svg%EB%A5%BC-%EC%A0%9C%EA%B1%B0%ED%95%98%EB%8A%94-%EB%AA%A8%EB%B2%94-%EC%82%AC%EB%A1%80)
-- [`<img>`로 SVG 로딩하기](#%EB%A1%9C-svg-%EB%A1%9C%EB%94%A9%ED%95%98%EA%B8%B0)
-- [SVG 스프라이트 - `<use>`를 사용하기](#svg-%EC%8A%A4%ED%94%84%EB%9D%BC%EC%9D%B4%ED%8A%B8---use%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0)
-  - [더 많은 JS 제거하기: `fill`, `stroke`, `width`, `height` 와 같은 것에 CSS & `currentcolor` 사용](#%EB%8D%94-%EB%A7%8E%EC%9D%80-js-%EC%A0%9C%EA%B1%B0%ED%95%98%EA%B8%B0-fill-stroke-width-height-%EC%99%80-%EA%B0%99%EC%9D%80-%EA%B2%83%EC%97%90-css--currentcolor-%EC%82%AC%EC%9A%A9)
-- [서버 컴포넌트 (리액트)](#%EC%84%9C%EB%B2%84-%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8-%EB%A6%AC%EC%95%A1%ED%8A%B8)
-- [CORS 의 경우: CSS를 사용하세요.](#cors-%EC%9D%98-%EA%B2%BD%EC%9A%B0-css%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%98%EC%84%B8%EC%9A%94)
-- [성능 vs 로딩 시간: 인라인을 할 것인가, 말 것인가?](#%EC%84%B1%EB%8A%A5-vs-%EB%A1%9C%EB%94%A9-%EC%8B%9C%EA%B0%84-%EC%9D%B8%EB%9D%BC%EC%9D%B8%EC%9D%84-%ED%95%A0-%EA%B2%83%EC%9D%B8%EA%B0%80-%EB%A7%90-%EA%B2%83%EC%9D%B8%EA%B0%80)
-- [정리](#%EC%A0%95%EB%A6%AC)
-
-## 어떻게 `<svg>`가 자바스크립트에 포함되게 되나요?
+- [성능 딥 다이브: SVG-in-JS 가 안티 패턴인 이유](#section2)
+  - [파싱 & 컴파일](#section2-1)
+- [메모리 사용](#section3)
+- [JS 번들에서 SVG를 제거하는 모범 사례](#section4)
+  - [`<img>`로 SVG 로딩하기](#section4-1)
+  - [SVG 스프라이트 - `<use>`를 사용하기](#section4-2)
+    - [더 많은 JS 제거하기: `fill`, `stroke`, `width`, `height` 와 같은 것에 CSS & `currentcolor` 사용](section4-2-1)
+    - [서버 컴포넌트 (리액트)](#section4-2-2)
+  - [CORS 의 경우: CSS를 사용하세요.](#section-4-3)
+- [성능 vs 로딩 시간: 인라인을 할 것인가, 말 것인가?](#section5)
+  - [JS 번들을 오염시키지 않고 SVG 인라인화하기](#section5-1)
+- [정리](#section6)
+- [도구/스니펫](#section7)
+- [각주 & 주석](#section8)
 
 <a name="section1"></a>
+
+## 어떻게 `<svg>`가 자바스크립트에 포함되게 되나요?
 
 먼저 SVG가 자바스크립트 소스 코드 내에 어떻게 포함되게 되는지 알아봅시다.
 일반적으로 이 작업은 JSX의 일부로 작성됩니다.
@@ -76,9 +79,13 @@ export default (props) => (
 
 물론 편리하고 사용하기 쉽지만 사용 편의성을 사용자가 지불해야 하는 단점을 수반합니다...
 
+<a name="section2"></a>
+
 ## 성능 딥 다이브: SVG-in-JS 가 안티 패턴인 이유
 
 ...그렇다면, JS 번들 안에 SVG 코드를 넣지 않으려는 이유는 무엇일까요?
+
+<a name="section2-1"></a>
 
 ### 파싱 & 컴파일
 
@@ -111,11 +118,15 @@ SVG를 JS 번들 밖으로 옮기면 파싱 및 컴파일 단계에서 벗어나
 > 이 경우 파싱 및 컴파일은 실행 직전이 아닌 다운로드 직후에 수행됩니다.
 > 타이밍을 관리하면 더 나은 결과를 얻을 수 있지만 근본 원인을 해결하지는 못합니다.
 
+<a name="section3"></a>
+
 ## 메모리 사용
 
 파싱 된 내용은 페이지가 유지되는 동안 자바스크립트 메모리 힙에 보관되어야 하며, 대부분 브라우저에 있는 다양한 메모리 캐시 안에 저장됩니다.
 갤럭시 A50에는 5기가 바이트의 RAM이 탑재되어 있으며, 해당 기기에서 실행되는 애플리케이션이 웹 사이트뿐만은 아니므로 남은 공간이 많지 않습니다.
 사용자를 배려하세요.
+
+<a name="section4"></a>
 
 ## JS 번들에서 SVG를 제거하는 모범 사례
 
@@ -130,7 +141,9 @@ SVG를 JS 번들 밖으로 옮기면 파싱 및 컴파일 단계에서 벗어나
 
 각 선택지에 대한 설명은 다음과 같습니다.
 
-## `<img>`로 SVG 로딩하기
+<a name="section4-1"></a>
+
+### `<img>`로 SVG 로딩하기
 
 SVG를 `<img>` 태그에서 사용하기 위해, 번들러/프레임워크에게 외부화하도록 명시해야 합니다(다른 말로, 정적 URL을 생성).
 웹팩의 경우 모든 `.svg` 파일을 `asset/resource`<sup>[1](#footnote_1)</sup> 형태로 설정하도록 웹팩 설정을 변경할 수 있습니다.
@@ -177,7 +190,9 @@ const App = () => <img src={HeartIcon} loading="lazy" />;
 저는 이렇게 하나의 뷰포트 밖에 있는 SVG를 사용하는 것을 **권장**합니다.
 하지만 스타일링이 필요하거나 개수가 많다면 다른 선택지 중 하나를 선택하는 것이 좋습니다.
 
-## SVG 스프라이트 - `use`를 사용하기
+<a name="section4-2"></a>
+
+### SVG 스프라이트 - `use`를 사용하기
 
 `fill` 및 기타 (사용자 정의) CSS 속성 또는 `currentcolor`를 값으로 사용하려면 SVG를 로드할 수 있는 `<use>` 태그를 사용해야 합니다.
 위와 동일한 웹팩 rules 와 함께 다음 처럼 SVG를 참조할 수 있습니다.
@@ -235,7 +250,9 @@ ID 를 부여해야 사용(`<use>`)할 수 있습니다(말 그대로).
 >
 > - SVG는 `<use>`를 사용할 때 CDN에서 로드될 수 없습니다. ➡️ CORS 챕터
 
-### 더 많은 JS 제거하기: `fill`, `stroke`, `width`, `height` 와 같은 것에 CSS & currentcolor 사용
+<a name="section4-2-1"></a>
+
+#### 더 많은 JS 제거하기: `fill`, `stroke`, `width`, `height` 와 같은 것에 CSS & currentcolor 사용
 
 아래와 같이 코드를 작성했을 수 있습니다.
 
@@ -323,7 +340,9 @@ const App = () => (
 
 > ⚠️️ 주의: `<use>` 의 너비와 높이는 원본 `<svg>` 에 viewBox 속성 (또는 [`<view>`](https://css-tricks.com/svg-fragment-identifiers-work/#aa-adding-those-special-viewboxs-into-the-svg-itself))가 있어야 합니다.
 
-## 서버 컴포넌트 (리액트)
+<a name="section4-2-2"></a>
+
+#### 서버 컴포넌트 (리액트)
 
 가장 최근의 솔루션 이지만 너무 많은 변경이 필요하지 않은 솔루션은 예를 들어 [NextJS 13.4](https://nextjs.org/blog/next-13-4)에서 사용할 수 있는 곧 출시될 리액트의 서버 컴포넌트를 채택하는 것입니다.
 런타임에 컴포넌트의 동작을 변경해야 할 때 특히 유용하며 서버에서만 실행되는 JSX를 작성할 수 있습니다.
@@ -332,7 +351,9 @@ const App = () => (
 
 > 💡️ 모든 SVG를 서버 컴포넌트로 만들면 HTML 응답에 인라인 처리되고 여기에도 단점이 있기 때문에 [인라인 챕터](#성능-vs-로딩-시간-인라인을-할-것인가-말-것인가)를 꼭 읽어 보세요.
 
-## CORS 의 경우: CSS를 사용하세요.
+<a name="section4-3"></a>
+
+### CORS 의 경우: CSS를 사용하세요.
 
 > SVG의 <use> 요소는 현재 교차 출처 권한을 요청할 수 있는 방법이 없습니다. 이는 교차 출처에서 전혀 작동하지 않습니다.
 
@@ -356,6 +377,8 @@ background-color: currentcolor;
 하지만 이 접근 방식을 사용하면 LCP 요소에 사용되는 CSS 배경 이미지와 동일한 단점이 있습니다.
 브라우저는 SVG를 검색하고 다운로드하기 전에 CSS를 먼저 다운로드하고 실행해야 하므로 SVG가 의미 있게 표시될 때 까지 시간이 길어지게 됩니다.
 
+<a name="section5"></a>
+
 ## 성능 vs 로딩 시간: 인라인을 할 것인가, 말 것인가?
 
 인라인은 하나의 HTTP 요청을 아끼도록 해주며 SVG 가 즉각적으로 표시됩니다.
@@ -371,6 +394,49 @@ background-color: currentcolor;
 
 3. 나머지, 인라인 하지말고 가능하면 지연-로딩 합니다.
 
+> 경험상 critical CSS와 비슷한 예산을 권장합니다.
+> Astro는 파일 인라이닝 임계값으로 **4 kB**를 사용합니다.
+> 일반적으로 상단 회면의 모든 것(CSS, SVG, JS, 콘텐츠)은 **14 kB**(압축되었을 때) 이하로 유지해야 합니다.
+
+<a name="section5-1"></a>
+
+### JS 번들을 오염시키지 않고 SVG 인라인화하기
+
+이제 무엇을 인라인해야 하는지 알아보았으니, SVG를 JS 번들에 다시 추가하지 않고 인라인하는 방법을 살펴봅시다.
+아래에서는 `<body>` 바로 뒤에 하트 아이콘을 인라인 처리하여 스프라이트를 참조하는 모든 SVG가 처음부터 바로 표시되도록 했습니다.
+덜 중요한 스프라이트에 대해서도 동일한 기법을 사용하여 스프라이트 출력을 `</body>` 바로 앞에 배치할 수 있습니다.
+
+```jsx
+import fs from "node:fs";
+
+const svgIcons = await fs.readFile("path/to/icons.svg"); // ← SVG file 컨텐츠 로딩
+
+// … fastify 나 express 와 같은 HTTP 프레임워크를 사용한 경우
+app.get("/", function () {
+  const reactOutput = renderToString(App);
+  return `<!doctype html><head><title>SVG-in-HTML</title></head>
+     <body>
+      <!-- ⬇️ output the SVG sprite to be re-used and make it invisible -->
+      <div style="display:none">${svgIcons}</div>
+
+      ${reactOutput}
+    </body>`;
+});
+```
+
+이제 SVG를 사용해야 하는 모든 인스턴스가 파일에 연결되지 않고 ID에만 연결되도록 해야 합니다:
+
+```xml
+<!-- `href` 속성에 누락된 파일 경로에 유의하세요. -->
+<svg><use href="#heart"></svg>
+```
+
+하지만 주의할 점은 이제 ID가 SVG 파일 내부에만 적용되는 것이 아니라 전역적으로 적용된다는 점입니다.
+
+짜잔, SVG-in-HTML입니다. 페이지/출력별로 사용된 모든 ID를 추출하도록 확장할 수 있으므로 모든 SVG가 아닌 실제로 사용된 SVG만 추출할 수 있습니다. 사용된 스타일은 중요한 CSS에 대해 이 작업을 수행하는 좋은 예입니다.
+
+<a name="section6"></a>
+
 ## 정리
 
 설명한 기술을 사용해 자바스크립트 번들을 더 작고 성능 좋게 만들 수 있으므로 오래된 장치의 속도를 줄이고 더 포괄저인 인터넷을 만들 수 있습니다.
@@ -382,6 +448,8 @@ background-color: currentcolor;
 
 JS 번들을 더 작게 만드는 다른 방법으로는 리액트 대신 [Preact](https://preactjs.com/)를 사용하고, Axios 대신 [Redaxios](https://github.com/developit/redaxios)를 사용하고, 더 큰 모듈(예: [uuid](https://github.com/lukeed/uuid), [clsx](https://github.com/lukeed/clsx))을 대체하는 [Luke Edward](https://github.com/lukeed/)의 모듈 컬렉션을 살펴보고, CSS-in-JS를 [ecsstatic](https://www.ecsstatic.dev/)/[kuma UI](https://www.kuma-ui.com/)/[Panda](https://panda-css.com/)와 같이 런타임 오버헤드가 없는 솔루션으로 대체하거나 CSS 모듈로 대체하는 방법이 있습니다.
 큰 모듈을 작은 모듈로 대체하는 [일부 웹팩 플러그인](https://github.com/GoogleChromeLabs/webpack-libs-optimizations)도 있습니다. [번들포비아](https://bundlephobia.com/)는 작은 모듈을 찾아주는 친구입니다.
+
+<a name="section7"></a>
 
 ## 도구 / 스니펫
 
@@ -396,6 +464,8 @@ JS 번들을 더 작게 만드는 다른 방법으로는 리액트 대신 [Preac
 [Icon-pipeline](https://github.com/DavidWells/icon-pipeline) - "🚚 SVG 아이콘 파이프라인 - 아이콘 최적화 및 SVG 스프라이트 빌드"
 
 [SVGomg](https://jakearchibald.github.io/svgomg/) - "SVG 옵티마이저의 GUI"
+
+<a name="section8"></a>
 
 ## 각주 & 주석
 
