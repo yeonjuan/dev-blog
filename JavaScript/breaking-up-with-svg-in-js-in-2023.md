@@ -137,7 +137,7 @@ SVG를 JS 번들 밖으로 옮기면 파싱 및 컴파일 단계에서 벗어나
 번들 안에 적지 않은 양이 들어있는 경우, 이를 제거하는 데 도움이 되는 몇 가지 선택지가 있습니다.
 다음 도표는 대부분의 경우 결정을 내리는 데 도움이 될 수 있습니다.
 
-![](./assets/svg-select.svg)
+<img src="./assets/select-svg.png"></img>
 
 각 선택지에 대한 설명은 다음과 같습니다.
 
@@ -444,7 +444,7 @@ app.get("/", function () {
 웹 성능과 관련한 주제에 대해서는 이 외에도 더 쉬운 방법 또는 더 최적화가 필요한 것들이 있을 수 있습니다.
 때문에 SVG 최적화에 뛰어들기 전에 SVG-in-JS가 가장 큰 원인이 아닐수 있다는 점을 명심하세요. 측정하고나서 최적화 하세요.
 
-> 팁: Ctrl+F 로 <svg> 를 찾아보면 충분한 아이디어를 얻을 수 있습니다.
+> 팁: Ctrl+F 로 `<svg>` 를 찾아보면 충분한 아이디어를 얻을 수 있습니다.
 
 JS 번들을 더 작게 만드는 다른 방법으로는 리액트 대신 [Preact](https://preactjs.com/)를 사용하고, Axios 대신 [Redaxios](https://github.com/developit/redaxios)를 사용하고, 더 큰 모듈(예: [uuid](https://github.com/lukeed/uuid), [clsx](https://github.com/lukeed/clsx))을 대체하는 [Luke Edward](https://github.com/lukeed/)의 모듈 컬렉션을 살펴보고, CSS-in-JS를 [ecsstatic](https://www.ecsstatic.dev/)/[kuma UI](https://www.kuma-ui.com/)/[Panda](https://panda-css.com/)와 같이 런타임 오버헤드가 없는 솔루션으로 대체하거나 CSS 모듈로 대체하는 방법이 있습니다.
 큰 모듈을 작은 모듈로 대체하는 [일부 웹팩 플러그인](https://github.com/GoogleChromeLabs/webpack-libs-optimizations)도 있습니다. [번들포비아](https://bundlephobia.com/)는 작은 모듈을 찾아주는 친구입니다.
@@ -473,7 +473,7 @@ JS 번들을 더 작게 만드는 다른 방법으로는 리액트 대신 [Preac
 
 <a name="footnote_1">1</a>: [웹팩 문서](https://webpack.js.org/guides/asset-modules/#resource-assets). 대체제로, 하나의 SVG에 대해 `new URL('path/to/svg.svg', import.meta.url)`를 사용할 수 도 있습니다. svgr을 계속 사용하기를 원한다면 [svgr 문서](https://react-svgr.com/docs/webpack/)에서도 어떻게 URL을 얻는지 설명하고 있습니다.
 
-<a name="footnote_2">2</a>: 인라인 SVG는 DPR = 1x 스크린에서 컴포지터에서 실행됩는데, 이는 보통 [크로미움 버그](https://bugs.chromium.org/p/chromium/issues/detail?id=1458806)에서 언급된 것처럼 더 높은 성능으로 이어집니다. 1x DPR을 넘어서는 스크린에선, 반대로, `<svg>`가 `<img>`보다 더 많은 CPU를 소모합니다. 직접 확인해볼 수 있습니다: [<img> 코드펜](https://codepen.io/kevinfarrugia/pen/OJBvmyw), [인라인 `svg` 코드펜](https://codepen.io/kevinfarrugia/pen/rNqdmYL). 개발자 도구 -> Ctrl + Shift + P > Performance monitor를 사용하세요.
+<a name="footnote_2">2</a>: 인라인 SVG는 DPR = 1x 스크린에서 컴포지터에서 실행됩는데, 이는 보통 [크로미움 버그](https://bugs.chromium.org/p/chromium/issues/detail?id=1458806)에서 언급된 것처럼 더 높은 성능으로 이어집니다. 1x DPR을 넘어서는 스크린에선, 반대로, `<svg>`가 `<img>`보다 더 많은 CPU를 소모합니다. 직접 확인해볼 수 있습니다: [`<img>` 코드펜](https://codepen.io/kevinfarrugia/pen/OJBvmyw), [인라인 `svg` 코드펜](https://codepen.io/kevinfarrugia/pen/rNqdmYL). 개발자 도구 -> Ctrl + Shift + P > Performance monitor를 사용하세요.
 
 <a name="footnote_3">3</a>: Alfredo Lopez는 그의 동료중 한명이 보여준 교묘한 꼼수를 알려주었습니다. 동적으로 `<style>:root { --color: green }</style>`를 SVG에 넣기 위해 쿼리 매개변수를 사용할 수 있습니다. (예: `HeartIcon.svg?color=green`) 그래서 CSS 커스텀 props를 사용할 수 있습니다. (이 기술에 대한 블로그 게시물이 뜨면 여기에 링크하겠습니다.)
 
