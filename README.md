@@ -17,6 +17,7 @@
 
 ### 2023
 
+- [자바스크립트 에코시스템의 속도 향상 - 배럴(Barrel) 파일의 대실패](./JavaScript/speeding-up-the-javascript-ecosystem-the-barrel-file-debacle.md)
 - [커스텀 프로퍼티를 이용해 CSS 와 자바스크립트 간 데이터 공유하기](./JavaScript/sharing-data-between-css-and-javascript-using-custom-properties.md)
 - [정말 리액트에서 useMemo를 사용해야 할까요? 알아봅시다.(번역)](./JavaScript/should-you-really-use-usememo.md)
 - [Well-Known symbols (번역)](./JavaScript/well-known-symbols.md)
