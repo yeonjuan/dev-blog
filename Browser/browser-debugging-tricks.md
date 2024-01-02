@@ -8,10 +8,10 @@
     - [호출 스택 추적](#tracing-callstacks)
   - [프로그램 동작 변경하기](#changing-program-behavior)
   - [빠르고 간단한 성능 프로파일링](#quick-and-dirty-performance-profiling)
-  - [함수 항수 사용](#using-function-arity)
+  - [함수의 항수(Arity) 활용](#using-function-arity)
     - [인자 갯수로 중단](#break-on-number-of-arguments)
     - [항수 불일치로 중단](#break-on-function-arity-mismatch)
-  - [시간 사용](#using-time)
+  - [시간 활용](#using-time)
     - [페이지 로드 스킵](#skip-page-load)
     - [N 초 스킵](#skip-n-seconds)
   - [CSS 활용](#using-css)
@@ -25,7 +25,7 @@
 - [함수 호출 및 디버깅](#call-and-debug-a-function)
 - [URL 변경시 실행 일시 중지](#pause-execution-on-url-change)
 - [프로퍼티 읽기 디버깅](#debugging-property-reads)
-- [copy() 사용](#use-copy)
+- [copy() 활용](#use-copy)
 - [HTML/CSS 디버깅](#debugging-htmlcss)
   - [JS 비활성화 상태에서 DOM 검사](#inspect-the-dom-with-js-disabled)
   - [찾기 어려운 요소 검사](#inspect-an-elusive-element)
@@ -41,7 +41,7 @@
 브라우저의 디버거<sup><a href="#1">1</a></sup>를 최대한 활용하기 위한 유용하지만 뻔하지 않은 방법들입니다.
 개발자 도구에 대한 중급 이상의 이해를 가지고 있다고 가정합니다.
 
-## <a id="advanced-conditional-breakpoints"></a> 조건부 중단점 고급 사용
+## <a id="advanced-conditional-breakpoints"></a> 조건부 중단점 고급 활용법
 
 예상치 못한 위치에서 사이드 이펙트가 있는 표현식을 사용할 때, 조건부 중단점과 같은 기본 기능을 활용하여 더 많은 기능을 끌어낼 수 있습니다.
 
@@ -99,7 +99,7 @@ show 메서드의 조건부 중단점에서 `console.trace`를 사용하여 코�
 
 ![](https://alan.norbauer.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fconsole-time-performance-profile.9b494665.gif&w=1920&q=75)
 
-## <a id="using-function-arity"></a> 함수의 매개변수 개수(Arity) 사용하기
+## <a id="using-function-arity"></a> 함수의 항수(Arity) 활용
 
 ### <a id="break-on-number-of-arguments"></a> 인자 갯수에 따른 중단
 
@@ -118,7 +118,7 @@ show 메서드의 조건부 중단점에서 `console.trace`를 사용하여 코�
 
 함수 호출부의 버그를 찾을 때 유용합니다.
 
-## <a id="using-time"></a> 시간 사용
+## <a id="using-time"></a> 시간 활용
 
 ### <a id="skip-page-load"></a> 페이지 로드 스킵
 
@@ -288,7 +288,7 @@ debug(window.location.assign);
 
 어떤 설정 옵션을 전달할 때 그 옵션이 어떻게 사용되는지 보고 싶을 때 유용합니다.
 
-### <a id="use-copy"></a> copy() 사용
+### <a id="use-copy"></a> copy() 활용
 
 <img width="30" alt="chrome" src="https://alan.norbauer.com/_next/static/media/chrome.2d2a19fd.svg"><img width="30" alt="firefox" src="https://alan.norbauer.com/_next/static/media/firefox.583d9a58.svg">
 
