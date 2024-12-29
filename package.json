@@ -1,0 +1,21 @@
+{
+  "name": "dev-blog",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "## YeonJuAn 👋",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint website",
+    "dev": "parcel website/index.html"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@html-eslint/eslint-plugin": "^0.31.1",
+    "@html-eslint/parser": "^0.31.0",
+    "eslint": "^9.17.0",
+    "parcel": "^2.13.3",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17"
+  }
+}
