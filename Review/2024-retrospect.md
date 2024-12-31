@@ -23,16 +23,16 @@
 가장 기억에 남는 기여는, `any` 타입을 `return` 하는 코드를 검출하는 [no-unsafe-return](https://typescript-eslint.io/rules/no-unsafe-return/) 규칙에 `Promise<any>`에 대한 `return`도 검출하는 기능을 추가하는 것이었다.
 기억에 남는 이유는 기능 제안, PR 그리고 연관된 프로젝트인 TypeScript에 기능을 제안하는 것과 PR지 모두 경험했기 때문이다.
 
-이기능을 구현하기 위해서는 `Promise`가 `await` 된 타입을 가져와야 했는데 이를 [TS Compiler API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API)로 직접 구현하려면 다소 까다로운 작업이 필요했다.
+이 기능을 구현하기 위해서는 `Promise`가 `await` 된 타입을 가져와야 했는데 이를 [TS Compiler API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API)로 직접 구현하려면 다소 까다로운 작업이 필요했다.
+
 하지만 TS Compiler API에는 `getAwaitedType` 이라는 private method가 이미 구현되어 있었고 정확히 내가 필요한 기능이었다. [이를 public으로 바꿔달라는 제안](https://github.com/microsoft/TypeScript/issues/59256)을 TypeScript에 생성하고 [PR](https://github.com/microsoft/TypeScript/pull/59268)을 생성했다. 작업 자체는 매우 간단했지만 처음으로 TypeScript 프로젝트에 기여하게 되었던 점이 좋았다.
 
-typescript-eslint에 기여를 열심히 하다 보니 컨트리뷰터에게 주는 리워드를 두 번 받게 되었다.
+typescript-eslint에 기여를 꾸준히 하다 보니 컨트리뷰터에게 주는 리워드를 두 번 받게 되었다.
 
 ![](./assets/2025-retrospect/open-collective.png)
 
 투자한 시간에 비해 큰돈은 아니라고 생각하지만 애초에 돈을 생각하고 기여한 건 아니었기에 액수에 큰 의미를 두진 않는다.
 내 활동이 오픈소스 커뮤니티에서 인정받고 있다는 느낌이 들어 동기부여가 되었다. 500달러씩 두 번 받아서 총 1000달러를 받았는데 내년에는 조금 더 열심히 참여해 봐야겠다.
-
 
 ## 개인 프로젝트
 
@@ -44,7 +44,7 @@ typescript-eslint에 기여를 열심히 하다 보니 컨트리뷰터에게 주
 
 리액트를 사용하지 않더라도 순수하게 html, css 만으로 웹 페이지를 만드는 경우는 드물다. JS로 html 문자열을 만들어서 UI를 생성하는 경우가 많은데 이때는 이때도 html-eslint를 사용할 수 있으면 좋겠다는 이슈 제보가 들어왔다.
 
-까다로운 점은 JS 에서 html을 만들어 사용하는 경우 expression을 같이 사용하는 경우가 많다는 것이었다.
+까다로운 점은 JS에서 html을 만들어 사용하는 경우 expression을 같이 사용할 수 있다는 점이었다.
 
 ```js
 button.innerHTML = /* html */`
