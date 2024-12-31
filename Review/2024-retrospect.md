@@ -1,7 +1,8 @@
 # 2024 회고
 
-올해는 결혼, 이사, 회사일로 바빴었던 것 같다. 그래도 시간을 내서 개발 분야에서 이것저것 해보려고 노력했었던 한 해였다.
-하루의 많은 시간을 일하면서 보내지만 회사일 외에 개인적으로 진행한 것들에 대한 회고를 작성해 봤다.
+결혼, 이사, 회사일로 바쁜 한 해였다. 그래도 시간을 내서 개발 분야에서 이것저것 해보려고 노력했었다.
+
+하루의 많은 시간을 회사 일을 하면서 보내지만 회사일 외에 개인적으로 진행한 것들에 대한 회고를 작성해 봤다.
 
 - [오픈소스 기여](#오픈소스-기여)
 - [개인 프로젝트](#개인-프로젝트)
@@ -13,25 +14,24 @@
 
 ## 오픈소스 기여
 
-자기 개발의 일환으로 다시 오픈 소스 기여를 시작했다.
+한동안 쉬고 있었던 오픈 소스 기여를 다시 시작했다.
 
 ![](./assets/2025-retrospect/pr-counts.png)
 
 주로 [typescript-eslint](https://github.com/typescript-eslint/typescript-eslint)에 기여를 했는데, 이슈를 해결하려다 보니 연관된 프로젝트인 [eslint](https://github.com/eslint/eslint) 와 [TypeScript](https://github.com/microsoft/TypeScript)에도 기여를 할 수 있는 기회가 있었다.
 
-기억에 나는 PR은 암묵적으로 `any` 타입을 `return` 하는 코드를 검출하는 [no-unsafe-return](https://typescript-eslint.io/rules/no-unsafe-return/) 규칙에 `Promise<any>`에 대한 return도 검출하는 기능을 추가하는 것이었다.
-기억에 남는 이유는 기능 제안, PR 그리고 연관된 프로젝트인 TypeScript에 기능을 제안하는 것과 PR 하는 것까지 모두 경험했기 때문인 것 같다.
+가장 기억에 남는 기여는, `any` 타입을 `return` 하는 코드를 검출하는 [no-unsafe-return](https://typescript-eslint.io/rules/no-unsafe-return/) 규칙에 `Promise<any>`에 대한 `return`도 검출하는 기능을 추가하는 것이었다.
+기억에 남는 이유는 기능 제안, PR 그리고 연관된 프로젝트인 TypeScript에 기능을 제안하는 것과 PR지 모두 경험했기 때문이다.
 
-이 기능을 구현하기 위해서는 `Promise`가 `await` 된 타입을 가져와야 했는데 이를 [TS Compiler API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API)로 직접 구현하려면 다소 까다로운 작업이 필요했다.
-하지만 TS Compiler API에는 `getAwaitedType` 이라는 private method가 이미 구현되어 있었고 정확히 내가 필요한 기능이었다. [이를 public으로 바꿔달라는 제안](https://github.com/microsoft/TypeScript/issues/59256)을 TypeScript에 생성하고 [PR](https://github.com/microsoft/TypeScript/pull/59268)을 생성했다. 작업 자체는 매우 간단했지만 처음으로 TypeScript 프로젝트에 기여하게 된 계기가 되었다.
-
+이기능을 구현하기 위해서는 `Promise`가 `await` 된 타입을 가져와야 했는데 이를 [TS Compiler API](https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API)로 직접 구현하려면 다소 까다로운 작업이 필요했다.
+하지만 TS Compiler API에는 `getAwaitedType` 이라는 private method가 이미 구현되어 있었고 정확히 내가 필요한 기능이었다. [이를 public으로 바꿔달라는 제안](https://github.com/microsoft/TypeScript/issues/59256)을 TypeScript에 생성하고 [PR](https://github.com/microsoft/TypeScript/pull/59268)을 생성했다. 작업 자체는 매우 간단했지만 처음으로 TypeScript 프로젝트에 기여하게 되었던 점이 좋았다.
 
 typescript-eslint에 기여를 열심히 하다 보니 컨트리뷰터에게 주는 리워드를 두 번 받게 되었다.
 
 ![](./assets/2025-retrospect/open-collective.png)
 
-기여에 투자한 시간에 비해 큰돈은 아니라고 생각하지만 애초에 돈을 생각하고 기여한 건 아니었기에 액수에 큰 의미를 두진 않았다.
-내 기여가 오픈소스 커뮤니티에서 인정받고 있다는 느낌이 들어 동기부여가 되었다. 500달러씩 두 번 받아서 총 1000달러를 받았는데 내년에는 조금 더 열심히 참여해 봐야겠다.
+투자한 시간에 비해 큰돈은 아니라고 생각하지만 애초에 돈을 생각하고 기여한 건 아니었기에 액수에 큰 의미를 두진 않는다.
+내 활동이 오픈소스 커뮤니티에서 인정받고 있다는 느낌이 들어 동기부여가 되었다. 500달러씩 두 번 받아서 총 1000달러를 받았는데 내년에는 조금 더 열심히 참여해 봐야겠다.
 
 
 ## 개인 프로젝트
@@ -133,7 +133,7 @@ html`
 
 ## 마무리
 
-23년에 번역을 마지막으로 블로그 글을 거의 작성하지 않았는데, 25년부터는 다시 글을 작성해 볼 생각이다.
+2023년 번역글 포스팅 마지막으로 블로그 글을 거의 작성하지 않았는데, 25년부터는 다시 글을 작성해 볼 생각이다.
 또 github page로 만들어서 웹으로도 제공할 계획인데 귀찮은 작업이 많이 필요해서 잘 될지는 모르겠다.
 
 2025년에도 꾸준히 오픈소스에 기여를 할 생각이다. 오픈소스에 계속 참여하는 이유는 회사에서 접하는 도메인과 아예 다른 분야에서 개발을 할 수 있다는 점이 재밌게 느껴져서 그런 것 같다.
