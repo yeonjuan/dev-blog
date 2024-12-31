@@ -15,6 +15,10 @@
 
 ## Posts
 
+### 2024
+
+- [2024 회고](./Review/2024-retrospect.md)
+
 ### 2023
 
 - [자바스크립트 에코시스템의 속도 향상 - 배럴(Barrel) 파일의 대실패](./JavaScript/speeding-up-the-javascript-ecosystem-the-barrel-file-debacle.md)
