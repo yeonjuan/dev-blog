@@ -20,7 +20,7 @@ function resolve(path) {
 async function loadPosts() {
   return Promise.all(
     SOURCE.posts.map(
-      async ({ title, description, src, thumbnail, createdAt }) => {
+      async ({ title, description, src, thumbnail, createdAt, category }) => {
         const markdown = await fs.promises.readFile(resolve(src), "utf-8");
         return {
           title,
@@ -28,6 +28,7 @@ async function loadPosts() {
           thumbnail,
           createdAt,
           markdown,
+          category,
         };
       },
     ),
