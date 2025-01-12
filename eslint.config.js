@@ -1,6 +1,9 @@
 import html from "@html-eslint/eslint-plugin";
 
 export default [
+  {
+    ignores: ["website/posts/**/*.html"],
+  },
   // your own configurations.
   {
     // recommended configuration included in the plugin

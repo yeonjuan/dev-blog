@@ -5,6 +5,7 @@ import SOURCE from "./source.js";
 export default async function load() {
   const [posts] = await Promise.all([loadPosts()]);
   return {
+    copyAssets: SOURCE.copyAssets,
     posts,
   };
 }
@@ -29,6 +30,7 @@ async function loadPosts() {
           createdAt,
           markdown,
           category,
+          src,
         };
       },
     ),

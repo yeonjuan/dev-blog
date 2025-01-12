@@ -5,6 +5,12 @@
  */
 
 export default {
+  copyAssets: [
+    [
+      "<rootDir>/JavaScript/assets",
+      "<rootDir>/website/posts/JavaScript/assets",
+    ],
+  ],
   posts: [
     {
       category: "JavaScript",
