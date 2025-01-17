@@ -3,7 +3,8 @@ import header from './header.js'
 
 export default ({
     title,
-    children
+    children,
+    link = ''
 }) => {
     return html`
    <!doctype html>
@@ -19,6 +20,7 @@ export default ({
                     href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
                     rel="stylesheet"
                 />
+                ${link}
             </head>
             <body>
                 <div class="relative">
