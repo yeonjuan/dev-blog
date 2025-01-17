@@ -31,7 +31,7 @@ export default () => html`
             rel="noopener noreferrer"
         >
             <img
-                src="./assets/ic-github.svg"
+                src="/assets/ic-github.svg"
                 alt="go to github"
                 width="20"
             >

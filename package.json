@@ -24,7 +24,7 @@
     "posthtml-modules": "^0.9.1",
     "svgo": "^3.3.2",
     "tailwindcss": "^3.4.17",
-    "y-blogify": "^0.0.6"
+    "y-blogify": "^0.0.7"
   },
   "source": [
     "website/index.html",
