@@ -2,3 +2,4 @@ node_modules
 .parcel-cache
 dist
 website/posts/*/assets
+out
