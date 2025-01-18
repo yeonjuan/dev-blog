@@ -2,34 +2,34 @@ import { html } from "y-blogify"
 import header from './header.js'
 
 export default ({
-    title,
-    children,
-    link = ''
+  title,
+  children,
+  link = ''
 }) => {
-    return html`
+  return html`
    <!doctype html>
-        <html lang="ko">
-            <head>
-                <meta charset="utf-8" />
-                <meta name="viewport" content="width=device-width" />
-                <title>${title}</title>
-                <link href="/output.css" type="text/css" rel="stylesheet" />
-                <link rel="preconnect" href="https://fonts.googleapis.com" />
-                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-                <link
-                    href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
-                    rel="stylesheet"
-                />
-                ${link}
-            </head>
-            <body>
-                <div class="relative">
+    <html lang="ko">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>${title}</title>
+        <link href="/output.css" type="text/css" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
+          rel="stylesheet"
+        />
+        ${link}
+      </head>
+      <body>
+        <div class="relative">
                     ${header()}
-                    <main class="py-2 px-4 pt-20">
+          <main class="py-2 px-4 pt-20">
                         ${children}
-                    </main>
-                </div>
-            </body>
-        </html>
+          </main>
+        </div>
+      </body>
+    </html>
     `
 } 

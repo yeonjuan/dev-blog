@@ -31,17 +31,17 @@ blogify({
   outRoot: path.resolve(process.cwd(), "out"),
 })
   .loadJSON({
-        key: "posts",
-        src: "src/data/posts.json"
-    })
-    .copy({
-      src: "src/assets",
-      out: "assets",
-    })
-    .copy({
-      src: "src/css",
-      out: "css",
-    })
+    key: "posts",
+    src: "src/data/posts.json"
+  })
+  .copy({
+    src: "src/assets",
+    out: "assets",
+  })
+  .copy({
+    src: "src/css",
+    out: "css",
+  })
   .copy({
     src: "Browser/assets",
     out: "Browser/assets",
