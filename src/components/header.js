@@ -1,4 +1,4 @@
-import { html } from "y-blogify";
+import { html } from "@html-kit/html"
 
 export default () => html`
   <style>

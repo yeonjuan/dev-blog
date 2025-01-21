@@ -1,4 +1,4 @@
-import {html} from 'y-blogify';
+import { html } from '@html-kit/html'
 import layout from '../components/layout.js';
 
 export default (children) => layout({

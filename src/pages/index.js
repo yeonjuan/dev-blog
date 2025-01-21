@@ -1,4 +1,4 @@
-import { html } from "y-blogify";
+import { html } from '@html-kit/html'
 import devPostList from "../components/dev-post-list.js";
 import layout from "../components/layout.js";
 

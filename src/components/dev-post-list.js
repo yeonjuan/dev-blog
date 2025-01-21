@@ -1,4 +1,4 @@
-import { html } from "y-blogify";
+import { html } from "@html-kit/html"
 
 const postItem = post => html`
   <div class="border-t border-black pt-6 mb-16">

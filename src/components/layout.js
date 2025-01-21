@@ -1,4 +1,4 @@
-import { html } from "y-blogify"
+import { html } from '@html-kit/html'
 import header from './header.js'
 
 export default ({
