@@ -1,28 +1,21 @@
-import html from "@html-eslint/eslint-plugin";
-import stylisticJs from "@stylistic/eslint-plugin-js";
+import html from '@html-eslint/eslint-plugin'
+import stylistic from '@stylistic/eslint-plugin'
 
 export default [
   {
     plugins: {
-      "@stylistic/js": stylisticJs,
+      '@stylistic': stylistic,
+      '@html-eslint': html,
     },
     rules: {
-      "@stylistic/js/indent": ["error", 2],
+      ...stylistic.configs['recommended-flat'].rules,
+      '@html-eslint/indent': ['error', 2],
     },
   },
   // your own configurations.
   {
     // recommended configuration included in the plugin
-    ...html.configs["flat/recommended"],
-    files: ["**/*.html"],
+    ...html.configs['flat/recommended'],
+    files: ['**/*.html'],
   },
-  {
-    files: ["**/*.js"],
-    plugins: {
-      "@html-eslint": html,
-    },
-    rules: {
-      "@html-eslint/indent": ["error", 2],
-    },
-  },
-];
+]

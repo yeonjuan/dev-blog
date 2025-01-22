@@ -4,7 +4,7 @@ import header from './header.js'
 export default ({
   title,
   children,
-  link = ''
+  link = '',
 }) => {
   return html`
    <!doctype html>
@@ -32,4 +32,4 @@ export default ({
       </body>
     </html>
     `
-} 
+}
