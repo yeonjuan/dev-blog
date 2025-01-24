@@ -117,42 +117,42 @@
       "category": "JavaScript",
       "title": "주니어 FE 개발자 오픈소스 성장기 - kakao tech",
       "description": ".....",
-      "thumbnail": "https://marvinh.dev/media/js-tools-module-cost.png",
+      "thumbnail": "/JavaScript/assets/kakao-fe.png",
       "createdAt": "2023.01.01"
     },
     {
       "category": "JavaScript",
       "title": "falsy & truthy",
       "description": ".....",
-      "thumbnail": "https://marvinh.dev/media/js-tools-module-cost.png",
+      "thumbnail": "/JavaScript/assets/falsy-truthy.png",
       "createdAt": "2023.01.01"
     },
     {
       "category": "JavaScript",
       "title": "return undefined vs null",
       "description": ".....",
-      "thumbnail": "https://marvinh.dev/media/js-tools-module-cost.png",
+      "thumbnail": "/JavaScript/assets/undefined-null.png",
       "createdAt": "2023.01.01"
     },
     {
       "category": "JavaScript",
       "title": "빌더 패턴 탐구(번역)",
       "description": ".....",
-      "thumbnail": "https://marvinh.dev/media/js-tools-module-cost.png",
+      "thumbnail": "/JavaScript/assets/builder-pattern.png",
       "createdAt": "2023.01.01"
     },
     {
       "category": "JavaScript",
       "title": "2020 OSS 컨트리뷰톤 멘티님들 후기 모음",
       "description": ".....",
-      "thumbnail": "https://marvinh.dev/media/js-tools-module-cost.png",
+      "thumbnail": "/JavaScript/assets/2020-oss-contributhon.png",
       "createdAt": "2023.01.01"
     },
     {
       "category": "JavaScript",
       "title": "node 패키지 브라우저에서 사용하기 (with Webpack 4)",
       "description": ".....",
-      "thumbnail": "https://marvinh.dev/media/js-tools-module-cost.png",
+      "thumbnail": "/JavaScript/assets/webpack4.png",
       "createdAt": "2023.01.01"
     },
     {
