@@ -1,2 +1,2 @@
-src
+src/**/*.js
 eslint.config.js

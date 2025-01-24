@@ -1,28 +1,151 @@
 {
-    "posts": [
-        {
-            "category": "JavaScript",
-            "title": "자바스크립트 에코시스템의 속도 향상 - 배럴(Barrel) 파일의 대실패",
-            "description": ".....",
-            "src": "<rootDir>/JavaScript/speeding-up-the-javascript-ecosystem-the-barrel-file-debacle.md",
-            "thumbnail": "https://marvinh.dev/media/js-tools-module-cost.png",
-            "createdAt": "2023.01.01"
-          },
-          {
-            "category": "JavaScript",
-            "title": "커스텀 프로퍼티를 이용해 CSS 와 자바스크립트 간 데이터 공유하기",
-            "description": ".....",
-            "src": "<rootDir>/JavaScript/sharing-data-between-css-and-javascript-using-custom-properties.md",
-            "thumbnail": "https://marvinh.dev/media/js-tools-module-cost.png",
-            "createdAt": "2023.01.01"
-          },
-          {
-            "category": "JavaScript",
-            "title": "정말 리액트에서 useMemo를 사용해야 할까요? 알아봅시다.(번역)",
-            "description": ".....",
-            "src": "<rootDir>/JavaScript/should-you-really-use-usememo.md",
-            "thumbnail": "https://marvinh.dev/media/js-tools-module-cost.png",
-            "createdAt": "2023.01.01"
-          }
-    ]
+  "posts": [
+    {
+      "category": "Review",
+      "title": "2024 회고",
+      "description": "2024 년을 되돌아 보며",
+      "thumbnail": "TODO",
+      "createdAt": "2024.12.31"
+    },
+    {
+      "category": "JavaScript",
+      "title": "자동화 게임 극한까지 자바스크립트 성능 끌어올리기 (번역)",
+      "description": "이 글은 자바스크립트로 게임을 만들면서 진행한 성능 최적화에 대한 글입니다. 성능을 1초라도 끌어올리기 위해 어떤 방법들을 시도해 보았는지 알 수 있습니다.",
+      "thumbnail": "/JavaScript/assets/squeezing%20-last-bit-of-javascript-performance-for-my-automation-game.webp",
+      "createdAt": "2024.02.22"
+    },
+    {
+      "category": "JavaScript",
+      "title": "자바스크립트 에코시스템의 속도 향상 - 배럴(Barrel) 파일의 대실패",
+      "description": ".....",
+      "thumbnail": "https://marvinh.dev/media/js-tools-module-cost.png",
+      "createdAt": "2023.01.01"
+    },
+    {
+      "category": "JavaScript",
+      "title": "커스텀 프로퍼티를 이용해 CSS 와 자바스크립트 간 데이터 공유하기",
+      "description": ".....",
+      "thumbnail": "https://marvinh.dev/media/js-tools-module-cost.png",
+      "createdAt": "2023.01.01"
+    },
+    {
+      "category": "JavaScript",
+      "title": "정말 리액트에서 useMemo를 사용해야 할까요? 알아봅시다.(번역)",
+      "description": ".....",
+      "thumbnail": "https://marvinh.dev/media/js-tools-module-cost.png",
+      "createdAt": "2023.01.01"
+    },
+    {
+      "category": "JavaScript",
+      "title": "Well-Known symbols (번역)",
+      "description": ".....",
+      "thumbnail": "https://marvinh.dev/media/js-tools-module-cost.png",
+      "createdAt": "2023.01.01"
+    },
+    {
+      "category": "JavaScript",
+      "title": "Next.js에서 HTML 페이로드 줄이기 (번역)",
+      "description": ".....",
+      "thumbnail": "https://marvinh.dev/media/js-tools-module-cost.png",
+      "createdAt": "2023.01.01"
+    },
+    {
+      "category": "JavaScript",
+      "title": "JavaScript JSON 파서 (번역)",
+      "description": ".....",
+      "thumbnail": "https://marvinh.dev/media/js-tools-module-cost.png",
+      "createdAt": "2023.01.01"
+    },
+    {
+      "category": "JavaScript",
+      "title": "사용자가 페이지를 떠날 때 안정적으로 HTTP 요청 보내기 (번역)",
+      "description": ".....",
+      "thumbnail": "https://marvinh.dev/media/js-tools-module-cost.png",
+      "createdAt": "2023.01.01"
+    },
+    {
+      "category": "JavaScript",
+      "title": "주니어 FE 개발자 오픈소스 성장기 - kakao tech",
+      "description": ".....",
+      "thumbnail": "https://marvinh.dev/media/js-tools-module-cost.png",
+      "createdAt": "2023.01.01"
+    },
+    {
+      "category": "JavaScript",
+      "title": "falsy & truthy",
+      "description": ".....",
+      "thumbnail": "https://marvinh.dev/media/js-tools-module-cost.png",
+      "createdAt": "2023.01.01"
+    },
+    {
+      "category": "JavaScript",
+      "title": "return undefined vs null",
+      "description": ".....",
+      "thumbnail": "https://marvinh.dev/media/js-tools-module-cost.png",
+      "createdAt": "2023.01.01"
+    },
+    {
+      "category": "JavaScript",
+      "title": "빌더 패턴 탐구(번역)",
+      "description": ".....",
+      "thumbnail": "https://marvinh.dev/media/js-tools-module-cost.png",
+      "createdAt": "2023.01.01"
+    },
+    {
+      "category": "JavaScript",
+      "title": "2020 OSS 컨트리뷰톤 멘티님들 후기 모음",
+      "description": ".....",
+      "thumbnail": "https://marvinh.dev/media/js-tools-module-cost.png",
+      "createdAt": "2023.01.01"
+    },
+    {
+      "category": "JavaScript",
+      "title": "node 패키지 브라우저에서 사용하기 (with Webpack 4)",
+      "description": ".....",
+      "thumbnail": "https://marvinh.dev/media/js-tools-module-cost.png",
+      "createdAt": "2023.01.01"
+    },
+    {
+      "category": "JavaScript",
+      "title": "node 패키지 브라우저에서 사용하기 (with Webpack 4)",
+      "description": ".....",
+      "thumbnail": "https://marvinh.dev/media/js-tools-module-cost.png",
+      "createdAt": "2023.01.01"
+    },
+    {
+      "category": "JavaScript",
+      "title": "Js13kGames 2019 참가 후기",
+      "description": ".....",
+      "thumbnail": "https://marvinh.dev/media/js-tools-module-cost.png",
+      "createdAt": "2023.01.01"
+    },
+    {
+      "category": "JavaScript",
+      "title": "Hacktoberfest 2019 참가 후기",
+      "description": ".....",
+      "thumbnail": "https://marvinh.dev/media/js-tools-module-cost.png",
+      "createdAt": "2023.01.01"
+    },
+    {
+      "category": "JavaScript",
+      "title": "ESLint 조금 더 잘 활용하기 - kakao tech",
+      "description": ".....",
+      "thumbnail": "https://marvinh.dev/media/js-tools-module-cost.png",
+      "createdAt": "2023.01.01"
+    },
+    {
+      "category": "JavaScript",
+      "title": "코딩 컨벤션 업무를 하며 알게 된 것들 - 1",
+      "description": ".....",
+      "thumbnail": "https://marvinh.dev/media/js-tools-module-cost.png",
+      "createdAt": "2023.01.01"
+    },
+    {
+      "category": "JavaScript",
+      "title": "코딩 컨벤션 업무를 하며 알게 된 것들 - 2",
+      "description": ".....",
+      "thumbnail": "https://marvinh.dev/media/js-tools-module-cost.png",
+      "createdAt": "2023.01.01"
+    }
+  ]
 }
