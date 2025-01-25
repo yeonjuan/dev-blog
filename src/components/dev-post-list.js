@@ -6,7 +6,7 @@ const postItem = post => html`
       <span class="text-xs font-bold block">${post.category}</span>
       <span class="text-xs ml-auto mr-0">${post.createdAt}</span>
     </div>
-    <a href="/posts/JavaScript/speeding-up-the-javascript-ecosystem-the-barrel-file-debacle/">
+    <a href="${post.href}">
       <span class="block my-3 text-xl font-bold">${post.title}</span>
    
       <p class="text-sm text-zinc-600 mb-8">

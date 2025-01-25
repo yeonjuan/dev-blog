@@ -63,6 +63,14 @@ blogify({
     },
     render: post,
   })
+  .markdown({
+    src: 'Review/2024-retrospect.md',
+    out: 'posts/Review/2024-retrospect.html',
+    parser: {
+      parse,
+    },
+    render: post,
+  })
   .html({
     out: 'index.html',
     render: index,

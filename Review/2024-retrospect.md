@@ -47,7 +47,7 @@ typescript-eslint에 기여를 꾸준히 하다 보니 컨트리뷰터에게 주
 까다로운 점은 JS에서 html을 만들어 사용하는 경우 expression을 같이 사용할 수 있다는 점이었다.
 
 ```js
-button.innerHTML = /* html */`
+button.innerHTML = /* html */ `
     <button id=${myButtonId}> </button>
 `;
 ```
@@ -62,6 +62,7 @@ es-html-parser에 특정 코드 범위의 배열을 옵션으로 추가하면 �
 
 [playground](https://html-eslint.org/playground#eyJjb2RlIjoiaHRtbGBcbiAgICA8ZGl2PlxuICAgICAgICA8c3Bhbj5cbiAgICA8L3NwYW4+XG4gICAgPC9kaXY+XG5gXG5cbmNvbnN0IGh0bWwgPSAvKmh0bWwqL2BcbjxkaXY+XG4gICAgPHNwYW4+XG4gICAgICAgPC9zcGFuPlxuPC9kaXY+XG5gOyIsImNvbmZpZyI6eyJydWxlcyI6eyJAaHRtbC1lc2xpbnQvaW5kZW50IjoiZXJyb3IifX0sImxhbmd1YWdlIjoiamF2YXNjcmlwdCJ9)
 
+<!-- prettier-ignore -->
 ```js
 html`
     <div>
@@ -75,9 +76,7 @@ html`
 
 ![](./assets/2025-retrospect/html-eslint-deps.png)
 
-
 25년에는 다양한 템플릿 엔진 ([handlebar](https://handlebarsjs.com/), [twig.js](https://github.com/twigjs/twig.js))과 함께 사용할 수 있는 방법과, `<script>` 태그 내의 JS 코드를 린팅할 수 있는 기능을 개발해 보려고 한다.
-
 
 ### parse-git-diff
 
@@ -92,11 +91,9 @@ html`
 - [sourcegraph/cody](https://github.com/sourcegraph/cody/blob/f3fe8b63cb326bc82d7485f86e0f832228d3be81/agent/package.json#L96)
 - [epicweb-dev](https://github.com/epicweb-dev/epicshop/blob/main/packages/workshop-app/package.json#L97)
 
-
 그리고 [thanks.dev](https://thanks.dev/)를 통해 [cody](https://sourcegraph.com/cody)로부터 소정의 금액을 기부받기도 했다.
 
 ![](./assets/2025-retrospect/thanks-dev-cody.png)
-
 
 개인적인 필요에 의해 만든 라이브러리로 예상하지 못했던 귀여운 수익을 낸 있는 경험이었다.
 내가 필요해서 만든 라이브러리는 다른 누군가에게도 필요한 경우가 많다는 것을 깨달았고, 앞으로도 직접 만든 라이브러리를 자주 공유해 봐야겠다는 생각이 들었다.
@@ -129,7 +126,6 @@ html`
 
 잘 이해하고 넘어가고 싶어서 자세히 읽다 보니 완독하는데 시간이 조금 걸리는 것 같다.
 객체지향에 대해 잘못 알고 있었던 부분이나 개발하면서 찜찜했던 부분을 잘 설명해 주는 책인것 같다.
-
 
 ## 마무리
 

@@ -1,5 +1,6 @@
 import { html } from '@html-kit/html'
 import { toId } from './utils.js'
+import sanitizeHtml from 'sanitize-html'
 
 /**
  *
@@ -51,7 +52,7 @@ function link({ text, href }) {
  */
 function paragraph({ tokens }) {
   const text = this.parser.parseInline(tokens)
-  return html`<p class="my-3 text-base leading-7">${text}</p>`
+  return html`<p class="my-1 text-base">${text}</p>`
 }
 
 /**
@@ -59,7 +60,7 @@ function paragraph({ tokens }) {
  * @returns
  */
 function codespan({ text }) {
-  return html`<code class="bg-gray-100 px-1 rounded-md inline-block text-sm">${text}</code>`
+  return html`<code class="bg-gray-100 px-1 rounded-md inline-block text-sm">${sanitizeHtml(text)}</code>`
 }
 
 /**
@@ -72,7 +73,7 @@ function blockquote({ tokens }) {
 }
 
 function list({ items }) {
-  return html`<ul class="my-4 px-3">${items.map(item => html`<li  class="text-base">${this.parser.parseInline(item.tokens)}</li>`).join('')}</ul>`
+  return html`<ul class="my-1 px-3">${items.map(item => html`<li  class="text-base">${this.parser.parse(item.tokens)}</li>`).join('')}</ul>`
 }
 
 export default {
