@@ -52,7 +52,7 @@
       "category": "JavaScript",
       "title": "2023년 SVG-in-JS와 결별 (번역)",
       "description": "웹 사이트를 만들 때 SVG 이미지를 어떻게 가져와 사용하시나요? 저는 JSX로 변환해 리액트 컴포넌트로 만들어 사용하곤 했었는데요. 사용하면서 혹시나 런타임 성능에 안 좋지 않을까라는 생각을 하곤 했습니다. 이 글에서는 이런 SVG를 사용하는 방식과 성능에 대한 궁금증을 해결해 주고, 다른 대안을 제시해 주고 있습니다. 이 글이 웹 사이트 성능 개선에 관심 있는 분들께 도움이 되었으면 좋겠습니다.",
-      "href": "/posts/JavaScript/assets/breaking-up-with-svg-in-js-in-2023",
+      "href": "/posts/JavaScript/breaking-up-with-svg-in-js-in-2023",
       "thumbnail": "/JavaScript/assets/breaking-up-with-svg-in-js-in-2023.webp",
       "createdAt": "2023.08.21"
     },
@@ -60,7 +60,7 @@
       "category": "JavaScript",
       "title": "Next.js에서 i18n과 호환성을 갖춘 정적 HTML Export (번역)",
       "description": "최근 진행한 프로젝트에서 부득이하게 Next.js Static Exports 와 next-i18next을 같이 사용해서 다국어가 지원되는 정적 웹페이지를 구성해야 했습니다. 하지만 next-i18next에서 서버사이드 런타임에 동작해야 하는 로직 때문에 에러가 발생했는데요. 해결 과정에서 이 글을 찾게 되었고 프로젝트를 성공적으로 구성할 수 있었습니다. 같은 어려움을 겪는 분들에게 도움이 되었으면 좋겠습니다.",
-      "href": "/posts/JavaScript/assets/static-html-export-i18n",
+      "href": "/posts/JavaScript/static-html-export-i18n",
       "thumbnail": "/JavaScript/assets/static-html-export-i18n.webp",
       "createdAt": "2023.07.25"
     },
@@ -68,7 +68,7 @@
       "category": "JavaScript",
       "title": "타입스크립트 5.2의 새로운 키워드: 'using' (번역)",
       "description": "최근 진행한 프로젝트에서 부득이하게 Next.js Static Exports 와 next-i18next을 같이 사용해서 다국어가 지원되는 정적 웹페이지를 구성해야 했습니다. 하지만 next-i18next에서 서버사이드 런타임에 동작해야 하는 로직 때문에 에러가 발생했는데요. 해결 과정에서 이 글을 찾게 되었고 프로젝트를 성공적으로 구성할 수 있었습니다. 같은 어려움을 겪는 분들에게 도움이 되었으면 좋겠습니다.",
-      "href": "/posts/JavaScript/assets/using-keyword",
+      "href": "/posts/JavaScript/using-keyword",
       "thumbnail": "/JavaScript/assets/using-keyword.webp",
       "createdAt": "2023.07.6"
     },
@@ -76,7 +76,7 @@
       "category": "JavaScript",
       "title": "Next.js 와 React Router로 싱글 페이지 애플리케이션 만들기",
       "description": "이 글에서는 Next.js 와 react-router-dom 을 이용해 SPA를 구성하는 방법에 대해 소개합니다. 일반적으로 Next.js를 사용하는 경우 내장된 라우터만 사용하는데요. 최근 저는 서비스의 특별한 이유로 react-router-dom 과 내장된 라우터를 같이 사용해야만 했고, 프로젝트를 구성하는데 이 글에서 도움을 받았습니다. 저와 같은 문제를 겪으시는 분들에게 도움이 되었으면 좋겠습니다.",
-      "href": "/posts/JavaScript/assets/building-a-spa-with-nextjs",
+      "href": "/posts/JavaScript/building-a-spa-with-nextjs",
       "thumbnail": "/JavaScript/assets/building-a-spa-with-nextjs.webp",
       "createdAt": "2023.05.26"
     },
@@ -101,7 +101,7 @@
       "category": "JavaScript",
       "title": "Well-Known symbols (번역)",
       "description": "Well-Known 심볼에 대해 들어보셨나요? Well-Known 심볼은 ECMAScript 스펙에 정의되어 있는 특별한 심볼들인데요. 자바스크립트에서 기본적으로 제공되는 기능을 확장 및 변경할 수 있도록 해줍니다. 이 글에서 Well-Known 심볼 각각에 대한 설명과 예제 코드를 통해 사용법을 알아볼 수 있습니다.",
-      "href": "/posts/JavaScript/well-known-symbols.webp",
+      "href": "/posts/JavaScript/well-known-symbols",
       "thumbnail": "/JavaScript/assets/well-known-symbols.webp",
       "createdAt": "2023.03.02"
     },
@@ -109,7 +109,7 @@
       "category": "JavaScript",
       "title": "Next.js에서 HTML 페이로드 줄이기 (번역)",
       "description": "이 글에서는 Next.js를 사용할 때, HTML 크기가 커지는 문제와 아키텍처 개선을 통해 이를 해결한 사례에 대해 설명합니다.",
-      "href": "/postsJavaScript/reduce-html-payload-with-nextjs",
+      "href": "/posts/JavaScript/reduce-html-payload-with-nextjs",
       "thumbnail": "/JavaScript/assets/reduce-html-payload-with-nextjs.webp",
       "createdAt": "2023.01.31"
     },
@@ -141,7 +141,7 @@
       "category": "JavaScript",
       "title": "falsy & truthy",
       "description": ".....",
-      "href": "/posts/JavaScript/falsy-truthy.png",
+      "href": "/posts/JavaScript/falsy-truthy",
       "thumbnail": "/JavaScript/assets/falsy-truthy.png",
       "createdAt": "2023.01.01"
     },
@@ -149,7 +149,7 @@
       "category": "JavaScript",
       "title": "return undefined vs null",
       "description": ".....",
-      "href": "/posts/JavaScript/undefined-null.png",
+      "href": "/posts/JavaScript/return-null-vs-undefined",
       "thumbnail": "/JavaScript/assets/undefined-null.png",
       "createdAt": "2023.01.01"
     },
@@ -157,7 +157,7 @@
       "category": "JavaScript",
       "title": "빌더 패턴 탐구(번역)",
       "description": ".....",
-      "href": "/posts/JavaScript/builder-pattern.png",
+      "href": "/posts/DesignPattern/builder-pattern-exploration",
       "thumbnail": "/JavaScript/assets/builder-pattern.png",
       "createdAt": "2023.01.01"
     },
@@ -165,15 +165,15 @@
       "category": "JavaScript",
       "title": "2020 OSS 컨트리뷰톤 멘티님들 후기 모음",
       "description": ".....",
-      "href": "/posts/JavaScript/2020-oss-contributhon.png",
-      "thumbnail": "/JavaScript/assets/2020-oss-contributhon.png",
+      "href": "/posts/Review/2020-oss-contributhon",
+      "thumbnail": "/Review/assets/2020-oss-contributhon.png",
       "createdAt": "2023.01.01"
     },
     {
       "category": "JavaScript",
       "title": "node 패키지 브라우저에서 사용하기 (with Webpack 4)",
       "description": ".....",
-      "href": "/posts/JavaScript/webpack4.png",
+      "href": "/posts/JavaScript/node-module-on-browser",
       "thumbnail": "/JavaScript/assets/webpack4.png",
       "createdAt": "2023.01.01"
     },
@@ -181,7 +181,7 @@
       "category": "JavaScript",
       "title": "Js13kGames 2019 참가 후기",
       "description": "Js13kGames는 2012년부터 매년 1회씩 개최된 HTML5 Game 개발자를 위한 대회입니다. 대회의 조건은 파일 크기를 13kb 이내로 제출해야 한다는 것과, 브라우저 상에서 동작해야 한다는 조건이 있습니다. 대회가 시작하면 게임 대회의 테마가 공개됩니다. 테마는 키워드로 주어지게 되는데 자유롭게 해석하여 게임을 만들고 제출하면 됩니다.",
-      "href": "/posts/Review/js13k2019/thumbnail",
+      "href": "/posts/Review/js-13k-2019",
       "thumbnail": "/Review/assets/js13k2019/thumbnail.jpg",
       "createdAt": "2023.01.01"
     },
@@ -189,7 +189,7 @@
       "category": "JavaScript",
       "title": "Hacktoberfest 2019 참가 후기",
       "description": ".....",
-      "href": "/posts/Review/hacktoberfest2019/profile.png",
+      "href": "/posts/Review/hacktoberfest-2019",
       "thumbnail": "/Review/assets/hacktoberfest2019/profile.png",
       "createdAt": "2023.01.01"
     },
@@ -197,7 +197,7 @@
       "category": "JavaScript",
       "title": "ESLint 조금 더 잘 활용하기 - kakao tech",
       "description": "안녕하세요. 카카오 FE플랫폼팀의 Joah입니다. 최근에 팀에서 사용하는 JavaScript 스타일 가이드를 개선하는 업무에 참여했습니다. 업무를 하며 스타일 가이드에서 사용하고 있는 ESLint에 관심이 생기게 되었고, 어떻게 동작하는지 소스코드를 분석해보다가 ESLint에 직접 컨트리뷰션 하는 경험도 하게 되었습니다. 이 과정들에서 알게 된 ESLint를 조금 더 잘 활용할 수 있는 방법에 대해 정리해 보았는데요.",
-      "href": "/posts/JavaScript/kakao-tech-eslint.png",
+      "href": "https://tech.kakao.com/posts/375",
       "thumbnail": "/JavaScript/assets/kakao-tech-eslint.png",
       "createdAt": "2023.01.01"
     },
@@ -205,7 +205,7 @@
       "category": "JavaScript",
       "title": "코딩 컨벤션 업무를 하며 알게 된 것들 - 2",
       "description": "이전 글에 이어서 Javascript 코딩 컨벤션 관련 업무를 하며 ESLint 규칙을 통해 알게 된 점을 정리해 보았습니다.",
-      "href": "/posts/JavaScript/coding-convention.png",
+      "href": "/posts/JavaScript/coding-convention-2",
       "thumbnail": "/JavaScript/assets/coding-convention.png",
       "createdAt": "2023.01.01"
     },
@@ -213,7 +213,7 @@
       "category": "JavaScript",
       "title": "코딩 컨벤션 업무를 하며 알게 된 것들 - 1",
       "description": "ESLint 규칙을 찾아보면서 몰랐던 내용이나, 흥미로운 내용을 따로 정리해 보았습니다.",
-      "href": "/posts/JavaScript/coding-convention.png",
+      "href": "/posts/JavaScript/coding-convention-1",
       "thumbnail": "/JavaScript/assets/coding-convention.png",
       "createdAt": "2023.01.01"
     }

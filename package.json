@@ -33,5 +33,8 @@
   "source": [
     "website/index.html",
     "website/posts/**/*.html"
-  ]
+  ],
+  "dependencies": {
+    "glob": "^11.0.1"
+  }
 }

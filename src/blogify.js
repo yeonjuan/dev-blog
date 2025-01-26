@@ -1,3 +1,4 @@
+import { Builder } from './libs/builder.js'
 import process from 'process'
 import path from 'path'
 import { blogify } from 'y-blogify'
@@ -27,48 +28,40 @@ function parse(markdown) {
   return marked.parse(markdown)
 }
 
-blogify({
+new Builder({
   srcRoot: process.cwd(),
   outRoot: path.resolve(process.cwd(), 'out'),
+}).loadJson({
+  key: 'posts',
+  src: 'src/data/posts.json',
+}).copy([
+  ['src/assets', 'assets'],
+  ['src/css', 'css'],
+  ['Browser/assets', 'Browser/assets'],
+  ['JavaScript/assets', 'JavaScript/assets'],
+  ['Review/assets', 'Review/assets'],
+]).markdownGlob({
+  srcPattern: 'JavaScript/*.md',
+  outDir: 'posts',
+  parse,
+  render: post,
 })
-  .loadJSON({
-    key: 'posts',
-    src: 'src/data/posts.json',
-  })
-  .copy({
-    src: 'src/assets',
-    out: 'assets',
-  })
-  .copy({
-    src: 'src/css',
-    out: 'css',
-  })
-  .copy({
-    src: 'Browser/assets',
-    out: 'Browser/assets',
-  })
-  .copy({
-    src: 'JavaScript/assets',
-    out: 'JavaScript/assets',
-  })
-  .copy({
-    src: 'Review/assets',
-    out: 'Review/assets',
-  })
-  .markdown({
-    src: 'JavaScript/speeding-up-the-javascript-ecosystem-the-barrel-file-debacle.md',
-    out: 'posts/JavaScript/speeding-up-the-javascript-ecosystem-the-barrel-file-debacle.html',
-    parser: {
-      parse,
-    },
+  .markdownGlob({
+    srcPattern: 'Browser/*.md',
+    outDir: 'posts',
+    parse,
     render: post,
   })
-  .markdown({
-    src: 'Review/2024-retrospect.md',
-    out: 'posts/Review/2024-retrospect.html',
-    parser: {
-      parse,
-    },
+  .markdownGlob({
+    srcPattern: 'Review/*.md',
+    outDir: 'posts',
+    parse,
+    render: post,
+  })
+  .markdownGlob({
+    srcPattern: 'DesignPattern/*.md',
+    outDir: 'posts',
+    parse,
     render: post,
   })
   .html({
