@@ -129,7 +129,7 @@ show 메서드의 조건부 중단점에서 `console.trace`를 사용하여 코�
 
 ### <a id="skip-n-seconds"></a> N 초 스킵하기
 
-다음 5초 이내에 중단점에 도달하면 실행을 일시 중지하지 않고, 그 이후에는 언제든지 일시 중지합니다. `window.baseline = window.baseline || Date.now(), (Date.now() - window.baseline) > 5000` 
+다음 5초 이내에 중단점에 도달하면 실행을 일시 중지하지 않고, 그 이후에는 언제든지 일시 중지합니다. `window.baseline = window.baseline || Date.now(), (Date.now() - window.baseline) > 5000`
 
 원하는 경우 언제든지 콘솔에서 카운터를 재설정 합니다. `window.baseline = Date.now()`
 
@@ -160,7 +160,7 @@ XHR 중단점에서 한 줄을 제외하거나, 예외가 발생했을 때 이�
 
 ## <a id="automatic-instance-ids"></a> 자동 인스턴스 ID
 
-생성자에서 아래과 같은 조건부 중단점을 설정하여 클래스의 모든 인스턴스에 고유 ID를 자동으로 할당하세요. 
+생성자에서 아래과 같은 조건부 중단점을 설정하여 클래스의 모든 인스턴스에 고유 ID를 자동으로 할당하세요.
 `(window.instances = window.instances || []).push(this)`.
 
 그런 다음 고유 ID를 검색하려면 `window.instances.indexOf(instance)`를 사용하세요. (예: 클래스 메서드에 있는 경우 `window.instances.indexOf(this)`).
@@ -191,13 +191,12 @@ setTimeout(() => (window.enableBreakpoints = true), 5000);
 
 - 기타
 
-
 ## <a id="monitor-class-calls"></a> monitor() class 호출
 
 <img width="30" alt="chrome" src="https://alan.norbauer.com/_next/static/media/chrome.2d2a19fd.svg">
 
 크롬의 `monitor` 커맨드 라인 메서드를 사용해서 모든 클래스 메서드 호출을 쉽게 추적할 수 있습니다.
-예를 들어 아래와 같은 `Dog` 클래스가 있다고 가정해봅시다. 
+예를 들어 아래와 같은 `Dog` 클래스가 있다고 가정해봅시다.
 
 ```js
 class Dog {
@@ -292,7 +291,6 @@ debug(window.location.assign);
 
 <img width="30" alt="chrome" src="https://alan.norbauer.com/_next/static/media/chrome.2d2a19fd.svg"><img width="30" alt="firefox" src="https://alan.norbauer.com/_next/static/media/firefox.583d9a58.svg">
 
-
 `copy()` 콘솔 API를 사용하면 문자열을 잘라내지 않고도 브라우저에서 관심 있는 정보를 클립보드로 바로 복사할 수 있습니다.
 복사하고 싶을 만한 정보 몇 가지를 소개합니다.
 
@@ -370,7 +368,6 @@ setInterval(() => {
 ```
 
 ![](https://alan.norbauer.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fmonitor-focus.b9692b99.gif&w=1920&q=75)
-
 
 ## <a id="find-bold-elements"></a> 볼드 요소 찾기
 

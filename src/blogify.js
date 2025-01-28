@@ -14,14 +14,15 @@ function parse(markdown) {
   hljs.registerLanguage('html', xml)
   const marked = new Marked(
     markedHighlight({
-      langPrefix: `hljs text-sm language-`,
+      langPrefix: `my-4 hljs text-xs language-`,
       highlight(code, info) {
         const [lang] = info.includes(',') ? info.split(',') : [info]
         const language = hljs.getLanguage(lang) ? lang : 'plaintext'
 
         return hljs.highlight(code, { language }).value
       },
-    }),
+    },
+    ),
   )
 
   marked.use({ renderer })
@@ -37,9 +38,9 @@ new Builder({
 }).copy([
   ['src/assets', 'assets'],
   ['src/css', 'css'],
-  ['Browser/assets', 'Browser/assets'],
-  ['JavaScript/assets', 'JavaScript/assets'],
-  ['Review/assets', 'Review/assets'],
+  ['Browser/assets', 'posts/Browser/assets'],
+  ['JavaScript/assets', 'posts/JavaScript/assets'],
+  ['Review/assets', 'posts/Review/assets'],
 ]).markdownGlob({
   srcPattern: 'JavaScript/*.md',
   outDir: 'posts',
