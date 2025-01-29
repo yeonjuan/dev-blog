@@ -37,7 +37,9 @@ export default () => html`
       >
     </a>
     <span>
-      DEV BLOG
+      <a href="/">
+        DEV BLOG
+      </a>
     </span>
     <div class="w-10">
       <input
@@ -55,10 +57,16 @@ export default () => html`
         <div></div>
         <div></div>
       </label>
-      <nav class="fixed text-black transition-[max-height] duration-200 overflow-hidden max-h-0 top-12 left-[0px] peer-checked:max-h-[200px] bg-gray-300 w-full md:ml-auto md:flex md:top-auto md:max-h-max md:relative md:w-auto md:peer-checked:translate-y-0">
+      <nav class="fixed text-black transition-[max-height] duration-200 overflow-hidden max-h-0 top-12 left-[0px] peer-checked:max-h-[200px] bg-white w-full md:ml-auto md:flex md:top-auto md:max-h-max md:relative md:w-auto md:peer-checked:translate-y-0 border-b border-black">
         <ul class="p-4">
           <li>
-            <a>개발 포스트</a>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/posts/JavaScript">JavaScript</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/posts/Review">Review</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/posts/Browser">Browser</a>
           </li>
         </ul>
       </nav>

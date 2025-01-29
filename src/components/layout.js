@@ -29,6 +29,7 @@ export default ({
                         ${children}
           </main>
         </div>
+        <script src="/scripts/header.js"></script>
       </body>
     </html>
     `
