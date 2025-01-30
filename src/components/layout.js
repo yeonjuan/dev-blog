@@ -24,9 +24,9 @@ export default ({
       </head>
       <body>
         <div class="relative">
-                    ${header()}
-          <main class="py-2 px-4 pt-20">
-                        ${children}
+            ${header()}
+          <main class="py-2 px-4 pt-20 max-w-3xl m-auto">
+              ${children}
           </main>
         </div>
         <script src="/scripts/header.js"></script>

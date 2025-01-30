@@ -51,14 +51,17 @@ export default () => html`
       <label
         for="menu"
         aria-label="menu button"
-        class="hamburger flex flex-col justify-between ml-auto h-[21px] w-[21px] px-[1px] py-[3px] [&>div]:h-[2px] [&>div]:w-[18px] [&>div]:bg-white md:hidden hover:cursor-pointer"
+        class="hamburger flex flex-col justify-between ml-auto h-[21px] w-[21px] px-[1px] py-[3px] [&>div]:h-[2px] [&>div]:w-[18px] [&>div]:bg-white hover:cursor-pointer"
       >
         <div></div>
         <div></div>
         <div></div>
       </label>
-      <nav class="fixed text-black transition-[max-height] duration-200 overflow-hidden max-h-0 top-12 left-[0px] peer-checked:max-h-[200px] bg-white w-full md:ml-auto md:flex md:top-auto md:max-h-max md:relative md:w-auto md:peer-checked:translate-y-0 border-b border-black">
+      <nav class="fixed text-black transition-[max-height] duration-200 overflow-hidden max-h-0 top-12 left-[0px] peer-checked:max-h-[200px] bg-white w-full border-b border-black">
         <ul class="p-4">
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/">HOME</a>
+          </li>
           <li>
             <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/posts/JavaScript">JavaScript</a>
           </li>
