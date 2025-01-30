@@ -1,9 +1,9 @@
 import { Builder } from './libs/builder.js'
 import process from 'process'
 import path from 'path'
-import { blogify } from 'y-blogify'
 import index from './pages/index.js'
 import post from './pages/post.js'
+import category from './pages/category.js'
 import { markedHighlight } from 'marked-highlight'
 import { Marked } from 'marked'
 import hljs from 'highlight.js'
@@ -69,5 +69,10 @@ new Builder({
   .html({
     out: 'index.html',
     render: index,
+  })
+  .html({
+    paths: ['Review', 'JavaScript', 'Browser', 'DesignPattern'].map(name => ({ name })),
+    out: 'posts/[name].html',
+    render: category,
   })
   .build()

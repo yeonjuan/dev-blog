@@ -154,7 +154,7 @@
       "createdAt": "2023.01.01"
     },
     {
-      "category": "JavaScript",
+      "category": "DesignPattern",
       "title": "빌더 패턴 탐구(번역)",
       "description": ".....",
       "href": "/posts/DesignPattern/builder-pattern-exploration",
@@ -162,7 +162,7 @@
       "createdAt": "2023.01.01"
     },
     {
-      "category": "JavaScript",
+      "category": "Review",
       "title": "2020 OSS 컨트리뷰톤 멘티님들 후기 모음",
       "description": ".....",
       "href": "/posts/Review/2020-oss-contributhon",
@@ -178,7 +178,7 @@
       "createdAt": "2023.01.01"
     },
     {
-      "category": "JavaScript",
+      "category": "Review",
       "title": "Js13kGames 2019 참가 후기",
       "description": "Js13kGames는 2012년부터 매년 1회씩 개최된 HTML5 Game 개발자를 위한 대회입니다. 대회의 조건은 파일 크기를 13kb 이내로 제출해야 한다는 것과, 브라우저 상에서 동작해야 한다는 조건이 있습니다. 대회가 시작하면 게임 대회의 테마가 공개됩니다. 테마는 키워드로 주어지게 되는데 자유롭게 해석하여 게임을 만들고 제출하면 됩니다.",
       "href": "/posts/Review/js-13k-2019",
@@ -186,7 +186,7 @@
       "createdAt": "2023.01.01"
     },
     {
-      "category": "JavaScript",
+      "category": "Review",
       "title": "Hacktoberfest 2019 참가 후기",
       "description": ".....",
       "href": "/posts/Review/hacktoberfest-2019",

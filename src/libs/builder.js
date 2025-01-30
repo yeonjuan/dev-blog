@@ -82,6 +82,7 @@ export class Builder {
   /**
    * @param {object} params
    * @param {string} params.out
+   * @param {Record<string, any>[]} [params.paths]
    * @param {(content: string, getData: <T>(key: string) => T) => string} [params.render]
    * @returns {this}
    */
@@ -98,7 +99,7 @@ export class Builder {
       out: (/** @type {string[]} */...subPath) => path.resolve(this.outRoot, ...subPath),
     }
     const data = new Map()
-
+    console.log(this.commands)
     for (const { type, params } of this.commands) {
       switch (type) {
         case 'loadJson': {
@@ -164,17 +165,31 @@ export class Builder {
         }
         case 'html': {
           const render = params.render || (content => content)
+          const paths = params.paths || []
           const getData = key => data.get(key)
-          const out = resolvers.out(params.out)
-          if (!params.src) {
-            await fs.writeFile(out, render('', getData), 'utf-8')
-            return
-          }
-          const src = resolvers.src(params.src)
-          const content = await fs.readFile(src, 'utf-8')
-          const result = await render(content, getData)
+          if (paths.length <= 0) {
+            const out = resolvers.out(params.out)
+            if (!params.src) {
+              await fs.writeFile(out, render('', getData), 'utf-8')
+              break
+            }
+            const src = resolvers.src(params.src)
+            const content = await fs.readFile(src, 'utf-8')
+            const result = await render(content, getData)
 
-          await fs.writeFile(out, result, 'utf-8')
+            await fs.writeFile(out, result, 'utf-8')
+          }
+          else {
+            await Promise.all(paths.map(async (pathParams) => {
+              let replacedOut = params.out
+              Object.entries(pathParams).forEach(([key, value]) => {
+                replacedOut = replacedOut.replace(`[${key}]`, value)
+              })
+              const out = resolvers.out(replacedOut)
+              await fs.writeFile(out, render('', getData, pathParams), 'utf-8')
+            }))
+          }
+
           break
         }
       }
