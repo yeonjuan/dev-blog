@@ -12,7 +12,7 @@ const postItem = post => html`
       <p class="text-sm text-zinc-600 mb-8">
           ${post.description}
       </p>
-      <img src="${post.thumbnail}" class="m-auto max-w-2xl" alt="">
+      <img src="${post.thumbnail}" loading="lazy" class="m-auto max-w-2xl w-full" alt="">
     </a>
   </div>
 `

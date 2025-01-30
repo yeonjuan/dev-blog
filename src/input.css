@@ -4,3 +4,6 @@
 * {
   word-break: keep-all;
 }
+html {
+  scroll-padding-top: 64px;
+}

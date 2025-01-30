@@ -132,7 +132,7 @@
     {
       "category": "JavaScript",
       "title": "주니어 FE 개발자 오픈소스 성장기 - kakao tech",
-      "description": ".....",
+      "description": "카카오 사내 기술 세미나 ‘Techtalk’에서 발표했던 오픈소스 활동 소개와 오픈소스 활동을 통해 개발자로서 성장했던 이야기를 공유하고자 합니다.",
       "href": "https://tech.kakao.com/posts/444",
       "thumbnail": "/posts/JavaScript/assets/kakao-fe.png",
       "createdAt": "2023.01.01"
@@ -140,7 +140,7 @@
     {
       "category": "JavaScript",
       "title": "falsy & truthy",
-      "description": ".....",
+      "description": "falsy 와 truthy는 ECMA 스펙에 등장하는 단어는 아닙니다. JavaScript 동작을 이해하기 쉽게 하기위해 사용되는 단어입니다. 번역해보면 truthy는 \"참 같은 값\", falsy는 \"거짓 같은 값\" 정도로 해석되며...",
       "href": "/posts/JavaScript/falsy-truthy",
       "thumbnail": "/posts/JavaScript/assets/falsy-truthy.png",
       "createdAt": "2023.01.01"
@@ -148,7 +148,7 @@
     {
       "category": "JavaScript",
       "title": "return undefined vs null",
-      "description": ".....",
+      "description": "보통 어떤 값을 반환하는 함수에서 마땅히 반환할 값이 없을 때 null 또는 undefined 을 사용하곤 합니다...",
       "href": "/posts/JavaScript/return-null-vs-undefined",
       "thumbnail": "/posts/JavaScript/assets/undefined-null.png",
       "createdAt": "2023.01.01"
@@ -156,7 +156,7 @@
     {
       "category": "DesignPattern",
       "title": "빌더 패턴 탐구(번역)",
-      "description": ".....",
+      "description": "이번엔, 빌더를 JavaScript 관점으로 살펴보았습니다. 이 글에서는 현대적인 언어 특징을 활용하여 JavaScript, 특히 ES6에서 빌더를 모델링 하는 세 가지 기법을 살펴보겠습니다.",
       "href": "/posts/DesignPattern/builder-pattern-exploration",
       "thumbnail": "/posts/JavaScript/assets/builder-pattern.png",
       "createdAt": "2023.01.01"
@@ -164,7 +164,7 @@
     {
       "category": "Review",
       "title": "2020 OSS 컨트리뷰톤 멘티님들 후기 모음",
-      "description": ".....",
+      "description": "2020 오픈소스 컨트리뷰톤 행사에 멘토로 참여하게 되었는데 멘티로 참여하신 분들께서 후기를 작성해 주셨다.",
       "href": "/posts/Review/2020-oss-contributhon",
       "thumbnail": "/posts/Review/assets/2020-oss-contributhon.png",
       "createdAt": "2023.01.01"

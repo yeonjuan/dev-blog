@@ -156,7 +156,7 @@ export class Builder {
             const result = await parse(content)
             await fs.writeFile(
               out,
-              await render(result, key => data.get(key)),
+              await render(result, key => data.get(key), { originalFilename: file }),
               'utf-8',
             )
           }))
