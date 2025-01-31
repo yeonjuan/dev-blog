@@ -6,7 +6,7 @@
 Industry Idle 게임을 한 번도 해보지 않은 분들을 위해 설명하자면, 이 게임은 공장 자동화 및 경제 시뮬레이션 게임입니다.
 제가 직면한 주요 성능 문제는 렌더링 측면에서 발생했는데, 게임에서 미니멀한 그래픽을 제공하고 있다는 점을 생각하면 의외였습니다.
 
-![](https://github.com/insraq/insraq.github.com/assets/608221/8a4e9749-326b-4da6-ae96-3a68fec2de9c)
+![](./assets/8a4e9749-326b-4da6-ae96-3a68fec2de9c.gif)
 
 ## 왜 다시 타입스크립트/자바스크립트인가?
 
@@ -66,9 +66,9 @@ CivIdle에서는 시뮬레이션과 렌더링이 완전히 분리되어 "모든 
 다행히도 브라우저에는 매우 훌륭한 프로파일링 도구가 있습니다.
 Chrome에서 프로파일 세션을 실행하면 다음과 같은 결과가 나타납니다.
 
-![](https://github.com/insraq/insraq.github.com/assets/608221/89a4ed63-0f46-4786-a94c-66717d5d007d)
+![](./assets/89a4ed63-0f46-4786-a94c-66717d5d007d.png)
 
-프로파일러는 성능 저하의 주요 원인이 될 수 있는 함수를 보여 주는데, 이는 매우 희망적인 상황입니다. 이는 일반적으로 쉽게 개선할 수 있는 문제를 의미합니다. 
+프로파일러는 성능 저하의 주요 원인이 될 수 있는 함수를 보여 주는데, 이는 매우 희망적인 상황입니다. 이는 일반적으로 쉽게 개선할 수 있는 문제를 의미합니다.
 문제의 함수는 바로 이것입니다.
 
 ```ts
@@ -113,7 +113,7 @@ public distance(x1: number, y1: number, x2: number, y2: number): number {
 새 코드는 훨씬 더 나빠 보이고 스레드에서 안전하지 않지만 어쨌든 우리는 단일 스레드입니다.
 동일한 프로필을 실행하면 전체 시간이 21초에서 9초로 단축됩니다! 이것은 정말 쉬운 개선입니다!
 
-![](https://github.com/insraq/insraq.github.com/assets/608221/936b6f25-c730-4306-90e6-5ef664b8c8e1)
+![](./assets/936b6f25-c730-4306-90e6-5ef664b8c8e1.png)
 
 ## 메모이제이션과 캐싱
 
@@ -121,7 +121,7 @@ public distance(x1: number, y1: number, x2: number, y2: number): number {
 예제는 다음과 같습니다(함수 시그니처를 단순화했습니다. 실제 코드 베이스에서는 `string`은 타입을 가지고 있지만 여기서는 상관없습니다).
 
 ```ts
-function getBuildingCost(type: string, level: number): Record<string, number>
+function getBuildingCost(type: string, level: number): Record<string, number>;
 ```
 
 이는 메모이제이션의 좋은 대상입니다.
@@ -130,14 +130,14 @@ function getBuildingCost(type: string, level: number): Record<string, number>
 
 ```ts
 function memoize(func) {
-   const results = {};
-   return (...args) => {
-      const argsKey = JSON.stringify(args);
-      if (!results[argsKey]) {
-         results[argsKey] = func(...args);
-      }
-      return results[argsKey];
-   };
+  const results = {};
+  return (...args) => {
+    const argsKey = JSON.stringify(args);
+    if (!results[argsKey]) {
+      results[argsKey] = func(...args);
+    }
+    return results[argsKey];
+  };
 }
 ```
 
@@ -153,7 +153,7 @@ function memoize(func) {
 안타깝게도 우리가 기대했던 열매는 모두 수확했습니다. 이 시점에서 코드의 핫스팟은 대부분 문자열과 관련이 있습니다.
 
 1. 이전 메모이제이션 예제에서 이미 문자열 키를 사용했습니다.
-2. 게임에서는 타일을 나타내기 위해 `{x, y}`를 사용하고 있고 키가 필요할 때마다 `"x,y"` 문자열을 사용하고 있습니다. 몇몇 핫스팟은 두 형식간의 변화와 관련이 있습니다. 
+2. 게임에서는 타일을 나타내기 위해 `{x, y}`를 사용하고 있고 키가 필요할 때마다 `"x,y"` 문자열을 사용하고 있습니다. 몇몇 핫스팟은 두 형식간의 변화와 관련이 있습니다.
 
 문자열을 사용하면 코드를 쉽게 읽을 수 있습니다.
 하지만 안타깝게도 코드 실행 속도가 느려지기도 합니다.
@@ -161,7 +161,7 @@ function memoize(func) {
 타일을 표현하는 경우 x와 y를 정수로 패킹할 수 있습니다.
 
 ```ts
-const tile = (x << 16) |  y;
+const tile = (x << 16) | y;
 ```
 
 앞서 자바스크립트(V8)에서 작은 정수, 즉 기본적으로 포인터에 들어갈 수 있는 정수를 제외한 거의 모든 것이 힙에 할당된다고 언급했습니다.
@@ -179,50 +179,56 @@ const tile = (x << 16) |  y;
 
 ```ts
 // Before
-function calculate(building: string, options: { flag1: boolean; flag2: boolean; flag3: boolean }) {}
+function calculate(
+  building: string,
+  options: { flag1: boolean; flag2: boolean; flag3: boolean },
+) {}
 
 // After
 export enum Options {
-    None = 0, Flag1 = 1 << 0, Flag2 = 1 << 1, Flag3 = 1 << 2, TotalBits = 3,
+  None = 0,
+  Flag1 = 1 << 0,
+  Flag2 = 1 << 1,
+  Flag3 = 1 << 2,
+  TotalBits = 3,
 }
 
 function calculate(building: string, options: Options) {
-   const hash = (BuildingHash[building] << Options.TotalBits) | options;
+  const hash = (BuildingHash[building] << Options.TotalBits) | options;
 }
 ```
 
-## (숫자 키를 사용하는)Map/Set 채택 
+## (숫자 키를 사용하는)Map/Set 채택
 
 저는 고성능 자바스크립트를 전문적으로 작성하지 않고(고성능 코드를 작성하긴 하지만 다른 언어로 작성합니다), 자바스크립트 세계의 최신 기술을 잘 따르지 않기 때문에 **자바스크립트 성능 전문가가 아니라는 사실**을 인정합니다.
 자바스크립트에서 Map/Set의 존재를 어렴풋이 알고는 있지만 항상 평범한 오래된 객체를 사용해 왔습니다.
 그래서 게임에서 흔히 사용되는 패턴의 일부를 간단히 마이크로 벤치마크해 보았습니다.
 
 ```ts
-new Bench
-.add("access obj (number key)", () => {
-   let sum = 0;
-   for (let i = 0; i < 1000; i++) {
-      sum += numObj[(i << 16) | i];
-   }
+new Bench.add("access obj (number key)", () => {
+  let sum = 0;
+  for (let i = 0; i < 1000; i++) {
+    sum += numObj[(i << 16) | i];
+  }
 })
-.add("access map (number key)", () => {
-   let sum = 0;
-   for (let i = 0; i < 1000; i++) {
+  .add("access map (number key)", () => {
+    let sum = 0;
+    for (let i = 0; i < 1000; i++) {
       sum += numMap.get((i << 16) | i);
-   }
-})
-.add("access obj (string key)", () => {
-   let sum = 0;
-   for (let i = 0; i < 1000; i++) {
+    }
+  })
+  .add("access obj (string key)", () => {
+    let sum = 0;
+    for (let i = 0; i < 1000; i++) {
       sum += strObj[`${i},${i}`];
-   }
-})
-.add("access map (string key)", () => {
-   let sum = 0;
-   for (let i = 0; i < 1000; i++) {
+    }
+  })
+  .add("access map (string key)", () => {
+    let sum = 0;
+    for (let i = 0; i < 1000; i++) {
       sum += strMap.get(`${i},${i}`);
-   }
-});
+    }
+  });
 ```
 
 결과의 순위는 그다지 놀랍지 않지만 차이점은 있었습니다!
@@ -243,37 +249,36 @@ new Bench
 map vs object를 순회하는 밴치마크도 진행했습니다.
 
 ```ts
-new Bench
-.add("iterate obj (number key)", () => {
-   let sum = 0;
-   for (const key in numObj) {
-      sum += numObj[key];
-   }
+new Bench.add("iterate obj (number key)", () => {
+  let sum = 0;
+  for (const key in numObj) {
+    sum += numObj[key];
+  }
 })
-.add("iterate map (number key)", () => {
-   let sum = 0;
-   for (const [_, value] of numMap) {
+  .add("iterate map (number key)", () => {
+    let sum = 0;
+    for (const [_, value] of numMap) {
       sum += value;
-   }
-})
-.add("forEach map (number key)", () => {
-   let sum = 0;
-   numMap.forEach((val) => {
+    }
+  })
+  .add("forEach map (number key)", () => {
+    let sum = 0;
+    numMap.forEach((val) => {
       sum += val;
-   });
-})
-.add("iterate obj (string key)", () => {
-   let sum = 0;
-   for (const key in strObj) {
+    });
+  })
+  .add("iterate obj (string key)", () => {
+    let sum = 0;
+    for (const key in strObj) {
       sum += strObj[key];
-   }
-})
-.add("iterate map (string key)", () => {
-   let sum = 0;
-   for (const [_, value] of strMap) {
+    }
+  })
+  .add("iterate map (string key)", () => {
+    let sum = 0;
+    for (const [_, value] of strMap) {
       sum += value;
-   }
-})
+    }
+  });
 ```
 
 아래 표가 결과 입니다
@@ -300,7 +305,7 @@ new Bench
 또한 C/C++와 같은 언어에 비해 자바스크립트에서 마이크로 최적화를 수행하는 것이 훨씬 더 어렵다는걸 알게되었습니다.
 
 1. 마이크로 벤치마킹은 신뢰할 수 없을 수 있습니다. JIT는 워밍업이 필요합니다. 가비지 수집기를 끌 수 없습니다.
-2. 최적화는 V8의 특정 구현에 대해 수행되며, 이는 변경될 수 있습니다. 그리고 V8의 내부를 파악하는 것은 사소한 일이 아니며 소스 코드를 읽는 것도 쉽지 않습니다. 그리고 여러 단계에 걸친 JIT 최적화는 작업을 더욱 어렵게 만듭니다. 
+2. 최적화는 V8의 특정 구현에 대해 수행되며, 이는 변경될 수 있습니다. 그리고 V8의 내부를 파악하는 것은 사소한 일이 아니며 소스 코드를 읽는 것도 쉽지 않습니다. 그리고 여러 단계에 걸친 JIT 최적화는 작업을 더욱 어렵게 만듭니다.
 3. 대부분의 유용한 마이크로 최적화는 대개 데이터 로컬리티와 관련된 것(예: 캐시 라인에 더 많은 데이터를 넣을 수 있도록 데이터를 작게 만들거나 함께 액세스하는 데이터가 함께 위치하도록 하는 것)인데, 안타깝게도 자바스크립트에서는 이를 달성하기가 어렵습니다.
 
 '성공 사례'와는 별개로, 저는 눈에 띄지도 않는 않는 미세 최적화를 여러 번 시도해 보았습니다.
@@ -309,18 +314,18 @@ new Bench
 
 ```ts
 new Bench()
-.add("access array", () => {
-   let sum = 0;
-   for (let i = 0; i < 1000; i++) {
+  .add("access array", () => {
+    let sum = 0;
+    for (let i = 0; i < 1000; i++) {
       sum += numArray[i];
-   }
-})
-.add("access uint32array", () => {
-   let sum = 0;
-   for (let i = 0; i < 1000; i++) {
+    }
+  })
+  .add("access uint32array", () => {
+    let sum = 0;
+    for (let i = 0; i < 1000; i++) {
       sum += uint32Array[i];
-   }
-});
+    }
+  });
 ```
 
 ```
@@ -380,4 +385,3 @@ C++의 라이브러리는 수정 없이 사용할 수 있는 경우가 많지만
 CivIdle이 관심 있는 게임인 것 같다면 [Steam](https://store.steampowered.com/app/2181940/CivIdle/)으로 이동하여 확인해 보세요.
 
 [HN](https://news.ycombinator.com/item?id=39210048) 와 [Reddit](https://www.reddit.com/r/programming/comments/1afu6jh/squeezing_last_bit_of_javascript_performance_for/)에서 토론
-

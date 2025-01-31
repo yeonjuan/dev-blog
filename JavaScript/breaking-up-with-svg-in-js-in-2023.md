@@ -105,7 +105,7 @@ JS 안에 이미지를 넣고 싶지는 않을 것입니다.
 SVG를 JS 번들 밖으로 옮기면 파싱 및 컴파일 단계에서 벗어나게 됩니다.
 아래에서 이것이 왜 유익한지 알아보겠습니다.
 
-![](https://kurtextrem.de/assets/posts/2/js-exec.png)
+![](./assets/js-exec.png)
 
 <sub>크로미움에서 자바스크립트 다운로드 및 실행 시각화. 파싱 및 컴파일은 메인 스레드를 차단하지 않습니다.<a href="https://v8.dev/blog/cost-of-javascript-2019">web.dev</a></sub>
 
@@ -249,7 +249,6 @@ const App = () => (
 > ⚠️ `<use>` 주의사항:
 >
 > - `<mask>`와 `<clippath>`는 외부에서 로드해온 SVG에서 동작하지 않습니다. [➡️ 인라인화](#section5)로 해결하세요.
->
 > - SVG는 `<use>`를 사용할 때 CDN에서 로드될 수 없습니다. [➡️ CORS 챕터](#section-4-3)
 
 <a name="section4-2-1"></a>

@@ -1,0 +1,11 @@
+{
+  "root": "dev-blog",
+  "sitemap": {
+    "base": "yeonjuan.github.io/dev-blog",
+    "priority": 0.5,
+    "removeExtension": true,
+    "trailingSlash": false,
+    "changefreq": "monthly",
+    "keepIndexName": false
+  }
+}

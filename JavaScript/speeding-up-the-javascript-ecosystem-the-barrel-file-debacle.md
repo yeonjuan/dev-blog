@@ -141,7 +141,7 @@ import "./b";
 모든 파일은 비어 있으며 import 문 이외의 코드는 포함하지 않습니다.
 시간은 제 MacBook M1 Air (2020)에서 측정했습니다.
 
-![](https://marvinh.dev/media/js-tools-module-cost.png)
+![](./assets/js-tools-module-cost.png)
 
 보시다시피 모듈을 더 적게 로드하면 그만한 가치가 있습니다.
 이러한 숫자를 100개의 테스트 파일이 있는 프로젝트에 적용하고, 각 테스트 파일에 새로운 자식 프로세스를 생성하는 테스트 실행 도구를 사용한다고 가정해 봅시다.
