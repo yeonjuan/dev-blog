@@ -7,6 +7,7 @@ export default (children, data, { originalFilename }) => {
     return post.href.endsWith(originalFilename.replace('.md', '').replace(' ', '%20'))
   })
   const paths = post.href.split('/').filter(Boolean)
+  paths.shift()
   return layout({
     title: post.title + ' | DevBlog',
     children,
@@ -20,7 +21,7 @@ export default (children, data, { originalFilename }) => {
     },
     {
       title: post.title,
-      href: paths.join('/'),
+      href: ['', ...paths].join('/'),
     },
     ],
     link: html`
