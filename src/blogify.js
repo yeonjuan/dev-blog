@@ -38,6 +38,7 @@ new Builder({
 }).copy([
   ['src/assets', 'assets'],
   ['src/css', 'css'],
+  ['src/public', ''],
   ['src/scripts', 'scripts'],
   ['Browser/assets', 'posts/Browser/assets'],
   ['JavaScript/assets', 'posts/JavaScript/assets'],

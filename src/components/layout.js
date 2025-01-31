@@ -5,6 +5,7 @@ export default ({
   title,
   children,
   link = '',
+  breadcrumb = [],
   description,
 }) => {
   return html`
@@ -14,6 +15,7 @@ export default ({
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width" />
         <title>${title}</title>
+        <link href="/favicon.ico" rel="shortcut icon">
         ${description && html`<meta name="description" content="${description}">`}
         <link href="/output.css" type="text/css" rel="stylesheet" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -27,8 +29,15 @@ export default ({
       <body>
         <div class="relative">
             ${header()}
-          <main class="py-2 px-4 pt-20 max-w-3xl m-auto pb-20">
-              ${children}
+          <main class="py-2 px-4 pt-10 max-w-3xl m-auto pb-20">
+          ${!!breadcrumb.length && html`
+            <aside class="mt-14">
+              ${breadcrumb.map(({ href, title }) => {
+                return html`<a href="${href}" class="hover:underline">${title}</a>`
+              }).join(' &gt; ')}
+            </aside>
+          `}
+            ${children}
           </main>
         </div>
         <script src="/scripts/header.js"></script>
