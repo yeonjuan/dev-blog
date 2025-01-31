@@ -1,0 +1,160 @@
+
+   <!doctype html>
+    <html lang="ko">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>커스텀 프로퍼티를 이용해 CSS 와 자바스크립트 간 데이터 공유하기 | DevBlog</title>
+        <link href="/dev-blog/favicon.ico" rel="shortcut icon">
+        <meta name="description" content="이 글에서는 CSS 커스텀 프로퍼티를 활용해서 CSS 와 자바스크립트 간에 데이터를 공유하는 방법에 대해 설명합니다. 짧은 글이지만 CSS 커스텀 프로퍼티를 활용해 간단한 방법으로 요소의 스타일을 조작할 수 있다는 점을 알게 되어 공유합니다.">
+        <link href="/dev-blog/output.css" type="text/css" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
+          rel="stylesheet"
+        />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-ZBZX7LMVNE');
+        </script>
+        
+      <link href="/dev-blog/css/github.min.css" type="text/css" rel="stylesheet" />
+    
+    
+      </head>
+      <body>
+        <div class="relative">
+            
+  <style>
+        .hamburger {
+            cursor: pointer;
+            justify-content: space-between;
+            flex-direction: column;
+        }
+        .hamburger > div {
+            height: 2px;
+            transition: 0.2s ease-out;
+            z-index: 999;
+        }
+        .menuInput:checked ~ .hamburger > div:nth-child(1) {
+            transform: translateY(6.5px) rotate(45deg);
+        }
+        .menuInput:checked ~ .hamburger > div:nth-child(2) {
+            opacity: 0;
+        }
+        .menuInput:checked ~ .hamburger > div:nth-child(3) {
+            transform: translateY(-6.5px) rotate(-45deg);
+        }
+    </style>
+  <div id="overlay" class="backdrop-blur-sm bg-black/20 dark:bg-slate-900/80 fixed h-full inset-0 hidden"></div>
+  <header class="bg-zinc-800 text-white h-12 fixed flex justify-between items-center w-full px-4">
+    <a
+      class="w-10 flex items-center justify-center"
+      href="https://github.com/yeonjuan/dev-blog"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <img
+        src="/dev-blog/assets/ic-github.svg"
+        alt="go to github"
+        width="20"
+      >
+    </a>
+    <span>
+      <a href="/dev-blog/">
+        DEV BLOG
+      </a>
+    </span>
+    <div class="w-10">
+      <input
+        id="menu"
+        type="checkbox"
+        class="menuInput peer sr-only hidden"
+        aria-hidden="true"
+      >
+      <label
+        for="menu"
+        aria-label="menu button"
+        class="hamburger flex flex-col justify-between ml-auto h-[21px] w-[21px] px-[1px] py-[3px] [&>div]:h-[2px] [&>div]:w-[18px] [&>div]:bg-white hover:cursor-pointer"
+      >
+        <div></div>
+        <div></div>
+        <div></div>
+      </label>
+      <nav class="fixed text-black transition-[max-height] duration-200 overflow-hidden max-h-0 top-12 left-[0px] peer-checked:max-h-[200px] bg-white w-full border-b border-black">
+        <ul class="p-4">
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/">HOME</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/posts/JavaScript">JavaScript</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/posts/Review">Review</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/posts/Browser">Browser</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+          <main class="py-2 px-4 pt-10 max-w-3xl m-auto pb-20">
+          
+            <aside class="mt-14">
+              <a href="/dev-blog/" class="hover:underline">Home</a> &gt; <a href="/dev-blog/dev-blog/posts" class="hover:underline">JavaScript</a> &gt; <a href="dev-blog/posts/JavaScript/sharing-data-between-css-and-javascript-using-custom-properties" class="hover:underline">커스텀 프로퍼티를 이용해 CSS 와 자바스크립트 간 데이터 공유하기</a>
+            </aside>
+          
+            
+    <h1 id="-css" class="text-2xl my-8 font-bold">
+      커스텀 프로퍼티를 이용해 CSS 와 자바스크립트 간 데이터 공유하기
+    </h1><blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6">원문: <a href="https://christianheilmann.com/2021/02/08/sharing-data-between-css-and-javascript-using-custom-properties/" class="text-orange-500">https://christianheilmann.com/2021/02/08/sharing-data-between-css-and-javascript-using-custom-properties/</a></p></blockquote><p class="my-1 text-sm leading-7 mb-6">여전히 웹 개발 업계에서 가장 큰 싸움 중 하나는 CSS vs 자바스크립트입니다.
+둘 모두 각자의 장점과 고유한 문법 및 사상이 있으며, 이를 이해하기가 어려울 수 있습니다.</p><p class="my-1 text-sm leading-7 mb-6">그렇기에 두 가지를 서로 소통하게 하고 각각의 장점을 살릴 수 있는 방법이 있다는 점이 맘에 듭니다.
+우선, 저는 DOM 요소의 스타일 객체를 조작하는 것이 항상 성가셨습니다.
+이는 요소에 접근해서 다양한 스타일 속성을 설정하는 것을 의미하는데요.
+결국 직접 작성하고 싶지 않을 인라인 스타일 속성이 탄생하곤 합니다.</p><p class="my-1 text-sm leading-7 mb-6">개인적으로 훨씬 깔끔한 방법은 CSS 커스텀 프로퍼티를 사용하는 것입니다.
+이를 보통 &quot;CSS 변수&quot;라고 하며, <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">--</code> 구문을 사용해서 CSS에서 정의합니다.</p><pre><code class="my-4 hljs text-xs language-css"><span class="hljs-selector-pseudo">:root</span> {
+  <span class="hljs-attr">--pagebackground</span>: powderblue;
+}
+<span class="hljs-selector-tag">body</span> {
+  <span class="hljs-attribute">background</span>: <span class="hljs-built_in">var</span>(--pagebackground);
+}</code></pre><p class="my-1 text-sm leading-7 mb-6">&quot;변수&quot;이기 때문에, 스타일 문서 전체에서 재사용할 수 있습니다.</p><p class="my-1 text-sm leading-7 mb-6">이를 자바스크립트를 사용해 조작하면 흥미로워집니다.
+이 예제의 경우 문서의 루트 요소에 CSS 커스텀 프로퍼티가 설정되어 있습니다.
+따라서 자바스크립트로 다음과 같이 읽어올 수 있습니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">let</span> bg = <span class="hljs-title function_">getComputedStyle</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-property">documentElement</span>).<span class="hljs-title function_">getPropertyValue</span>(
+  <span class="hljs-string">&quot;--pagebackground&quot;</span>
+);</code></pre><p class="my-1 text-sm leading-7 mb-6">또한 루트 요소(또는 커스텀 프로퍼티가 있는 다른 요소)의 스타일에 접근하고 자바스크립트를 통해 속성을 설정할 수 있습니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-variable language_">document</span>.<span class="hljs-property">documentElement</span>.<span class="hljs-property">style</span>.<span class="hljs-title function_">setProperty</span>(<span class="hljs-string">&quot;--pagebackground&quot;</span>, <span class="hljs-string">&quot;firebrick&quot;</span>);</code></pre><p class="my-1 text-sm leading-7 mb-6">이 예제는 <a href="https://codepen.io/codepo8/pen/abBZVdp" class="text-orange-500">codepen</a>에서 확인할 수 있습니다:</p><p class="my-1 text-sm leading-7 mb-6">이것의 좋은 점은 자바스크립트의 힘을 활용해서 CSS가 접근할 수 없는 것을 제공할 수 있다는 것입니다.
+예를 들어, CSS는 마우스 커서의 좌표를 읽을 수 없지만 자바스크립트는 읽을 수 있습니다.</p><p class="my-1 text-sm leading-7 mb-6">CSS에서 두 속성을 0으로 정의할 수 있습니다.</p><pre><code class="my-4 hljs text-xs language-css"><span class="hljs-selector-pseudo">:root</span> {
+  <span class="hljs-attr">--mouse-x</span>: <span class="hljs-number">0</span>;
+  <span class="hljs-attr">--mouse-y</span>: <span class="hljs-number">0</span>;
+}</code></pre><p class="my-1 text-sm leading-7 mb-6">그리고 자바스크립트에서는 document에 mousemove 핸들러를 추가하고 이 두 속성을 조작합니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">let</span> root = <span class="hljs-variable language_">document</span>.<span class="hljs-property">documentElement</span>;
+<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&quot;mousemove&quot;</span>, <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> {
+  root.<span class="hljs-property">style</span>.<span class="hljs-title function_">setProperty</span>(<span class="hljs-string">&quot;--mouse-x&quot;</span>, e.<span class="hljs-property">x</span>);
+  root.<span class="hljs-property">style</span>.<span class="hljs-title function_">setProperty</span>(<span class="hljs-string">&quot;--mouse-y&quot;</span>, e.<span class="hljs-property">y</span>);
+});</code></pre><p class="my-1 text-sm leading-7 mb-6">이것이 필요한 자바스크립트의 전부입니다.
+CSS 커스텀 프로퍼티가 존재하고 값을 변경할 수 있으므로, 예를 들어 마우스 커서가 있는 위치에 원을 표시할 수 있습니다.</p><p class="my-1 text-sm leading-7 mb-6">HTML:</p><pre><code class="my-4 hljs text-xs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;ball&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre><p class="my-1 text-sm leading-7 mb-6">CSS:</p><pre><code class="my-4 hljs text-xs language-css"><span class="hljs-selector-pseudo">:root</span> {
+  <span class="hljs-attr">--mouse-x</span>: <span class="hljs-number">0</span>;
+  <span class="hljs-attr">--mouse-y</span>: <span class="hljs-number">0</span>;
+}
+<span class="hljs-selector-id">#ball</span> {
+  <span class="hljs-attribute">width</span>: <span class="hljs-number">20px</span>;
+  <span class="hljs-attribute">height</span>: <span class="hljs-number">20px</span>;
+  <span class="hljs-attribute">background</span>: white;
+  <span class="hljs-attribute">border-radius</span>: <span class="hljs-number">100%</span>;
+  <span class="hljs-attribute">transform</span>: <span class="hljs-built_in">translate</span>(
+    <span class="hljs-built_in">calc</span>(<span class="hljs-built_in">calc</span>(<span class="hljs-built_in">var</span>(--mouse-x) - <span class="hljs-number">10</span>) * <span class="hljs-number">1px</span>),
+    <span class="hljs-built_in">calc</span>(<span class="hljs-built_in">calc</span>(<span class="hljs-built_in">var</span>(--mouse-y) - <span class="hljs-number">10</span>) * <span class="hljs-number">1px</span>)
+  );
+}</code></pre><p class="my-1 text-sm leading-7 mb-6">CSS 코드에 대한 설명입니다:</p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">ball DIV의 너비와 높이를 20픽셀로 설정하고 배경은 흰색으로 설정합니다.</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">border-radius를 100%로 추가하면 사각형이 아닌 원이 표시됩니다.</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">그런 다음 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">transform: translate</code>를 사용하여 화면에 원을 배치합니다. 예를 들어 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">transform: translate(200px, 300px)</code>를 사용하여 ball을 가로 200픽셀, 세로 300픽셀에 배치할 수 있습니다.</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">자바스크립트는 CSS 커스텀 프로퍼티를 숫자 값으로 설정하므로 여기에 &quot;1px&quot;를 곱하여 픽셀로 변환해야 합니다.</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">ball의 크기가 20픽셀이므로 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">--mouse-x</code>, <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">--mouse-y</code>에 바로 배치할 순 없고 커서 중앙에 배치하기 위해 10을 빼야 합니다.</p></li></ul><p class="my-1 text-sm leading-7 mb-6">이 트릭을 사용하면 복잡한 계산을 수행하며 브라우저 상태와 인터랙션 상태를 자바스크립트로 읽으면서도 모든 룩앤필(look and feel)을 CSS로 유지할 수 있습니다. 저는 이 방법이 아주 마음에 듭니다</p><p class="my-1 text-sm leading-7 mb-6">실제로 작동하는 모습을 보고 싶으시다면 이 <a href="https://codepen.io/codepo8/pen/oNYxBLd" class="text-orange-500">codepen</a>을 사용해 보세요.
+또한 마우스 x 및 y 데이터를 재사용하는 방법을 보여주기 위해 배경 효과도 추가했습니다.</p>
+          </main>
+        </div>
+        <script src="/dev-blog/scripts/header.js"></script>
+      </body>
+    </html>
+    

@@ -1,0 +1,253 @@
+
+   <!doctype html>
+    <html lang="ko">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>브라우저가 알려주지 않는 67가지 이상한 디버깅 트릭 (번역) | DevBlog</title>
+        <link href="/dev-blog/favicon.ico" rel="shortcut icon">
+        <meta name="description" content="이 글에서는 브라우저에서 사용할 수 있는 여러 가지 유용한 디버깅 트릭을 소개합니다. 어느 정도 디버깅에 익숙하신 분들을 위한 글로 기본적인 사용법을 다루지는 않습니다. “이럴 땐 어떻게 디버깅하지?“라는 생각이 들 때 이 글을 찾아보면 도움이 될 것 같습니다.">
+        <link href="/dev-blog/output.css" type="text/css" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
+          rel="stylesheet"
+        />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-ZBZX7LMVNE');
+        </script>
+        
+      <link href="/dev-blog/css/github.min.css" type="text/css" rel="stylesheet" />
+    
+    
+      </head>
+      <body>
+        <div class="relative">
+            
+  <style>
+        .hamburger {
+            cursor: pointer;
+            justify-content: space-between;
+            flex-direction: column;
+        }
+        .hamburger > div {
+            height: 2px;
+            transition: 0.2s ease-out;
+            z-index: 999;
+        }
+        .menuInput:checked ~ .hamburger > div:nth-child(1) {
+            transform: translateY(6.5px) rotate(45deg);
+        }
+        .menuInput:checked ~ .hamburger > div:nth-child(2) {
+            opacity: 0;
+        }
+        .menuInput:checked ~ .hamburger > div:nth-child(3) {
+            transform: translateY(-6.5px) rotate(-45deg);
+        }
+    </style>
+  <div id="overlay" class="backdrop-blur-sm bg-black/20 dark:bg-slate-900/80 fixed h-full inset-0 hidden"></div>
+  <header class="bg-zinc-800 text-white h-12 fixed flex justify-between items-center w-full px-4">
+    <a
+      class="w-10 flex items-center justify-center"
+      href="https://github.com/yeonjuan/dev-blog"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <img
+        src="/dev-blog/assets/ic-github.svg"
+        alt="go to github"
+        width="20"
+      >
+    </a>
+    <span>
+      <a href="/dev-blog/">
+        DEV BLOG
+      </a>
+    </span>
+    <div class="w-10">
+      <input
+        id="menu"
+        type="checkbox"
+        class="menuInput peer sr-only hidden"
+        aria-hidden="true"
+      >
+      <label
+        for="menu"
+        aria-label="menu button"
+        class="hamburger flex flex-col justify-between ml-auto h-[21px] w-[21px] px-[1px] py-[3px] [&>div]:h-[2px] [&>div]:w-[18px] [&>div]:bg-white hover:cursor-pointer"
+      >
+        <div></div>
+        <div></div>
+        <div></div>
+      </label>
+      <nav class="fixed text-black transition-[max-height] duration-200 overflow-hidden max-h-0 top-12 left-[0px] peer-checked:max-h-[200px] bg-white w-full border-b border-black">
+        <ul class="p-4">
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/">HOME</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/posts/JavaScript">JavaScript</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/posts/Review">Review</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/posts/Browser">Browser</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+          <main class="py-2 px-4 pt-10 max-w-3xl m-auto pb-20">
+          
+            <aside class="mt-14">
+              <a href="/dev-blog/" class="hover:underline">Home</a> &gt; <a href="/dev-blog/dev-blog/posts" class="hover:underline">Browser</a> &gt; <a href="dev-blog/posts/Browser/browser-debugging-tricks" class="hover:underline">브라우저가 알려주지 않는 67가지 이상한 디버깅 트릭 (번역)</a>
+            </aside>
+          
+            
+    <h1 id="-67" class="text-2xl my-8 font-bold">
+      브라우저가 알려주지 않는 67가지 이상한 디버깅 트릭
+    </h1><blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6">원본: <a href="https://alan.norbauer.com/articles/browser-debugging-tricks" class="text-orange-500">https://alan.norbauer.com/articles/browser-debugging-tricks</a></p></blockquote><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#advanced-conditional-breakpoints" class="text-orange-500">조건부 중단점 고급 활용법</a></p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#logpoints--tracepoints" class="text-orange-500">로그 지점 / 추적 지점</a></p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#watch-pane" class="text-orange-500">감시 창(Watch Pane)</a></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#tracing-callstacks" class="text-orange-500">호출 스택 추적</a></p></li></ul></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#changing-program-behavior" class="text-orange-500">프로그램 동작 변경하기</a></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#quick-and-dirty-performance-profiling" class="text-orange-500">빠르고 간단한 성능 프로파일링</a></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#using-function-arity" class="text-orange-500">함수의 항수(Arity) 활용</a></p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#break-on-number-of-arguments" class="text-orange-500">인자 갯수로 중단</a></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#break-on-function-arity-mismatch" class="text-orange-500">항수 불일치로 중단</a></p></li></ul></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#using-time" class="text-orange-500">시간 활용</a></p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#skip-page-load" class="text-orange-500">페이지 로드 스킵</a></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#skip-n-seconds" class="text-orange-500">N 초 스킵</a></p></li></ul></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#using-css" class="text-orange-500">CSS 활용</a></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#even-calls-only" class="text-orange-500">짝수 호출만</a></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#break-on-sample" class="text-orange-500">랜덤 중단</a></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#never-pause-here" class="text-orange-500">절대 중단시키지 않기</a></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#automatic-instance-ids" class="text-orange-500">자동 인스턴스 ID</a></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#programmatically-toggle" class="text-orange-500">프로그래밍 토글</a></p></li></ul></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#monitor-class-calls" class="text-orange-500">monitor() class 호출</a></p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#from-a-specific-instance" class="text-orange-500">특정 인스턴스에서</a></p></li></ul></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#call-and-debug-a-function" class="text-orange-500">함수 호출 및 디버깅</a></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#pause-execution-on-url-change" class="text-orange-500">URL 변경시 실행 일시 중지</a></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#debugging-property-reads" class="text-orange-500">프로퍼티 읽기 디버깅</a></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#use-copy" class="text-orange-500">copy() 활용</a></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#debugging-htmlcss" class="text-orange-500">HTML/CSS 디버깅</a></p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#inspect-the-dom-with-js-disabled" class="text-orange-500">JS 비활성화 상태에서 DOM 검사</a></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#inspect-an-elusive-element" class="text-orange-500">찾기 어려운 요소 검사</a></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#record-snapshots-of-the-dom" class="text-orange-500">DOM 스냅샷 기록</a></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#monitor-focused-element" class="text-orange-500">포커싱된 요소 모니터링</a></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#find-bold-elements" class="text-orange-500">볼드 요소 찾기</a></p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#just-descendants" class="text-orange-500">하위 요소만</a></p></li></ul></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#reference-currently-selected-element" class="text-orange-500">현재 선택된 요소 참조</a></p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#previous-elements" class="text-orange-500">이전 요소</a></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#get-event-listeners" class="text-orange-500">이벤트 리스너 가져오기</a></p></li></ul></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#monitor-events-for-element" class="text-orange-500">요소에 대한 이벤트 모니터링</a></p></li></ul></li></ul><p class="my-1 text-sm leading-7 mb-6">브라우저의 디버거<sup><a href="#1">1</a></sup>를 최대한 활용하기 위한 유용하지만 뻔하지 않은 방법들입니다.
+개발자 도구에 대한 중급 이상의 이해를 가지고 있다고 가정합니다.</p>
+    <h2 id="-a-id-advanced-conditional-breakpoints-a" class="text-xl my-4 font-semibold">
+      <a id="advanced-conditional-breakpoints"></a> 조건부 중단점 고급 활용법
+    </h2><p class="my-1 text-sm leading-7 mb-6">예상치 못한 위치에서 사이드 이펙트가 있는 표현식을 사용할 때, 조건부 중단점과 같은 기본 기능을 활용하여 더 많은 기능을 끌어낼 수 있습니다.</p><a id="logpoints--tracepoints"></a> 로그 지점 / 추적 지점<p class="my-1 text-sm leading-7 mb-6">예를 들어, 중단점에서 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">console.log</code>를 사용할 수 있습니다.
+로그 지점은 실행을 일시 중지하지 않고 콘솔에 기록하는 중단점입니다.
+마이크로소프트 엣지에는 오래전부터 로그 지점이 내장되어 있었고 크롬은 v73에서 로그 지점을 추가했지만 파이어 폭스에서는 그렇지 않습니다.
+하지만 조건부 중단점을 사용하여 모든 브라우저에서 중단점을 시뮬레이션할 수 있습니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/conditional-breakpoint-console-log.gif"></p><p class="my-1 text-sm leading-7 mb-6">해당 줄이 얼마나 많이 실행되었는지 카운트하고 싶다면 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">console.log</code> 대신 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">console.count</code>를 사용하세요.</p><p class="my-1 text-sm leading-7 mb-6">변경 (2020년 5월): 이제 모든 주요 브라우저에서 로그 지점/추적 지점을 지원합니다. (<a href="https://developers.google.com/web/updates/2019/01/devtools#logpoints" class="text-orange-500">Chrome 로그 지점</a>, <a href="https://learn.microsoft.com/en-us/archive/microsoft-edge/legacy/developer/#breakpoints" class="text-orange-500">Edge 추적 지점</a>, Firefox <a href="https://firefox-source-docs.mozilla.org/devtools-user/debugger/set_a_logpoint/index.html" class="text-orange-500">로그 지점</a>)</p><a id="watch-pane"></a> 감시 창 (Watch pane)<p class="my-1 text-sm leading-7 mb-6">감시 창에서 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">console.log</code>를 사용할 수도 있습니다.
+예를 들어 디버거에서 앱이 중단될 때마다 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">localStorage</code>의 스냅샷을 덤프하고 싶다면 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">console.table(localStorage)</code> 감지를 생성할 수 있습니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/console-table-in-watch.png"></p><p class="my-1 text-sm leading-7 mb-6">또는 DOM이 변경된 후 표현식을 실행하려면 요소 검사기에서 DOM 변경 중단점을 설정합니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/conditional-breakpoint-DOM-mutation-chrome.png"></p><p class="my-1 text-sm leading-7 mb-6">그런 다음 감시 표현식을 추가합니다.
+예를 들어 DOM 스냅샷 기록을 하려면 다음과 같이 합니다:</p><pre><code class="my-4 hljs text-xs language-js">(<span class="hljs-variable language_">window</span>.<span class="hljs-property">doms</span> = <span class="hljs-variable language_">window</span>.<span class="hljs-property">doms</span> || []).<span class="hljs-title function_">push</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-property">documentElement</span>.<span class="hljs-property">outerHTML</span>);</code></pre><p class="my-1 text-sm leading-7 mb-6">이제 DOM 하위 트리를 수정한 후 디버거가 실행을 일시 중지하고 새 DOM 스냅샷이 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">window.doms</code> 배열의 끝에 오게 됩니다.(실행을 일시 중지하지 않는 DOM 변경 중단점을 생성하는 방법은 없습니다.)</p><a id="tracing-callstacks"></a> 호출 스택 추적<p class="my-1 text-sm leading-7 mb-6">로딩 스피너를 표시하는 함수와 이를 감추는 함수가 있는데 코드 어딘가에서 숨기기를 호출하지 않고 표시 메서드만 호출하고 있다고 가정해 보겠습니다.
+짝이 없는 표시 호출의 소스를 어떻게 찾을 수 있을까요?
+show 메서드의 조건부 중단점에서 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">console.trace</code>를 사용하여 코드를 실행하고, show 메서드의 마지막 스택 기록을 찾은 다음 호출자를 클릭하여 해당 코드로 이동합니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/console-trace-find-stack.gif"></p>
+    <h2 id="-a-id-changing-program-behavior-a" class="text-xl my-4 font-semibold">
+      <a id="changing-program-behavior"></a> 프로그램 동작 변경하기
+    </h2><p class="my-1 text-sm leading-7 mb-6">프로그램 동작에 사이드 이펙트가 있는 표현식을 사용하면 브라우저에서 바로 프로그램 동작을 변경할 수 있습니다.</p><p class="my-1 text-sm leading-7 mb-6">예를 들어 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">getPerson</code> 함수의 매개변수인 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">id</code>를 재정의할 수 있습니다.
+<code class="bg-gray-100 px-1 rounded-md inline-block text-sm">id=1</code>은 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">true</code>로 평가되므로 이 조건부 중단점은 디버거를 일시 중지합니다.
+이를 방지하려면 표현식에 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">false</code>를 추가하세요.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/conditional-breakpoint-parameter-override.gif"></p>
+    <h2 id="-a-id-quick-and-dirty-performance-profiling-a" class="text-xl my-4 font-semibold">
+      <a id="quick-and-dirty-performance-profiling"></a> 빠르고 간단한 성능 프로파일링
+    </h2><p class="my-1 text-sm leading-7 mb-6">조건부 중단점 평가 시간 등으로 성능 프로파일링을 혼란스럽게 만들어서는 안 되지만, 무언가를 실행하는 데 걸리는 시간을 빠르고 간단하게 측정하고 싶다면 조건부 중단점에서 콘솔 타이밍 API를 사용할 수 있습니다.
+시작 지점에 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">console.time('label')</code> 조건으로 중단점을 설정하고 종료 지점에 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">console.timeEnd('label')</code> 조건으로 중단점을 설정하면 됩니다.
+측정 대상 항목이 실행될 때마다 브라우저는 소요 시간을 콘솔에 기록합니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/console-time-performance-profile.gif"></p>
+    <h2 id="-a-id-using-function-arity-a-arity" class="text-xl my-4 font-semibold">
+      <a id="using-function-arity"></a> 함수의 항수(Arity) 활용
+    </h2><a id="break-on-number-of-arguments"></a> 인자 갯수에 따른 중단<p class="my-1 text-sm leading-7 mb-6">현재 함수가 3개의 인수로 호출될 때만 일시 중지하기
+<code class="bg-gray-100 px-1 rounded-md inline-block text-sm">arguments.callee.length === 3</code></p><p class="my-1 text-sm leading-7 mb-6">옵셔널 매개변수가 있는 함수가 있을 때 유용합니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/conditional-breakpoint-argument-length.gif"></p><a id="break-on-function-arity-mismatch"></a> 항수 불일치시 중단<p class="my-1 text-sm leading-7 mb-6">현재 함수가 잘못된 인수 개수로 호출될 때만 일시 중지합니다. <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">(arguments.callee.length) != arguments.length</code></p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/conditional-breakpoint-arity-check.gif"></p><p class="my-1 text-sm leading-7 mb-6">함수 호출부의 버그를 찾을 때 유용합니다.</p>
+    <h2 id="-a-id-using-time-a" class="text-xl my-4 font-semibold">
+      <a id="using-time"></a> 시간 활용
+    </h2><a id="skip-page-load"></a> 페이지 로드 스킵<p class="my-1 text-sm leading-7 mb-6">페이지 로드 후 5초 동안 일시 중지하지 않기
+<code class="bg-gray-100 px-1 rounded-md inline-block text-sm">performance.now() &gt; 5000</code></p><p class="my-1 text-sm leading-7 mb-6">중단점을 설정하고 싶지만 초기 페이지 로드 후 실행을 일시 중지하는 데만 관심이 있는 경우에 유용합니다.</p><a id="skip-n-seconds"></a> N 초 스킵하기<p class="my-1 text-sm leading-7 mb-6">다음 5초 이내에 중단점에 도달하면 실행을 일시 중지하지 않고, 그 이후에는 언제든지 일시 중지합니다.</p><pre><code class="my-4 hljs text-xs language-js">(<span class="hljs-variable language_">window</span>.<span class="hljs-property">baseline</span> = <span class="hljs-variable language_">window</span>.<span class="hljs-property">baseline</span> || <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>()),
+  <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>() - <span class="hljs-variable language_">window</span>.<span class="hljs-property">baseline</span> &gt; <span class="hljs-number">5000</span>;</code></pre><p class="my-1 text-sm leading-7 mb-6">원하는 경우 언제든지 콘솔에서 카운터를 재설정 합니다. <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">window.baseline = Date.now()</code></p>
+    <h2 id="-a-id-using-css-a-css" class="text-xl my-4 font-semibold">
+      <a id="using-css"></a> CSS 사용
+    </h2><p class="my-1 text-sm leading-7 mb-6">계산된 CSS 값에 따라 일시 중지하기(예: document body의 배경색이 빨간색일 때만 실행 일시 중지):</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-variable language_">window</span>.<span class="hljs-title function_">getComputedStyle</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-property">body</span>).<span class="hljs-property">backgroundColor</span> === <span class="hljs-string">&quot;rgb(255,0,0)&quot;</span>;</code></pre>
+    <h2 id="-a-id-even-calls-only-a" class="text-xl my-4 font-semibold">
+      <a id="even-calls-only"></a> 짝수 호출만
+    </h2><p class="my-1 text-sm leading-7 mb-6">줄이 짝수 번 실행될 때마다 일시 중지:</p><pre><code class="my-4 hljs text-xs language-js">(<span class="hljs-variable language_">window</span>.<span class="hljs-property">counter</span> = <span class="hljs-variable language_">window</span>.<span class="hljs-property">counter</span> || <span class="hljs-number">0</span>), <span class="hljs-variable language_">window</span>.<span class="hljs-property">counter</span> % <span class="hljs-number">2</span> === <span class="hljs-number">0</span>;</code></pre>
+    <h2 id="-a-id-break-on-sample-a" class="text-xl my-4 font-semibold">
+      <a id="break-on-sample"></a> 무작위 중단
+    </h2><p class="my-1 text-sm leading-7 mb-6">줄을 실행을 무작위로 중단합니다.(예: 줄이 실행되는 10번 중 1번만 중단) <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">Math.random() &lt; 0.1</code></p>
+    <h2 id="-a-id-never-pause-here-a" class="text-xl my-4 font-semibold">
+      <a id="never-pause-here"></a> 절대 중단시키지 않기
+    </h2><img width="30" alt="chrome" src="https://alan.norbauer.com/_next/static/media/chrome.2d2a19fd.svg">
+
+<p class="my-1 text-sm leading-7 mb-6">공백을 우클릭하고 &quot;Never Pause Here&quot;을 선택하면 크롬은 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">false</code> 인 절대 통과하지 않는 조건부 중단점을 생성합니다.
+이를 통해 디버거는 이 라인에서 일시 중지되지 않습니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/never-pause-here.png"></p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/never-pause-here-result.png"></p><p class="my-1 text-sm leading-7 mb-6">XHR 중단점에서 한 줄을 제외하거나, 예외가 발생했을 때 이를 무시하고 싶을 때 유용합니다.</p>
+    <h2 id="-a-id-automatic-instance-ids-a-id" class="text-xl my-4 font-semibold">
+      <a id="automatic-instance-ids"></a> 자동 인스턴스 ID
+    </h2><p class="my-1 text-sm leading-7 mb-6">생성자에서 아래과 같은 조건부 중단점을 설정하여 클래스의 모든 인스턴스에 고유 ID를 자동으로 할당하세요.
+<code class="bg-gray-100 px-1 rounded-md inline-block text-sm">(window.instances = window.instances || []).push(this)</code>.</p><p class="my-1 text-sm leading-7 mb-6">그런 다음 고유 ID를 검색하려면 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">window.instances.indexOf(instance)</code>를 사용하세요. (예: 클래스 메서드에 있는 경우 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">window.instances.indexOf(this)</code>).</p><a id="programmatically-toggle"></a> 프로그래밍 토글<p class="my-1 text-sm leading-7 mb-6">전역 boolean을 사용하여 하나 이상의 조건부 중단점을 생성합니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/conditional-breakpoint-gated.png"></p><p class="my-1 text-sm leading-7 mb-6">그런 다음 프로그래밍 방식으로 다음과 같이 boolean을 토글 합니다.</p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">콘솔에서 수동으로 하는 방법은 다음과 같습니다.</p></li></ul><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-variable language_">window</span>.<span class="hljs-property">enableBreakpoints</span> = <span class="hljs-literal">true</span>;</code></pre><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">다른 중단점에서 하는 방법은 다음과 같습니다.</p></li></ul><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/conditional-breakpoint-gated-enable-from-breakpoint.png"></p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">콘솔의 타이머에서 하는 방법은 다음과 같습니다.</p></li></ul><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> (<span class="hljs-variable language_">window</span>.<span class="hljs-property">enableBreakpoints</span> = <span class="hljs-literal">true</span>), <span class="hljs-number">5000</span>);</code></pre><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">기타</p></li></ul>
+    <h2 id="-a-id-monitor-class-calls-a-monitor-class" class="text-xl my-4 font-semibold">
+      <a id="monitor-class-calls"></a> monitor() class 호출
+    </h2><img width="30" alt="chrome" src="https://alan.norbauer.com/_next/static/media/chrome.2d2a19fd.svg">
+
+<p class="my-1 text-sm leading-7 mb-6">크롬의 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">monitor</code> 커맨드 라인 메서드를 사용해서 모든 클래스 메서드 호출을 쉽게 추적할 수 있습니다.
+예를 들어 아래와 같은 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">Dog</code> 클래스가 있다고 가정해봅시다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Dog</span> {
+  <span class="hljs-title function_">bark</span>(<span class="hljs-params">count</span>) {
+    <span class="hljs-comment">/* ... */</span>
+  }
+}</code></pre><p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">Dog</code>의 모든 인스턴스에 대한 모든 호출을 알고 싶으면 명령줄에 아래 내용을 붙여 넣습니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">var</span> p = <span class="hljs-title class_">Dog</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>;
+<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">getOwnPropertyNames</span>(p).<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">k</span>) =&gt;</span> <span class="hljs-title function_">monitor</span>(p[k]));</code></pre><p class="my-1 text-sm leading-7 mb-6">그러면 콘솔에 출력됩니다.</p><pre><code class="my-4 hljs text-xs language-">&gt; function bark called with arguments: 2</code></pre><p class="my-1 text-sm leading-7 mb-6">메서드 호출에 대해 실행을 일시 중지하려면(콘솔에 기록하는 대신) <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">monitor</code> 대신 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">debug</code>를 사용할 수 있습니다.</p><a id="from-a-specific-instance"></a> 특정 인스턴스에서<img width="30" alt="chrome" src="https://alan.norbauer.com/_next/static/media/chrome.2d2a19fd.svg">
+
+<p class="my-1 text-sm leading-7 mb-6">클래스는 모르지만 인스턴스를 아는 경우에는 아래와 같이 할 수 있습니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">var</span> p = instance.<span class="hljs-property">constructor</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>;
+<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">getOwnPropertyNames</span>(p).<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">k</span>) =&gt;</span> <span class="hljs-title function_">monitor</span>(p[k]));</code></pre><p class="my-1 text-sm leading-7 mb-6">모든 클래스의 인스턴스에 대해 이 작업을 수행하는 함수를 작성할 때 유용합니다. (<code class="bg-gray-100 px-1 rounded-md inline-block text-sm">Dog</code> 대신)</p>
+    <h2 id="-a-id-call-and-debug-a-function-a" class="text-xl my-4 font-semibold">
+      <a id="call-and-debug-a-function"></a> 함수 호출 및 디버그
+    </h2><p class="my-1 text-sm leading-7 mb-6">콘솔에서 디버그할 함수를 호출하기 전에 debugger를 호출합니다. 예시를 살펴보겠습니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">fn</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-comment">/* ... */</span>
+}</code></pre><p class="my-1 text-sm leading-7 mb-6">콘솔에 아래와 같이 입력합니다.</p><pre><code class="my-4 hljs text-xs language-console"><span class="hljs-meta prompt_">&gt; </span><span class="language-bash">debugger; fn(1);</span></code></pre><p class="my-1 text-sm leading-7 mb-6">그런 다음 &quot;Step into next function call&quot;을 사용하여 fn의 구현을 디버깅합니다.</p><p class="my-1 text-sm leading-7 mb-6">fn의 정의를 찾아 중단점을 수동으로 추가하고 싶지 않거나, fn이 함수에 동적으로 바인딩되어 있는데 소스가 어디에 있는지 모를 때 유용합니다.</p><p class="my-1 text-sm leading-7 mb-6">크롬에서는 명령줄에서 선택적으로 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">debug(fn)</code>을 호출할 수도 있으며, 이 경우 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">fn</code>이 호출될 때마다 디버거가 내부의 실행을 일시 중지합니다.</p>
+    <h2 id="-a-id-pause-execution-on-url-change-a-url" class="text-xl my-4 font-semibold">
+      <a id="pause-execution-on-url-change"></a> URL 변경시 실행 중지
+    </h2><p class="my-1 text-sm leading-7 mb-6">단일 페이지 애플리케이션이 URL을 수정하기 전에(즉, 일부 라우팅 이벤트가 발생하기 전에) 실행을 일시 중지합니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">dbg</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">debugger</span>;
+};
+history.<span class="hljs-property">pushState</span> = dbg;
+history.<span class="hljs-property">replaceState</span> = dbg;
+<span class="hljs-variable language_">window</span>.<span class="hljs-property">onhashchange</span> = dbg;
+<span class="hljs-variable language_">window</span>.<span class="hljs-property">onpopstate</span> = dbg;</code></pre><p class="my-1 text-sm leading-7 mb-6">탐색을 중단하지 않고 실행을 일시 중지하는 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">dbg</code> 버전을 만드는 방법은 독자들께 연습용으로 남겨두겠습니다.</p><p class="my-1 text-sm leading-7 mb-6">또한 코드에서 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">window.location.replace/assign</code>을 직접 호출하는 경우에는 할당 후 페이지가 즉시 언로드되므로 디버깅할 것이 없어 처리되지 않습니다.
+그럼에도 이런 리디렉션의 소스를 확인하고 리다이렉션 당시의 상태를 디버깅하려면 크롬에서 관련 메서드를 디버그하면 됩니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-title function_">debug</span>(<span class="hljs-variable language_">window</span>.<span class="hljs-property">location</span>.<span class="hljs-property">replace</span>);
+<span class="hljs-title function_">debug</span>(<span class="hljs-variable language_">window</span>.<span class="hljs-property">location</span>.<span class="hljs-property">assign</span>);</code></pre>
+    <h2 id="-a-id-debugging-property-reads-a" class="text-xl my-4 font-semibold">
+      <a id="debugging-property-reads"></a> 프로퍼티 읽기 디버깅
+    </h2><p class="my-1 text-sm leading-7 mb-6">객체가 있고 그 객체에서 프로퍼티를 읽을 때마다 알고 싶다면 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">debugger</code> 호출과 함께 객체 getter를 사용하세요.
+예를 들어 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">{configOption: true}</code>를 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">{get configOption() { debugger; return true; }}</code>로 변환합니다. (원본 소스 코드에서 또는 조건부 중단점을 사용합니다).</p><p class="my-1 text-sm leading-7 mb-6">어떤 설정 옵션을 전달할 때 그 옵션이 어떻게 사용되는지 보고 싶을 때 유용합니다.</p><a id="use-copy"></a> copy() 활용<p class="my-1 text-sm leading-7 mb-6"><img width="30" alt="chrome" src="https://alan.norbauer.com/_next/static/media/chrome.2d2a19fd.svg"><img width="30" alt="firefox" src="https://alan.norbauer.com/_next/static/media/firefox.583d9a58.svg"></p><p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">copy()</code> 콘솔 API를 사용하면 문자열을 잘라내지 않고도 브라우저에서 관심 있는 정보를 클립보드로 바로 복사할 수 있습니다.
+복사하고 싶을 만한 정보 몇 가지를 소개합니다.</p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">현재 DOM 스냅샷:</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-title function_">copy</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-property">documentElement</span>.<span class="hljs-property">outerHTML</span>);</code></pre></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">리소스 메타데이터 (예. images):</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-title function_">copy</span>(performance.<span class="hljs-title function_">getEntriesByType</span>(<span class="hljs-string">&quot;resource&quot;</span>));</code></pre></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">큰 JSON blob, 포맷팅된:</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-title function_">copy</span>(<span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">parse</span>(blob));</code></pre></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">localStorage 덤프:</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-title function_">copy</span>(<span class="hljs-variable language_">localStorage</span>);</code></pre></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">기타.</p></li></ul>
+    <h2 id="-a-id-debugging-htmlcss-a-html-css" class="text-xl my-4 font-semibold">
+      <a id="debugging-htmlcss"><a> HTML/CSS 디버깅
+    </h2><p class="my-1 text-sm leading-7 mb-6">JS 콘솔은 HTML/CSS의 문제를 진단할 때 도움이 될 수 있습니다.</p><a id="inspect-the-dom-with-js-disabled"></a> JS 비활성화상태에서 DOM 검사하기<p class="my-1 text-sm leading-7 mb-6">DOM 인스펙터에서 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">ctrl+\</code> (크롬/윈도우)를 누르면 JS 실행을 언제든 멈춥니다.
+이를 통해 JS가 DOM을 변형하거나 이벤트(예: 마우스 오버)로 인해 DOM이 변경될 염려 없이 DOM의 스냅샷을 검사할 수 있습니다.</p><a id="inspect-an-elusive-element"></a> 찾기 어려운 요소 검사<p class="my-1 text-sm leading-7 mb-6">조건부로만 표시되는 DOM 요소를 검사하고 싶다고 가정해 보겠습니다.
+해당 요소를 검사하려면 마우스를 해당 요소로 이동해야 하는데, 마우스를 이동하려고 하면 해당 요소가 사라집니다:</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/elusive-element.gif"></p><p class="my-1 text-sm leading-7 mb-6">요소를 검사하려면 다음 코드를 콘솔에 붙여 넣으면 됩니다: <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">setTimeout(function() { debugger; }, 5000);</code>
+이렇게 하면 5초 동안 UI를 트리거할 수 있으며, 5초 타이머가 끝나면 JS 실행이 일시 중지되고 요소가 사라지지 않습니다.
+요소를 잃지 않고 개발 도구로 마우스를 자유롭게 이동할 수 있습니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/elusive-element-inspected.gif"></p><p class="my-1 text-sm leading-7 mb-6">JS 실행이 일시 중지된 상태에서 요소를 검사하고, CSS를 편집하고, JS 콘솔에서 명령을 실행하는 등의 작업을 수행할 수 있습니다.</p><p class="my-1 text-sm leading-7 mb-6">특정 커서 위치, 포커스 등에 따라 달라지는 DOM을 검사할 때 유용합니다.</p>
+    <h2 id="-a-id-record-snapshots-of-the-dom-a-dom" class="text-xl my-4 font-semibold">
+      <a id="record-snapshots-of-the-dom"></a> DOM 스냅샷 기록
+    </h2><p class="my-1 text-sm leading-7 mb-6">현재 상태의 DOM 사본을 가져옵니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-title function_">copy</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-property">documentElement</span>.<span class="hljs-property">outerHTML</span>);</code></pre><p class="my-1 text-sm leading-7 mb-6">매 초마다 DOM 스냅샷을 기록하기</p><pre><code class="my-4 hljs text-xs language-js">doms = [];
+<span class="hljs-built_in">setInterval</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> domStr = <span class="hljs-variable language_">document</span>.<span class="hljs-property">documentElement</span>.<span class="hljs-property">outerHTML</span>;
+  doms.<span class="hljs-title function_">push</span>(domStr);
+}, <span class="hljs-number">1000</span>);</code></pre><p class="my-1 text-sm leading-7 mb-6">혹은 콘솔에 이를 덤프합니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-built_in">setInterval</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> domStr = <span class="hljs-variable language_">document</span>.<span class="hljs-property">documentElement</span>.<span class="hljs-property">outerHTML</span>;
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;snapshotting DOM: &quot;</span>, domStr);
+}, <span class="hljs-number">1000</span>);</code></pre>
+    <h2 id="-a-id-monitor-focused-element-a" class="text-xl my-4 font-semibold">
+      <a id="monitor-focused-element"></a> 포커싱된 요소 모니터링
+    </h2><pre><code class="my-4 hljs text-xs language-js">(<span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">let</span> last = <span class="hljs-variable language_">document</span>.<span class="hljs-property">activeElement</span>;
+  <span class="hljs-built_in">setInterval</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">document</span>.<span class="hljs-property">activeElement</span> !== last) {
+      last = <span class="hljs-variable language_">document</span>.<span class="hljs-property">activeElement</span>;
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Focus changed to: &quot;</span>, last);
+    }
+  }, <span class="hljs-number">100</span>);
+})();</code></pre><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/monitor-focus.gif"></p>
+    <h2 id="-a-id-find-bold-elements-a" class="text-xl my-4 font-semibold">
+      <a id="find-bold-elements"></a> 볼드 요소 찾기
+    </h2><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">isBold</span> = (<span class="hljs-params">e</span>) =&gt; {
+  <span class="hljs-keyword">let</span> w = <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">getComputedStyle</span>(e).<span class="hljs-property">fontWeight</span>;
+  <span class="hljs-keyword">return</span> w === <span class="hljs-string">&quot;bold&quot;</span> || w === <span class="hljs-string">&quot;700&quot;</span>;
+};
+<span class="hljs-title class_">Array</span>.<span class="hljs-title function_">from</span>(<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelectorAll</span>(<span class="hljs-string">&quot;*&quot;</span>)).<span class="hljs-title function_">filter</span>(isBold);</code></pre>
+    <h2 id="-a-id-just-descendants-a" class="text-xl my-4 font-semibold">
+      <a id="just-descendants"></a> 하위 요소만
+    </h2><p class="my-1 text-sm leading-7 mb-6">또는 인스펙터에서 현재 선택된 요소의 하위 요소에 대해서만 사용할 수 있습니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-title class_">Array</span>.<span class="hljs-title function_">from</span>($0.<span class="hljs-title function_">querySelectorAll</span>(<span class="hljs-string">&quot;*&quot;</span>)).<span class="hljs-title function_">filter</span>(isBold);</code></pre>
+    <h2 id="-a-id-reference-currently-selected-element-a" class="text-xl my-4 font-semibold">
+      <a id="reference-currently-selected-element"></a> 현재 선택된 요소 참조
+    </h2><p class="my-1 text-sm leading-7 mb-6">콘솔에서 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">$0</code>은 요소 인스펙터에서 현재 선택된 요소를 자동으로 참조합니다.</p><a id="previous-elements"></a> 이전 요소<p class="my-1 text-sm leading-7 mb-6"><img width="30" alt="chrome" src="https://alan.norbauer.com/_next/static/media/chrome.2d2a19fd.svg"><img width="30" alt="edge" src="https://alan.norbauer.com/_next/static/media/edge.c22c90ce.svg"></p><p class="my-1 text-sm leading-7 mb-6">크롬과 엣지에서는 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">$1</code>로 마지막으로 검사한 요소, <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">$2</code>로 그 이전 요소 등에 접근할 수 있습니다.</p><a id="get-event-listeners"></a> 이벤트 리스너 가져오기<img width="30" alt="chrome" src="https://alan.norbauer.com/_next/static/media/chrome.2d2a19fd.svg">
+
+<p class="my-1 text-sm leading-7 mb-6">크롬에서는 현재 선택된 요소의 모든 이벤트 리스너를 조사할 수 있습니다: <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">getEventListener($0)</code></p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/getEventListeners.png"></p><a id="monitor-events-for-element"></a> 요소에 대한 이벤트 모니터링<p class="my-1 text-sm leading-7 mb-6">선택된 요소의 모든 이벤트 디버깅하기: <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">monitorEvents($0)</code></p><p class="my-1 text-sm leading-7 mb-6">선택된 요소의 특정 이벤트 디버깅하기: <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">monitorEvents($0, ["control", "key"])</code></p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/monitorEvents.gif"></p>
+    <h2 id="" class="text-xl my-4 font-semibold">
+      각주
+    </h2><p class="my-1 text-sm leading-7 mb-6"><a id="1"></a></p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">브라우저 로고가 따로 표시되어 있지 않으면 크롬, 파이어폭스 및 엣지에서 지원되는 팁입니다. <img width="30" alt="chrome" src="https://alan.norbauer.com/_next/static/media/chrome.2d2a19fd.svg"><img width="30" alt="firefox" src="https://alan.norbauer.com/_next/static/media/firefox.583d9a58.svg"><img width="30" alt="edge" src="https://alan.norbauer.com/_next/static/media/edge.c22c90ce.svg"></p></li></ul>
+          </main>
+        </div>
+        <script src="/dev-blog/scripts/header.js"></script>
+      </body>
+    </html>
+    

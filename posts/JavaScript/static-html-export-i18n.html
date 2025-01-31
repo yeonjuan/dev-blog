@@ -1,0 +1,355 @@
+
+   <!doctype html>
+    <html lang="ko">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>Next.js에서 i18n과 호환성을 갖춘 정적 HTML Export (번역) | DevBlog</title>
+        <link href="/dev-blog/favicon.ico" rel="shortcut icon">
+        <meta name="description" content="최근 진행한 프로젝트에서 부득이하게 Next.js Static Exports 와 next-i18next을 같이 사용해서 다국어가 지원되는 정적 웹페이지를 구성해야 했습니다. 하지만 next-i18next에서 서버사이드 런타임에 동작해야 하는 로직 때문에 에러가 발생했는데요. 해결 과정에서 이 글을 찾게 되었고 프로젝트를 성공적으로 구성할 수 있었습니다. 같은 어려움을 겪는 분들에게 도움이 되었으면 좋겠습니다.">
+        <link href="/dev-blog/output.css" type="text/css" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
+          rel="stylesheet"
+        />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-ZBZX7LMVNE');
+        </script>
+        
+      <link href="/dev-blog/css/github.min.css" type="text/css" rel="stylesheet" />
+    
+    
+      </head>
+      <body>
+        <div class="relative">
+            
+  <style>
+        .hamburger {
+            cursor: pointer;
+            justify-content: space-between;
+            flex-direction: column;
+        }
+        .hamburger > div {
+            height: 2px;
+            transition: 0.2s ease-out;
+            z-index: 999;
+        }
+        .menuInput:checked ~ .hamburger > div:nth-child(1) {
+            transform: translateY(6.5px) rotate(45deg);
+        }
+        .menuInput:checked ~ .hamburger > div:nth-child(2) {
+            opacity: 0;
+        }
+        .menuInput:checked ~ .hamburger > div:nth-child(3) {
+            transform: translateY(-6.5px) rotate(-45deg);
+        }
+    </style>
+  <div id="overlay" class="backdrop-blur-sm bg-black/20 dark:bg-slate-900/80 fixed h-full inset-0 hidden"></div>
+  <header class="bg-zinc-800 text-white h-12 fixed flex justify-between items-center w-full px-4">
+    <a
+      class="w-10 flex items-center justify-center"
+      href="https://github.com/yeonjuan/dev-blog"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <img
+        src="/dev-blog/assets/ic-github.svg"
+        alt="go to github"
+        width="20"
+      >
+    </a>
+    <span>
+      <a href="/dev-blog/">
+        DEV BLOG
+      </a>
+    </span>
+    <div class="w-10">
+      <input
+        id="menu"
+        type="checkbox"
+        class="menuInput peer sr-only hidden"
+        aria-hidden="true"
+      >
+      <label
+        for="menu"
+        aria-label="menu button"
+        class="hamburger flex flex-col justify-between ml-auto h-[21px] w-[21px] px-[1px] py-[3px] [&>div]:h-[2px] [&>div]:w-[18px] [&>div]:bg-white hover:cursor-pointer"
+      >
+        <div></div>
+        <div></div>
+        <div></div>
+      </label>
+      <nav class="fixed text-black transition-[max-height] duration-200 overflow-hidden max-h-0 top-12 left-[0px] peer-checked:max-h-[200px] bg-white w-full border-b border-black">
+        <ul class="p-4">
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/">HOME</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/posts/JavaScript">JavaScript</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/posts/Review">Review</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/posts/Browser">Browser</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+          <main class="py-2 px-4 pt-10 max-w-3xl m-auto pb-20">
+          
+            <aside class="mt-14">
+              <a href="/dev-blog/" class="hover:underline">Home</a> &gt; <a href="/dev-blog/dev-blog/posts" class="hover:underline">JavaScript</a> &gt; <a href="dev-blog/posts/JavaScript/static-html-export-i18n" class="hover:underline">Next.js에서 i18n과 호환성을 갖춘 정적 HTML Export (번역)</a>
+            </aside>
+          
+            
+    <h1 id="next-js-i18n-html-export" class="text-2xl my-8 font-bold">
+      Next.js에서 i18n과 호환성을 갖춘 정적 HTML Export
+    </h1><blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6">원문: <a href="https://locize.com/blog/next-i18n-static/" class="text-orange-500">https://locize.com/blog/next-i18n-static/</a></p></blockquote><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/static-html-export-i18n-title.jpg"></p><p class="my-1 text-sm leading-7 mb-6"><a href="https://nextjs.org/" class="text-orange-500">Next.js</a>에 대해선 아시나요? - 모르신다면 이 글을 읽지 마시고 다른 것을 만들어 보세요.</p><p class="my-1 text-sm leading-7 mb-6"><em>Next.js 13과 app 디렉터리를 사용 중이라면 <a href="https://locize.com/blog/next-13-app-dir-i18n/" class="text-orange-500">이 블로그 글</a>을 확인해 보세요.</em></p><p class="my-1 text-sm leading-7 mb-6">Next.js는 굉장합니다! 필요한 모든 기능을 갖춘 최고의 개발자 경험을 제공합니다.</p>
+    <h2 id="toc" class="text-xl my-4 font-semibold">
+      TOC
+    </h2><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">하지만, 이미 들어보셨을 수도 있습니다.</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">이제 어떻게 하면 좋을까요?</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">레시피</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">결과</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">🎉🥳 축하합니다 🎊🎁</p></li></ul>
+    <h2 id="" class="text-xl my-4 font-semibold">
+      하지만, 이 문제를 겪어보셨을 겁니다.
+    </h2><pre><code class="my-4 hljs text-xs language-">Error: i18n support is not compatible with next export. See here for more info on deploying: https://nextjs.org/docs/deployment</code></pre><p class="my-1 text-sm leading-7 mb-6"><a href="https://nextjs.org/docs/pages/building-your-application/routing/internationalization" class="text-orange-500">국제화 라우팅 기능</a>을 사용 중이고 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">next export</code>를 실행해서 <a href="https://nextjs.org/docs/pages/building-your-application/deploying/static-exports" class="text-orange-500">정적 HTML export</a>를 생성하려는 경우 이 문제가 발생합니다.
+하지만 이 기능은 빌드 프로세스 중에 계산할 수 없는 동적 로직 또는 Node.js 서버가 필요하기 때문에 <a href="https://nextjs.org/docs/pages/building-your-application/deploying/static-exports#unsupported-features" class="text-orange-500">지원되지 않습니다</a>.</p><p class="my-1 text-sm leading-7 mb-6">예를 들어 <a href="https://github.com/i18next/next-i18next" class="text-orange-500">next-i18next</a>를 사용하는 것이 이 경우에 해당합니다.</p>
+    <h2 id="" class="text-xl my-4 font-semibold">
+      이제 어떻게 하면 좋을까요?
+    </h2><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/static-html-export-i18n-what.jpg"></p><p class="my-1 text-sm leading-7 mb-6">확실한 대안은 정적 HTML export를 포기하고 배포 환경으로 Node.js 서버 또는 Vercel을 사용하는 것입니다.</p><p class="my-1 text-sm leading-7 mb-6">하지만 회사 또는 아키텍처 가이드라인에 따라 정적 웹 서버를 사용해야 하는 경우도 있습니다.
+그럼 i18n을 버려야 하나요? - 아니요, 지금 이 글을 읽고 있다면 이는 필수사항인 것 같습니다.
+그럼 Next.js 없이 해야 하나요? - 하지만 이건 모든 프로젝트를 다시 작성하는 것을 뜻합니다.</p><p class="my-1 text-sm leading-7 mb-6">i18n을 사용하지 않을 때 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">next export</code> 를 실행하면 잘 동작하는 것 같습니다. <a href="https://nextjs.org/docs/pages/building-your-application/routing/internationalization" class="text-orange-500">국제화 라우팅 기능</a>을 사용하지 않고 i18n 라우팅을 우리가 직접 수행하면 어떨까요?</p>
+    <h2 id="" class="text-xl my-4 font-semibold">
+      레시피
+    </h2><p class="my-1 text-sm leading-7 mb-6">이 레시피를 &quot;요리&quot;하려면 다음 재료가 필요합니다.</p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="https://nextjs.org/docs/pages/building-your-application/routing#dynamic-route-segments" class="text-orange-500">동적 경로 세그먼트</a> 기능 사용</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">프로젝트 파일의 구조를 변경하려는 의지</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">약간의 코드를 수정하려는 의지</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">사용자 언어를 감지하고 그에 따라 리다이렉션하는 로직</p></li></ul><p class="my-1 text-sm leading-7 mb-6">할만하겠군요. 시작하겠습니다.</p>1. `next.config.js`에서 i18n 옵션을 제거합니다.<pre><code class="my-4 hljs text-xs language-diff"><span class="hljs-deletion">- const { i18n } = require(&#x27;./next-i18next.config&#x27;)</span>
+<span class="hljs-deletion">-</span>
+module.exports = {
+<span class="hljs-deletion">-   i18n,</span>
+  trailingSlash: true,
+}</code></pre>2. `[locale]` 폴더를 pages 디렉터리에 생성합니다.<p class="my-1 text-sm leading-7 mb-6">a) 모든 페이지 파일을 해당 폴더로 옮깁니다. (_app.js 또는 _document.js는 제외)</p><p class="my-1 text-sm leading-7 mb-6">b) 필요한 경우 import를 조정합니다.</p>3. `getStatic.js`파일을 생성하고 `lib` 디렉터리에 위치시킵니다.<pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">import</span> { serverSideTranslations } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;next-i18next/serverSideTranslations&quot;</span>;
+<span class="hljs-keyword">import</span> i18nextConfig <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;../next-i18next.config&quot;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">getI18nPaths</span> = (<span class="hljs-params"></span>) =&gt;
+  i18nextConfig.<span class="hljs-property">i18n</span>.<span class="hljs-property">locales</span>.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">lng</span>) =&gt;</span> ({
+    <span class="hljs-attr">params</span>: {
+      <span class="hljs-attr">locale</span>: lng,
+    },
+  }));
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">getStaticPaths</span> = (<span class="hljs-params"></span>) =&gt; ({
+  <span class="hljs-attr">fallback</span>: <span class="hljs-literal">false</span>,
+  <span class="hljs-attr">paths</span>: <span class="hljs-title function_">getI18nPaths</span>(),
+});
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">getI18nProps</span>(<span class="hljs-params">ctx, ns = [<span class="hljs-string">&quot;common&quot;</span>]</span>) {
+  <span class="hljs-keyword">const</span> locale = ctx?.<span class="hljs-property">params</span>?.<span class="hljs-property">locale</span>;
+  <span class="hljs-keyword">let</span> props = {
+    ...(<span class="hljs-keyword">await</span> <span class="hljs-title function_">serverSideTranslations</span>(locale, ns)),
+  };
+  <span class="hljs-keyword">return</span> props;
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">makeStaticProps</span>(<span class="hljs-params">ns = {}</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">getStaticProps</span>(<span class="hljs-params">ctx</span>) {
+    <span class="hljs-keyword">return</span> {
+      <span class="hljs-attr">props</span>: <span class="hljs-keyword">await</span> <span class="hljs-title function_">getI18nProps</span>(ctx, ns),
+    };
+  };
+}</code></pre>4.페이지들에서 `getStaticPaths` 와 `makeStaticProps`를 다음과 같이 사용합니다.<pre><code class="my-4 hljs text-xs language-diff">import { useTranslation } from &#x27;next-i18next&#x27;
+import { getStaticPaths, makeStaticProps } from &#x27;../../lib/getStatic&#x27;
+import { Header } from &#x27;../../components/Header&#x27;
+import { Footer } from &#x27;../../components/Footer&#x27;
+import Link from &#x27;../../components/Link&#x27;
+
+<span class="hljs-addition">+ const getStaticProps = makeStaticProps([&#x27;common&#x27;, &#x27;footer&#x27;])</span>
+<span class="hljs-addition">+ export { getStaticPaths, getStaticProps }</span>
+
+const Homepage = () =&gt; {
+  const { t } = useTranslation(&#x27;common&#x27;)
+
+  return (
+    &lt;&gt;
+      &lt;main&gt;
+        &lt;Header heading={t(&#x27;h1&#x27;)} title={t(&#x27;title&#x27;)} /&gt;
+        &lt;div&gt;
+          &lt;Link href=&#x27;/second-page&#x27;&gt;&lt;button type=&#x27;button&#x27;&gt;{t(&#x27;to-second-page&#x27;)}&lt;/button&gt;&lt;/Link&gt;
+        &lt;/div&gt;
+      &lt;/main&gt;
+      &lt;Footer /&gt;
+    &lt;/&gt;
+  )
+}
+
+export default Homepage</code></pre>5. [next-language-detector](https://github.com/i18next/next-language-detector)를 설치합니다.<p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">npm i next-language-detector</code></p>6. `languageDetector.js`파일을 생성하고 `lib` 디렉터리에 위치시킵니다.<pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">import</span> languageDetector <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;next-language-detector&quot;</span>;
+<span class="hljs-keyword">import</span> i18nextConfig <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;../next-i18next.config&quot;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title function_">languageDetector</span>({
+  <span class="hljs-attr">supportedLngs</span>: i18nextConfig.<span class="hljs-property">i18n</span>.<span class="hljs-property">locales</span>,
+  <span class="hljs-attr">fallbackLng</span>: i18nextConfig.<span class="hljs-property">i18n</span>.<span class="hljs-property">defaultLocale</span>,
+});</code></pre>7. `redirect.js` 파일을 생성하고 `lib` 디렉터리에 위치시킵니다.<pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">import</span> { useEffect } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;react&quot;</span>;
+<span class="hljs-keyword">import</span> { useRouter } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;next/router&quot;</span>;
+<span class="hljs-keyword">import</span> languageDetector <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./languageDetector&quot;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">useRedirect</span> = (<span class="hljs-params">to</span>) =&gt; {
+  <span class="hljs-keyword">const</span> router = <span class="hljs-title function_">useRouter</span>();
+  to = to || router.<span class="hljs-property">asPath</span>;
+
+  <span class="hljs-comment">// 언어 감지</span>
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> detectedLng = languageDetector.<span class="hljs-title function_">detect</span>();
+    <span class="hljs-keyword">if</span> (to.<span class="hljs-title function_">startsWith</span>(<span class="hljs-string">&quot;/&quot;</span> + detectedLng) &amp;&amp; router.<span class="hljs-property">route</span> === <span class="hljs-string">&quot;/404&quot;</span>) {
+      <span class="hljs-comment">// 무한 루프 방지</span>
+      router.<span class="hljs-title function_">replace</span>(<span class="hljs-string">&quot;/&quot;</span> + detectedLng + router.<span class="hljs-property">route</span>);
+      <span class="hljs-keyword">return</span>;
+    }
+
+    languageDetector.<span class="hljs-title function_">cache</span>(detectedLng);
+    router.<span class="hljs-title function_">replace</span>(<span class="hljs-string">&quot;/&quot;</span> + detectedLng + to);
+  });
+
+  <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;&gt;</span><span class="hljs-tag">&lt;/&gt;</span></span>;
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">Redirect</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-title function_">useRedirect</span>();
+  <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;&gt;</span><span class="hljs-tag">&lt;/&gt;</span></span>;
+};
+
+<span class="hljs-comment">// eslint-disable-next-line react/display-name</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">getRedirect</span> = (<span class="hljs-params">to</span>) =&gt; <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-title function_">useRedirect</span>(to);
+  <span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;&gt;</span><span class="hljs-tag">&lt;/&gt;</span></span>;
+};</code></pre>8. `index.js`를 제외한 `[locale]` 디렉터리의 모든 페이지 파일들과 동일한 파일 이름으로 아래 내용의 파일들을 생성합니다.<pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">Redirect</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;../lib/redirect&quot;</span>;
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">Redirect</span>;</code></pre>9. `Link.js` 컴포넌트를 생성해서 `components` 디렉터리에 위치시킵니다.<pre><code class="my-4 hljs text-xs language-jsx"><span class="hljs-keyword">import</span> <span class="hljs-title class_">React</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;react&quot;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Link</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;next/link&quot;</span>;
+<span class="hljs-keyword">import</span> { useRouter } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;next/router&quot;</span>;
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">LinkComponent</span> = (<span class="hljs-params">{ children, skipLocaleHandling, ...rest }</span>) =&gt; {
+  <span class="hljs-keyword">const</span> router = <span class="hljs-title function_">useRouter</span>();
+  <span class="hljs-keyword">const</span> locale = rest.<span class="hljs-property">locale</span> || router.<span class="hljs-property">query</span>.<span class="hljs-property">locale</span> || <span class="hljs-string">&quot;&quot;</span>;
+
+  <span class="hljs-keyword">let</span> href = rest.<span class="hljs-property">href</span> || router.<span class="hljs-property">asPath</span>;
+  <span class="hljs-keyword">if</span> (href.<span class="hljs-title function_">indexOf</span>(<span class="hljs-string">&quot;http&quot;</span>) === <span class="hljs-number">0</span>) skipLocaleHandling = <span class="hljs-literal">true</span>;
+  <span class="hljs-keyword">if</span> (locale &amp;&amp; !skipLocaleHandling) {
+    href = href
+      ? <span class="hljs-string">`/<span class="hljs-subst">${locale}</span><span class="hljs-subst">${href}</span>`</span>
+      : router.<span class="hljs-property">pathname</span>.<span class="hljs-title function_">replace</span>(<span class="hljs-string">&quot;[locale]&quot;</span>, locale);
+  }
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Link</span> <span class="hljs-attr">href</span>=<span class="hljs-string">{href}</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">a</span> {<span class="hljs-attr">...rest</span>}&gt;</span>{children}<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">Link</span>&gt;</span>
+    <span class="hljs-tag">&lt;/&gt;</span></span>
+  );
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">LinkComponent</span>;</code></pre>10. 모든 `next/link` `Link` import 를 `../components/Link` `Link` import로 교체합니다.<pre><code class="my-4 hljs text-xs language-diff"><span class="hljs-deletion">- import Link from &#x27;next/link&#x27;</span>
+<span class="hljs-addition">+ import Link from &#x27;../../components/Link&#x27;</span></code></pre>11. 올바른 html `lang` 속성으로 설정하기 위해 `_document.js` 파일을 추가하거나 수정합니다.<pre><code class="my-4 hljs text-xs language-tsx"><span class="hljs-keyword">import</span> <span class="hljs-title class_">Document</span>, { <span class="hljs-title class_">Html</span>, <span class="hljs-title class_">Head</span>, <span class="hljs-title class_">Main</span>, <span class="hljs-title class_">NextScript</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;next/document&quot;</span>;
+<span class="hljs-keyword">import</span> i18nextConfig <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;../next-i18next.config&quot;</span>;
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">MyDocument</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Document</span> {
+  <span class="hljs-title function_">render</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> currentLocale =
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">props</span>.<span class="hljs-property">__NEXT_DATA__</span>.<span class="hljs-property">query</span>.<span class="hljs-property">locale</span> || i18nextConfig.<span class="hljs-property">i18n</span>.<span class="hljs-property">defaultLocale</span>;
+    <span class="hljs-keyword">return</span> (
+      <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">{currentLocale}</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">Head</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">Main</span> /&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">NextScript</span> /&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">Html</span>&gt;</span></span>
+    );
+  }
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">MyDocument</span>;</code></pre>12. 언어 변경 기능이 있는 경우, 아래와 같이 생성하고 이를 적용합니다.<pre><code class="my-4 hljs text-xs language-jsx"><span class="hljs-comment">// components/LanguageSwitchLink.js</span>
+<span class="hljs-keyword">import</span> languageDetector <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;../lib/languageDetector&quot;</span>;
+<span class="hljs-keyword">import</span> { useRouter } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;next/router&quot;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Link</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;next/link&quot;</span>;
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">LanguageSwitchLink</span> = (<span class="hljs-params">{ locale, ...rest }</span>) =&gt; {
+  <span class="hljs-keyword">const</span> router = <span class="hljs-title function_">useRouter</span>();
+
+  <span class="hljs-keyword">let</span> href = rest.<span class="hljs-property">href</span> || router.<span class="hljs-property">asPath</span>;
+  <span class="hljs-keyword">let</span> pName = router.<span class="hljs-property">pathname</span>;
+  <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">keys</span>(router.<span class="hljs-property">query</span>).<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">k</span>) =&gt;</span> {
+    <span class="hljs-keyword">if</span> (k === <span class="hljs-string">&quot;locale&quot;</span>) {
+      pName = pName.<span class="hljs-title function_">replace</span>(<span class="hljs-string">`[<span class="hljs-subst">${k}</span>]`</span>, locale);
+      <span class="hljs-keyword">return</span>;
+    }
+    pName = pName.<span class="hljs-title function_">replace</span>(<span class="hljs-string">`[<span class="hljs-subst">${k}</span>]`</span>, router.<span class="hljs-property">query</span>[k]);
+  });
+  <span class="hljs-keyword">if</span> (locale) {
+    href = rest.<span class="hljs-property">href</span> ? <span class="hljs-string">`/<span class="hljs-subst">${locale}</span><span class="hljs-subst">${rest.href}</span>`</span> : pName;
+  }
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Link</span> <span class="hljs-attr">href</span>=<span class="hljs-string">{href}</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> languageDetector.cache(locale)}&gt;
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{{</span> <span class="hljs-attr">fontSize:</span> &quot;<span class="hljs-attr">small</span>&quot; }}&gt;</span>{locale}<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">Link</span>&gt;</span></span>
+  );
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">LanguageSwitchLink</span>;</code></pre><pre><code class="my-4 hljs text-xs language-jsx"><span class="hljs-comment">// components/Footer.js</span>
+<span class="hljs-keyword">import</span> { useTranslation } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;next-i18next&quot;</span>;
+<span class="hljs-keyword">import</span> { useRouter } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;next/router&quot;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">LanguageSwitchLink</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./LanguageSwitchLink&quot;</span>;
+<span class="hljs-keyword">import</span> i18nextConfig <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;../next-i18next.config&quot;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">Footer</span> = (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> router = <span class="hljs-title function_">useRouter</span>();
+  <span class="hljs-keyword">const</span> { t } = <span class="hljs-title function_">useTranslation</span>(<span class="hljs-string">&quot;footer&quot;</span>);
+  <span class="hljs-keyword">const</span> currentLocale = router.<span class="hljs-property">query</span>.<span class="hljs-property">locale</span> || i18nextConfig.<span class="hljs-property">i18n</span>.<span class="hljs-property">defaultLocale</span>;
+
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">footer</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{{</span> <span class="hljs-attr">lineHeight:</span> &quot;<span class="hljs-attr">4.65em</span>&quot;, <span class="hljs-attr">fontSize:</span> &quot;<span class="hljs-attr">small</span>&quot; }}&gt;</span>
+          {t(&quot;change-locale&quot;)}
+        <span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+        {i18nextConfig.i18n.locales.map((locale) =&gt; {
+          if (locale === currentLocale) return null;
+          return <span class="hljs-tag">&lt;<span class="hljs-name">LanguageSwitchLink</span> <span class="hljs-attr">locale</span>=<span class="hljs-string">{locale}</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{locale}</span> /&gt;</span>;
+        })}
+      <span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">footer</span>&gt;</span></span>
+  );
+};</code></pre>
+    <h2 id="" class="text-xl my-4 font-semibold">
+      결과
+    </h2><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/static-html-export-i18n-result.jpg"></p><p class="my-1 text-sm leading-7 mb-6">이제 프로젝트를 시작하면(<code class="bg-gray-100 px-1 rounded-md inline-block text-sm">next dev</code>) 이전과 거의 동일한 동작을 볼 수 있습니다.</p><p class="my-1 text-sm leading-7 mb-6">그렇다면 어떤 이점이 있을까요?</p><p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">next build && next export</code>를 시도해 보세요.</p><p class="my-1 text-sm leading-7 mb-6">마지막에 다음과 같은 내용이 표시됩니다.</p><pre><code class="my-4 hljs text-xs language-">●  (SSG)     automatically generated as static HTML + JSON (uses getStaticProps)
+
+info  - using build directory: /Users/usr/projects/my-awesome-project/.next
+info  - Copying &quot;static build&quot; directory
+info  - No &quot;exportPathMap&quot; found in &quot;/Users/usr/projects/my-awesome-project/next.config.js&quot;. Generating map from &quot;./pages&quot;
+info  - Launching 9 workers
+info  - Copying &quot;public&quot; directory
+info  - Exporting (3/3)
+Export successful. Files written to /Users/usr/projects/my-awesome-project/out</code></pre><p class="my-1 text-sm leading-7 mb-6"><strong>네, <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">i18과 호환되지 않는다는 next export</code> 에러가 더 이상 없습니다!</strong></p><p class="my-1 text-sm leading-7 mb-6"><strong>축하합니다. 이제 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">out</code> 디렉터리의 콘텐츠를 정적 웹서버에 &quot;배포&quot;할 수 있습니다.</strong></p><p class="my-1 text-sm leading-7 mb-6">🧑‍💻 완성된 코드는 <a href="https://github.com/i18next/next-language-detector/tree/main/examples/basic" class="text-orange-500">이곳</a>에서 확인할 수 있습니다.</p>
+    <h2 id="" class="text-xl my-4 font-semibold">
+      자발적인 부분
+    </h2><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/transform_your_localization_process_small.jpg"></p><p class="my-1 text-sm leading-7 mb-6">멋진 번역 관리 시스템에 연결해서 코드 외부에서 번역을 관리하세요.</p><p class="my-1 text-sm leading-7 mb-6"><a href="https://locize.com/" class="text-orange-500">locize</a>를 통해 번역 파일을 동기화해 보겠습니다.
+이 작업은 온-디맨드 또는 CI서버에서 수행하거나 앱을 배포하기 전에 수행할 수 있습니다.</p>이 단계에 도달하기 위해 수행해야 할 작업:<ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">locize에서: <a href="https://locize.app/register에" class="text-orange-500">https://locize.app/register에</a> 가입하고 <a href="https://docs.locize.com/integration/getting-started/create-a-user-account" class="text-orange-500">로그인</a>합니다.</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">locize에서: <a href="https://docs.locize.com/integration/getting-started/add-a-new-project" class="text-orange-500">프로젝트를 생성합니다.</a></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">locize에서: 모든 추가 언어를 추가합니다.(<a href="https://docs.locize.com/integration/api#add-new-language" class="text-orange-500">API</a>로도 가능합니다)</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="https://github.com/locize/locize-cli" class="text-orange-500">lociz-cli</a>를 설치합니다 (<code class="bg-gray-100 px-1 rounded-md inline-block text-sm">npm i locize-cli</code>)</p></li></ul>[locize-cli](https://github.com/locize/locize-cli) 사용.<p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">locize sync</code> 명령어를 사용해서 로컬 저장소(<code class="bg-gray-100 px-1 rounded-md inline-block text-sm">public/locales</code>) 와 locize에 배포된 것을 동기화 시킵니다.</p><p class="my-1 text-sm leading-7 mb-6">또는 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">locize download</code> 명령을 사용하여 앱을 번들링하기 전에 게시된 locize 번역을 로컬 저장소(<code class="bg-gray-100 px-1 rounded-md inline-block text-sm">public/locales</code>)에 다운로드할 수도 있습니다.</p>
+    <h2 id="" class="text-xl my-4 font-semibold">
+      🎉🥳 축하합니다 🎊🎁
+    </h2><p class="my-1 text-sm leading-7 mb-6">정적 사이트 생성(SSG), <a href="https://nextjs.org/" class="text-orange-500">Next.js</a>, <a href="https://github.com/i18next/next-i18next" class="text-orange-500">next-i18next</a>, <a href="https://www.i18next.com/" class="text-orange-500">i18next</a> 및 <a href="https://locize.com/" class="text-orange-500">최신 국제화 워크플로우</a>에 대해 몇가지 새로운 사실을 알게 되셨기를 바랍니다.</p><p class="my-1 text-sm leading-7 mb-6">따라서 i18n 주제를 한 단계 더 발전시키고 싶다면 <a href="https://locize.com/" class="text-orange-500">국제화 관리 플랫폼인 locize</a>를 사용해볼 가치가 있습니다.</p><p class="my-1 text-sm leading-7 mb-6"><a href="https://locize.com/" class="text-orange-500">locize</a>의 창립자는 <a href="https://www.i18next.com/" class="text-orange-500">i18next</a>의 제작자이기도 합니다. 따라서 <a href="https://locize.com/" class="text-orange-500">locize</a>를 사용하면 i18next의 미래를 직접 지원할 수 있습니다.</p>
+    <h2 id="-next-js" class="text-xl my-4 font-semibold">
+      최적화된 Next.js 번역 셋업을 찾고 계신가요?
+    </h2><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/next-i18next.jpg"></p><p class="my-1 text-sm leading-7 mb-6"><a href="https://locize.com/blog/next-i18next/" class="text-orange-500">여기</a>에서 클라이언트 측 번역 다운로드 및 SEO 최적화와 함께 next-i18next를 가장 효과적으로 사용하는 방법에 대한 블로그 게시물을 확인할 수 있습니다.</p>
+          </main>
+        </div>
+        <script src="/dev-blog/scripts/header.js"></script>
+      </body>
+    </html>
+    

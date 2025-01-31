@@ -1,0 +1,127 @@
+
+   <!doctype html>
+    <html lang="ko">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>DevBlog</title>
+        <link href="/dev-blog/favicon.ico" rel="shortcut icon">
+        
+        <link href="/dev-blog/output.css" type="text/css" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
+          rel="stylesheet"
+        />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-ZBZX7LMVNE');
+        </script>
+        
+      </head>
+      <body>
+        <div class="relative">
+            
+  <style>
+        .hamburger {
+            cursor: pointer;
+            justify-content: space-between;
+            flex-direction: column;
+        }
+        .hamburger > div {
+            height: 2px;
+            transition: 0.2s ease-out;
+            z-index: 999;
+        }
+        .menuInput:checked ~ .hamburger > div:nth-child(1) {
+            transform: translateY(6.5px) rotate(45deg);
+        }
+        .menuInput:checked ~ .hamburger > div:nth-child(2) {
+            opacity: 0;
+        }
+        .menuInput:checked ~ .hamburger > div:nth-child(3) {
+            transform: translateY(-6.5px) rotate(-45deg);
+        }
+    </style>
+  <div id="overlay" class="backdrop-blur-sm bg-black/20 dark:bg-slate-900/80 fixed h-full inset-0 hidden"></div>
+  <header class="bg-zinc-800 text-white h-12 fixed flex justify-between items-center w-full px-4">
+    <a
+      class="w-10 flex items-center justify-center"
+      href="https://github.com/yeonjuan/dev-blog"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <img
+        src="/dev-blog/assets/ic-github.svg"
+        alt="go to github"
+        width="20"
+      >
+    </a>
+    <span>
+      <a href="/dev-blog/">
+        DEV BLOG
+      </a>
+    </span>
+    <div class="w-10">
+      <input
+        id="menu"
+        type="checkbox"
+        class="menuInput peer sr-only hidden"
+        aria-hidden="true"
+      >
+      <label
+        for="menu"
+        aria-label="menu button"
+        class="hamburger flex flex-col justify-between ml-auto h-[21px] w-[21px] px-[1px] py-[3px] [&>div]:h-[2px] [&>div]:w-[18px] [&>div]:bg-white hover:cursor-pointer"
+      >
+        <div></div>
+        <div></div>
+        <div></div>
+      </label>
+      <nav class="fixed text-black transition-[max-height] duration-200 overflow-hidden max-h-0 top-12 left-[0px] peer-checked:max-h-[200px] bg-white w-full border-b border-black">
+        <ul class="p-4">
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/">HOME</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/posts/JavaScript">JavaScript</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/posts/Review">Review</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/posts/Browser">Browser</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+          <main class="py-2 px-4 pt-10 max-w-3xl m-auto pb-20">
+          
+            <aside class="mt-14">
+              <a href="/dev-blog/" class="hover:underline">Home</a> &gt; <a href="/dev-blog/posts/DesignPattern" class="hover:underline">DesignPattern</a>
+            </aside>
+          
+            
+    <h1 class="text-2xl my-8 font-bold">DesignPattern</h1>
+    <ul>
+        
+              <li class="border-t border-gray-200 flex items-center hover:underline cursor:pointer">
+                <span class="pl-2 pr-4">1</span>
+                <a href=/dev-blog/posts/DesignPattern/builder-pattern-exploration class="py-4 inline-block text-base">빌더 패턴 탐구(번역)</a>
+              </li>
+            
+    </ul>
+  
+          </main>
+        </div>
+        <script src="/dev-blog/scripts/header.js"></script>
+      </body>
+    </html>
+    

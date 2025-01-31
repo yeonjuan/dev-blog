@@ -1,0 +1,798 @@
+
+   <!doctype html>
+    <html lang="ko">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>Diff 전략 (번역) | DevBlog</title>
+        <link href="/dev-blog/favicon.ico" rel="shortcut icon">
+        <meta name="description" content="이 글에서는 텍스트 Diff 알고리즘을 이용해 차이점을 분석할 때 성능을 개선할 수 있는 전, 후처리 방법에 대해 소개합니다. ">
+        <link href="/dev-blog/output.css" type="text/css" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
+          rel="stylesheet"
+        />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-ZBZX7LMVNE');
+        </script>
+        
+      <link href="/dev-blog/css/github.min.css" type="text/css" rel="stylesheet" />
+    
+    
+      </head>
+      <body>
+        <div class="relative">
+            
+  <style>
+        .hamburger {
+            cursor: pointer;
+            justify-content: space-between;
+            flex-direction: column;
+        }
+        .hamburger > div {
+            height: 2px;
+            transition: 0.2s ease-out;
+            z-index: 999;
+        }
+        .menuInput:checked ~ .hamburger > div:nth-child(1) {
+            transform: translateY(6.5px) rotate(45deg);
+        }
+        .menuInput:checked ~ .hamburger > div:nth-child(2) {
+            opacity: 0;
+        }
+        .menuInput:checked ~ .hamburger > div:nth-child(3) {
+            transform: translateY(-6.5px) rotate(-45deg);
+        }
+    </style>
+  <div id="overlay" class="backdrop-blur-sm bg-black/20 dark:bg-slate-900/80 fixed h-full inset-0 hidden"></div>
+  <header class="bg-zinc-800 text-white h-12 fixed flex justify-between items-center w-full px-4">
+    <a
+      class="w-10 flex items-center justify-center"
+      href="https://github.com/yeonjuan/dev-blog"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <img
+        src="/dev-blog/assets/ic-github.svg"
+        alt="go to github"
+        width="20"
+      >
+    </a>
+    <span>
+      <a href="/dev-blog/">
+        DEV BLOG
+      </a>
+    </span>
+    <div class="w-10">
+      <input
+        id="menu"
+        type="checkbox"
+        class="menuInput peer sr-only hidden"
+        aria-hidden="true"
+      >
+      <label
+        for="menu"
+        aria-label="menu button"
+        class="hamburger flex flex-col justify-between ml-auto h-[21px] w-[21px] px-[1px] py-[3px] [&>div]:h-[2px] [&>div]:w-[18px] [&>div]:bg-white hover:cursor-pointer"
+      >
+        <div></div>
+        <div></div>
+        <div></div>
+      </label>
+      <nav class="fixed text-black transition-[max-height] duration-200 overflow-hidden max-h-0 top-12 left-[0px] peer-checked:max-h-[200px] bg-white w-full border-b border-black">
+        <ul class="p-4">
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/">HOME</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/posts/JavaScript">JavaScript</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/posts/Review">Review</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/posts/Browser">Browser</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+          <main class="py-2 px-4 pt-10 max-w-3xl m-auto pb-20">
+          
+            <aside class="mt-14">
+              <a href="/dev-blog/" class="hover:underline">Home</a> &gt; <a href="/dev-blog/dev-blog/posts" class="hover:underline">Browser</a> &gt; <a href="dev-blog/posts/JavaScript/diff-strategies" class="hover:underline">Diff 전략 (번역)</a>
+            </aside>
+          
+            
+    <h1 id="diff" class="text-2xl my-8 font-bold">
+      Diff 전략
+    </h1><blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6">원문: <a href="https://neil.fraser.name/writing/diff/" class="text-orange-500">https://neil.fraser.name/writing/diff/</a></p></blockquote><p class="my-1 text-sm leading-7 mb-6">두 시퀀스 간의 차이점을 계산하는 것은 많은 애플리케이션의 핵심입니다.
+아래는 두 텍스트의 차이점을 계산하는 간단한 예입니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/diff-1.png"></p><p class="my-1 text-sm leading-7 mb-6">이 문서에서는 차이점 알고리즘에 관한 문헌을 조사하고 비교하며, 실질적으로 알고리즘의 유용성을 개선하기 위한 몇 가지 기법에 대해 설명합니다.
+특히 전처리 최적화, 최적의 차이점 알고리즘을 선택하기 위한 전략, 후처리 정리에 대해 설명합니다.</p><hr>
+
+    <h1 id="1" class="text-2xl my-8 font-bold">
+      1. 전처리 최적화
+    </h1><p class="my-1 text-sm leading-7 mb-6">가장 유명한 차이점 알고리즘조차도 계산 비용이 큰 작업입니다.
+대부분의 실제 사례에서 비교 대상이 되는 두 시퀀스(보통 텍스트)는 서로 어느 정도 유사합니다.
+이 사실을 통해 알고리즘의 실제 실행 시간을 개선할 수 있는 몇 가지 최적화를 적용할 수 있으며, 경우에 따라 알고리즘을 실행할 필요성을 완전히 없앨 수도 있습니다.</p>
+    <h2 id="1-1" class="text-xl my-4 font-semibold">
+      1.1 동일성
+    </h2><p class="my-1 text-sm leading-7 mb-6">가장 확실하고 간단한 최적화는 동일성 검사입니다.
+두 시퀀스가 동일할 확률은 매우 낮지만 이를 확인하는 것은 매우 간단하므로 동일성 확인을 먼저 하는 것이 합리적입니다.
+이 검사의 부수 작용은 뒤이은 코드를 단순화할 수 있다는 것입니다.
+검사가 끝나면 차이점이 있다는 것이 보장되므로 null 케이스가 배제됩니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">if</span> (text1 == text2) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;</code></pre>
+    <h2 id="1-2" class="text-xl my-4 font-semibold">
+      1.2 공통 접두사/접미사
+    </h2><p class="my-1 text-sm leading-7 mb-6">텍스트 간에 어떤 공통점이 있다면 시작 혹은 끝부분에 공통된 부분 문자열이 있을 가능성이 높습니다.</p><pre><code class="my-4 hljs text-xs language-text">Text 1: The cat in the hat.
+Text 2: The dog in the hat.</code></pre><p class="my-1 text-sm leading-7 mb-6">이는 다음과 같이 단순화될 수 있습니다.</p><pre><code class="my-4 hljs text-xs language-text">Text 1: cat
+Text 2: dog</code></pre><p class="my-1 text-sm leading-7 mb-6">공통 부분 문자열 탐색은 이진 탐색을 사용하여 O(log n)에 수행할 수 있습니다.
+이진 탐색은 극단적인 경우 효율성이 가장 떨어지고 현실 세계에서는 공통성이 0인 경우가 드물지 않기 때문에 검색을 시작하기 전에 첫 번째(또는 마지막) 문자를 빠르게 확인하는 것이 좋습니다.</p><p class="my-1 text-sm leading-7 mb-6">(이 섹션에 대해 많은 이메일을 받았습니다. 문제는 문자열 등호 연산(a == b)은 일반적으로 O(n)이므로 설명한 알고리즘은 O(n log n)이 된다는 것입니다. 그러나 고수준 언어를 다룰 때는 루프와 등호 연산 사이의 속도 차이가 너무 커서 등호 연산은 O(1)로 간주할 수 있습니다. 문제를 더욱 복잡하게 만드는 것은 파이썬과 같이 모든 문자열에 해시 테이블을 사용하는 언어의 경우, 동일성 검사는 O(1), 문자열 생성은 O(n)이 됩니다. 자세한 내용은 <a href="https://neil.fraser.name/news/2007/10/09/" class="text-orange-500">성능 테스트</a>를 참고하세요.)</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">diff_commonPrefix</span>(<span class="hljs-params">text1, text2</span>) {
+  <span class="hljs-comment">// 일반적인 null 케이스를 빠르게 검사</span>
+  <span class="hljs-keyword">if</span> (!text1 || !text2 || text1.<span class="hljs-title function_">charCodeAt</span>(<span class="hljs-number">0</span>) !== text2.<span class="hljs-title function_">charCodeAt</span>(<span class="hljs-number">0</span>)) {
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+  }
+  <span class="hljs-comment">// 이진 탐색.</span>
+  <span class="hljs-keyword">var</span> pointermin = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">var</span> pointermax = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(text1.<span class="hljs-property">length</span>, text2.<span class="hljs-property">length</span>);
+  <span class="hljs-keyword">var</span> pointermid = pointermax;
+  <span class="hljs-keyword">var</span> pointerstart = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">while</span> (pointermin &lt; pointermid) {
+    <span class="hljs-keyword">if</span> (
+      text1.<span class="hljs-title function_">substring</span>(pointerstart, pointermid) ==
+      text2.<span class="hljs-title function_">substring</span>(pointerstart, pointermid)
+    ) {
+      pointermin = pointermid;
+      pointerstart = pointermin;
+    } <span class="hljs-keyword">else</span> {
+      pointermax = pointermid;
+    }
+    pointermid = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>((pointermax - pointermin) / <span class="hljs-number">2</span> + pointermin);
+  }
+  <span class="hljs-keyword">return</span> pointermid;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">diff_commonSuffix</span>(<span class="hljs-params">text1, text2</span>) {
+  <span class="hljs-comment">// 일반적인 null 케이스 검사.</span>
+  <span class="hljs-keyword">if</span> (
+    !text1 ||
+    !text2 ||
+    text1.<span class="hljs-title function_">charCodeAt</span>(text1.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>) !== text2.<span class="hljs-title function_">charCodeAt</span>(text2.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>)
+  ) {
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+  }
+  <span class="hljs-comment">// 이진 탐색.</span>
+  <span class="hljs-keyword">var</span> pointermin = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">var</span> pointermax = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(text1.<span class="hljs-property">length</span>, text2.<span class="hljs-property">length</span>);
+  <span class="hljs-keyword">var</span> pointermid = pointermax;
+  <span class="hljs-keyword">var</span> pointerend = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">while</span> (pointermin &lt; pointermid) {
+    <span class="hljs-keyword">if</span> (
+      text1.<span class="hljs-title function_">substring</span>(text1.<span class="hljs-property">length</span> - pointermid, text1.<span class="hljs-property">length</span> - pointerend) ==
+      text2.<span class="hljs-title function_">substring</span>(text2.<span class="hljs-property">length</span> - pointermid, text2.<span class="hljs-property">length</span> - pointerend)
+    ) {
+      pointermin = pointermid;
+      pointerend = pointermin;
+    } <span class="hljs-keyword">else</span> {
+      pointermax = pointermid;
+    }
+    pointermid = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>((pointermax - pointermin) / <span class="hljs-number">2</span> + pointermin);
+  }
+  <span class="hljs-keyword">return</span> pointermid;
+}</code></pre><p class="my-1 text-sm leading-7 mb-6">접두사와 접미사에 대한 선형 매칭을 하는 GNU diff 프로그램은 문서에서 &quot;때때로 [접두사 및 접미사 제거]가 최소값이 아닌 결과를 생성할 수 있다&quot;고 <a href="https://www.gnu.org/software/diffutils/manual/html_node/diff-Performance.html" class="text-orange-500">주장</a>하지만, 이에 대한 예시는 제공하지 않습니다.</p>
+    <h2 id="1-3" class="text-xl my-4 font-semibold">
+      1.3 단일 항목 삽입/삭제
+    </h2><p class="my-1 text-sm leading-7 mb-6">가장 흔한 차이점은 일부 텍스트가 삽입되거나 삭제되는 경우 입니다.</p><pre><code class="my-4 hljs text-xs language-text">Text 1: The cat in the hat.             | Text 1: The cat in the hat.
+Text 2: The furry cat in the hat.       | Text 2: The cat.</code></pre><p class="my-1 text-sm leading-7 mb-6">공통 접두사와 접미사를 제거한 후 다음을 얻을 수 있습니다.</p><pre><code class="my-4 hljs text-xs language-text">Text 1:                                 | Text 1:  in the hat
+Text 2: furry                           | Text 2:</code></pre><p class="my-1 text-sm leading-7 mb-6">첫 번째 예시에서 빈 &#39;Text 1&#39;는 &#39;Text 2&#39;가 삽입되었음을 나타냅니다.
+두 번째 예시에서 빈 &#39;Text 2&#39;는 &#39;Text 1&#39;이 삭제되었음을 나타냅니다.
+이러한 일반적인 경우를 감지하면 차이점을 체크하는 알고리즘을 실행할 필요가 전혀 없습니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">if</span> (!text1) {
+  <span class="hljs-comment">// 단순한 텍스트 추가</span>
+  <span class="hljs-keyword">return</span> [[<span class="hljs-variable constant_">DIFF_INSERT</span>, text2]];
+}
+<span class="hljs-keyword">if</span> (!text2) {
+  <span class="hljs-comment">// 단순한 텍스트 제거</span>
+  <span class="hljs-keyword">return</span> [[<span class="hljs-variable constant_">DIFF_DELETE</span>, text1]];
+}</code></pre><p class="my-1 text-sm leading-7 mb-6">이 예제와 이후의 예제에서 차이점 집합을 표현하는 내부 포맷은 튜플 배열입니다.
+각 튜플의 첫 번째 요소는 <ins>삽입</ins> (DIFF_INSERT), <del>삭제</del> (DIFF_DELETE) 또는 동일성 (DIFF_EQUAL) 여부를 나타냅니다.
+두 번째 요소는 영향을 받는 텍스트를 나태냅니다.</p>
+    <h2 id="1-4" class="text-xl my-4 font-semibold">
+      1.4 두 개의 수정
+    </h2><p class="my-1 text-sm leading-7 mb-6">두 개의 수정을 감지하고 처리하는 것은 단일 수정보다 더 어렵습니다.
+두 개의 단순 삽입은 &#39;Text 2&#39; 안에 &#39;Text 1&#39;이 있는지 확인하면 감지할 수 있습니다.
+마찬가지로 &#39;Text 1&#39;안에 &#39;Text 2&#39;가 있는지 확인하면 두 개의 단순 삭제를 감지할 수 있습니다.</p><pre><code class="my-4 hljs text-xs language-text">Text 1: The cat in the hat.
+Text 2: The happy cat in the black hat.</code></pre><p class="my-1 text-sm leading-7 mb-6">첫 단계에서 공통 접두사와 접미사를 제거하면 남은 텍스트의 각 끝 부분은 서로 다르다는 것이 보장됩니다.
+그러면 더 짧은 문자열(&quot;cat in the&quot;)이 더 긴 문자열(&quot;happy cat in the black&quot;) 내에 존재한다는 것을 쉽게 확인할 수 있습니다.
+이러한 상황에서는 차이점 알고리즘을 실행하지 않고도 차이를 확인할 수 있습니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">var</span> longtext = text1.<span class="hljs-property">length</span> &gt; text2.<span class="hljs-property">length</span> ? text1 : text2;
+<span class="hljs-keyword">var</span> shorttext = text1.<span class="hljs-property">length</span> &gt; text2.<span class="hljs-property">length</span> ? text2 : text1;
+<span class="hljs-keyword">var</span> i = longtext.<span class="hljs-title function_">indexOf</span>(shorttext);
+<span class="hljs-keyword">if</span> (i != -<span class="hljs-number">1</span>) {
+  <span class="hljs-comment">// 짧은 텍스트가 긴 텍스트에 포함됨.</span>
+  diffs = [
+    [<span class="hljs-variable constant_">DIFF_INSERT</span>, longtext.<span class="hljs-title function_">substring</span>(<span class="hljs-number">0</span>, i)],
+    [<span class="hljs-variable constant_">DIFF_EQUAL</span>, shorttext],
+    [<span class="hljs-variable constant_">DIFF_INSERT</span>, longtext.<span class="hljs-title function_">substring</span>(i + shorttext.<span class="hljs-property">length</span>)],
+  ];
+  <span class="hljs-comment">// 차이점이 반전된 경우 삽입을 삭제로 바꿉니다.</span>
+  <span class="hljs-keyword">if</span> (text1.<span class="hljs-property">length</span> &gt; text2.<span class="hljs-property">length</span>) {
+    diffs[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>] = diffs[<span class="hljs-number">2</span>][<span class="hljs-number">0</span>] = <span class="hljs-variable constant_">DIFF_DELETE</span>;
+  }
+  <span class="hljs-keyword">return</span> diffs;
+}</code></pre><p class="my-1 text-sm leading-7 mb-6">편집 내용이 단순한 2개의 삽입이나 2개의 삭제가 아니면 더 복잡해집니다.
+두 편집 내용이 꽤 긴 텍스트를 사이에 두고 구분되어 있는 경우 이러한 경우가 종종 감지될 수 있습니다.</p><pre><code class="my-4 hljs text-xs language-text">Text 1: The cat in the hat.
+Text 2: The ox in the box.</code></pre><p class="my-1 text-sm leading-7 mb-6">일반적인 접두사와 접미사를 제거하면 다음과 같이 됩니다.</p><pre><code class="my-4 hljs text-xs language-text">Text 1: cat in the hat
+Text 2: ox in the box</code></pre><p class="my-1 text-sm leading-7 mb-6">만약 더 긴 텍스트의 절반 길이 이상의 부분 문자열이 두 텍스트에 존재한다면, 그 문자열이 공통 문자열인 것이 보장됩니다. (역주: 위 예제에 공통 문자열 &quot; in the &quot;를 의미합니다.)
+이 경우 텍스트를 두 개로 분할하고 개별적으로 차이점을 찾을 수 있습니다:</p><pre><code class="my-4 hljs text-xs language-text">Text 1: cat     | Text 1: hat
+Text 2: ox      | Text 2: box</code></pre><p class="my-1 text-sm leading-7 mb-6">이 검사를 재귀적으로 수행하면 더 세분화할 수 있지만, 위 예제에서는 그러한 세분화가 적용되지 않았습니다.</p><p class="my-1 text-sm leading-7 mb-6">가장 긴 공통 부분 문자열을 계산하는 것은 차이점을 계산하는 것만큼이나 복잡한 연산이므로 더 절약되지 않습니다.
+그러나 공통 부분 문자열이 더 긴 텍스트 길이의 절반 이상이어야 한다는 제한이 지름길을 제공합니다.
+아래 다이어그램에서 볼 수 있듯이, 이러한 길이의 공통 부분 문자열이 존재하는 경우 가장 긴 문자열의 2/4 및/또는 3/4가 이 부분 문자열의 일부를 구성해야 합니다.</p><p class="my-1 text-sm leading-7 mb-6">더 작은 텍스트는 이 두 분기의 일치 항목을 검색할 수 있으며, 일치하는 항목의 문맥은 공통 접두사와 접미사를 찾아서 두 텍스트에서 비교할 수 있습니다.
+문자열은 가장 긴 일치 항목의 위치에서 더 긴 텍스트의 절반 길이보다 크거나 같은 위치에서 분할될 수 있습니다.
+반복되는 문자열일 수 있기 때문에 필요한 길이에 도달하는 첫 번째 문자열뿐만 아니라 작은 텍스트에서 각 분기의 모든 일치 항목을 확인해야 합니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-comment">// 두 문제로 나눌 수 있는지 확인합니다.</span>
+<span class="hljs-keyword">var</span> hm = <span class="hljs-title function_">diff_halfMatch</span>(text1, text2);
+<span class="hljs-keyword">if</span> (hm) {
+  <span class="hljs-comment">// 절반 일치가 발견되어 반환 데이터를 정렬합니다.</span>
+  <span class="hljs-keyword">var</span> text1_a = hm[<span class="hljs-number">0</span>];
+  <span class="hljs-keyword">var</span> text1_b = hm[<span class="hljs-number">1</span>];
+  <span class="hljs-keyword">var</span> text2_a = hm[<span class="hljs-number">2</span>];
+  <span class="hljs-keyword">var</span> text2_b = hm[<span class="hljs-number">3</span>];
+  <span class="hljs-keyword">var</span> mid_common = hm[<span class="hljs-number">4</span>];
+  <span class="hljs-comment">// 개별 처리를 위해 두 쌍을 모두 보냅니다.</span>
+  <span class="hljs-keyword">var</span> diffs_a = <span class="hljs-title function_">diff_main</span>(text1_a, text2_a);
+  <span class="hljs-keyword">var</span> diffs_b = <span class="hljs-title function_">diff_main</span>(text1_b, text2_b);
+  <span class="hljs-comment">// 결과를 합칩니다.</span>
+  <span class="hljs-keyword">return</span> diffs_a.<span class="hljs-title function_">concat</span>([[<span class="hljs-variable constant_">DIFF_EQUAL</span>, mid_common]], diffs_b);
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">diff_halfMatch</span>(<span class="hljs-params">text1, text2</span>) {
+  <span class="hljs-comment">// 두 텍스트에 긴 텍스트 길이의 절반 이상인 공통 하위 문자열이 있나요?</span>
+  <span class="hljs-keyword">var</span> longtext = text1.<span class="hljs-property">length</span> &gt; text2.<span class="hljs-property">length</span> ? text1 : text2;
+  <span class="hljs-keyword">var</span> shorttext = text1.<span class="hljs-property">length</span> &gt; text2.<span class="hljs-property">length</span> ? text2 : text1;
+  <span class="hljs-keyword">if</span> (longtext.<span class="hljs-property">length</span> &lt; <span class="hljs-number">10</span> || shorttext.<span class="hljs-property">length</span> &lt; <span class="hljs-number">1</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; <span class="hljs-comment">// 무의미.</span>
+  }
+
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">diff_halfMatchI</span>(<span class="hljs-params">longtext, shorttext, i</span>) {
+    <span class="hljs-comment">// 위치 i 에서 1/4 길이의 하위 문자열을 seed 로 시작합니다.</span>
+    <span class="hljs-keyword">var</span> seed = longtext.<span class="hljs-title function_">substring</span>(i, i + <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(longtext.<span class="hljs-property">length</span> / <span class="hljs-number">4</span>));
+    <span class="hljs-keyword">var</span> j = -<span class="hljs-number">1</span>;
+    <span class="hljs-keyword">var</span> best_common = <span class="hljs-string">&quot;&quot;</span>;
+    <span class="hljs-keyword">var</span> best_longtext_a, best_longtext_b, best_shorttext_a, best_shorttext_b;
+    <span class="hljs-keyword">while</span> ((j = shorttext.<span class="hljs-title function_">indexOf</span>(seed, j + <span class="hljs-number">1</span>)) != -<span class="hljs-number">1</span>) {
+      <span class="hljs-keyword">var</span> prefixLength = <span class="hljs-title function_">diff_commonPrefix</span>(
+        longtext.<span class="hljs-title function_">substring</span>(i),
+        shorttext.<span class="hljs-title function_">substring</span>(j),
+      );
+      <span class="hljs-keyword">var</span> suffixLength = <span class="hljs-title function_">diff_commonSuffix</span>(
+        longtext.<span class="hljs-title function_">substring</span>(<span class="hljs-number">0</span>, i),
+        shorttext.<span class="hljs-title function_">substring</span>(<span class="hljs-number">0</span>, j),
+      );
+      <span class="hljs-keyword">if</span> (best_common.<span class="hljs-property">length</span> &lt; suffixLength + prefixLength) {
+        best_common =
+          shorttext.<span class="hljs-title function_">substring</span>(j - suffixLength, j) +
+          shorttext.<span class="hljs-title function_">substring</span>(j, j + prefixLength);
+        best_longtext_a = longtext.<span class="hljs-title function_">substring</span>(<span class="hljs-number">0</span>, i - suffixLength);
+        best_longtext_b = longtext.<span class="hljs-title function_">substring</span>(i + prefixLength);
+        best_shorttext_a = shorttext.<span class="hljs-title function_">substring</span>(<span class="hljs-number">0</span>, j - suffixLength);
+        best_shorttext_b = shorttext.<span class="hljs-title function_">substring</span>(j + prefixLength);
+      }
+    }
+    <span class="hljs-keyword">if</span> (best_common.<span class="hljs-property">length</span> &gt;= longtext.<span class="hljs-property">length</span> / <span class="hljs-number">2</span>) {
+      <span class="hljs-keyword">return</span> [
+        best_longtext_a,
+        best_longtext_b,
+        best_shorttext_a,
+        best_shorttext_b,
+        best_common,
+      ];
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+    }
+  }
+
+  <span class="hljs-comment">// 먼저 두 번째 분기가 하프 매치의 시드인지 확인합니다.</span>
+  <span class="hljs-keyword">var</span> hm1 = <span class="hljs-title function_">diff_halfMatchI</span>(
+    longtext,
+    shorttext,
+    <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">ceil</span>(longtext.<span class="hljs-property">length</span> / <span class="hljs-number">4</span>),
+  );
+  <span class="hljs-comment">// 세번째 분기를 기준으로 다시 확인합니다.</span>
+  <span class="hljs-keyword">var</span> hm2 = <span class="hljs-title function_">diff_halfMatchI</span>(
+    longtext,
+    shorttext,
+    <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">ceil</span>(longtext.<span class="hljs-property">length</span> / <span class="hljs-number">2</span>),
+  );
+  <span class="hljs-keyword">var</span> hm;
+  <span class="hljs-keyword">if</span> (!hm1 &amp;&amp; !hm2) {
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (!hm2) {
+    hm = hm1;
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (!hm1) {
+    hm = hm2;
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-comment">// 둘 다 일치합니다. 가장 긴 것을 선택합니다.</span>
+    hm = hm1[<span class="hljs-number">4</span>].<span class="hljs-property">length</span> &gt; hm2[<span class="hljs-number">4</span>].<span class="hljs-property">length</span> ? hm1 : hm2;
+  }
+
+  <span class="hljs-comment">// 하프 매치가 발견되어 반환 데이터를 정렬합니다.</span>
+  <span class="hljs-keyword">var</span> text1_a, text1_b, text2_a, text2_b;
+  <span class="hljs-keyword">if</span> (text1.<span class="hljs-property">length</span> &gt; text2.<span class="hljs-property">length</span>) {
+    text1_a = hm[<span class="hljs-number">0</span>];
+    text1_b = hm[<span class="hljs-number">1</span>];
+    text2_a = hm[<span class="hljs-number">2</span>];
+    text2_b = hm[<span class="hljs-number">3</span>];
+  } <span class="hljs-keyword">else</span> {
+    text2_a = hm[<span class="hljs-number">0</span>];
+    text2_b = hm[<span class="hljs-number">1</span>];
+    text1_a = hm[<span class="hljs-number">2</span>];
+    text1_b = hm[<span class="hljs-number">3</span>];
+  }
+  <span class="hljs-keyword">var</span> mid_common = hm[<span class="hljs-number">4</span>];
+  <span class="hljs-keyword">return</span> [text1_a, text1_b, text2_a, text2_b, mid_common];
+}</code></pre>
+    <h1 id="2" class="text-2xl my-8 font-bold">
+      2 차이점 알고리즘
+    </h1><p class="my-1 text-sm leading-7 mb-6">전처리 최적화가 완료되면 나머지 텍스트는 차이점 알고리즘에 의해 비교됩니다.
+무차별 대입 기법은 실행에 O(n1*n2)가 소요됩니다 (n1과 n2는 각 입력의 길이).
+이는 텍스트 길이가 정해지지 않은 실제 애플리케이션에서는 확장 불가능하기 때문에, O(n1+n2)에 근접하는 더 나은 알고리즘에 대한 많은 연구가 진행되어 왔습니다.
+하지만 이러한 알고리즘들은 서로 호환되지 않습니다.
+속도 외에도 중요한 몇 가지 기준이 있습니다.</p>
+    <h2 id="2-1" class="text-xl my-4 font-semibold">
+      2.1 입력
+    </h2><p class="my-1 text-sm leading-7 mb-6">입력 텍스트를 비교하는 데는 보통 세 가지 모드가 있습니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/diff-2.png"></p><p class="my-1 text-sm leading-7 mb-6">개별 문자들 끼리 비교하면 가장 세밀한 수준의 디테일을 얻을 수 있지만 토큰 수가 많기 때문에 실행 시간이 가장 오래 걸립니다.
+단어 경계 또는 줄 바꿈으로 비교하는 것이 더 빠르고 편집점이 더 적게 발생하지만 편집점의 총 길이는 더 길어집니다.
+필요한 세부 수준은 애플리케이션에 따라 다릅니다.
+예를 들어 소스 코드 비교는 일반적으로 줄 단위로 수행되는 반면, 영어 문서 비교는 단어 단위로, 바이너리 데이터나 DNA 서열 비교는 문자 단위로 수행됩니다.</p><p class="my-1 text-sm leading-7 mb-6">모든 차이점 알고리즘은 이론적으로 문자, 단어 또는 줄로 나뉘는지 여부에 관계없이 모든 입력을 처리할 수 있습니다.
+그러나 일부 차이점 알고리즘은 문자와 같은 작은 토큰을 처리하는 데 훨씬 더 효율적이고, 다른 알고리즘은 줄과 같은 큰 토큰을 처리하는 데 훨씬 더 효율적입니다.
+그 이유는 가능한 줄의 수가 무한대이고, 한 텍스트에는 없지만 다른 텍스트에는 존재하는 줄은 자동으로 삽입 또는 삭제로 인식되기 때문입니다.
+반대로 문자를 처리할 때는 80개 정도의 고유 토큰(a-z, A-Z, 0-9 및 일부 구두점)만 존재하므로, 실제 텍스트에는 이 문자들 모두는 아니더라도 대부분 여러 문자가 포함될 수 있습니다.
+다양한 알고리즘이 입력 텍스트의 통계적 차이를 활용하여 더 효율적인 전략을 수립할 수 있습니다.
+줄별 차이를 위해 특별히 고안된 알고리즘은 1976년 J. Hunt와 M. McIlroy의 논문에 설명되어 있습니다: <a href="https://www.cs.dartmouth.edu/~doug/diff.pdf" class="text-orange-500">An Algorithm for Differential File Comparison</a>.</p><p class="my-1 text-sm leading-7 mb-6">고려해야 할 또 다른 요소는 유용한 기능이 사용 가능한지 입니다.
+대부분의 컴퓨터 언어는 배열 처리 기능에 비해 문자열 처리 기능(정규식 등)이 뛰어납니다.
+이런 강력한 문자열 함수를 사용하면 문자 기반 차이점 알고리즘을 더 쉽게 프로그래밍할 수 있습니다.
+반면에 많은 언어에서 유니코드가 지원됨에 따라 문자열에 최대 65,536개의 알파벳이 포함될 수 있습니다.
+따라서 단어나 줄을 단일 문자로 해시화할 수 있으므로 차이점 알고리즘이 배열 대신 문자열을 사용할 수 있습니다.
+이를 직관적으로 설명하자면, 킹 제임스 성경에는 30,833개의 고유한 줄과 28,880개의 고유한 &#39;단어&#39;(선행 또는 후행 구두점이 구분되지 않고 공백으로만 구분됨)가 포함되어 있습니다.</p>
+    <h2 id="2-2" class="text-xl my-4 font-semibold">
+      2.2 출력
+    </h2><p class="my-1 text-sm leading-7 mb-6">기존의 차이점 알고리즘들은 첫 번째 텍스트에 대해 수행해서 두 번째 텍스트가 되는 삽입 및 삭제 목록을 생성합니다.
+이를 확장하여 &#39;이동&#39; 연산자를 추가했습니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/diff-3.png"></p><p class="my-1 text-sm leading-7 mb-6">큰 텍스트 블록이 한 위치에서 다른 위치로 이동한 경우, 삭제 및 삽입보다는 이동으로 보는 것이 더 이해하기 쉬운 경우가 많습니다.
+&#39;이동&#39; 연산자를 사용하는 알고리즘은 1978년 P. Heckel의 <a href="https://dl.acm.org/doi/10.1145/359460.359467" class="text-orange-500">파일 간에 차이점을 분리하는 기술</a>이라는 논문에 설명되어 있습니다.</p><p class="my-1 text-sm leading-7 mb-6">완전히 다른 접근 방식은 &#39;복사&#39;와 &#39;삽입&#39;을 연산자로 사용하는 것입니다:</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/diff-4.png"></p><p class="my-1 text-sm leading-7 mb-6">이 방법은 첫 번째 텍스트의 일부를 복사하여 붙여넣어 두 번째 텍스트를 구성하는 방식입니다.
+신문에서 단어를 스크랩하여 몸값을 요구하는 메모(랜섬 노트)를 작성하는 것과 비슷하지만, 스크랩한 단어를 복사하여 여러 번 사용할 수 있다는 점이 다릅니다.
+완전히 새로운 텍스트는 그대로 삽입됩니다.
+복사/삽입 차이는 일반적으로 사람이 읽을 수 없습니다.
+그러나 계산 속도가 훨씬 빠르기 때문에 델타 압축 애플리케이션의 경우 삽입/삭제 차이점 보다 우수합니다.
+&#39;복사&#39; 및 &#39;삽입&#39; 연산자를 사용하는 알고리즘은 J. MacDonald의 2000년 <a href="http://www.xmailserver.org/xdfs.pdf" class="text-orange-500">델타 압축을 위한 파일 시스템 지원</a>이라는 논문에 설명되어 있습니다.</p>
+    <h2 id="2-3" class="text-xl my-4 font-semibold">
+      2.3 정확성
+    </h2><p class="my-1 text-sm leading-7 mb-6">차이점 알고리즘은 잘못된 결과, 즉 한 텍스트에서 다른 텍스트로의 차이점들을 설명하지 못하는 결과를 반환해서는 안 됩니다.
+그러나 일부 알고리즘은 속도를 위해 차선의 결과를 반환할 수 있습니다.
+예를 들어, 헤켈의 알고리즘(1978)은 빠르지만 입력에 반복되는 텍스트가 있는 경우 혼동을 일으킬 수 있습니다:</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/diff-5.png"></p><p class="my-1 text-sm leading-7 mb-6">속도를 위해 정확도를 희생하는 또 다른 예는 전체 텍스트를 줄 기반 알고리즘으로 처리한 다음, 수정된 줄을 문자 기반 알고리즘으로 재처리하는 것입니다.
+이 멀티패스 접근 방식의 문제점은 줄 기반 차이로 인해 두 줄 사이의 부적절한 공통점을 식별할 수 있다는 것입니다.
+빈 줄은 서로 관련이 없는 두 텍스트에 나타날 수 있기 때문에 이러한 문제의 일반적인 원인입니다.
+이러한 부적절한 공통점은 수정 블록을 무작위로 분할하여 문자 기반 단계에서 실제로 공통 텍스트를 발견하는 것을 방해할 수 있습니다.
+이에 대한 해결책은 문자를 기준으로 차이점을 찾기 전에 행을 기반으로 시맨틱 정리 알고리즘(아래 3.2절에 설명됨)에 통과시키는 것입니다.
+긴 문서를 여러 번 편집하는 경우 높은 수준의 차이를 수행한 후 낮은 수준의 차이를 수행하면 속도와 메모리 요구 사항이 크게 개선될 수 있습니다.
+그러나 결과적인 차이점 경로가 최단 경로가 아닐 수 있다는 위험은 여전히 남아 있습니다.</p><p class="my-1 text-sm leading-7 mb-6">가장 좋은 범용 미분 알고리즘은 1986년 마이어스(E. Myers)의 <a href="https://neil.fraser.name/writing/diff/myers.pdf" class="text-orange-500">O(ND) 차이점 알고리즘과 그 변형</a>이라는 논문에서 설명합니다.
+제안된 최적화 방법 중 하나는 양쪽 끝의 차이를 동시에 처리하여 중간에서 만나는 것입니다.
+대부분의 경우 이렇게 하면 성능이 최대 50%까지 향상됩니다.</p><hr>
+
+    <h1 id="3" class="text-2xl my-8 font-bold">
+      3. 후처리 정리
+    </h1><p class="my-1 text-sm leading-7 mb-6">완벽한 차이점 알고리즘은 한 텍스트를 다른 텍스트로 변환하는 데 필요한 최소 편집 횟수를 보고합니다.
+하지만 때로는 결과가 너무 완벽할 때도 있습니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/diff-6.png"></p><p class="my-1 text-sm leading-7 mb-6">새로운 차이점을 처리할 때 첫 번째 단계는 섹션처럼 바꾸고 병합하는 것입니다.
+위의 예에서는 이러한 최적화가 가능합니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/diff-7.png"></p><p class="my-1 text-sm leading-7 mb-6">두 차이점 모두 출력은 동일하지만, 두 번째 차이점은 우연히 반복되는 등호를 바꾸어 두 연산을 하나로 합쳤습니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">diff_cleanupMerge</span>(<span class="hljs-params">diffs</span>) {
+  <span class="hljs-comment">// 섹션이 수정된 것 처럼 순서를 바꾸고 병합합니다. 동일한 부분을 병합합니다.</span>
+  <span class="hljs-comment">// 모든 편집 섹션은 동등한 부분을 넘어서지 않는 한 이동할 수 있습니다.</span>
+  diffs.<span class="hljs-title function_">push</span>([<span class="hljs-variable constant_">DIFF_EQUAL</span>, <span class="hljs-string">&#x27;&#x27;</span>]);  <span class="hljs-comment">// 마지막에 더미 추가</span>
+  <span class="hljs-keyword">var</span> pointer = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">var</span> count_delete = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">var</span> count_insert = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">var</span> text_delete = <span class="hljs-string">&#x27;&#x27;</span>;
+  <span class="hljs-keyword">var</span> text_insert = <span class="hljs-string">&#x27;&#x27;</span>;
+  <span class="hljs-keyword">var</span> commonlength;
+  <span class="hljs-keyword">while</span> (pointer &lt; diffs.<span class="hljs-property">length</span>) {
+    <span class="hljs-keyword">switch</span> (diffs[pointer][<span class="hljs-number">0</span>]) {
+      <span class="hljs-keyword">case</span> <span class="hljs-attr">DIFF_INSERT</span>:
+        count_insert++;
+        text_insert += diffs[pointer][<span class="hljs-number">1</span>];
+        pointer++;
+        <span class="hljs-keyword">break</span>;
+      <span class="hljs-keyword">case</span> <span class="hljs-attr">DIFF_DELETE</span>:
+        count_delete++;
+        text_delete += diffs[pointer][<span class="hljs-number">1</span>];
+        pointer++;
+        <span class="hljs-keyword">break</span>;
+      <span class="hljs-keyword">case</span> <span class="hljs-attr">DIFF_EQUAL</span>:
+        <span class="hljs-comment">// 동등한 부분에 도달하면 이전에 중복된 항목이 있는지 확인합니다.</span>
+        <span class="hljs-keyword">if</span> (count_delete !== <span class="hljs-number">0</span> || count_insert !== <span class="hljs-number">0</span>) {
+          <span class="hljs-keyword">if</span> (count_delete !== <span class="hljs-number">0</span> &amp;&amp; count_insert !== <span class="hljs-number">0</span>) {
+            <span class="hljs-comment">// 공통 접두사는 제외합니다.</span>
+            commonlength = <span class="hljs-title function_">diff_commonPrefix</span>(text_insert, text_delete);
+            <span class="hljs-keyword">if</span> (commonlength !== <span class="hljs-number">0</span>) {
+              <span class="hljs-keyword">if</span> ((pointer - count_delete - count_insert) &gt; <span class="hljs-number">0</span> &amp;&amp;
+                  diffs[pointer - count_delete - count_insert - <span class="hljs-number">1</span>][<span class="hljs-number">0</span>] ==
+                  <span class="hljs-variable constant_">DIFF_EQUAL</span>) {
+                diffs[pointer - count_delete - count_insert - <span class="hljs-number">1</span>][<span class="hljs-number">1</span>] +=
+                    text_insert.<span class="hljs-title function_">substring</span>(<span class="hljs-number">0</span>, commonlength);
+              } <span class="hljs-keyword">else</span> {
+                diffs.<span class="hljs-title function_">splice</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, [<span class="hljs-variable constant_">DIFF_EQUAL</span>,
+                    text_insert.<span class="hljs-title function_">substring</span>(<span class="hljs-number">0</span>, commonlength)]);
+                pointer++;
+              }
+              text_insert = text_insert.<span class="hljs-title function_">substring</span>(commonlength);
+              text_delete = text_delete.<span class="hljs-title function_">substring</span>(commonlength);
+            }
+            <span class="hljs-comment">// 공통 접미사는 제외합니다.</span>
+            commonlength = <span class="hljs-title function_">diff_commonSuffix</span>(text_insert, text_delete);
+            <span class="hljs-keyword">if</span> (commonlength !== <span class="hljs-number">0</span>) {
+              diffs[pointer][<span class="hljs-number">1</span>] = text_insert.<span class="hljs-title function_">substring</span>(text_insert.<span class="hljs-property">length</span> -
+                  commonlength) + diffs[pointer][<span class="hljs-number">1</span>];
+              text_insert = text_insert.<span class="hljs-title function_">substring</span>(<span class="hljs-number">0</span>, text_insert.<span class="hljs-property">length</span> -
+                  commonlength);
+              text_delete = text_delete.<span class="hljs-title function_">substring</span>(<span class="hljs-number">0</span>, text_delete.<span class="hljs-property">length</span> -
+                  commonlength);
+            }
+          }
+          <span class="hljs-comment">// 문제가 되는 부분을 삭제하고 병합된 레코드를 추가합니다.</span>
+          <span class="hljs-keyword">if</span> (count_delete === <span class="hljs-number">0</span>) {
+            diffs.<span class="hljs-title function_">splice</span>(pointer - count_delete - count_insert,
+                count_delete + count_insert, [<span class="hljs-variable constant_">DIFF_INSERT</span>, text_insert]);
+          } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (count_insert === <span class="hljs-number">0</span>) {
+            diffs.<span class="hljs-title function_">splice</span>(pointer - count_delete - count_insert,
+                count_delete + count_insert, [<span class="hljs-variable constant_">DIFF_DELETE</span>, text_delete]);
+          } <span class="hljs-keyword">else</span> {
+            diffs.<span class="hljs-title function_">splice</span>(pointer - count_delete - count_insert,
+                count_delete + count_insert, [<span class="hljs-variable constant_">DIFF_DELETE</span>, text_delete],
+                [<span class="hljs-variable constant_">DIFF_INSERT</span>, text_insert]);
+          }
+          pointer = pointer - count_delete - count_insert +
+                    (count_delete ? <span class="hljs-number">1</span> : <span class="hljs-number">0</span>) + (count_insert ? <span class="hljs-number">1</span> : <span class="hljs-number">0</span>) + <span class="hljs-number">1</span>;
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (pointer !== <span class="hljs-number">0</span> &amp;&amp; diffs[pointer - <span class="hljs-number">1</span>][<span class="hljs-number">0</span>] == <span class="hljs-variable constant_">DIFF_EQUAL</span>) {
+          <span class="hljs-comment">// 이 동일한 부분을 이전 동일한 부분과 병합합니다.</span>
+          diffs[pointer - <span class="hljs-number">1</span>][<span class="hljs-number">1</span>] += diffs[pointer][<span class="hljs-number">1</span>];
+          diffs.<span class="hljs-title function_">splice</span>(pointer, <span class="hljs-number">1</span>);
+        } <span class="hljs-keyword">else</span> {
+          pointer++;
+        }
+        count_insert = <span class="hljs-number">0</span>;
+        count_delete = <span class="hljs-number">0</span>;
+        text_delete = <span class="hljs-string">&#x27;&#x27;</span>;
+        text_insert = <span class="hljs-string">&#x27;&#x27;</span>;
+        <span class="hljs-keyword">break</span>;
+    }
+  }
+  <span class="hljs-keyword">if</span> (diffs[diffs.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>][<span class="hljs-number">1</span>] === <span class="hljs-string">&#x27;&#x27;</span>) {
+    diffs.<span class="hljs-title function_">pop</span>();  <span class="hljs-comment">// 마지막 더미 제거</span>
+  }
+
+  <span class="hljs-comment">// 두 번째 단계: 양쪽이 동등한 부분으로 둘러싸인 단일 편집점을 찾습니다.</span>
+  <span class="hljs-comment">// 이 편집점을 옆으로 이동하여 공일한 부분을 제거할 수 있습니다.</span>
+  <span class="hljs-comment">// e.g: A&lt;ins&gt;BA&lt;/ins&gt;C -&gt; &lt;ins&gt;AB&lt;/ins&gt;AC</span>
+  <span class="hljs-keyword">var</span> changes = <span class="hljs-literal">false</span>;
+  pointer = <span class="hljs-number">1</span>;
+  <span class="hljs-comment">// 첫 번째와 마지막은 의도적으로 무시합니다.</span>
+  <span class="hljs-keyword">while</span> (pointer &lt; diffs.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>) {
+    <span class="hljs-keyword">if</span> (diffs[pointer - <span class="hljs-number">1</span>][<span class="hljs-number">0</span>] == <span class="hljs-variable constant_">DIFF_EQUAL</span> &amp;&amp;
+        diffs[pointer + <span class="hljs-number">1</span>][<span class="hljs-number">0</span>] == <span class="hljs-variable constant_">DIFF_EQUAL</span>) {
+      <span class="hljs-comment">// 양쪽이 동일한 부분으로 둘러싸인 단일 편집입니다.</span>
+      <span class="hljs-keyword">if</span> (diffs[pointer][<span class="hljs-number">1</span>].<span class="hljs-title function_">substring</span>(diffs[pointer][<span class="hljs-number">1</span>].<span class="hljs-property">length</span> -
+          diffs[pointer - <span class="hljs-number">1</span>][<span class="hljs-number">1</span>].<span class="hljs-property">length</span>) == diffs[pointer - <span class="hljs-number">1</span>][<span class="hljs-number">1</span>]) {
+
+        <span class="hljs-comment">// 편집 내용을 이전 동일한 부분의 위로 이동시킵니다.</span>
+        diffs[pointer][<span class="hljs-number">1</span>] = diffs[pointer - <span class="hljs-number">1</span>][<span class="hljs-number">1</span>] +
+            diffs[pointer][<span class="hljs-number">1</span>].<span class="hljs-title function_">substring</span>(<span class="hljs-number">0</span>, diffs[pointer][<span class="hljs-number">1</span>].<span class="hljs-property">length</span> -
+                                        diffs[pointer - <span class="hljs-number">1</span>][<span class="hljs-number">1</span>].<span class="hljs-property">length</span>);
+        diffs[pointer + <span class="hljs-number">1</span>][<span class="hljs-number">1</span>] = diffs[pointer - <span class="hljs-number">1</span>][<span class="hljs-number">1</span>] + diffs[pointer + <span class="hljs-number">1</span>][<span class="hljs-number">1</span>];
+        diffs.<span class="hljs-title function_">splice</span>(pointer - <span class="hljs-number">1</span>, <span class="hljs-number">1</span>);
+        changes = <span class="hljs-literal">true</span>;
+      } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (diffs[pointer][<span class="hljs-number">1</span>].<span class="hljs-title function_">substring</span>(<span class="hljs-number">0</span>, diffs[pointer + <span class="hljs-number">1</span>][<span class="hljs-number">1</span>].<span class="hljs-property">length</span>) ==
+          diffs[pointer + <span class="hljs-number">1</span>][<span class="hljs-number">1</span>]) {
+        <span class="hljs-comment">// 편집 내용을 다음 동일한 부분으로 이동시킵니다.</span>
+        diffs[pointer - <span class="hljs-number">1</span>][<span class="hljs-number">1</span>] += diffs[pointer + <span class="hljs-number">1</span>][<span class="hljs-number">1</span>];
+        diffs[pointer][<span class="hljs-number">1</span>] =
+            diffs[pointer][<span class="hljs-number">1</span>].<span class="hljs-title function_">substring</span>(diffs[pointer + <span class="hljs-number">1</span>][<span class="hljs-number">1</span>].<span class="hljs-property">length</span>) +
+            diffs[pointer + <span class="hljs-number">1</span>][<span class="hljs-number">1</span>];
+        diffs.<span class="hljs-title function_">splice</span>(pointer + <span class="hljs-number">1</span>, <span class="hljs-number">1</span>);
+        changes = <span class="hljs-literal">true</span>;
+      }
+    }
+    pointer++;
+  }  .
+  <span class="hljs-comment">// 변경이 발생한 경우, 차이를 다시 정렬하고 변경 스윕을 다시 해야합니다.</span>
+  <span class="hljs-keyword">if</span> (changes) {
+    <span class="hljs-title function_">diff_cleanupMerge</span>(diffs);
+  }
+}</code></pre><p class="my-1 text-sm leading-7 mb-6">변환이 약간의 도움이 되고 완전히 안전하지만, 더 큰 문제는 서로 다른 두 텍스트 사이의 차이가 &#39;쭉정이&#39;라고 불리는 작은 우연의 일치로 흩어지는 경우가 많다는 것입니다.
+위의 예상 결과는 끝에 마침표를 제외하고 &#39;Text 1&#39;을 모두 삭제하고 &#39;Text 2&#39;를 모두 삽입하는 것일 수 있습니다.
+그러나 대부분의 알고리즘은 조각조각 잘라내어 엉망인 결과를 초래합니다.</p><p class="my-1 text-sm leading-7 mb-6">이 문제는 문자 기반 차이에서 가장 두드러지게 나타나는데, 영숫자 문자의 작은 집합이 공통점을 보장하기 때문입니다.
+위 예의 단어 기반 차이는 분명히 더 낫지만 &quot; the &quot;를 부적절하게 복구했을 것입니다.
+텍스트가 길어지면 공유되는 단어가 더 많아집니다.
+위 예시의 줄 기반 차이가 가장 이상적입니다.
+그러나 줄 기반 차이점도 빈 줄과 기타 일반적인 줄(예: 소스 코드의 &quot;} else {&quot;)을 잘못 복구하는 데 취약합니다.</p><p class="my-1 text-sm leading-7 mb-6">쭉정이 문제는 사실 효율성 또는 시맨틱 두 가지 문제 중 하나입니다.
+이 두 가지 문제에는 각각 다른 해결책이 필요합니다.</p>
+    <h2 id="3-1" class="text-xl my-4 font-semibold">
+      3.1 효율성
+    </h2><p class="my-1 text-sm leading-7 mb-6">차이점의 출력이 컴퓨터용으로 설계된 경우(예: 델타 압축 또는 패치 프로그램 입력) 후속 애플리케이션 또는 저장 방법에 따라 각 편집 작업에는 해당 편집 내의 문자 수 외에도 고정된 계산 오버헤드가 발생할 수 있습니다.
+예를 들어, 50개의 단일 문자 편집은 하나의 50자 편집보다 더 많은 저장 공간을 차지하거나 다음 애플리케이션에서 처리하는 데 더 오래 걸릴 수 있습니다.
+장단점을 측정한 후에는 편집 작업의 계산 또는 저장 비용을 변경된 문자 수에 상응하는 비용으로 표시할 수 있습니다.
+비용이 0이면 오버헤드가 없는 것입니다.
+예를 들어 이 비용이 10자인 경우, 편집되는 총 문자 수를 최대 9자까지 늘리고 편집 작업 수를 1자 줄이면 순 절감 효과가 발생합니다.
+따라서 차이의 총 비용은 o * c + n으로 계산할 수 있으며, 여기서 o는 수정 작업 수, c는 문자 수로 표시된 각 수정 작업의 상수 비용, n은 변경된 총 문자 수입니다.
+다음은 수정된 문자 수를 늘리면 수정 작업 수를 줄이고 전체 차이 비용을 줄일 수 있는 방법을 보여주는 세 가지 예입니다(c는 4로 임의로 설정).</p><p class="my-1 text-sm leading-7 mb-6">첫째, 기존 삽입 및 삭제에 의해 양쪽이 둘러싸인 등호(변경되지 않은 텍스트)는 길이가 c자 미만이어야 분할하는 것이 유리합니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/diff-8.png"></p><p class="my-1 text-sm leading-7 mb-6">둘째, 한쪽은 기존 삽입 및 삭제로 둘러싸여 있고 다른 한쪽은 기존 삽입 또는 삭제로 둘러싸여 있는 등호는 분할하는 것이 유리하려면 길이가 0.5C 문자 미만이어야 합니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/diff-9.png"></p><p class="my-1 text-sm leading-7 mb-6">이 두 가지 조건은 데이터를 한 번만 통과하면 빠르게 계산할 수 있으며, 분할로 인해 주변의 편집 유형이 변경된 경우 역추적하여 이전 동일성을 재평가할 수 있습니다.
+또 다른 패스는 편집 작업의 순서를 바꾸고 유사한 작업을 병합하기 위해 수행됩니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">diff_cleanupEfficiency</span>(<span class="hljs-params">diffs</span>) {
+  <span class="hljs-comment">// 사소한 동일성을 제거해서 편집 횟수를 줄임</span>
+  <span class="hljs-keyword">var</span> changes = <span class="hljs-literal">false</span>;
+  <span class="hljs-keyword">var</span> equalities = []; <span class="hljs-comment">// 동등성이 발견되는 인덱스 스텍</span>
+  <span class="hljs-keyword">var</span> lastequality = <span class="hljs-string">&quot;&quot;</span>; <span class="hljs-comment">// equalities[equalities.length-1][1] 와 항상 같음</span>
+  <span class="hljs-keyword">var</span> pointer = <span class="hljs-number">0</span>; <span class="hljs-comment">// 현재 위치의 인덱스.</span>
+  <span class="hljs-comment">// 마지막 동등한 부분 앞에 삽입 연산이 있는지 여부</span>
+  <span class="hljs-keyword">var</span> pre_ins = <span class="hljs-literal">false</span>;
+  <span class="hljs-comment">// 마지막 동등한 부분 앞에 삭제 연산이 있는지 여부</span>
+  <span class="hljs-keyword">var</span> pre_del = <span class="hljs-literal">false</span>;
+  <span class="hljs-comment">// 마지막 동등한 부분 뒤에 삽입 연산이 있는지 여부</span>
+  <span class="hljs-keyword">var</span> post_ins = <span class="hljs-literal">false</span>;
+  <span class="hljs-comment">// 마지막 동등한 부분 뒤에 삭제 연산이 있는지 여부</span>
+  <span class="hljs-keyword">var</span> post_del = <span class="hljs-literal">false</span>;
+  <span class="hljs-keyword">while</span> (pointer &lt; diffs.<span class="hljs-property">length</span>) {
+    <span class="hljs-keyword">if</span> (diffs[pointer][<span class="hljs-number">0</span>] == <span class="hljs-variable constant_">DIFF_EQUAL</span>) {
+      <span class="hljs-comment">// 동등성 찾음</span>
+      <span class="hljs-keyword">if</span> (diffs[pointer][<span class="hljs-number">1</span>].<span class="hljs-property">length</span> &lt; <span class="hljs-title class_">Diff</span>_EditCost &amp;&amp; (post_ins || post_del)) {
+        <span class="hljs-comment">// 후보가 찾아짐</span>
+        equalities.<span class="hljs-title function_">push</span>(pointer);
+        pre_ins = post_ins;
+        pre_del = post_del;
+        lastequality = diffs[pointer][<span class="hljs-number">1</span>];
+      } <span class="hljs-keyword">else</span> {
+        <span class="hljs-comment">// 후보가 될 수 없음.</span>
+        equalities = [];
+        lastequality = <span class="hljs-string">&quot;&quot;</span>;
+      }
+      post_ins = post_del = <span class="hljs-literal">false</span>;
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-comment">// 삽입 또는 삭제</span>
+      <span class="hljs-keyword">if</span> (diffs[pointer][<span class="hljs-number">0</span>] == <span class="hljs-variable constant_">DIFF_DELETE</span>) {
+        post_del = <span class="hljs-literal">true</span>;
+      } <span class="hljs-keyword">else</span> {
+        post_ins = <span class="hljs-literal">true</span>;
+      }
+      <span class="hljs-comment">/*
+       * 5가지 유형으로 나뉨:
+       * &lt;ins&gt;A&lt;/ins&gt;&lt;del&gt;B&lt;/del&gt;XY&lt;ins&gt;C&lt;/ins&gt;&lt;del&gt;D&lt;/del&gt;
+       * &lt;ins&gt;A&lt;/ins&gt;X&lt;ins&gt;C&lt;/ins&gt;&lt;del&gt;D&lt;/del&gt;
+       * &lt;ins&gt;A&lt;/ins&gt;&lt;del&gt;B&lt;/del&gt;X&lt;ins&gt;C&lt;/ins&gt;
+       * &lt;ins&gt;A&lt;/del&gt;X&lt;ins&gt;C&lt;/ins&gt;&lt;del&gt;D&lt;/del&gt;
+       * &lt;ins&gt;A&lt;/ins&gt;&lt;del&gt;B&lt;/del&gt;X&lt;del&gt;C&lt;/del&gt;
+       */</span>
+      <span class="hljs-keyword">if</span> (
+        lastequality &amp;&amp;
+        ((pre_ins &amp;&amp; pre_del &amp;&amp; post_ins &amp;&amp; post_del) ||
+          (lastequality.<span class="hljs-property">length</span> &lt; <span class="hljs-title class_">Diff</span>_EditCost / <span class="hljs-number">2</span> &amp;&amp;
+            pre_ins + pre_del + post_ins + post_del == <span class="hljs-number">3</span>))
+      ) {
+        <span class="hljs-comment">// 중복 레코드</span>
+        diffs.<span class="hljs-title function_">splice</span>(equalities[equalities.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>], <span class="hljs-number">0</span>, [
+          <span class="hljs-variable constant_">DIFF_DELETE</span>,
+          lastequality,
+        ]);
+        <span class="hljs-comment">// 두 번째 복사를 삽입으로 변경.</span>
+        diffs[equalities[equalities.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>] + <span class="hljs-number">1</span>][<span class="hljs-number">0</span>] = <span class="hljs-variable constant_">DIFF_INSERT</span>;
+        equalities.<span class="hljs-title function_">pop</span>(); <span class="hljs-comment">// 방금 삭제한 동등한 부분 제거.</span>
+        lastequality = <span class="hljs-string">&quot;&quot;</span>;
+        <span class="hljs-keyword">if</span> (pre_ins &amp;&amp; pre_del) {
+          <span class="hljs-comment">// 이전 항목에 영향을 줄 수 있는 변경 사항이 없으므로 계속 진행.</span>
+          post_ins = post_del = <span class="hljs-literal">true</span>;
+          equalities = [];
+        } <span class="hljs-keyword">else</span> {
+          equalities.<span class="hljs-title function_">pop</span>(); <span class="hljs-comment">// 이전에 동등한 부분 제거;</span>
+          pointer = equalities.<span class="hljs-property">length</span> ? equalities[equalities.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>] : -<span class="hljs-number">1</span>;
+          post_ins = post_del = <span class="hljs-literal">false</span>;
+        }
+        changes = <span class="hljs-literal">true</span>;
+      }
+    }
+    pointer++;
+  }
+
+  <span class="hljs-keyword">if</span> (changes) {
+    <span class="hljs-title function_">diff_cleanupMerge</span>(diffs);
+  }
+}</code></pre><p class="my-1 text-sm leading-7 mb-6">이는 좋은 시작이지만, 세 번째 유형의 상태를 포착하지 못하기 때문에 완전한 해결책은 아닙니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/diff-10.png"></p><p class="my-1 text-sm leading-7 mb-6">이와 유사한 경우, 개별 분할은 전체 비용을 높히지만, 이러한 분할이 결합되면 결과적으로 전체 비용은 낮아집니다.
+이러한 형태의 최적화를 계산하는 것은 앞의 두 경우의 O(n) 최적화와는 대조적으로 선택된 차이의 영역에 대한 O(n^2) 연산으로 보이므로, 절감 효과보다 더 많은 비용이 소요될 수 있습니다.</p>
+    <h2 id="3-2" class="text-xl my-4 font-semibold">
+      3.2 시맨틱
+    </h2>3.2.1 시맨틱 쭉정이<p class="my-1 text-sm leading-7 mb-6">차이점의 출력이 시각적 표시와 같이 사람이 사용하도록 설계된 경우 문제가 달라집니다.
+이 경우 목표는 더 의미 있는 구분을 제공하는 것입니다.
+다음 두 가지 예를 생각해 보세요.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/diff-11.png"></p><p class="my-1 text-sm leading-7 mb-6">수학적으로 이 두 예는 매우 유사합니다.
+중심 등호(&quot;f&quot;)가 같고 편집 연산 횟수도 동일합니다.
+그러나 첫 번째 예(두 개의 오타를 수정하는 작업)는 등호를 분할하고 병합한 후가 아니라 원시 차이 단계에서 더 의미가 있습니다.
+반면 두 번째 예제(더 큰 편집이 포함됨)는 원시 차이점 단계에서는 의미가 거의 없으며 등호를 분할하고 병합한 후에 훨씬 더 명확해집니다.
+이 두 예제 사이의 주요 차이점은 등호를 둘러싼 변화의 양입니다.</p><p class="my-1 text-sm leading-7 mb-6">시맨틱 쭉정이를 제거하는 한 가지 해결책은 데이터를 통과하면서 양쪽의 삽입과 삭제보다 작거나 같은 등호를 찾는 것입니다.
+이러한 동일성이 발견되면 삭제와 추가로 나눕니다.
+그런 다음 두 번째 패스를 수행하여 살아남은 등호로 분리되지 않은 모든 삭제와 추가를 다시 정렬하고 병합합니다.
+아래는 이러한 단계를 보여주는 다소 인위적인 예시입니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/diff-12.png"></p><p class="my-1 text-sm leading-7 mb-6">이 경우 &quot;over&quot;의 길이는 네 글자인데 반해 그 주위의 변화는 다섯 글자와 한 글자밖에 되지 않으므로 그대로 남습니다.
+그러나 &quot;n&quot;은 한 글자에 불과한 반면, 그 주위의 변화는 1글자와 5글자에 불과합니다.
+따라서 &quot;n&quot;은 분할됩니다.
+등호가 분할되면 컨텍스트가 변경되었으므로 패스는 이전 등호를 다시 평가하기 위해 역추적해야 합니다.
+이 경우 &quot;over&quot;는 이제 다섯 글자와 여덟 글자의 변화로 둘러싸여 있으므로 역시 분할됩니다.
+마지막으로 모든 조각이 한데 모이면 쉽게 이해할 수 있는 차이가 나타납니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">diff_cleanupSemantic</span>(<span class="hljs-params">diffs</span>) {
+  <span class="hljs-comment">// 의미상 사소한 동일성을 제거하여 편집 횟수를 줄이세요.</span>
+  <span class="hljs-keyword">var</span> changes = <span class="hljs-literal">false</span>;
+  <span class="hljs-keyword">var</span> equalities = [];  <span class="hljs-comment">// 동등성이 발견되는 인덱스 스택입니다.</span>
+  <span class="hljs-keyword">var</span> lastequality = <span class="hljs-literal">null</span>;  <span class="hljs-comment">//equalities[equalities.length-1][1] 와 항상 같음</span>
+  <span class="hljs-keyword">var</span> pointer = <span class="hljs-number">0</span>;  <span class="hljs-comment">// 현재 위치 인덱스</span>
+  <span class="hljs-comment">// 동일성 이전에 변경된 문자 수</span>
+  <span class="hljs-keyword">var</span> length_changes1 = <span class="hljs-number">0</span>;
+  <span class="hljs-comment">// 동일성 이후에 변경된 문자 수</span>
+  <span class="hljs-keyword">var</span> length_changes2 = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">while</span> (pointer &lt; diffs.<span class="hljs-property">length</span>) {
+    <span class="hljs-keyword">if</span> (diffs[pointer][<span class="hljs-number">0</span>] == <span class="hljs-variable constant_">DIFF_EQUAL</span>) {  <span class="hljs-comment">// 동일성 발견</span>
+      equalities.<span class="hljs-title function_">push</span>(pointer);
+      length_changes1 = length_changes2;
+      length_changes2 = <span class="hljs-number">0</span>;
+      lastequality = diffs[pointer][<span class="hljs-number">1</span>];
+    } <span class="hljs-keyword">else</span> {  <span class="hljs-comment">// 삽입 또는 삭제</span>
+      length_changes2 += diffs[pointer][<span class="hljs-number">1</span>].<span class="hljs-property">length</span>;
+      <span class="hljs-keyword">if</span> (lastequality !== <span class="hljs-literal">null</span> &amp;&amp; (lastequality.<span class="hljs-property">length</span> &lt;= length_changes1) &amp;&amp;
+          (lastequality.<span class="hljs-property">length</span> &lt;= length_changes2)) {
+        <span class="hljs-comment">//alert(&#x27;Splitting: &quot;&#x27; + lastequality + &#x27;&quot;&#x27;);</span>
+        <span class="hljs-comment">// 중복 레코드</span>
+        diffs.<span class="hljs-title function_">splice</span>(equalities[equalities.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>], <span class="hljs-number">0</span>,
+                     [<span class="hljs-variable constant_">DIFF_DELETE</span>, lastequality]);
+        <span class="hljs-comment">// 두 번째 복사를 삽입으로 번경</span>
+        diffs[equalities[equalities.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>] + <span class="hljs-number">1</span>][<span class="hljs-number">0</span>] = <span class="hljs-variable constant_">DIFF_INSERT</span>;  .
+        <span class="hljs-comment">// 방금 삭제한 동등성은 버립니다.</span>
+        equalities.<span class="hljs-title function_">pop</span>();
+        <span class="hljs-comment">// 이전의 동등성을 버립니다. (재평가 필요)</span>
+        equalities.<span class="hljs-title function_">pop</span>();
+        pointer = equalities.<span class="hljs-property">length</span> ? equalities[equalities.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>] : -<span class="hljs-number">1</span>;
+        length_changes1 = <span class="hljs-number">0</span>;  <span class="hljs-comment">// 카운터 리셋</span>
+        length_changes2 = <span class="hljs-number">0</span>;
+        lastequality = <span class="hljs-literal">null</span>;
+        changes = <span class="hljs-literal">true</span>;
+      }
+    }
+    pointer++;
+  }
+
+  <span class="hljs-keyword">if</span> (changes) {
+    <span class="hljs-title function_">diff_cleanupMerge</span>(diffs);
+  }
+}
+</code></pre><p class="my-1 text-sm leading-7 mb-6">이 해결법은 완벽하지 않습니다.
+이는 좁은 시야를 가지고 있으며, 평가하는 각 동일성의 바로 옆을 보지 못합니다.
+이로 인해 소수의 쭉정이 그룹이 살아남을 수 있습니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/diff-13.png"></p><p class="my-1 text-sm leading-7 mb-6">보다 포괄적인 해결책은 문제의 평등에서 더 멀리 떨어진 차이의 가중 평균을 계산하는 것입니다.</p>3.2.2 시맨틱 정렬<p class="my-1 text-sm leading-7 mb-6">시맨틱하게 의미 있는 Diff를 만드는 것과는 별개로 편집 경계를 논리적 구분으로 정렬하는 문제가 있습니다.
+다음 diff를 생각해 보세요.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/diff-14.png"></p><p class="my-1 text-sm leading-7 mb-6">6개의 diff 모두 유효하며 최소한의 차이점입니다.
+Diff 1과 6은 차이점 알고리즘이 반환할 가능성이 가장 높은 Diff 입니다.
+그러나 Diff 3과 4는 차이점의 시맨틱 의미를 포착할 가능성이 더 높습니다.</p><p class="my-1 text-sm leading-7 mb-6">해결책은 양쪽이 등호로 둘러싸인 각 삽입 또는 삭제 부분을 찾아서 옆으로 밀어내는 것입니다.
+앞의 같음의 마지막 토큰이 편집의 마지막 토큰과 같으면 편집을 왼쪽으로 밀 수 있습니다.
+마찬가지로 편집의 첫 번째 토큰이 다음 등호의 첫 번째 토큰과 같으면 편집을 오른쪽으로 밀어낼 수 있습니다.
+가능한 각 위치는 경계가 논리적으로 보이는지 여부에 따라 점수를 매길 수 있습니다.
+효과적인 한 가지 방식은 다음과 같습니다.</p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">경계가 영어와 숫자가 아닌 문자에 인접한 경우 1점.</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">경계가 공백에 인접한 경우 2점.</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">경계가 줄 바꿈에 인접한 경우 3점.</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">경계가 빈 줄에 인접한 경우 4점.</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">경계가 전체 등호를 소비한 경우 5점.</p></li></ul><p class="my-1 text-sm leading-7 mb-6">이 방식에서는 Diff 1, 2, 5, 6에 0점을 부여하고 차이점 3과 4에 4점을 부여합니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">diff_cleanupSemanticLossless</span>(<span class="hljs-params">diffs</span>) {
+  <span class="hljs-comment">// 양쪽이 등호로 둘러싸인 단일 편집 내용을 찾아 옆으로 이동하여</span>
+  <span class="hljs-comment">// 편집 내용을 단어 경계에 맞출 수 있습니다.</span>
+  <span class="hljs-comment">// e.g: The c&lt;ins&gt;at c&lt;/ins&gt;ame. -&gt; The &lt;ins&gt;cat &lt;/ins&gt;came.</span>
+  <span class="hljs-comment">// 경계를 찾기 위한 몇 가지 정규식 패턴을 정의합니다.</span>
+  <span class="hljs-keyword">var</span> punctuation = <span class="hljs-regexp">/[^a-zA-Z0-9]/</span>;
+  <span class="hljs-keyword">var</span> whitespace = <span class="hljs-regexp">/\s/</span>;
+  <span class="hljs-keyword">var</span> linebreak = <span class="hljs-regexp">/[\r\n]/</span>;
+  <span class="hljs-keyword">var</span> blanklineEnd = <span class="hljs-regexp">/\n\r?\n$/</span>;
+  <span class="hljs-keyword">var</span> blanklineStart = <span class="hljs-regexp">/^\r?\n\r?\n/</span>;
+
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">diff_cleanupSemanticScore</span>(<span class="hljs-params">one, two</span>) {
+    <span class="hljs-comment">// 두 개의 문자열이 주어졌을 때, 내부 경계가 논리적 경계에 속하는지 여부를 나타내는 점수를 계산합니다.</span>
+    <span class="hljs-comment">// 점수는 5점(최고)에서 0점(최저) 입니다.</span>
+    <span class="hljs-comment">// 클로저는 위에서 정의한 정규식 패턴을 참조합니다.</span>
+    <span class="hljs-keyword">if</span> (!one || !two) {
+      <span class="hljs-comment">// Edges are the best.</span>
+      <span class="hljs-keyword">return</span> <span class="hljs-number">5</span>;
+    }
+
+    <span class="hljs-comment">// 이 함수의 각 포트는 &#x27;공백&#x27;에 대한 각 언어의 미묘한 정의 차이로 인해 약간 다르게 동작합니다.</span>
+    <span class="hljs-comment">// 이 함수의 목적은 대부분 외형적인 것이기 때문에 완전한 일치를 강요하기보다는 각 언어의 고유한 기능을 사용하기로 결정했습니다.</span>
+    <span class="hljs-keyword">var</span> score = <span class="hljs-number">0</span>;
+    <span class="hljs-comment">// 영어와 숫자가 아니면 1점</span>
+    <span class="hljs-keyword">if</span> (
+      one.<span class="hljs-title function_">charAt</span>(one.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>).<span class="hljs-title function_">match</span>(punctuation) ||
+      two.<span class="hljs-title function_">charAt</span>(<span class="hljs-number">0</span>).<span class="hljs-title function_">match</span>(punctuation)
+    ) {
+      score++;
+      <span class="hljs-comment">// 공백에 2점</span>
+      <span class="hljs-keyword">if</span> (
+        one.<span class="hljs-title function_">charAt</span>(one.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>).<span class="hljs-title function_">match</span>(whitespace) ||
+        two.<span class="hljs-title function_">charAt</span>(<span class="hljs-number">0</span>).<span class="hljs-title function_">match</span>(whitespace)
+      ) {
+        score++;
+        <span class="hljs-comment">// 개행에 3점</span>
+        <span class="hljs-keyword">if</span> (
+          one.<span class="hljs-title function_">charAt</span>(one.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>).<span class="hljs-title function_">match</span>(linebreak) ||
+          two.<span class="hljs-title function_">charAt</span>(<span class="hljs-number">0</span>).<span class="hljs-title function_">match</span>(linebreak)
+        ) {
+          score++;
+          <span class="hljs-comment">// 빈 줄에 4점</span>
+          <span class="hljs-keyword">if</span> (one.<span class="hljs-title function_">match</span>(blanklineEnd) || two.<span class="hljs-title function_">match</span>(blanklineStart)) {
+            score++;
+          }
+        }
+      }
+    }
+    <span class="hljs-keyword">return</span> score;
+  }
+
+  <span class="hljs-keyword">var</span> pointer = <span class="hljs-number">1</span>;
+  <span class="hljs-comment">// 첫 번째와 마지막 요소는 의도적으로 무시합니다(확인할 필요가 없음).</span>
+  <span class="hljs-keyword">while</span> (pointer &lt; diffs.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>) {
+    <span class="hljs-keyword">if</span> (
+      diffs[pointer - <span class="hljs-number">1</span>][<span class="hljs-number">0</span>] == <span class="hljs-variable constant_">DIFF_EQUAL</span> &amp;&amp;
+      diffs[pointer + <span class="hljs-number">1</span>][<span class="hljs-number">0</span>] == <span class="hljs-variable constant_">DIFF_EQUAL</span>
+    ) {
+      <span class="hljs-comment">// 동일한 부분으로 둘러싸인 단일 편집점</span>
+      <span class="hljs-keyword">var</span> equality1 = diffs[pointer - <span class="hljs-number">1</span>][<span class="hljs-number">1</span>];
+      <span class="hljs-keyword">var</span> edit = diffs[pointer][<span class="hljs-number">1</span>];
+      <span class="hljs-keyword">var</span> equality2 = diffs[pointer + <span class="hljs-number">1</span>][<span class="hljs-number">1</span>];
+
+      <span class="hljs-comment">// 먼저 편집 내용을 최대한 왼쪽으로 이동합니다.</span>
+      <span class="hljs-keyword">var</span> commonOffset = <span class="hljs-title function_">diff_commonSuffix</span>(equality1, edit);
+      <span class="hljs-keyword">if</span> (commonOffset) {
+        <span class="hljs-keyword">var</span> commonString = edit.<span class="hljs-title function_">substring</span>(edit.<span class="hljs-property">length</span> - commonOffset);
+        equality1 = equality1.<span class="hljs-title function_">substring</span>(<span class="hljs-number">0</span>, equality1.<span class="hljs-property">length</span> - commonOffset);
+        edit = commonString + edit.<span class="hljs-title function_">substring</span>(<span class="hljs-number">0</span>, edit.<span class="hljs-property">length</span> - commonOffset);
+        equality2 = commonString + equality2;
+      }
+
+      <span class="hljs-comment">// 둘째, 가장 적합한 문자를 찾아 한 글자씩 단계적으로 입력합니다.</span>
+      <span class="hljs-keyword">var</span> bestEquality1 = equality1;
+      <span class="hljs-keyword">var</span> bestEdit = edit;
+      <span class="hljs-keyword">var</span> bestEquality2 = equality2;
+      <span class="hljs-keyword">var</span> bestScore =
+        <span class="hljs-title function_">diff_cleanupSemanticScore</span>(equality1, edit) +
+        <span class="hljs-title function_">diff_cleanupSemanticScore</span>(edit, equality2);
+      <span class="hljs-keyword">while</span> (edit.<span class="hljs-title function_">charAt</span>(<span class="hljs-number">0</span>) === equality2.<span class="hljs-title function_">charAt</span>(<span class="hljs-number">0</span>)) {
+        equality1 += edit.<span class="hljs-title function_">charAt</span>(<span class="hljs-number">0</span>);
+        edit = edit.<span class="hljs-title function_">substring</span>(<span class="hljs-number">1</span>) + equality2.<span class="hljs-title function_">charAt</span>(<span class="hljs-number">0</span>);
+        equality2 = equality2.<span class="hljs-title function_">substring</span>(<span class="hljs-number">1</span>);
+        <span class="hljs-keyword">var</span> score =
+          <span class="hljs-title function_">diff_cleanupSemanticScore</span>(equality1, edit) +
+          <span class="hljs-title function_">diff_cleanupSemanticScore</span>(edit, equality2);
+        <span class="hljs-comment">// &gt;= 는 편집 시 선행 공백보다 후행 공백을 권장합니다.</span>
+        <span class="hljs-keyword">if</span> (score &gt;= bestScore) {
+          bestScore = score;
+          bestEquality1 = equality1;
+          bestEdit = edit;
+          bestEquality2 = equality2;
+        }
+      }
+
+      <span class="hljs-keyword">if</span> (diffs[pointer - <span class="hljs-number">1</span>][<span class="hljs-number">1</span>] != bestEquality1) {
+        <span class="hljs-comment">// 개선 사항이 있으니 차이점에 다시 저장하세요.</span>
+        <span class="hljs-keyword">if</span> (bestEquality1) {
+          diffs[pointer - <span class="hljs-number">1</span>][<span class="hljs-number">1</span>] = bestEquality1;
+        } <span class="hljs-keyword">else</span> {
+          diffs.<span class="hljs-title function_">splice</span>(pointer - <span class="hljs-number">1</span>, <span class="hljs-number">1</span>);
+          pointer--;
+        }
+        diffs[pointer][<span class="hljs-number">1</span>] = bestEdit;
+        <span class="hljs-keyword">if</span> (bestEquality2) {
+          diffs[pointer + <span class="hljs-number">1</span>][<span class="hljs-number">1</span>] = bestEquality2;
+        } <span class="hljs-keyword">else</span> {
+          diffs.<span class="hljs-title function_">splice</span>(pointer + <span class="hljs-number">1</span>, <span class="hljs-number">1</span>);
+          pointer--;
+        }
+      }
+    }
+    pointer++;
+  }
+}</code></pre><p class="my-1 text-sm leading-7 mb-6">diff 의 <a href="https://github.com/google/diff-match-patch" class="text-orange-500">구현체</a>와 온라인 <a href="https://neil.fraser.name/software/diff_match_patch/demos/diff.html" class="text-orange-500">데모</a>를 확인해 보세요.
+Diff에 대한 짝꿍 문서도 참조하세요: <a href="https://neil.fraser.name/writing/patch/" class="text-orange-500">Patch</a></p>
+          </main>
+        </div>
+        <script src="/dev-blog/scripts/header.js"></script>
+      </body>
+    </html>
+    

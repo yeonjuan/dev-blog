@@ -1,0 +1,197 @@
+
+   <!doctype html>
+    <html lang="ko">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>타입스크립트 5.2의 새로운 키워드: 'using' (번역) | DevBlog</title>
+        <link href="/dev-blog/favicon.ico" rel="shortcut icon">
+        <meta name="description" content="최근 진행한 프로젝트에서 부득이하게 Next.js Static Exports 와 next-i18next을 같이 사용해서 다국어가 지원되는 정적 웹페이지를 구성해야 했습니다. 하지만 next-i18next에서 서버사이드 런타임에 동작해야 하는 로직 때문에 에러가 발생했는데요. 해결 과정에서 이 글을 찾게 되었고 프로젝트를 성공적으로 구성할 수 있었습니다. 같은 어려움을 겪는 분들에게 도움이 되었으면 좋겠습니다.">
+        <link href="/dev-blog/output.css" type="text/css" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
+          rel="stylesheet"
+        />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-ZBZX7LMVNE');
+        </script>
+        
+      <link href="/dev-blog/css/github.min.css" type="text/css" rel="stylesheet" />
+    
+    
+      </head>
+      <body>
+        <div class="relative">
+            
+  <style>
+        .hamburger {
+            cursor: pointer;
+            justify-content: space-between;
+            flex-direction: column;
+        }
+        .hamburger > div {
+            height: 2px;
+            transition: 0.2s ease-out;
+            z-index: 999;
+        }
+        .menuInput:checked ~ .hamburger > div:nth-child(1) {
+            transform: translateY(6.5px) rotate(45deg);
+        }
+        .menuInput:checked ~ .hamburger > div:nth-child(2) {
+            opacity: 0;
+        }
+        .menuInput:checked ~ .hamburger > div:nth-child(3) {
+            transform: translateY(-6.5px) rotate(-45deg);
+        }
+    </style>
+  <div id="overlay" class="backdrop-blur-sm bg-black/20 dark:bg-slate-900/80 fixed h-full inset-0 hidden"></div>
+  <header class="bg-zinc-800 text-white h-12 fixed flex justify-between items-center w-full px-4">
+    <a
+      class="w-10 flex items-center justify-center"
+      href="https://github.com/yeonjuan/dev-blog"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <img
+        src="/dev-blog/assets/ic-github.svg"
+        alt="go to github"
+        width="20"
+      >
+    </a>
+    <span>
+      <a href="/dev-blog/">
+        DEV BLOG
+      </a>
+    </span>
+    <div class="w-10">
+      <input
+        id="menu"
+        type="checkbox"
+        class="menuInput peer sr-only hidden"
+        aria-hidden="true"
+      >
+      <label
+        for="menu"
+        aria-label="menu button"
+        class="hamburger flex flex-col justify-between ml-auto h-[21px] w-[21px] px-[1px] py-[3px] [&>div]:h-[2px] [&>div]:w-[18px] [&>div]:bg-white hover:cursor-pointer"
+      >
+        <div></div>
+        <div></div>
+        <div></div>
+      </label>
+      <nav class="fixed text-black transition-[max-height] duration-200 overflow-hidden max-h-0 top-12 left-[0px] peer-checked:max-h-[200px] bg-white w-full border-b border-black">
+        <ul class="p-4">
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/">HOME</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/posts/JavaScript">JavaScript</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/posts/Review">Review</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/posts/Browser">Browser</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+          <main class="py-2 px-4 pt-10 max-w-3xl m-auto pb-20">
+          
+            <aside class="mt-14">
+              <a href="/dev-blog/" class="hover:underline">Home</a> &gt; <a href="/dev-blog/dev-blog/posts" class="hover:underline">JavaScript</a> &gt; <a href="dev-blog/posts/JavaScript/using-keyword" class="hover:underline">타입스크립트 5.2의 새로운 키워드: 'using' (번역)</a>
+            </aside>
+          
+            
+    <h1 id="-5-2-using" class="text-2xl my-8 font-bold">
+      타입스크립트 5.2의 새로운 키워드: 'using'
+    </h1><blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6">원문: <a href="https://www.totaltypescript.com/typescript-5-2-new-keyword-using" class="text-orange-500">https://www.totaltypescript.com/typescript-5-2-new-keyword-using</a></p></blockquote><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/using-keyword-thumbnail.webp"></p><p class="my-1 text-sm leading-7 mb-6">타입스크립트 5.2에서 새로운 키워드인 &#39;using&#39;이 도입되었습니다. 이는 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">Symbol.dispose</code> 함수를 통해 스코프를 벗어날 때 모든 것을 폐기하는 데 사용할 수 있습니다.</p><pre><code class="my-4 hljs text-xs language-ts">{
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">getResource</span> = (<span class="hljs-params"></span>) =&gt; {
+    <span class="hljs-keyword">return</span> {
+      [<span class="hljs-title class_">Symbol</span>.<span class="hljs-property">dispose</span>]: <span class="hljs-function">() =&gt;</span> {
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Hooray!&#x27;</span>)
+      }
+    }
+  }
+  <span class="hljs-keyword">using</span> resource = <span class="hljs-title function_">getResource</span>();
+} <span class="hljs-comment">// &#x27;Hooray!&#x27;가 console에 로깅됩니다.</span></code></pre><p class="my-1 text-sm leading-7 mb-6">이는 최근 3단계에 도달한 <a href="https://github.com/tc39/proposal-explicit-resource-management" class="text-orange-500">TC39 제안</a>을 기반으로 하며, 자바스크립트에 적용될 것임을 뜻합니다.</p><p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">using</code>은 파일 처리, 데이터베이스 연결과 같은 리소스를 관리하는데 매우 유용합니다.</p>
+    <h2 id="-symbol-dispose" class="text-xl my-4 font-semibold">
+      `Symbol.dispose`
+    </h2><p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">Symbol.dispose</code>는 자바스크립트의 새로운 전역 심볼입니다.
+<code class="bg-gray-100 px-1 rounded-md inline-block text-sm">Symbol.dispose</code>에 함수가 할당된 모든 것은 &#39;리소스&#39;, 즉 <a href="https://github.com/tc39/proposal-explicit-resource-management#definitions" class="text-orange-500">&quot;특정 수명을 가진 객체&quot;</a>로 간주되며 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">using</code> 키워드와 함께 사용할 수 있습니다.</p><pre><code class="my-4 hljs text-xs language-ts"><span class="hljs-keyword">const</span> resource = {
+  [<span class="hljs-title class_">Symbol</span>.<span class="hljs-property">dispose</span>]: <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Hooray!&quot;</span>);
+  },
+};</code></pre>
+    <h2 id="-await-using" class="text-xl my-4 font-semibold">
+      `await using`
+    </h2><p class="my-1 text-sm leading-7 mb-6">또한 비동기적으로 처리해야 하는 리소스를 다루기 위해 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">Symbol.asyncDispose</code> 와 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">await using</code>을 사용할 수도 있습니다.</p><pre><code class="my-4 hljs text-xs language-ts"><span class="hljs-keyword">const</span> <span class="hljs-title function_">getResource</span> = (<span class="hljs-params"></span>) =&gt; ({
+  [<span class="hljs-title class_">Symbol</span>.<span class="hljs-property">asyncDispose</span>]: <span class="hljs-title function_">async</span> () =&gt; {
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">someAsyncFunc</span>();
+  },
+});
+
+{
+  <span class="hljs-keyword">await</span> <span class="hljs-keyword">using</span> resource = <span class="hljs-title function_">getResource</span>();
+}</code></pre><p class="my-1 text-sm leading-7 mb-6">이렇게 하면 계속 진행하기 전에 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">Symbol.asyncDispose</code> 함수를 기다립니다.</p><p class="my-1 text-sm leading-7 mb-6">이는 데이터베이스 연결과 같이 프로그램을 계속하기 전에 연결이 종료되었는지 확인해야 하는 리소스에 유용합니다.</p>
+    <h2 id="" class="text-xl my-4 font-semibold">
+      사용 사례
+    </h2>파일 처리<p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">using</code>을 사용하면, node에서 파일 핸들러를 통해 파일 시스템에 접근하는 것이 훨씬 쉬워질 수 있습니다.</p><p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">using</code>을 사용하지 않으면 다음과 같습니다.</p><pre><code class="my-4 hljs text-xs language-ts"><span class="hljs-keyword">import</span> { open } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;node:fs/promises&quot;</span>;
+
+<span class="hljs-keyword">let</span> filehandle;
+<span class="hljs-keyword">try</span> {
+  filehandle = <span class="hljs-keyword">await</span> <span class="hljs-title function_">open</span>(<span class="hljs-string">&quot;thefile.txt&quot;</span>, <span class="hljs-string">&quot;r&quot;</span>);
+} <span class="hljs-keyword">finally</span> {
+  <span class="hljs-keyword">await</span> filehandle?.<span class="hljs-title function_">close</span>();
+}</code></pre><p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">using</code>을 사용하면 다음과 같습니다:</p><pre><code class="my-4 hljs text-xs language-ts"><span class="hljs-keyword">import</span> { open } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;node:fs/promises&quot;</span>;
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">getFileHandle</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params"><span class="hljs-attr">path</span>: <span class="hljs-built_in">string</span></span>) =&gt; {
+  <span class="hljs-keyword">const</span> filehandle = <span class="hljs-keyword">await</span> <span class="hljs-title function_">open</span>(path, <span class="hljs-string">&quot;r&quot;</span>);
+
+  <span class="hljs-keyword">return</span> {
+    filehandle,
+    [<span class="hljs-title class_">Symbol</span>.<span class="hljs-property">asyncDispose</span>]: <span class="hljs-title function_">async</span> () =&gt; {
+      <span class="hljs-keyword">await</span> filehandle.<span class="hljs-title function_">close</span>();
+    },
+  };
+};
+
+{
+  <span class="hljs-keyword">await</span> <span class="hljs-keyword">using</span> file = <span class="hljs-title function_">getFileHandle</span>(<span class="hljs-string">&quot;thefile.txt&quot;</span>);
+  <span class="hljs-comment">// file.filehandle를 사용해 작업을 수행합니다.</span>
+} <span class="hljs-comment">// 자동으로 폐기됩니다!</span></code></pre>데이터베이스 연결<p class="my-1 text-sm leading-7 mb-6">데이터베이스 연결 관리는 C#에서 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">using</code>의 일반적인 사용 사례입니다.</p><p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">using</code>을 사용하지 않으면 다음과 같습니다.</p><pre><code class="my-4 hljs text-xs language-ts"><span class="hljs-keyword">const</span> connection = <span class="hljs-keyword">await</span> <span class="hljs-title function_">getDb</span>();
+
+<span class="hljs-keyword">try</span> {
+  <span class="hljs-comment">// connection으로 작업을 수행합니다.</span>
+} <span class="hljs-keyword">finally</span> {
+  <span class="hljs-keyword">await</span> connection.<span class="hljs-title function_">close</span>();
+}</code></pre><p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">using</code>을 사용하면 다음과 같습니다:</p><pre><code class="my-4 hljs text-xs language-ts"><span class="hljs-keyword">const</span> <span class="hljs-title function_">getConnection</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params"></span>) =&gt; {
+  <span class="hljs-keyword">const</span> connection = <span class="hljs-keyword">await</span> <span class="hljs-title function_">getDb</span>();
+
+  <span class="hljs-keyword">return</span> {
+    connection,
+    [<span class="hljs-title class_">Symbol</span>.<span class="hljs-property">asyncDispose</span>]: <span class="hljs-title function_">async</span> () =&gt; {
+      <span class="hljs-keyword">await</span> connection.<span class="hljs-title function_">close</span>();
+    },
+  };
+};
+
+{
+  <span class="hljs-keyword">await</span> <span class="hljs-keyword">using</span> { connection } = <span class="hljs-title function_">getConnection</span>();
+  <span class="hljs-comment">// connection으로 작업 수행</span>
+} <span class="hljs-comment">// 자동으로 연결이 닫힙니다!</span></code></pre><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/await-using_lalzrw.jpeg"></p>
+          </main>
+        </div>
+        <script src="/dev-blog/scripts/header.js"></script>
+      </body>
+    </html>
+    

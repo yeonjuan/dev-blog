@@ -1,0 +1,248 @@
+
+   <!doctype html>
+    <html lang="ko">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>return undefined vs null | DevBlog</title>
+        <link href="/dev-blog/favicon.ico" rel="shortcut icon">
+        <meta name="description" content="보통 어떤 값을 반환하는 함수에서 마땅히 반환할 값이 없을 때 null 또는 undefined 을 사용하곤 합니다...">
+        <link href="/dev-blog/output.css" type="text/css" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
+          rel="stylesheet"
+        />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-ZBZX7LMVNE');
+        </script>
+        
+      <link href="/dev-blog/css/github.min.css" type="text/css" rel="stylesheet" />
+    
+    
+      </head>
+      <body>
+        <div class="relative">
+            
+  <style>
+        .hamburger {
+            cursor: pointer;
+            justify-content: space-between;
+            flex-direction: column;
+        }
+        .hamburger > div {
+            height: 2px;
+            transition: 0.2s ease-out;
+            z-index: 999;
+        }
+        .menuInput:checked ~ .hamburger > div:nth-child(1) {
+            transform: translateY(6.5px) rotate(45deg);
+        }
+        .menuInput:checked ~ .hamburger > div:nth-child(2) {
+            opacity: 0;
+        }
+        .menuInput:checked ~ .hamburger > div:nth-child(3) {
+            transform: translateY(-6.5px) rotate(-45deg);
+        }
+    </style>
+  <div id="overlay" class="backdrop-blur-sm bg-black/20 dark:bg-slate-900/80 fixed h-full inset-0 hidden"></div>
+  <header class="bg-zinc-800 text-white h-12 fixed flex justify-between items-center w-full px-4">
+    <a
+      class="w-10 flex items-center justify-center"
+      href="https://github.com/yeonjuan/dev-blog"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <img
+        src="/dev-blog/assets/ic-github.svg"
+        alt="go to github"
+        width="20"
+      >
+    </a>
+    <span>
+      <a href="/dev-blog/">
+        DEV BLOG
+      </a>
+    </span>
+    <div class="w-10">
+      <input
+        id="menu"
+        type="checkbox"
+        class="menuInput peer sr-only hidden"
+        aria-hidden="true"
+      >
+      <label
+        for="menu"
+        aria-label="menu button"
+        class="hamburger flex flex-col justify-between ml-auto h-[21px] w-[21px] px-[1px] py-[3px] [&>div]:h-[2px] [&>div]:w-[18px] [&>div]:bg-white hover:cursor-pointer"
+      >
+        <div></div>
+        <div></div>
+        <div></div>
+      </label>
+      <nav class="fixed text-black transition-[max-height] duration-200 overflow-hidden max-h-0 top-12 left-[0px] peer-checked:max-h-[200px] bg-white w-full border-b border-black">
+        <ul class="p-4">
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/">HOME</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/posts/JavaScript">JavaScript</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/posts/Review">Review</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/posts/Browser">Browser</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+          <main class="py-2 px-4 pt-10 max-w-3xl m-auto pb-20">
+          
+            <aside class="mt-14">
+              <a href="/dev-blog/" class="hover:underline">Home</a> &gt; <a href="/dev-blog/dev-blog/posts" class="hover:underline">JavaScript</a> &gt; <a href="dev-blog/posts/JavaScript/return-null-vs-undefined" class="hover:underline">return undefined vs null</a>
+            </aside>
+          
+            <!--meta
+title: return null vs undefined
+description: null, undefined 중 어떤 것을 사용하면 좋을지 고민한 글.
+keywords: null vs undefined
+-->
+
+
+    <h1 id="return-null-vs-undefined" class="text-2xl my-8 font-bold">
+      return `null` vs `undefined`
+    </h1>
+    <h2 id="" class="text-xl my-4 font-semibold">
+      들어가기 전에
+    </h2><p class="my-1 text-sm leading-7 mb-6">보통 어떤 값을 반환하는 함수에서 마땅히 반환할 값이 없을 때 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">null</code> 또는 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">undefined</code> 을 사용하곤 합니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;empty&#x27;</span>); <span class="hljs-comment">// null</span>
+[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>].<span class="hljs-title function_">find</span>(<span class="hljs-function"><span class="hljs-params">num</span> =&gt;</span> num === <span class="hljs-number">5</span>); <span class="hljs-comment">// undefined</span></code></pre><p class="my-1 text-sm leading-7 mb-6">2개월 전 즈음, 회사 내 팀원들과 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">null</code> vs <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">undefined</code>로 이야기를 나눈 적이 있었습니다. 이야기를 나누기 전에는 당연하듯 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">null</code> 을 사용했었고 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">undefined</code>를 사용해야겠다는 생각 자체를 안 했었습니다.</p><p class="my-1 text-sm leading-7 mb-6">그런데 최근 들어 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">undefined</code>를 사용하는 코드를 종종 보게 되었고 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">null</code> vs <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">undefined</code>에 대한 고민이 다시 생기게 되어 간략히 정리해 보았습니다.</p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#오픈소스-null-vs-undefined" class="text-orange-500">오픈소스 null vs undefined</a></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#null-선호" class="text-orange-500">null 선호</a></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#undefined-선호" class="text-orange-500">undefined 선호</a></p></li></ul>
+    <h2 id="-null-vs-undefined" class="text-xl my-4 font-semibold">
+      오픈소스 null vs undefined
+    </h2><p class="my-1 text-sm leading-7 mb-6">먼저 오픈소스들에서는 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">null</code> 과 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">undefined</code> 중 어떤 값을 선호하는지 찾아보았습니다. 모든 오픈소스를 둘러볼 수는 없기에 관심있는 프로젝트만 살펴보았습니다.</p><table>
+<thead>
+<tr>
+    <th>언어</th>
+    <th>프로젝트</th>
+    <th>null vs undefined</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td rowspan=3>JavaScript</td>
+    <td><a href='https://github.com/eslint/eslint'>eslint</a></td>
+    <td>null</td>
+</tr>
+<tr>
+    <td><a href='https://github.com/facebook/react'>react</a></td>
+    <td>null</td>
+</tr>
+<tr>
+    <td><a href='https://github.com/GoogleChrome/lighthouse'>lighthouse</a></td>
+    <td>null</td>
+</tr>
+<tr>
+    <td rowspan=3>TypeScript</td>
+    <td><a href='https://github.com/typescript-eslint/typescript-eslint'>typescript-eslint</a></td>
+    <td>null</td>
+</tr>
+<tr>
+    <td><a href='https://github.com/romefrontend/rome'> rome </a></td>
+    <td>undefined</td>
+</tr>
+<tr>
+    <td><a href='https://github.com/microsoft/TypeScript'> TypeScript</a></td>
+    <td>undefined</td>
+</tr>
+
+</tbody>
+</table>
+
+<p class="my-1 text-sm leading-7 mb-6">찾아본 프로젝트 수가 적어서 큰 의미는 없지만 조사한 프로젝트에서는, JavaScript는 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">null</code>, TypeScript는 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">undefined</code> 를 사용하는 경우가 보입니다. 여기서 조금 놀랐는데, 당연히 모두 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">null</code>을 사용하고 있을 줄 알았습니다.</p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="https://github.com/eslint/eslint/blob/master/lib/rules/utils/ast-utils.js#L87-L99" class="text-orange-500">ESLint - example</a></p></li></ul><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">getUpperFunction</span>(<span class="hljs-params">node</span>) {
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> currentNode = node; currentNode; currentNode = currentNode.<span class="hljs-property">parent</span>) {
+        <span class="hljs-keyword">if</span> (anyFunctionPattern.<span class="hljs-title function_">test</span>(currentNode.<span class="hljs-property">type</span>)) {
+            <span class="hljs-keyword">return</span> currentNode;
+        }
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; <span class="hljs-comment">// &lt;--</span>
+}</code></pre><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="https://github.com/microsoft/TypeScript/blob/7b942b4fa875f2877a90d201cf146e6196b0c07b/src/compiler/watchUtilities.ts#L42-L46" class="text-orange-500">TypeScript - example</a></p></li></ul><pre><code class="my-4 hljs text-xs language-ts"> <span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">createCachedDirectoryStructureHost</span>(<span class="hljs-params"><span class="hljs-attr">host</span>: <span class="hljs-title class_">DirectoryStructureHost</span>, <span class="hljs-comment">/* ...*/</span></span>): <span class="hljs-title class_">CachedDirectoryStructureHost</span> | <span class="hljs-literal">undefined</span> {
+        <span class="hljs-keyword">if</span> (!host.<span class="hljs-property">getDirectories</span> || !host.<span class="hljs-property">readDirectory</span>) {
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span>; <span class="hljs-comment">// &lt;--</span>
+        }</code></pre><p class="my-1 text-sm leading-7 mb-6">살펴본 오픈소스 프로젝트에서도 선호하는 컨벤션에 대한 명확한 이유를 찾을 수는 없었습니다. 이에 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">null</code>, <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">undefined</code> 각각 선호하는 이유에 대해 정리해보았습니다.</p>
+    <h1 id="null" class="text-2xl my-8 font-bold">
+      null 선호
+    </h1>
+    <h2 id="1-ecmaspec" class="text-xl my-4 font-semibold">
+      1. ECMASpec
+    </h2><blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6"><strong>4.3.10 undefined value</strong><br>primitive value used when a variable has not been assigned a value </p><p class="my-1 text-sm leading-7 mb-6"><strong>4.3.12 null value</strong><br>primitive value that represents the intentional absence of any object value</p></blockquote><p class="my-1 text-sm leading-7 mb-6">ECMA 10 스펙을 보면 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">undefined</code> 와 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">null</code> 값을 위와 같이 설명하고 있습니다
+해석해 보면 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">undefined</code>는 &quot;변수에 값이 할당되지 않았을 때&quot;, <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">null</code> 은 &quot;객체 값의 부재를 의도적으로 표현할 때&quot; 쓰인다고 되어있습니다. 때문에 스펙상으로는 어떤 값의 부재를 표현할 때는 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">null</code>이 더 적절해 보입니다.</p>
+    <h2 id="2" class="text-xl my-4 font-semibold">
+      2. 명시적인 반환값 표현
+    </h2><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">foo</span> (<span class="hljs-params"></span>) { <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;foo&quot;</span>); }
+
+<span class="hljs-keyword">var</span> ret = <span class="hljs-title function_">foo</span>();
+ret; <span class="hljs-comment">// unedfined</span></code></pre><p class="my-1 text-sm leading-7 mb-6">JavaScript 함수에서 return 문이 없거나 뒤에 반환 값이 없으면 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">undefined</code>를 반환하게 됩니다. </p><p class="my-1 text-sm leading-7 mb-6">때문에 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">undefined</code>를 사용하면 <strong>값을 반환하지 않는 함수</strong> 와 <strong>값을 반환 하지만 없는 값을 표현하는 함수</strong>를 명확하게 구분 지을 수 없습니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-comment">// 반환 값이 없는 함수</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">printFoo</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;foo&quot;</span>);
+}
+
+<span class="hljs-comment">// 반환 값이 있는 함수</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">getBar</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">if</span> (<span class="hljs-title function_">barExists</span>()) {
+    <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;bar&quot;</span>;
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+}</code></pre><p class="my-1 text-sm leading-7 mb-6">반면 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">null</code> 을 사용하면 위와 같이, 이 둘을 구분 지울 수 있습니다.</p>
+    <h2 id="3-undefined" class="text-xl my-4 font-semibold">
+      3. undefined 식별자
+    </h2><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">var</span> <span class="hljs-literal">null</span> = <span class="hljs-number">1</span>; <span class="hljs-comment">// Uncaught SyntaxError: Unexpected token &#x27;null&#x27;</span>
+
+<span class="hljs-keyword">var</span> <span class="hljs-literal">undefined</span> = <span class="hljs-number">2</span>; <span class="hljs-comment">// no error</span></code></pre><p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">null</code> 은 식별자로 사용할 수 없습니다. 반면 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">undefined</code>는 예약어가 아니기 때문에 식별자로 사용될 수 있습니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">foo</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">var</span> <span class="hljs-literal">undefined</span> = <span class="hljs-number">2</span>;
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-literal">undefined</span>);
+}
+<span class="hljs-title function_">foo</span>();</code></pre><p class="my-1 text-sm leading-7 mb-6">때문에 중첩된 스코프에서 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">undefined</code> 식별자에는 다른 값이 할당될 수 있습니다. (전역스코프에선 안됩니당)</p>
+    <h1 id="undefined" class="text-2xl my-8 font-bold">
+      undefined 선호
+    </h1>
+    <h2 id="1-optional-chaining" class="text-xl my-4 font-semibold">
+      1. Optional Chaining
+    </h2><p class="my-1 text-sm leading-7 mb-6"><a href="https://github.com/tc39/proposal-optional-chaining" class="text-orange-500">ECMA Propsal 4의 Optional Chaining</a> 은 프로퍼티 접근에서 참조가 nullish(<code class="bg-gray-100 px-1 rounded-md inline-block text-sm">null</code> or <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">undefined</code>)일 경우에 더 이상 참조하지 않고 반환값을 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">undefined</code>로 종결짓습니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">getBaz</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> foo?.<span class="hljs-property">bar</span>?.<span class="hljs-property">baz</span>?.();
+}</code></pre><p class="my-1 text-sm leading-7 mb-6">반환값을 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">undefined</code>로 사용할 경우 값의 부재를 위와 같이 간단하게 표현할 수 있습니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">getBaz</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> foo?.<span class="hljs-property">bar</span>?.<span class="hljs-property">baz</span>?.() ?? <span class="hljs-literal">null</span>;
+}</code></pre><p class="my-1 text-sm leading-7 mb-6">반면 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">null</code>만을 사용하게 된다면 Optional Chaining이 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">undefined</code>를 반환하기 때문에 반환값을 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">null</code>로 바꿔주는 처리가 필요합니다.</p><blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6">실제로 <a href="https://github.com/typescript-eslint/typescript-eslint/pull/2156/files#diff-bcb5a3b3b1ba2154d91dbf1ebd8c54d2R56" class="text-orange-500">typescript-eslint 에서 코드를 작성할 때</a>, 이 경험을 했었는데 다소 어색했습니다.</p></blockquote>
+    <h2 id="2-typeof" class="text-xl my-4 font-semibold">
+      2. typeof
+    </h2><p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">undefined</code>의 타입은 Undefined 이고 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">null</code>의 타입은 Null 입니다. 그럼에도 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">typeof</code> 연산자는 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">null</code> 값에 대해서 &quot;object&quot;를 반환합니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">returnNull</span>(<span class="hljs-params"></span>) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span> };
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">returnUndefined</span>(<span class="hljs-params"></span>) { <span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span>; };
+
+<span class="hljs-keyword">typeof</span> <span class="hljs-title function_">returnNull</span>(); <span class="hljs-comment">// &quot;object&quot;</span>
+<span class="hljs-keyword">typeof</span> <span class="hljs-title function_">returnUndefined</span>(); <span class="hljs-comment">// &quot;undefined&quot;</span></code></pre><p class="my-1 text-sm leading-7 mb-6">이는 JavaScript에 익숙하지 않은 개발자들이 어떤 값을 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">if(typeof ret === "object")</code>를 이용해 검증할 때 종종 문제가 됩니다.</p>
+    <h2 id="" class="text-xl my-4 font-semibold">
+      그 밖에...
+    </h2><p class="my-1 text-sm leading-7 mb-6">그 밖에 상황에 따라 장, 단점이 되는 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">null</code>과 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">undefined</code>의 다른 동작들입니다.</p>JSON.stringify<p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">JSON.stringify</code>를 이용해 객체를 직렬화하면 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">undefined</code>는 생략되지만 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">null</code> 은 생략되지 않습니다</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(<span class="hljs-literal">undefined</span>);
+<span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(<span class="hljs-literal">null</span>); <span class="hljs-comment">// &quot;null&quot;</span>
+<span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>({<span class="hljs-attr">a</span>: <span class="hljs-literal">undefined</span>, <span class="hljs-attr">b</span>: <span class="hljs-literal">null</span>}); <span class="hljs-comment">// &quot;{&quot;b&quot;: null}&quot;</span></code></pre>Default Parameter<p class="my-1 text-sm leading-7 mb-6">매개변수의 기본값을 사용할 때 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">null</code>은 명시적인 값으로 인식되기 때문에, 기본값이 할당되지 않습니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">foo</span>(<span class="hljs-params">a = {}</span>) {
+  <span class="hljs-keyword">return</span> a;
+}
+
+<span class="hljs-title function_">foo</span>(<span class="hljs-literal">undefined</span>); <span class="hljs-comment">// {}</span>
+<span class="hljs-title function_">foo</span>(<span class="hljs-literal">null</span>);  <span class="hljs-comment">// null</span></code></pre>
+    <h1 id="" class="text-2xl my-8 font-bold">
+      결론
+    </h1><p class="my-1 text-sm leading-7 mb-6">알아보기 전에는 딱히 고민 없이 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">null</code> 을 사용해야 한다고 생각했었습니다. 이는 첫 프로그래밍 언어가 C였기 때문에 당연히 그렇게 생각했던 것 같습니다.</p><p class="my-1 text-sm leading-7 mb-6">알아보면서 놀란 점은 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">undefined</code> 사용을 권장하는 경우가 은근히 많다는 사실이었습니다.</p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines#null-and-undefined" class="text-orange-500">TypeScript Coding guidelines - Use undefined. Do not use null.</a></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="https://www.youtube.com/watch?v=PSGEjv3Tqo0&t=563s" class="text-orange-500">Douglas Crockford - I have stopped using null</a></p></li></ul><p class="my-1 text-sm leading-7 mb-6">개인적으로는 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">null</code> 을 사용해야 한다는 입장에서, <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">undefined</code> 든 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">null</code> 이든 하나의 컨벤션에 따라 일관되게만 작성하면 된다는 입장을 가지게 되었습니다.</p>
+          </main>
+        </div>
+        <script src="/dev-blog/scripts/header.js"></script>
+      </body>
+    </html>
+    

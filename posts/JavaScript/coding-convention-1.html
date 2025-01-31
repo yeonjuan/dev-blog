@@ -1,0 +1,150 @@
+
+   <!doctype html>
+    <html lang="ko">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>코딩 컨벤션 업무를 하며 알게 된 것들 - 1 | DevBlog</title>
+        <link href="/dev-blog/favicon.ico" rel="shortcut icon">
+        <meta name="description" content="ESLint 규칙을 찾아보면서 몰랐던 내용이나, 흥미로운 내용을 따로 정리해 보았습니다.">
+        <link href="/dev-blog/output.css" type="text/css" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
+          rel="stylesheet"
+        />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-ZBZX7LMVNE');
+        </script>
+        
+      <link href="/dev-blog/css/github.min.css" type="text/css" rel="stylesheet" />
+    
+    
+      </head>
+      <body>
+        <div class="relative">
+            
+  <style>
+        .hamburger {
+            cursor: pointer;
+            justify-content: space-between;
+            flex-direction: column;
+        }
+        .hamburger > div {
+            height: 2px;
+            transition: 0.2s ease-out;
+            z-index: 999;
+        }
+        .menuInput:checked ~ .hamburger > div:nth-child(1) {
+            transform: translateY(6.5px) rotate(45deg);
+        }
+        .menuInput:checked ~ .hamburger > div:nth-child(2) {
+            opacity: 0;
+        }
+        .menuInput:checked ~ .hamburger > div:nth-child(3) {
+            transform: translateY(-6.5px) rotate(-45deg);
+        }
+    </style>
+  <div id="overlay" class="backdrop-blur-sm bg-black/20 dark:bg-slate-900/80 fixed h-full inset-0 hidden"></div>
+  <header class="bg-zinc-800 text-white h-12 fixed flex justify-between items-center w-full px-4">
+    <a
+      class="w-10 flex items-center justify-center"
+      href="https://github.com/yeonjuan/dev-blog"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <img
+        src="/dev-blog/assets/ic-github.svg"
+        alt="go to github"
+        width="20"
+      >
+    </a>
+    <span>
+      <a href="/dev-blog/">
+        DEV BLOG
+      </a>
+    </span>
+    <div class="w-10">
+      <input
+        id="menu"
+        type="checkbox"
+        class="menuInput peer sr-only hidden"
+        aria-hidden="true"
+      >
+      <label
+        for="menu"
+        aria-label="menu button"
+        class="hamburger flex flex-col justify-between ml-auto h-[21px] w-[21px] px-[1px] py-[3px] [&>div]:h-[2px] [&>div]:w-[18px] [&>div]:bg-white hover:cursor-pointer"
+      >
+        <div></div>
+        <div></div>
+        <div></div>
+      </label>
+      <nav class="fixed text-black transition-[max-height] duration-200 overflow-hidden max-h-0 top-12 left-[0px] peer-checked:max-h-[200px] bg-white w-full border-b border-black">
+        <ul class="p-4">
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/">HOME</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/posts/JavaScript">JavaScript</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/posts/Review">Review</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/posts/Browser">Browser</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+          <main class="py-2 px-4 pt-10 max-w-3xl m-auto pb-20">
+          
+            <aside class="mt-14">
+              <a href="/dev-blog/" class="hover:underline">Home</a> &gt; <a href="/dev-blog/dev-blog/posts" class="hover:underline">JavaScript</a> &gt; <a href="dev-blog/posts/JavaScript/coding-convention-1" class="hover:underline">코딩 컨벤션 업무를 하며 알게 된 것들 - 1</a>
+            </aside>
+          
+            
+    <h1 id="-1" class="text-2xl my-8 font-bold">
+      코딩 컨벤션 업무를 하며 알게 된 것들 - 1
+    </h1><p class="my-1 text-sm leading-7 mb-6">최근 Javascript 코딩 컨벤션 관련 업무를 하고 있습니다. 업무를 하기 전에는, 만들어져 있던 Linter를 사용하기만 했었습니다. 어떤규칙들이 있는지, 왜 이런 규칙이 있는지 자세하게 알아본 적이 없었습니다.<br>이번 업무를 통해 <a href="https://github.com/airbnb/javascript" class="text-orange-500">Airbnb</a>나 <a href="https://standardjs.com/" class="text-orange-500">StandardJS</a> 등 유명한 가이드의 규칙을 자세히 살펴보았습니다. 또 ESLint에는 어떤 규칙들이 있는지, 왜 이런 규칙이 있는지 찾아보는 좋은 계기가 되었습니다. ESLint 규칙을 찾아보면서 몰랐던 내용이나, 흥미로운 내용을 따로 정리해 보았습니다.</p>
+    <h2 id="1-no-octal" class="text-xl my-4 font-semibold">
+      1. no-octal
+    </h2><p class="my-1 text-sm leading-7 mb-6"><a href="https://eslint.org/docs/rules/no-octal" class="text-orange-500">ESLint: no-octal</a></p><p class="my-1 text-sm leading-7 mb-6">이 규칙은 8진수를 나타낼 때 0을 앞에 쓴 표현(&quot;0&quot;-prefixed octal literals)을 쓰지 말자는 규칙입니다.</p><p class="my-1 text-sm leading-7 mb-6">ES3에서는 다음과 같이 8진수를 8진수 숫자 앞에 0을 붙여서 나타낼 수 있었습니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-number">010</span>); <span class="hljs-comment">// 8</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-number">011</span>); <span class="hljs-comment">// 9</span></code></pre><p class="my-1 text-sm leading-7 mb-6">그런데 만약 0뒤에 10진수가 온다면 자바스크립트에서는 이를 10진수로 해석합니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-number">080</span>); <span class="hljs-comment">// 80</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-number">091</span>); <span class="hljs-comment">// 91</span></code></pre><p class="my-1 text-sm leading-7 mb-6">이런 경우 개발자가 8진수를 쓰려다 실수를 했는지, 10진수를 쓴건지 판단하기 어렵다고 생각합니다. 때문에 이런 표현을 금지할 수 있는 규칙을 제공하는 것 같습니다.  </p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">&quot;0&quot;-prefixed octal literals 은 strict 모드나 ES6 이후 버전에서는 SyntaxError 에러를 발생시킵니다.*</p></li></ul>
+    <h2 id="2-yoda" class="text-xl my-4 font-semibold">
+      2. yoda
+    </h2><p class="my-1 text-sm leading-7 mb-6"><a href="https://eslint.org/docs/rules/yoda" class="text-orange-500">ESLint: yoda</a></p><p class="my-1 text-sm leading-7 mb-6">yoda? 요다?<br>이름이 좀 이상한것 같아 찾아보니 찾아보니 <strong>스타워즈</strong>의 요다 였습니다. <strong>요다</strong>가 말하는 방식 (yodish)에서 이름을 따온 룰 이라고 합니다.<br>보통 영어에서 &quot;Yoda is a jedi Master&quot; 와 같이 subject, verb, object 순으로 말하는데,<br>요다는 &quot;A jedi Master yoda is&quot; 와 같이 object, subject, verb 순으로 말한다더군요.  </p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="https://www.youtube.com/watch?v=O8yXTxodxrg" class="text-orange-500">How to talk like Yoda - yotube</a></p></li></ul><p class="my-1 text-sm leading-7 mb-6">그래서 아래와 같이 변수를 오른쪽에 둔 비교 조건문을 <a href="https://en.wikipedia.org/wiki/Yoda_conditions" class="text-orange-500">Yoda condition</a> 이라고 합니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">if</span> (<span class="hljs-string">&quot;red&quot;</span> === color) {
+  <span class="hljs-comment">// &quot;만약 &#x27;red&#x27;가 color면 처럼&quot; 읽힌다!</span>
+}</code></pre><p class="my-1 text-sm leading-7 mb-6">위 코드를 의미적으로 읽어보면 <strong>&quot;만약 red 가 color면&quot;</strong> 처럼 읽혀져 직관적이지 않습니다. ESLint 에서 Yoda규칙은 이런 Yoda Condition 을 잡아내거나 강요하는 규칙입니다. Yoda Condition에 대한 규칙이 있는 이유는 가독성 때문입니다. 일반적으로 위와 같은 표현(Yoda Condition) 보다는</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">if</span> (color === <span class="hljs-string">&#x27;red&#x27;</span>) {
+  <span class="hljs-comment">// &quot;만약 color가 &#x27;red&#x27;면 처럼&quot; 읽힌다!</span>
+}</code></pre><p class="my-1 text-sm leading-7 mb-6">이런 표현이 <strong>&quot;만약 color 가 red 면&quot;</strong> 으로 직관적으로 읽히기 때문에 더 가독성이 좋습니다. 하지만 Yoda Condition 에는 실수를 빨리 알아챌수 있다는 장점이 있습니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">if</span> (color = <span class="hljs-string">&#x27;red&#x27;</span>) {
+  <span class="hljs-comment">// = 이 하나 빠졌다!</span>
+}</code></pre><p class="my-1 text-sm leading-7 mb-6">만약 개발자가 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">==</code>을 의도했지만 실수로 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">=</code>를 하나 빼먹게 된다면 변수 color에는 &#39;red&#39; 라는 값이 할당됩니다. 에러도 발생하지 않고 초기에 버그를 잡기 힘듭니다. 하지만 다음과 같이</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">if</span> (<span class="hljs-string">&#x27;red&#x27;</span> = color) {
+  <span class="hljs-comment">// = 이 하나 빠졌다!</span>
+}</code></pre><p class="my-1 text-sm leading-7 mb-6">조건문을 요다처럼 쓰다가 실수를 한다면, 이 코드는 에러를 발생시키기 때문에 좀더 빠르게 에러를 잡아낼 수 있습니다.  </p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">개발 툴도 좋아지고 다른 lint 규칙으로 yodish의 장점을 커버할 수 있기 때문에 많은 곳에서 yoda를 규칙을 never(사용 못 하도록)로 설정합니다.</p></li></ul>
+    <h2 id="3-no-magic-numbers" class="text-xl my-4 font-semibold">
+      3. no-magic-numbers
+    </h2><p class="my-1 text-sm leading-7 mb-6"><a href="https://eslint.org/docs/rules/no-magic-numbers" class="text-orange-500">ESLint: no-magic-numbers</a></p><p class="my-1 text-sm leading-7 mb-6">no-magic-numbers 규칙은 매직넘버(magic number)를 사용하지 못하도록 하는 규칙입니다. 이 내용은 <strong>클린 코드라는 책의 냄새와 휴리스틱</strong> 부분에도 나오는 내용으로 소프트웨어 개발에서 <strong>오래된 규칙</strong>이라고 합니다. 또한 코드 리뷰를 받을 때 제 코드에서 종종 나온 내용이기도 합니다:)  </p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">ESLinter 에서는 숫자만 매직넘버로 거르지만 &#39;매직넘버&#39; 라는 용어는 숫자뿐만 아니라 의미가 불분명한 모든 토큰을 가리킵니다.</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="https://stackoverflow.com/questions/47882/what-is-a-magic-number-and-why-is-it-bad" class="text-orange-500">What is a magic number, and why is it bad? - stackoverflow</a></p></li></ul><p class="my-1 text-sm leading-7 mb-6">이 규칙은 아무런 옵션을 주지 않을 경우 이런 경우까지 linter가 잡아냅니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-comment">// 배열 길이 0 인지</span>
+<span class="hljs-keyword">if</span> (someArray.<span class="hljs-property">length</span> === <span class="hljs-number">0</span>) {}
+
+<span class="hljs-comment">// 원의 둘레</span>
+<span class="hljs-keyword">const</span> circleCircumference = radius * <span class="hljs-title class_">Math</span>.<span class="hljs-property">PI</span> * <span class="hljs-number">2</span>;  </code></pre><p class="my-1 text-sm leading-7 mb-6">그럼 이렇게 해버려야 하나?</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">ZERO</span> = <span class="hljs-number">0</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">TWO</span> = <span class="hljs-number">2</span>;
+
+<span class="hljs-keyword">if</span> (someArray.<span class="hljs-property">length</span> === <span class="hljs-variable constant_">ZERO</span>) {}
+<span class="hljs-keyword">const</span> circleCircumference = radius * <span class="hljs-title class_">Math</span>.<span class="hljs-property">PI</span> * <span class="hljs-variable constant_">TWO</span>;</code></pre><p class="my-1 text-sm leading-7 mb-6">이런 방식은 Linter는 통과하지만 매직넘버를 쓰지 말자는 의도에도 부합하지 않고,,, 의미가 없다고 생각합니다.<br>ignores 옵션으로 특정 숫자들은 사용할 수 있게 하는 설정이 가능합니다. 하지만 어떤 기준으로 어떤 숫자를 허용할 건지에 대한 의문이 생깁니다. 그래서 매직넘버의 예외로 둘 수 있는 기준이 있나? 생각이 들어 찾아보았습니다만 기준에 대한 명확한 자료를 찾지는 못했습니다.<br>stackoverflow 나 github의 몇몇 글을 찾아보니 간혹 이 규칙을 적용한 경우에는 예외로 사용할 수 있는 수를 [0], [-1, 0, 1], [-1, 0, 1, 2] 와 같이 비슷하지만 조금씩 다른 옵션들을 사용하고 있었습니다. 하지만 아마 대부분 휴리스틱에 의존한 설정이 아닐까 싶습니다.</p>
+          </main>
+        </div>
+        <script src="/dev-blog/scripts/header.js"></script>
+      </body>
+    </html>
+    

@@ -1,0 +1,318 @@
+
+   <!doctype html>
+    <html lang="ko">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>2023년 SVG-in-JS와 결별 (번역) | DevBlog</title>
+        <link href="/dev-blog/favicon.ico" rel="shortcut icon">
+        <meta name="description" content="웹 사이트를 만들 때 SVG 이미지를 어떻게 가져와 사용하시나요? 저는 JSX로 변환해 리액트 컴포넌트로 만들어 사용하곤 했었는데요. 사용하면서 혹시나 런타임 성능에 안 좋지 않을까라는 생각을 하곤 했습니다. 이 글에서는 이런 SVG를 사용하는 방식과 성능에 대한 궁금증을 해결해 주고, 다른 대안을 제시해 주고 있습니다. 이 글이 웹 사이트 성능 개선에 관심 있는 분들께 도움이 되었으면 좋겠습니다.">
+        <link href="/dev-blog/output.css" type="text/css" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
+          rel="stylesheet"
+        />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-ZBZX7LMVNE');
+        </script>
+        
+      <link href="/dev-blog/css/github.min.css" type="text/css" rel="stylesheet" />
+    
+    
+      </head>
+      <body>
+        <div class="relative">
+            
+  <style>
+        .hamburger {
+            cursor: pointer;
+            justify-content: space-between;
+            flex-direction: column;
+        }
+        .hamburger > div {
+            height: 2px;
+            transition: 0.2s ease-out;
+            z-index: 999;
+        }
+        .menuInput:checked ~ .hamburger > div:nth-child(1) {
+            transform: translateY(6.5px) rotate(45deg);
+        }
+        .menuInput:checked ~ .hamburger > div:nth-child(2) {
+            opacity: 0;
+        }
+        .menuInput:checked ~ .hamburger > div:nth-child(3) {
+            transform: translateY(-6.5px) rotate(-45deg);
+        }
+    </style>
+  <div id="overlay" class="backdrop-blur-sm bg-black/20 dark:bg-slate-900/80 fixed h-full inset-0 hidden"></div>
+  <header class="bg-zinc-800 text-white h-12 fixed flex justify-between items-center w-full px-4">
+    <a
+      class="w-10 flex items-center justify-center"
+      href="https://github.com/yeonjuan/dev-blog"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <img
+        src="/dev-blog/assets/ic-github.svg"
+        alt="go to github"
+        width="20"
+      >
+    </a>
+    <span>
+      <a href="/dev-blog/">
+        DEV BLOG
+      </a>
+    </span>
+    <div class="w-10">
+      <input
+        id="menu"
+        type="checkbox"
+        class="menuInput peer sr-only hidden"
+        aria-hidden="true"
+      >
+      <label
+        for="menu"
+        aria-label="menu button"
+        class="hamburger flex flex-col justify-between ml-auto h-[21px] w-[21px] px-[1px] py-[3px] [&>div]:h-[2px] [&>div]:w-[18px] [&>div]:bg-white hover:cursor-pointer"
+      >
+        <div></div>
+        <div></div>
+        <div></div>
+      </label>
+      <nav class="fixed text-black transition-[max-height] duration-200 overflow-hidden max-h-0 top-12 left-[0px] peer-checked:max-h-[200px] bg-white w-full border-b border-black">
+        <ul class="p-4">
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/">HOME</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/posts/JavaScript">JavaScript</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/posts/Review">Review</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/posts/Browser">Browser</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+          <main class="py-2 px-4 pt-10 max-w-3xl m-auto pb-20">
+          
+            <aside class="mt-14">
+              <a href="/dev-blog/" class="hover:underline">Home</a> &gt; <a href="/dev-blog/dev-blog/posts" class="hover:underline">JavaScript</a> &gt; <a href="dev-blog/posts/JavaScript/breaking-up-with-svg-in-js-in-2023" class="hover:underline">2023년 SVG-in-JS와 결별 (번역)</a>
+            </aside>
+          
+            
+    <h1 id="2023-svg-in-js" class="text-2xl my-8 font-bold">
+      2023년 SVG-in-JS와 결별
+    </h1><blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6">원문: <a href="https://kurtextrem.de/posts/svg-in-js" class="text-orange-500">https://kurtextrem.de/posts/svg-in-js</a></p></blockquote><p class="my-1 text-sm leading-7 mb-6">작년 12월에 <a href="https://kofearticle.substack.com/p/korean-fe-article-css-in-js?utm_source=%2Fsearch%2Fcss-in-js&utm_medium=reader2" class="text-orange-500">&quot;우리가 CSS-in-JS와 헤어지는 이유&quot;</a>라는 글을 통해 더 이상 JS 번들 안에 CSS를 넣지 않으려는 이유를 설명했었습니다.
+하지만, 오늘날 JS 번들에 CSS만 들어가는 것은 아닙니다. <a href="https://preactjs.com/" class="text-orange-500">Preact</a>의 저자 <a href="https://jasonformat.com/" class="text-orange-500">Jason Miller</a>의 글에서 알 수 있듯이 SVG도 JS 번들에 들어갑니다.</p><blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6"><a href="https://twitter.com/_developit/status/1382838799420514317" class="text-orange-500">Jason Miller 트윗</a></p><p class="my-1 text-sm leading-7 mb-6">SVG를 JSX로 import 하지 마세요. 가장 비용이 많이 드는 스프라이트 시트입니다. 다른 기술보다 최소 3배 이상 비용이 들고 런타임(렌더링) 성능과 메모리 사용 모두 해칩니다. 유명한 사이트의 번들을 살펴보면 거의 50%가 SVG 아이콘(250kb)이 차지하고 대부분 사용되지 않습니다.
+<img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/svg-twitter.png"></p></blockquote><p class="my-1 text-sm leading-7 mb-6">JS 안의 SVG에는 비용이 들고 SVG는 JS 번들의 소유물이 아닙니다
+<code class="bg-gray-100 px-1 rounded-md inline-block text-sm">SVG-in-HTML</code>로 돌아갈 때입니다.
+JS 번들을 작고 성능 좋게 유지하면서 JSX에서 SVG를 사용하는 더 나은 방법들에 대해 알아보겠습니다.</p>
+    <h2 id="" class="text-xl my-4 font-semibold">
+      목차
+    </h2><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#section1" class="text-orange-500">어떻게 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;svg&gt;</code>가 자바스크립트에 포함되게 되나요?</a></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#section2" class="text-orange-500">성능 딥 다이브: SVG-in-JS 가 안티 패턴인 이유</a></p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#section2-1" class="text-orange-500">파싱 &amp; 컴파일</a></p></li></ul></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#section3" class="text-orange-500">메모리 사용</a></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#section4" class="text-orange-500">JS 번들에서 SVG를 제거하는 모범 사례</a></p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#section4-1" class="text-orange-500"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;img&gt;</code>로 SVG 로딩하기</a></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#section4-2" class="text-orange-500">SVG 스프라이트 - <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;use&gt;</code>를 사용하기</a></p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="section4-2-1" class="text-orange-500">JS 더 많이 제거하기: <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">fill</code>, <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">stroke</code>, <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">width</code>, <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">height</code> 와 같은 것에 CSS &amp; <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">currentcolor</code> 사용</a></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#section4-2-2" class="text-orange-500">서버 컴포넌트 (리액트)</a></p></li></ul></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#section-4-3" class="text-orange-500">CORS의 경우: CSS를 사용하세요.</a></p></li></ul></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#section5" class="text-orange-500">성능 vs 로딩 시간: 인라인을 할 것인가, 말 것인가?</a></p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#section5-1" class="text-orange-500">JS 번들을 오염시키지 않고 SVG 인라인화하기</a></p></li></ul></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#section6" class="text-orange-500">정리</a></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#section7" class="text-orange-500">도구/스니펫</a></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="#section8" class="text-orange-500">각주 &amp; 주석</a></p></li></ul><p class="my-1 text-sm leading-7 mb-6"><a name="section1"></a></p>
+    <h2 id="-svg" class="text-xl my-4 font-semibold">
+      어떻게 `<svg>`가 자바스크립트에 포함되게 되나요?
+    </h2><p class="my-1 text-sm leading-7 mb-6">먼저 SVG가 자바스크립트 소스 코드 내에 어떻게 포함되게 되는지 알아봅시다.
+대게 이 작업은 JSX의 일부로 작성됩니다.</p><pre><code class="my-4 hljs text-xs language-jsx">&lt;svg viewBox=<span class="hljs-string">&quot;0 0 300 300&quot;</span>&gt;
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">g</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">path</span> <span class="hljs-attr">d</span>=<span class="hljs-string">&quot;M0 200 v-200 h200 a100,100 90 0,1 0,200 a100,100 90 0,1 -200,0z&quot;</span> /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">g</span>&gt;</span></span>
+&lt;/svg&gt;</code></pre><pre><code class="my-4 hljs text-xs language-jsx"><span class="hljs-comment">// App.jsx</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">HeartIcon</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./HeartIcon.svg&quot;</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">HeartIcon</span> <span class="hljs-attr">fill</span>=<span class="hljs-string">&quot;red&quot;</span> /&gt;</span></span>;</code></pre><p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">.svg</code> 파일에 대해 import가 동작하도록 하기 위해서 번들러에게 자바스크립트(또는 타입스크립트)가 아닌 파일을 어떻게 처리해야 할지 알려주어야 합니다.
+보통 <a href="https://react-svgr.com/" class="text-orange-500">svgr</a> 같은 웹팩 로더가 사용되는데 이는 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">.svg</code> 파일을 리액트 컴포넌트로 변환합니다.
+이는 SVG 태그의 속성(<code class="bg-gray-100 px-1 rounded-md inline-block text-sm">fill="red"</code> 같은)을 손쉽게 추가할 수 있도록 해줍니다.</p><pre><code class="my-4 hljs text-xs language-jsx"><span class="hljs-comment">// svgr을 거친 HeartIcon.svg (단순화 및 JSX 변환 전) - ⚠️️ 복사하지 마세요</span>
+<span class="hljs-keyword">export</span> <span class="hljs-title function_">default</span> (props) =&gt; (
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">svg</span> <span class="hljs-attr">viewBox</span>=<span class="hljs-string">&quot;0 0 300 300&quot;</span> {<span class="hljs-attr">...props</span>}  {/* ⬅️ <span class="hljs-attr">props</span> <span class="hljs-attr">spread</span> <span class="hljs-attr">를</span> <span class="hljs-attr">사용</span> <span class="hljs-attr">했습니다</span>*/}&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">g</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">path</span> <span class="hljs-attr">d</span>=<span class="hljs-string">&quot;M0 200 v-200 h200 a100,100 90 0,1 0,200 a100,100 90 0,1 -200,0z&quot;</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">g</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">svg</span>&gt;</span></span>
+);</code></pre><blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6">⚠️ 전체 SVG 컨텐츠를 반환하는 직접 작성한 리액트 컴포넌트는 앞선 이유와 함께 svgr에 비해 마이그레이션 하기 어렵기 때문에 안티 패턴입니다. SVG는 항상 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">.svg</code> 파일에만 넣도록 합니다.</p></blockquote><p class="my-1 text-sm leading-7 mb-6">렌더링된 결과는 다음과 같습니다:</p><pre><code class="my-4 hljs text-xs language-jsx">&lt;svg viewBox=<span class="hljs-string">&quot;0 0 300 300&quot;</span> fill=<span class="hljs-string">&quot;red&quot;</span>&gt;&lt;!-- ⬅️ 차이점은 <span class="hljs-string">`fill`</span> 속성 --&gt;
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">g</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">path</span> <span class="hljs-attr">d</span>=<span class="hljs-string">&quot;M0 200 v-200 h200 a100,100 90 0,1 0,200 a100,100 90 0,1 -200,0z&quot;</span> /&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">g</span>&gt;</span></span>
+&lt;/svg&gt;</code></pre><p class="my-1 text-sm leading-7 mb-6">물론 편리하고 사용하기 쉽지만 사용 편의성에 대한 비용을 사용자가 지불해야 하는 단점을 수반합니다...</p><p class="my-1 text-sm leading-7 mb-6"><a name="section2"></a></p>
+    <h2 id="-svg-in-js" class="text-xl my-4 font-semibold">
+      성능 딥 다이브: SVG-in-JS 가 안티 패턴인 이유
+    </h2><p class="my-1 text-sm leading-7 mb-6">...그렇다면, JS 번들 안에 SVG 코드를 넣지 않으려는 이유는 무엇일까요?</p><p class="my-1 text-sm leading-7 mb-6"><a name="section2-1"></a></p>파싱 & 컴파일<p class="my-1 text-sm leading-7 mb-6">자바스크립트 파싱과 컴파일은 공짜가 아닙니다. 번들에 더 많이 넣을수록 자바스크립트 엔진이 소스코드를 처리하는 시간이 더 오래 걸립니다.</p><p class="my-1 text-sm leading-7 mb-6">빠른 M2 노트북에서는 그 차이가 크지 않을 수 있지만, 마이크로소프트 엣지 팀의 <a href="https://infrequently.org/" class="text-orange-500">Alex Russel</a>이 매년 보고하는 것처럼 <a href="https://infrequently.org/2022/12/performance-baseline-2023/" class="text-orange-500">성능 불평등의 격차</a>가 있습니다.
+그의 말처럼 전 세계 75퍼센트 이상 사용자를 이해하기에는 삼성 갤럭시 A50과 노키아 G11이 가장 적합한 기기입니다.
+웹 개발은 부유한 지역뿐 아니라 모든 사람을 위한 포용적인 것이어야 합니다.</p><blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6">바이트 단위의 자바스크립트는 같은 크기의 이미지나 웹 폰트보다 브라우저 처리 비용이 더 많이 듭니다.</p><p class="my-1 text-sm leading-7 mb-6">-- Tom Dale, <a href="https://web.dev/optimizing-content-efficiency-javascript-startup-optimization/#parsecompile" class="text-orange-500">web.dev</a></p></blockquote><p class="my-1 text-sm leading-7 mb-6">SVG는 자바스크립트가 아니라 이미지를 나타내는 HTML과 유사한 XML 태그입니다.
+JS 안에 이미지를 넣고 싶지는 않을 것입니다.
+SVG를 JS 번들 밖으로 옮기면 파싱 및 컴파일 단계에서 벗어나게 됩니다.
+아래에서 이것이 왜 유익한지 알아보겠습니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/js-exec.png"></p><p class="my-1 text-sm leading-7 mb-6"><sub>크로미움에서 자바스크립트 다운로드 및 실행 시각화. 파싱 및 컴파일은 메인 스레드를 차단하지 않습니다.<a href="https://v8.dev/blog/cost-of-javascript-2019">web.dev</a></sub></p><p class="my-1 text-sm leading-7 mb-6">파싱과 컴파일은 실행 직전에 일어납니다.
+그래서 자바스크립트를 다운로드하고 실행할 준비가 되면 <strong>파싱</strong>에 걸리는 <strong>시간</strong>과 <strong>컴파일</strong>에 걸리는 시간은 <strong>사용자가 상호작용을 기다리는 시간</strong>입니다.</p><p class="my-1 text-sm leading-7 mb-6">리액트의 경우 그 위에 하이드레이션도 필요합니다. 다운로드 + 파싱 + 컴파일 + 하이드레이션은 상호작용이 가능해 지기까지의 시간입니다.
+컴포넌트 트리가 클 수록 하이드레이션에 더 많은 시간이 소요됩니다.
+이 주제에 대해서는 Add Osmani의 <a href="https://web.dev/optimizing-content-efficiency-javascript-startup-optimization/#parsecompile" class="text-orange-500">&quot;JavaScript 최적화 시작하기&quot;</a> 문서에서 자세히 다루고 있습니다.</p><blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6">참고로 압축은 처리 시간에도 긍정적인 영향을 미칠 수 있지만, JS 엔진은 압축되지 않은 소스 코드에서도 작동한다는 점을 잊지 마세요.
+이를 위해 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;link rel="modulepreload"&gt;</code>를 사용하여 파싱 및 컴파일을 더 이른 시간으로 앞당기고 <a href="https://v8.dev/blog/code-caching-for-devs" class="text-orange-500">Service Worker로 가로채서</a> 파싱 및 컴파일을 앞당길 수 있습니다.
+이 경우 파싱 및 컴파일은 실행 직전이 아닌 다운로드 직후에 수행됩니다.
+타이밍을 관리하면 더 나은 결과를 얻을 수 있지만 근본 원인을 해결하지는 못합니다.</p></blockquote><p class="my-1 text-sm leading-7 mb-6"><a name="section3"></a></p>
+    <h2 id="" class="text-xl my-4 font-semibold">
+      메모리 사용
+    </h2><p class="my-1 text-sm leading-7 mb-6">파싱된 내용은 페이지가 유지되는 동안 자바스크립트 메모리 힙에 보관되어야 하며, 대부분 브라우저에 있는 다양한 메모리 캐시 안에 저장됩니다.
+갤럭시 A50에는 5기가 바이트의 RAM이 탑재되어 있으며, 해당 기기에서 실행되는 애플리케이션이 웹 사이트뿐만은 아니므로 남은 공간이 많지 않습니다.
+사용자를 배려하세요.</p><p class="my-1 text-sm leading-7 mb-6"><a name="section4"></a></p>
+    <h2 id="js-svg" class="text-xl my-4 font-semibold">
+      JS 번들에서 SVG를 제거하는 모범 사례
+    </h2><p class="my-1 text-sm leading-7 mb-6">시작하기 전에, 첫 번째 단계는 자바스크립트 번들에 SVG가 있는지 확인하는 것입니다.
+소스 코드를 검사하여 &quot;svg&quot;를 검색하거나 Lighthouse에 내장된 번들 뷰어를 사용하여 확인할 수 있습니다.
+보고서의 &quot;Performance&quot; 섹션의 &quot;View Treemap&quot; 버튼을 통해 접근할 수 있습니다.</p><p class="my-1 text-sm leading-7 mb-6">번들 안에 적지 않은 양이 들어있는 경우, 이를 제거하는 데 도움이 되는 몇 가지 선택지가 있습니다.
+다음 도표는 대부분의 경우 결정을 내리는 데 도움이 될 수 있습니다.</p><p class="my-1 text-sm leading-7 mb-6"><img src="./assets/select-svg.png"></img></p><p class="my-1 text-sm leading-7 mb-6">각 선택지에 대한 설명은 다음과 같습니다.</p><p class="my-1 text-sm leading-7 mb-6"><a name="section4-1"></a></p>`<img>`로 SVG 로딩하기<p class="my-1 text-sm leading-7 mb-6">SVG를 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;img&gt;</code> 태그에서 사용하기 위해, 번들러/프레임워크에게 외부화하도록 명시해야 합니다(다른 말로, 정적 URL을 생성).
+웹팩의 경우 모든 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">.svg</code> 파일을 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">asset/resource</code><sup><a href="#footnote_1" class="text-orange-500">1</a></sup> 형태로 설정하도록 웹팩 설정을 변경할 수 있습니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">const</span> config = {
+  <span class="hljs-comment">// … 다른 웹팩 설정들 …</span>
+  <span class="hljs-attr">module</span>: {
+    <span class="hljs-attr">rules</span>: [
+      {
+        <span class="hljs-attr">test</span>: <span class="hljs-regexp">/\.svg/</span>,
+        <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;asset/resource&quot;</span>,
+      },
+    ],
+  },
+};</code></pre><p class="my-1 text-sm leading-7 mb-6"><a href="https://astro.build/" class="text-orange-500">Astro</a>와 같은 다른 프레임워크는 이를 자동적으로 수행합니다.
+<code class="bg-gray-100 px-1 rounded-md inline-block text-sm">svg</code> 파일은 JS 파일처럼 압축될 수 있으므로 인프라에 Brotli/Gzip 압축이 적용되어 있는지 확인하세요.</p><p class="my-1 text-sm leading-7 mb-6">그러면 SVG를 참조하는 것이 일반적인(PNG/JPG/...) 이미지들처럼 쉬워집니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">import</span> <span class="hljs-title class_">HeartIcon</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./HeartIcon.svg&quot;</span>;
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">{HeartIcon}</span> <span class="hljs-attr">loading</span>=<span class="hljs-string">&quot;lazy&quot;</span> /&gt;</span></span>;</code></pre><p class="my-1 text-sm leading-7 mb-6">💡️ 성능 팁:</p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;img&gt;</code>를 사용하면 내장된 지연-로딩을 위해 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">loading="lazy"</code> 와 같은 속성을 사용하거나 패치 우선순위를 바꾸기 위해 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">importance="high"</code>를 사용할 수 있습니다⚡️</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">DPR(Device-Pixel-Ratio) &gt; 1x 스크린에서 복잡한 SVG 애니메이션의 경우 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;img&gt;</code>는 인라인 SVG보다 더 적은 CPU를 사용합니다.</p></li></ul><p class="my-1 text-sm leading-7 mb-6"><a name="img-warn"></a></p><p class="my-1 text-sm leading-7 mb-6">⚠️ <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;img&gt;</code> 주의 사항:</p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">현재 페이지에서 값을 상속받지 않기 때문에 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">currentColor</code> CSS 값 및 CSS 커스텀 props (<code class="bg-gray-100 px-1 rounded-md inline-block text-sm">--variable</code>) 사용은 어렵습니다. (SVG 파일은 DOM의 일부가 아닌 외부 리소스로 취급됩니다)<sup><a href="#footnote_3" class="text-orange-500">3</a></sup></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">크로미움: SVG 애니메이션은 최대 60Hz까지 실행되며 DPR = 1x 스크린에서 더 많은 CPU를 사용합니다.<sup><a href="#footnote_2" class="text-orange-500">2</a></sup></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">SVG에 포함된 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;a&gt;</code> 태그는 클릭될 수 없습니다.</p></li></ul><p class="my-1 text-sm leading-7 mb-6">저는 이렇게 하나의 뷰포트 밖에 있는 SVG를 사용하는 것을 <strong>권장</strong>합니다.
+하지만 스타일링이 필요하거나 개수가 많다면 다른 선택지 중 하나를 선택하는 것이 좋습니다.</p><p class="my-1 text-sm leading-7 mb-6"><a name="section4-2"></a></p>SVG 스프라이트 - `use`를 사용하기<p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">fill</code> 및 기타 (사용자 정의) CSS 속성 또는 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">currentcolor</code>를 값으로 사용하려면 SVG를 로드할 수 있는 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;use&gt;</code> 태그를 사용해야 합니다.
+위와 동일한 웹팩 rules 와 함께 다음 처럼 SVG를 참조할 수 있습니다.</p><pre><code class="my-4 hljs text-xs language-jsx"><span class="hljs-keyword">import</span> <span class="hljs-title class_">HeartIcon</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./HeartIcon.svg&quot;</span>;
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; (
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">svg</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">use</span> <span class="hljs-attr">href</span>=<span class="hljs-string">{</span>`${<span class="hljs-attr">HeartIcon</span>}#<span class="hljs-attr">heart</span>`} /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">svg</span>&gt;</span></span>
+);</code></pre><p class="my-1 text-sm leading-7 mb-6">자세히 보면 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;use&gt;</code>에 필요한 ID를 참조하고 있음을 알 수 있습니다. HeartIcon SVG를 변경해 봅시다.</p><pre><code class="my-4 hljs text-xs language-jsx">&lt;svg viewBox=<span class="hljs-string">&quot;0 0 300 300&quot;</span> id=<span class="hljs-string">&quot;heart&quot;</span>&gt;
+  ...
+&lt;/svg&gt;</code></pre><p class="my-1 text-sm leading-7 mb-6">사이트에 많은 SVG가 있는 경우 모두 하나의 파일에 넣을 수 있습니다. <strong>SVG 스프라이트</strong> 는 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;symbol&gt;</code> 태그를 사용하여 빌드됩니다.
+말 그대로 ID 를 부여해야 사용(<code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;use&gt;</code>)할 수 있습니다.
+스타일링, <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#currentcolor_keyword" class="text-orange-500">currentcolor</a> 등은 모두 이전과 동일하게 작동합니다.</p><pre><code class="my-4 hljs text-xs language-xml"><span class="hljs-comment">&lt;!-- icons.svg --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">svg</span>&gt;</span>
+  <span class="hljs-comment">&lt;!-- 1: `&lt;defs&gt;` 태그를 추가 --&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">defs</span>&gt;</span>
+    <span class="hljs-comment">&lt;!-- 2`&lt;symbol&gt;`을 감싸고 ID 추가 (`viewBox`) --&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">symbol</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;icon1&quot;</span>&gt;</span>
+      <span class="hljs-comment">&lt;!-- 3: `&lt;symbol&gt;`안에 컨텐츠 복사 --&gt;</span>
+      ...
+    <span class="hljs-tag">&lt;/<span class="hljs-name">symbol</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">symbol</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;icon2&quot;</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">symbol</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">defs</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">svg</span>&gt;</span></code></pre><p class="my-1 text-sm leading-7 mb-6">스프라이트 파일은 한 번만 로드되고 캐시됩니다.
+이제 다음과 같은 방식으로 SVG를 참조할 수 있습니다.</p><pre><code class="my-4 hljs text-xs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">svg</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">use</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;icons.svg#icon1&quot;</span> /&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">svg</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">svg</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">use</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;icons.svg#icon2&quot;</span> /&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">svg</span>&gt;</span></code></pre><p class="my-1 text-sm leading-7 mb-6">직접 SVG 스프라이트를 작성하는 데는 시간이 걸리지만 <a href="#section7" class="text-orange-500">➡️도구 챕터</a>에서 이를 자동화하는 오픈소스 솔루션을 모아두었으니 걱정하지 마세요.</p><blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6">⚠️ <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;use&gt;</code> 주의사항:</p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;mask&gt;</code>와 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;clippath&gt;</code>는 외부에서 로드해온 SVG에서 동작하지 않습니다. <a href="#section5" class="text-orange-500">➡️ 인라인화</a>로 해결하세요.</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">SVG는 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;use&gt;</code>를 사용할 때 CDN에서 로드될 수 없습니다. <a href="#section-4-3" class="text-orange-500">➡️ CORS 챕터</a></p></li></ul></blockquote><p class="my-1 text-sm leading-7 mb-6"><a name="section4-2-1"></a></p>더 많은 JS 제거하기: `fill`, `stroke`, `width`, `height` 와 같은 것에 CSS & currentcolor 사용<p class="my-1 text-sm leading-7 mb-6">아래와 같이 코드를 작성했을 수 있습니다.</p><pre><code class="my-4 hljs text-xs language-jsx"><span class="hljs-comment">// 😐 최적이 아님</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">Icon</span> = (<span class="hljs-params">favColor, width</span>) =&gt; (
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">svg</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">use</span>
+      <span class="hljs-attr">href</span>=<span class="hljs-string">{</span>`${<span class="hljs-attr">HeartIcon</span>}#<span class="hljs-attr">heart</span>`}
+      <span class="hljs-attr">fill</span>=<span class="hljs-string">{favColor</span> ? <span class="hljs-attr">favColor</span> <span class="hljs-attr">:</span> &quot;<span class="hljs-attr">red</span>&quot;}
+      <span class="hljs-attr">width</span>=<span class="hljs-string">{width}</span>
+    /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">svg</span>&gt;</span></span>
+);
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; (
+  <span class="language-xml"><span class="hljs-tag">&lt;&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">Icon</span> <span class="hljs-attr">favColor</span>=<span class="hljs-string">&quot;#FFFF00&quot;</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">Icon</span> <span class="hljs-attr">width</span>=<span class="hljs-string">{300}</span> /&gt;</span>
+  <span class="hljs-tag">&lt;/&gt;</span></span>
+);</code></pre><p class="my-1 text-sm leading-7 mb-6">이렇게 하는걸 권장하지 않습니다.
+로직은 다시 자바스크립트 번들에 포함되며 자바스크립트 엔진에서 실행해야 합니다.
+CSS-in-JS를 피하는 것 처럼, 클래스 이름과 CSS를 사용해 SVG 스타일을 지정할 수 있도록 하려고 합니다.</p><pre><code class="my-4 hljs text-xs language-jsx"><span class="hljs-comment">// ✅ better</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">Icon</span> = (<span class="hljs-params">className</span>) =&gt; (
+  <span class="hljs-comment">// 클래스를 추가하고 사용자가 CSS를 통해 세부사항을 다룰 수 있도록 합니다. ⬇️</span>
+  <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">svg</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">use</span> <span class="hljs-attr">href</span>=<span class="hljs-string">{</span>`${<span class="hljs-attr">HeartIcon</span>}#<span class="hljs-attr">heart</span>`} <span class="hljs-attr">className</span>=<span class="hljs-string">{</span>`<span class="hljs-attr">heart</span> ${<span class="hljs-attr">className</span>}`} /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">svg</span>&gt;</span></span>
+);
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">YellowHeart</span> = (<span class="hljs-params"></span>) =&gt; <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Icon</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;yellow&quot;</span> /&gt;</span></span>;
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">BigHeart</span> = (<span class="hljs-params"></span>) =&gt; <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Icon</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;big&quot;</span> /&gt;</span></span>;
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">App</span> = (<span class="hljs-params"></span>) =&gt; (
+  <span class="language-xml"><span class="hljs-tag">&lt;&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">YellowHeart</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">BigHeart</span> /&gt;</span>
+  <span class="hljs-tag">&lt;/&gt;</span></span>
+);</code></pre><p class="my-1 text-sm leading-7 mb-6">이제 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">currentcolor</code>를 사용해서 SVG가 CSS 속성 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">color</code> 에서 색을 상속하도록 할 수 있습니다.</p><pre><code class="my-4 hljs text-xs language-scss"><span class="hljs-comment">/* 👍 good */</span>
+<span class="hljs-selector-class">.heart</span> {
+  <span class="hljs-attribute">fill</span>: currentcolor; <span class="hljs-comment">/* ⬅️ 현재 `color` 적용 */</span>
+}
+
+<span class="hljs-comment">/* ⬇️ 사용하는 디자인 시스템에서 가져온 클래스를 사용할 수 있고 SVG에만 국한되지 않습니다. */</span>
+<span class="hljs-selector-class">.big</span> {
+  <span class="hljs-attribute">width</span>: <span class="hljs-number">300px</span>;
+}
+<span class="hljs-selector-class">.yellow</span> {
+  <span class="hljs-attribute">color</span>: <span class="hljs-number">#ffff00</span>;
+}</code></pre><p class="my-1 text-sm leading-7 mb-6">또는 SVG에 접근하면 더 좋습니다.</p><pre><code class="my-4 hljs text-xs language-xml"><span class="hljs-comment">&lt;!-- HeartIcon.svg --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">svg</span> <span class="hljs-attr">viewBox</span>=<span class="hljs-string">&quot;0 0 300 300&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;heart&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">g</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">path</span>
+      <span class="hljs-attr">d</span>=<span class="hljs-string">&quot;M0 200 v-200 h200 a100,100 90 0,1 0,200 a100,100 90 0,1 -200,0z&quot;</span>
+      <span class="hljs-attr">fill</span>=<span class="hljs-string">&quot;currentcolor&quot;</span>
+    /&gt;</span><span class="hljs-comment">&lt;!-- ⬆️ `fill`/`stroke` 에 `currentcolor` 추가 --&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">g</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">svg</span>&gt;</span></code></pre><pre><code class="my-4 hljs text-xs language-css"><span class="hljs-comment">/* 🏆 최적 */</span>
+<span class="hljs-selector-class">.heart</span> {
+  <span class="hljs-comment">/* `fill`은 더 이상 CSS에 필요하지 않습니다. */</span>
+}</code></pre><p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;use&gt;</code> 태그에 적용되는 모든 CSS 속성은 참조된 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;svg&gt;/&lt;symbol&gt;</code> 태그에 자동으로 스타일을 적용합니다.
+따라서 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;path&gt;</code> 요소의 색상을 건드리지 않으면서 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">.heart</code> 에 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">stroke</code>를 추가할 수 있습니다.</p><p class="my-1 text-sm leading-7 mb-6">⚠️️ 주의: <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;use&gt;</code> 의 너비와 높이는 원본 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;svg&gt;</code> 에 viewBox 속성 (또는 <a href="https://css-tricks.com/svg-fragment-identifiers-work/#aa-adding-those-special-viewboxs-into-the-svg-itself" class="text-orange-500"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;view&gt;</code></a>)가 있어야 합니다.</p><p class="my-1 text-sm leading-7 mb-6"><a name="section4-2-2"></a></p>서버 컴포넌트 (리액트)<p class="my-1 text-sm leading-7 mb-6">가장 최근의 솔루션 이지만 너무 많은 변경이 필요하지 않은 솔루션은 예를 들어 <a href="https://nextjs.org/blog/next-13-4" class="text-orange-500">NextJS 13.4</a>에서 사용할 수 있는 곧 출시될 리액트의 서버 컴포넌트를 채택하는 것입니다.
+런타임에 컴포넌트의 동작을 변경해야 할 때 특히 유용하며 서버에서만 실행되는 JSX를 작성할 수 있습니다.
+이렇게 하면 SVG가 더 이상 브라우저에 제공되는 자바스크립트 번들에 포함되지 않습니다.
+서버에만 유지하기 위해 파일에 &quot;use client&quot;를 추가하지 않으면 되기 때문에 간단합니다.</p><p class="my-1 text-sm leading-7 mb-6">💡️ 모든 SVG를 서버 컴포넌트로 만들면 HTML 응답에 인라인 처리되고 여기에도 단점이 있기 때문에 <a href="#성능-vs-로딩-시간-인라인을-할-것인가-말-것인가" class="text-orange-500">인라인 챕터</a>를 꼭 읽어 보세요.</p><p class="my-1 text-sm leading-7 mb-6"><a name="section4-3"></a></p>CORS(교차 출처 리소스 공유)의 경우: CSS를 사용하세요.<blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6">SVG의 <use> 요소는 현재 교차 출처 권한을 요청할 수 있는 방법이 없습니다. <strong>이는 교차 출처에서 전혀 작동하지 않습니다</strong>.</p><p class="my-1 text-sm leading-7 mb-6">-- <a href="https://oreillymedia.github.io/Using_SVG/extras/ch10-cors.html#:~:text=SVG%20%3Cuse%3E%20elements%20don%E2%80%99t%20currently%20have%20any%20way%20to%20ask%20for%20cross%2Dorigin%20permissions.%20They%20just%20don%E2%80%99t%20work%20cross%2Dorigin%2C%20at%20all." class="text-orange-500">O’Reilly Media book by Amelia Bellamy-Royds, Kurt Cagle, and Dudley Storey</a></p></blockquote><p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;use&gt;</code>로 외부 에셋을 사용하려면 동일한 도메인에서 (스프라이트)SVG를 로드해야 합니다. CDN을 사용하는 경우 인용 제한에 부딪히게 됩니다.</p><p class="my-1 text-sm leading-7 mb-6">이제 두 가지 선택지가 있습니다.</p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">이 문제를 피하는 방법은 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;img&gt;</code> 챕터에서 설명한 방법을 따르는 것입니다. 그러나 이렇게 하면 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">currentColor</code>가 동작하지 않습니다.</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">한 가지 색상만 적용해야 하는 경우 직접 최적화할 때 가장 성능이 좋은 방법으로 필터가 포함된 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;img&gt;</code>를 사용하거나, 적은 노력을 들여서 이미지를 마스크 합니다.</p></li></ul><pre><code class="my-4 hljs text-xs language-scss"><span class="hljs-selector-class">.heart</span> {
+  <span class="hljs-selector-tag">mask</span>-<span class="hljs-selector-tag">image</span>: <span class="hljs-built_in">url</span>(<span class="hljs-string">&quot;somecdn.com/HeartIcon.svg#heart&quot;</span>);
+  <span class="hljs-comment">/* ⬇️ &#x27;color&#x27; the SVG */</span>
+  <span class="hljs-attribute">background-color</span>: currentcolor;
+}</code></pre><p class="my-1 text-sm leading-7 mb-6">하지만 이 접근 방식을 사용하면 LCP 요소에 사용되는 CSS 배경 이미지와 동일한 단점이 있습니다.
+브라우저는 SVG를 검색하고 다운로드하기 전에 CSS를 먼저 다운로드하고 실행해야 하므로 SVG가 의미 있게 표시될 때 까지 시간이 길어지게 됩니다.
+이 문제는 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;link rel="preload" as="image"&gt;</code>를 사용하거나 CSS를 인라인으로 처리하여 완화할 수 있습니다.
+또한 <a href="#img-warn" class="text-orange-500"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;img&gt;</code> 의 모든 주의 사항</a>은 SVG에도 적용됩니다 (mask도 DOM의 일부가 아님).
+한 가지 장점은 요소가 숨겨져 있으면(<code class="bg-gray-100 px-1 rounded-md inline-block text-sm">display: none</code>으로) 브라우저에서 mask 이미지를 다운로드하지 않는다는 것입니다.</p><p class="my-1 text-sm leading-7 mb-6"><a name="section5"></a></p>
+    <h2 id="-vs" class="text-xl my-4 font-semibold">
+      성능 vs 로딩 시간: 인라인을 할 것인가, 말 것인가?
+    </h2><p class="my-1 text-sm leading-7 mb-6">인라인은 하나의 HTTP 요청을 아끼도록 해주며 SVG 가 즉각적으로 표시됩니다.
+단점은 중요한 CSS와 마찬가지로 브라우저에 캐시되지 않은 모든 페이지에서 바이트가 다운로드 된다는 것입니다.
+또한, 인라인 SVG는 DOM의 일부이기 때문에 브라우저 계산량을 증가시키게 됩니다.
+그래서, 자바스크립트 엔진이 처리해야 하는 양을 줄이되, HTML 응답의 다운로드 시간을 많이 느리게 하거나 DOM을 부풀리고 싶지는 않습니다.</p><p class="my-1 text-sm leading-7 mb-6">그러므로, 우리는 인라인할 항목에 대한 몇 가지 규칙을 정할 수 있습니다.</p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">로고는 높은 우선순위를 가집니다. 로고는 사용자가 당신의 브랜드를 인식할 수 있도록 합니다. <a href="https://www.speedcurve.com/blog/element-timing-one-true-metric/#:~:text=What%20is%20Element%20Timing%3F" class="text-orange-500">어떤 웹사이트들은 로고 로딩 속도를 측정하기도 합니다.</a> (비록 이것이 LPC요소가 아니더라도 말이죠). LCP 요소가 SEO에는 중요한 요인이지만(<a href="https://web.dev/learn-core-web-vitals/" class="text-orange-500">코어 웹 바이탈</a> 이므로), 시각적 완성도는 대부분의 사용자에게 &quot;웹 사이트를 지금 사용할 수 있다&quot;는 것을 의미합니다. 또한 시각적 &#39;깜빡임&#39; 또는 CLS를 방지합니다.</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">다음은 검색 또는 햄버거 아이콘같이 뷰포트에 있는 아이콘입니다. 이들은 보통 사용자가 터치하는 아이콘입니다. 그래서 늦게 로딩될 경우 사용자 경험에 영향을 미칩니다. 이쯤 되면 중요 CSS와 유사점을 발견할 수 있을 것입니다. 폴드 위쪽의 모든 것이 더 중요하고, 폴드 아래쪽의 모든 것은 그다지 중요하지 않습니다.</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">나머지는 인라인 하지말고 가능하면 지연-로딩 합니다.</p></li></ul><blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6">경험상 critical CSS와 비슷한 예산을 권장합니다.
+Astro는 파일 인라이닝 임계값으로 <strong>4 kB</strong>를 사용합니다.<sup><a href="#footnote_7" class="text-orange-500">1</a></sup>
+일반적으로 상단 회면의 모든 것(CSS, SVG, JS, 콘텐츠)은 <strong>14 kB</strong>(압축되었을 때)<sup><a href="#footnote_8" class="text-orange-500">1</a></sup> 이하로 유지해야 합니다.</p></blockquote><p class="my-1 text-sm leading-7 mb-6">인라이닝 방법은, <a href="https://cloudfour.com/thinks/svg-icon-stress-test/#image-element-with-data-uri" class="text-orange-500">Cloudfour의 SVG 아이콘 벤치마크</a>에서 가장 빠른 기술을 사용하거나 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;img src="data:image/svg+xml,%3Csvg xmlns='..."</code>
+주의 사항에 해당한다면 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;svg&gt;</code>를 직접 삽입하세요.</p><p class="my-1 text-sm leading-7 mb-6">예산을 초과하는 경우 먼저 벤치마킹하고 필요한 경우 인라인하지 않는 기술을 사용하고 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;link rel="preload" as="image"&gt;</code>를 사용하여 리소스 우선순위를 높여 보세요.</p><p class="my-1 text-sm leading-7 mb-6">인라인을 사용하기로 결정하고 캐싱 이점을 극대화하려면 첫 번째 방문자에게는 아이콘을 인라인하고, 백그라운드에서 스프라이트 SVG를 미리 가져오고(<code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;link rel="prefetch"&gt;</code>),
+이후 방문자에게는 서버에서 쿠키 값을 확인하여 스프라이트 SVG만 로드할 수 있습니다 (예: 서버에서 쿠키 값을 확인함).</p><p class="my-1 text-sm leading-7 mb-6"><a name="section5-1"></a></p>JS 번들을 오염시키지 않고 SVG 인라인화하기<p class="my-1 text-sm leading-7 mb-6">이제 무엇을 인라인해야 하는지 알아보았으니, SVG를 JS 번들에 다시 추가하지 않고 인라인하는 방법을 살펴봅시다.
+아래에서는 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;body&gt;</code> 바로 뒤에 하트 아이콘을 인라인 처리하여 스프라이트를 참조하는 모든 SVG가 처음부터 바로 표시되도록 했습니다.
+덜 중요한 스프라이트에 대해서도 동일한 기법을 사용하여 스프라이트 출력을 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;/body&gt;</code> 바로 앞에 배치할 수 있습니다.</p><pre><code class="my-4 hljs text-xs language-jsx"><span class="hljs-keyword">import</span> fs <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;node:fs&quot;</span>;
+
+<span class="hljs-keyword">const</span> svgIcons = <span class="hljs-keyword">await</span> fs.<span class="hljs-title function_">readFile</span>(<span class="hljs-string">&quot;path/to/icons.svg&quot;</span>); <span class="hljs-comment">// ← SVG file 컨텐츠 로딩</span>
+
+<span class="hljs-comment">// … fastify 나 express 와 같은 HTTP 프레임워크를 사용한 경우</span>
+app.<span class="hljs-title function_">get</span>(<span class="hljs-string">&quot;/&quot;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> reactOutput = <span class="hljs-title function_">renderToString</span>(<span class="hljs-title class_">App</span>);
+  <span class="hljs-keyword">return</span> <span class="hljs-string">`&lt;!doctype html&gt;&lt;head&gt;&lt;title&gt;SVG-in-HTML&lt;/title&gt;&lt;/head&gt;
+     &lt;body&gt;
+      &lt;!-- ⬇️ output the SVG sprite to be re-used and make it invisible --&gt;
+      &lt;div style=&quot;display:none&quot;&gt;<span class="hljs-subst">${svgIcons}</span>&lt;/div&gt;
+
+      <span class="hljs-subst">${reactOutput}</span>
+    &lt;/body&gt;`</span>;
+});</code></pre><p class="my-1 text-sm leading-7 mb-6">이제 SVG를 사용해야 하는 모든 인스턴스가 파일에 연결되지 않고 ID에만 연결되도록 해야 합니다:</p><pre><code class="my-4 hljs text-xs language-xml"><span class="hljs-comment">&lt;!-- `href` 속성에 누락된 파일 경로에 유의하세요. --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">svg</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">use</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;#heart&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">svg</span>&gt;</span></code></pre><p class="my-1 text-sm leading-7 mb-6"><sub>하지만 주의할 점은 이제 ID가 SVG 파일 내부에만 적용되는 것이 아니라 전역적으로 적용된다는 점입니다.</sub></p><p class="my-1 text-sm leading-7 mb-6">짜잔, SVG-in-HTML입니다. 페이지/출력별로 사용된 모든 ID를 추출하도록 확장할 수 있으므로 모든 SVG가 아닌 실제로 사용된 SVG만 추출할 수 있습니다. 사용된 스타일은 중요한 CSS에 대해 이 작업을 수행하는 좋은 예입니다.</p><p class="my-1 text-sm leading-7 mb-6"><a name="section6"></a></p>
+    <h2 id="" class="text-xl my-4 font-semibold">
+      정리
+    </h2><p class="my-1 text-sm leading-7 mb-6">설명한 기술을 사용해 자바스크립트 번들을 더 작고 성능 좋게 만들 수 있으므로 오래된 장치의 속도를 줄이고 더 포용적인 인터넷을 만들 수 있습니다.</p><p class="my-1 text-sm leading-7 mb-6">웹 성능과 관련한 주제에 대해서는 이 외에도 더 쉬운 방법 또는 더 최적화가 필요한 것들이 있을 수 있습니다.
+때문에 SVG 최적화에 뛰어들기 전에 SVG-in-JS가 가장 큰 원인이 아닐수 있다는 점을 명심하세요. 측정하고나서 최적화 하세요.</p><blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6">팁: Ctrl+F 로 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;svg&gt;</code> 를 찾아보면 충분한 아이디어를 얻을 수 있습니다.</p></blockquote><p class="my-1 text-sm leading-7 mb-6">JS 번들을 더 작게 만드는 다른 방법으로는 리액트 대신 <a href="https://preactjs.com/" class="text-orange-500">Preact</a>를 사용하고, Axios 대신 <a href="https://github.com/developit/redaxios" class="text-orange-500">Redaxios</a>를 사용하고, 더 큰 모듈(예: <a href="https://github.com/lukeed/uuid" class="text-orange-500">uuid</a>, <a href="https://github.com/lukeed/clsx" class="text-orange-500">clsx</a>)을 대체하는 <a href="https://github.com/lukeed/" class="text-orange-500">Luke Edward</a>의 모듈 컬렉션을 살펴보고, CSS-in-JS를 <a href="https://www.ecsstatic.dev/" class="text-orange-500">ecsstatic</a>/<a href="https://www.kuma-ui.com/" class="text-orange-500">kuma UI</a>/<a href="https://panda-css.com/" class="text-orange-500">Panda</a>와 같이 런타임 오버헤드가 없는 솔루션으로 대체하거나 CSS 모듈로 대체하는 방법이 있습니다.
+큰 모듈을 작은 모듈로 대체하는 <a href="https://github.com/GoogleChromeLabs/webpack-libs-optimizations" class="text-orange-500">일부 웹팩 플러그인</a>도 있습니다. <a href="https://bundlephobia.com/" class="text-orange-500">번들포비아</a>는 작은 모듈을 찾아주는 친구입니다.</p><p class="my-1 text-sm leading-7 mb-6"><a name="section7"></a></p>
+    <h2 id="" class="text-xl my-4 font-semibold">
+      도구 / 스니펫
+    </h2><p class="my-1 text-sm leading-7 mb-6"><a href="https://benadam.me/thoughts/react-svg-sprites/#:~:text=similar%2C%20but%20different.-,The%20Symbol%20Element,-Let%20me%20introduce" class="text-orange-500">Ben Adam</a>이 비슷한 글을 작성했는데, 여기서 그는 리액트에서 SVG 스프라이트를 관리하는 방법에 대한 스니펫을 보여줍니다.</p><p class="my-1 text-sm leading-7 mb-6"><a href="https://cloudfour.com/thinks/svg-icon-stress-test/" class="text-orange-500">Cloudfour’s SVG Icon Stress Test</a>, Tyler Sticka가 다양한 기법에 대한 렌더링 성능 벤치마크를 제시합니다.</p><p class="my-1 text-sm leading-7 mb-6"><a href="https://github.com/kiliman/epic-stack-with-svg-sprites" class="text-orange-500">Epic Stack + SVG sprites</a> - &quot;rmx-cli를 사용하여 스프라이트 생성 자동화하기&quot;</p><p class="my-1 text-sm leading-7 mb-6"><a href="https://github.com/JetBrains/svg-sprite-loader" class="text-orange-500">JetBrains SVG sprite loade</a> - &quot;SVG 스프라이트 생성을 위한 웹팩 로더&quot;.</p><p class="my-1 text-sm leading-7 mb-6"><a href="https://github.com/DavidWells/icon-pipeline" class="text-orange-500">Icon-pipeline</a> - &quot;🚚 SVG 아이콘 파이프라인 - 아이콘 최적화 및 SVG 스프라이트 빌드&quot;</p><p class="my-1 text-sm leading-7 mb-6"><a href="https://jakearchibald.github.io/svgomg/" class="text-orange-500">SVGomg</a> - &quot;SVG 옵티마이저의 GUI&quot;</p><p class="my-1 text-sm leading-7 mb-6"><a name="section8"></a></p>
+    <h2 id="" class="text-xl my-4 font-semibold">
+      각주 & 주석
+    </h2><p class="my-1 text-sm leading-7 mb-6"><sub>이 포스팅에 대해 소중한 피드백을 주신 <a href="https://www.tunetheweb.com/" class="text-orange-500">Barry Pollard</a> 와 <a href="https://imkev.dev/" class="text-orange-500">Kevin Farrugia</a>에게 감사드립니다.</sub></p><p class="my-1 text-sm leading-7 mb-6"><a name="footnote_1">1</a>: <a href="https://webpack.js.org/guides/asset-modules/#resource-assets" class="text-orange-500">웹팩 문서</a>. 대체제로, 하나의 SVG에 대해 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">new URL('path/to/svg.svg', import.meta.url)</code>를 사용할 수 도 있습니다. svgr을 계속 사용하기를 원한다면 <a href="https://react-svgr.com/docs/webpack/" class="text-orange-500">svgr 문서</a>에서도 어떻게 URL을 얻는지 설명하고 있습니다.</p><p class="my-1 text-sm leading-7 mb-6"><a name="footnote_2">2</a>: 인라인 SVG는 DPR = 1x 스크린에서 컴포지터에서 실행됩는데, 이는 보통 <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=1458806" class="text-orange-500">크로미움 버그</a>에서 언급된 것처럼 더 높은 성능으로 이어집니다. 1x DPR을 넘어서는 스크린에선, 반대로, <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;svg&gt;</code>가 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;img&gt;</code>보다 더 많은 CPU를 소모합니다. 직접 확인해볼 수 있습니다: <a href="https://codepen.io/kevinfarrugia/pen/OJBvmyw" class="text-orange-500"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;img&gt;</code> 코드펜</a>, <a href="https://codepen.io/kevinfarrugia/pen/rNqdmYL" class="text-orange-500">인라인 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">svg</code> 코드펜</a>. 개발자 도구 -&gt; Ctrl + Shift + P &gt; Performance monitor를 사용하세요.</p><p class="my-1 text-sm leading-7 mb-6"><a name="footnote_3">3</a>: Alfredo Lopez는 그의 동료중 한명이 보여준 교묘한 꼼수를 알려주었습니다. 동적으로 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;style&gt;:root { --color: green }&lt;/style&gt;</code>를 SVG에 넣기 위해 쿼리 매개변수를 사용할 수 있습니다. (예: <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">HeartIcon.svg?color=green</code>) 그래서 CSS 커스텀 props를 사용할 수 있습니다. (이 기술에 대한 블로그 게시물이 뜨면 여기에 링크하겠습니다.)</p><p class="my-1 text-sm leading-7 mb-6"><a name="footnote_4">4</a>: <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=1458806#c3" class="text-orange-500">크로미움 코멘트</a></p><p class="my-1 text-sm leading-7 mb-6"><a name="footnote_5">5</a>: <a href="https://stackoverflow.com/questions/72027981/mask-tag-in-svg-is-ignored-if-used-from-an-external-svg-sprite-file/72044790#72044790" class="text-orange-500">스택오버플로우 참고</a></p><p class="my-1 text-sm leading-7 mb-6"><a name="footnote_6">6</a>: <a href="https://developer.chrome.com/docs/lighthouse/performance/dom-size/" class="text-orange-500">DOM 크기에 관한 web.dev 아티클</a></p><p class="my-1 text-sm leading-7 mb-6"><a name="footnote_7">7</a>: <a href="https://docs.astro.build/en/reference/configuration-reference/#buildinlinestylesheets" class="text-orange-500">Astro 문서</a></p><p class="my-1 text-sm leading-7 mb-6"><a name="footnote_8">8</a>: <a href="https://web.dev/extract-critical-css/#14KB" class="text-orange-500">critical CSS에 관한 web.dev 아티클</a></p>
+          </main>
+        </div>
+        <script src="/dev-blog/scripts/header.js"></script>
+      </body>
+    </html>
+    

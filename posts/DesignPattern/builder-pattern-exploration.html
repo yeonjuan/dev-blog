@@ -1,0 +1,421 @@
+
+   <!doctype html>
+    <html lang="ko">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>빌더 패턴 탐구(번역) | DevBlog</title>
+        <link href="/dev-blog/favicon.ico" rel="shortcut icon">
+        <meta name="description" content="이번엔, 빌더를 JavaScript 관점으로 살펴보았습니다. 이 글에서는 현대적인 언어 특징을 활용하여 JavaScript, 특히 ES6에서 빌더를 모델링 하는 세 가지 기법을 살펴보겠습니다.">
+        <link href="/dev-blog/output.css" type="text/css" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
+          rel="stylesheet"
+        />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-ZBZX7LMVNE');
+        </script>
+        
+      <link href="/dev-blog/css/github.min.css" type="text/css" rel="stylesheet" />
+    
+    
+      </head>
+      <body>
+        <div class="relative">
+            
+  <style>
+        .hamburger {
+            cursor: pointer;
+            justify-content: space-between;
+            flex-direction: column;
+        }
+        .hamburger > div {
+            height: 2px;
+            transition: 0.2s ease-out;
+            z-index: 999;
+        }
+        .menuInput:checked ~ .hamburger > div:nth-child(1) {
+            transform: translateY(6.5px) rotate(45deg);
+        }
+        .menuInput:checked ~ .hamburger > div:nth-child(2) {
+            opacity: 0;
+        }
+        .menuInput:checked ~ .hamburger > div:nth-child(3) {
+            transform: translateY(-6.5px) rotate(-45deg);
+        }
+    </style>
+  <div id="overlay" class="backdrop-blur-sm bg-black/20 dark:bg-slate-900/80 fixed h-full inset-0 hidden"></div>
+  <header class="bg-zinc-800 text-white h-12 fixed flex justify-between items-center w-full px-4">
+    <a
+      class="w-10 flex items-center justify-center"
+      href="https://github.com/yeonjuan/dev-blog"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <img
+        src="/dev-blog/assets/ic-github.svg"
+        alt="go to github"
+        width="20"
+      >
+    </a>
+    <span>
+      <a href="/dev-blog/">
+        DEV BLOG
+      </a>
+    </span>
+    <div class="w-10">
+      <input
+        id="menu"
+        type="checkbox"
+        class="menuInput peer sr-only hidden"
+        aria-hidden="true"
+      >
+      <label
+        for="menu"
+        aria-label="menu button"
+        class="hamburger flex flex-col justify-between ml-auto h-[21px] w-[21px] px-[1px] py-[3px] [&>div]:h-[2px] [&>div]:w-[18px] [&>div]:bg-white hover:cursor-pointer"
+      >
+        <div></div>
+        <div></div>
+        <div></div>
+      </label>
+      <nav class="fixed text-black transition-[max-height] duration-200 overflow-hidden max-h-0 top-12 left-[0px] peer-checked:max-h-[200px] bg-white w-full border-b border-black">
+        <ul class="p-4">
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/">HOME</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/posts/JavaScript">JavaScript</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/posts/Review">Review</a>
+          </li>
+          <li>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/dev-blog/posts/Browser">Browser</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+          <main class="py-2 px-4 pt-10 max-w-3xl m-auto pb-20">
+          
+            <aside class="mt-14">
+              <a href="/dev-blog/" class="hover:underline">Home</a> &gt; <a href="/dev-blog/dev-blog/posts" class="hover:underline">DesignPattern</a> &gt; <a href="dev-blog/posts/DesignPattern/builder-pattern-exploration" class="hover:underline">빌더 패턴 탐구(번역)</a>
+            </aside>
+          
+            <!--meta
+title: JavaScript 빌더(Builder) 탐구
+description: JavaScript 빌더 패턴에 대한 글을 번역한 글.
+keywords: Builder Pattern, 빌더 패턴, JavaScript 빌더 패턴
+-->
+
+
+    <h1 id="javascript-builder" class="text-2xl my-8 font-bold">
+      JavaScript 빌더(Builder) 탐구
+    </h1><blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6">이 글은 <a href="http://ryanogles.by/an-exploration-of-javascript-builders/" class="text-orange-500">An Exploration of JavaScript Builders</a>를 원작자(Ryan Oglesby)의 허락을 받아 번역하였습니다.</p></blockquote><p class="my-1 text-sm leading-7 mb-6"><a href="http://ryanogles.by/how-your-mother-can-help-you-build-cleaner-unit-tests/part-i/" class="text-orange-500">이전에 블로그에서도 포스팅</a>했듯이, 빌더는 저에게 흥미로운 주제입니다.
+이번엔, 빌더를 JavaScript 관점으로 살펴보았습니다.
+이 글에서는 현대적인 언어 특징을 활용하여 JavaScript, 특히 ES6에서 빌더를 모델링 하는 세 가지 기법을 살펴보겠습니다.</p><p class="my-1 text-sm leading-7 mb-6"><em>글에서 모든 예제는 오직 테스트 목적으로 작성되었습니다.
+실제 코드에 빌더 패턴을 사용할 수 있지만, 아래 표시된 빌더에는 기본값이 미리 포함되어 있어 프로덕션 코드에는 적합하지 않습니다.</em></p>
+    <h2 id="" class="text-xl my-4 font-semibold">
+      고전적인 방식
+    </h2><p class="my-1 text-sm leading-7 mb-6">먼저 객체의 상태를 빌드 하기 위해 &quot;withers&quot;를 사용하는 간단하고 이해하기 쉬운 빌더 부터 시작하겠습니다.
+각 &quot;wither&quot;는 체이닝을 하기 위해 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">this</code>를 반환합니다. <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">build</code> 메서드는 결국 일반 JavaScript 객체를 반환합니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">ProductBuilder</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span> = <span class="hljs-string">&#x27;A Product&#x27;</span>
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">price</span> = <span class="hljs-number">9.99</span>
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">category</span> = <span class="hljs-string">&#x27;other&#x27;</span>
+  }
+
+  <span class="hljs-title function_">withName</span>(<span class="hljs-params">name</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span> = name
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>
+  }
+
+  <span class="hljs-title function_">withPrice</span>(<span class="hljs-params">price</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">price</span> = price
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>
+  }
+
+  <span class="hljs-title function_">withCategory</span>(<span class="hljs-params">category</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">category</span> = category
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>
+  }
+
+  <span class="hljs-title function_">build</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">return</span> {
+      <span class="hljs-attr">name</span>: <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span>,
+      <span class="hljs-attr">price</span>: <span class="hljs-variable language_">this</span>.<span class="hljs-property">price</span>,
+      <span class="hljs-attr">category</span>: <span class="hljs-variable language_">this</span>.<span class="hljs-property">category</span>,
+    }
+  }
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(
+  <span class="hljs-keyword">new</span> <span class="hljs-title class_">ProductBuilder</span>()
+    .<span class="hljs-title function_">withName</span>(<span class="hljs-string">&#x27;Harry Potter&#x27;</span>)
+    .<span class="hljs-title function_">withCategory</span>(<span class="hljs-string">&#x27;book&#x27;</span>)
+    .<span class="hljs-title function_">build</span>()
+)
+<span class="hljs-comment">// =&gt;</span>
+<span class="hljs-comment">//    {</span>
+<span class="hljs-comment">//      name: &#x27;Harry Potter&#x27;,</span>
+<span class="hljs-comment">//      price: 9.99,</span>
+<span class="hljs-comment">//      category: &#x27;book&#x27;</span>
+<span class="hljs-comment">//    }</span></code></pre><p class="my-1 text-sm leading-7 mb-6">간단하고 익숙하지만 장황합니다. 빌더는 세 개의 필드만 필요하지만 벌써 꽤 커졌고 많은 보일러 플레이트가 필요합니다.
+이 크기는 필드의 수에 따라 선형적으로 증가합니다.</p><p class="my-1 text-sm leading-7 mb-6">이 기법도 괜찮지만, 강력한 JavaScript의 기능을 사용하지 않고, Java-스러운 접근법을 취하고 있습니다. 이 점을 좀 더 살펴봅시다.</p>
+    <h2 id="" class="text-xl my-4 font-semibold">
+      메타 프로그래밍을 통한 빌더 생성
+    </h2><p class="my-1 text-sm leading-7 mb-6">앞의 예시중 몇 가지 단점, 즉 반복적인 &quot;wither&quot;에 대해 이야기해 봅시다. 각각의 &quot;withers&quot; 메서드를 수동으로 입력하기보다는 자동으로 생성해 봅시다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">ProductBuilder</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span> = <span class="hljs-string">&#x27;A metaprogrammed product&#x27;</span>
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">price</span> = <span class="hljs-number">9.99</span>
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">category</span> = <span class="hljs-string">&#x27;other&#x27;</span>
+
+    <span class="hljs-comment">// 각 프로퍼티에 따라 &quot;wither&quot; 메서드 생성</span>
+    <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">keys</span>(<span class="hljs-variable language_">this</span>).<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">key</span> =&gt;</span> {
+      <span class="hljs-keyword">const</span> witherName = <span class="hljs-string">`with<span class="hljs-subst">${key.substring(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>).toUpperCase()}</span><span class="hljs-subst">${key.substring(<span class="hljs-number">1</span>)}</span>`</span>
+      <span class="hljs-variable language_">this</span>[witherName] = <span class="hljs-function"><span class="hljs-params">value</span> =&gt;</span> {
+        <span class="hljs-variable language_">this</span>[key] = value
+        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>
+      }
+    })
+  }
+
+  <span class="hljs-title function_">build</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-comment">// 빌더에서 함수가 아닌 프로퍼티의 배열을 가져옴</span>
+    <span class="hljs-keyword">const</span> keysNoWithers = <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">keys</span>(<span class="hljs-variable language_">this</span>).<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">key</span> =&gt;</span> <span class="hljs-keyword">typeof</span> <span class="hljs-variable language_">this</span>[key] !== <span class="hljs-string">&#x27;function&#x27;</span>)
+
+    <span class="hljs-comment">// 키 배열을 객체로 변환</span>
+    <span class="hljs-keyword">return</span> keysNoWithers.<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">returnValue, key</span>) =&gt;</span> {
+      <span class="hljs-keyword">return</span> {
+        ...returnValue,
+        [key]: <span class="hljs-variable language_">this</span>[key],
+      }
+    }, {})
+  }
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(
+  <span class="hljs-keyword">new</span> <span class="hljs-title class_">ProductBuilder</span>()
+    .<span class="hljs-title function_">withName</span>(<span class="hljs-string">&#x27;Harry Potter&#x27;</span>)
+    .<span class="hljs-title function_">withCategory</span>(<span class="hljs-string">&#x27;book&#x27;</span>)
+    .<span class="hljs-title function_">build</span>()
+)
+<span class="hljs-comment">// =&gt;</span>
+<span class="hljs-comment">//    {</span>
+<span class="hljs-comment">//      name: &#x27;Harry Potter&#x27;,</span>
+<span class="hljs-comment">//      price: 9.99,</span>
+<span class="hljs-comment">//      category: &#x27;book&#x27;</span>
+<span class="hljs-comment">//    }</span></code></pre><p class="my-1 text-sm leading-7 mb-6">이 패턴은 첫 번째 예제와 같은 결과를 만듭니다. 생성자에서는 객체의 프로퍼티를 통해, 자동으로 &quot;wither&quot; 메서드를 생성합니다. 그리고, <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">build</code> 메서드에서는 결과 객체를 만들기 위해 객체의 프로퍼티를 한 번더 사용합니다. 여기서 JavaScript의 멋진 기능인 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys" class="text-orange-500">Object.keys</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce" class="text-orange-500">reduce</a>와 <a href="https://github.com/tc39/proposal-object-rest-spread" class="text-orange-500">object rest spread</a>를 사용하고 있습니다.</p><p class="my-1 text-sm leading-7 mb-6">처음에는 지나치게 복잡해 보일 수 있습니다.(한 개의 빌더는 복잡합니다), 진짜 강력함은 빌더가 많을 때 발휘됩니다.
+일반화된 부분을 공통의 슈퍼클래스로 쉽게 추출할 수 있어, 새로운 빌더를 엄청 쉽게 만들 수 있습니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">BaseBuilder</span> {
+  <span class="hljs-title function_">init</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">keys</span>(<span class="hljs-variable language_">this</span>).<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">key</span>) =&gt;</span> {
+      <span class="hljs-keyword">const</span> witherName = <span class="hljs-string">`with<span class="hljs-subst">${key.substring(<span class="hljs-number">0</span>,<span class="hljs-number">1</span>).toUpperCase()}</span><span class="hljs-subst">${key.substring(<span class="hljs-number">1</span>)}</span>`</span>;
+      <span class="hljs-variable language_">this</span>[witherName] = <span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> {
+        <span class="hljs-variable language_">this</span>[key] = value;
+        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>;
+      };
+    });
+  }
+
+  <span class="hljs-title function_">build</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> keysNoWithers = <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">keys</span>(<span class="hljs-variable language_">this</span>).<span class="hljs-title function_">filter</span>(<span class="hljs-function">(<span class="hljs-params">key</span>) =&gt;</span> (
+      <span class="hljs-keyword">typeof</span> <span class="hljs-variable language_">this</span>[key] !== <span class="hljs-string">&#x27;function&#x27;</span>
+    ));
+
+    <span class="hljs-keyword">return</span> keysNoWithers.<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">returnValue, key</span>) =&gt;</span> {
+      <span class="hljs-keyword">return</span> {
+        ...returnValue,
+        [key]: <span class="hljs-variable language_">this</span>[key]
+      };
+    }, {});
+  }
+}
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">ProductBuilder</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">BaseBuilder</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">super</span>();
+
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span> = <span class="hljs-string">&#x27;A metaprogrammed product&#x27;</span>;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">price</span> = <span class="hljs-number">9.99</span>;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">category</span> = <span class="hljs-string">&#x27;other&#x27;</span>;
+
+    <span class="hljs-variable language_">super</span>.<span class="hljs-title function_">init</span>();
+  }
+}
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">SandwichBuilder</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">BaseBuilder</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">super</span>();
+
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">meat</span> = <span class="hljs-string">&#x27;ham&#x27;</span>;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">cheese</span> = <span class="hljs-string">&#x27;swiss&#x27;</span>;
+
+    <span class="hljs-variable language_">super</span>.<span class="hljs-title function_">init</span>();
+  }
+}
+
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(
+  <span class="hljs-keyword">new</span> <span class="hljs-title class_">ProductBuilder</span>()
+    .<span class="hljs-title function_">withName</span>(<span class="hljs-string">&#x27;Harry Potter&#x27;</span>)
+    .<span class="hljs-title function_">withCategory</span>(<span class="hljs-string">&#x27;book&#x27;</span>)
+    .<span class="hljs-title function_">build</span>()
+);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(
+  <span class="hljs-keyword">new</span> <span class="hljs-title class_">SandwichBuilder</span>()
+    .<span class="hljs-title function_">withMeat</span>(<span class="hljs-string">&#x27;Roast Beef&#x27;</span>
+    .<span class="hljs-title function_">withCheese</span>(<span class="hljs-string">&#x27;Havarti&#x27;</span>)
+    .<span class="hljs-title function_">build</span>()
+);
+<span class="hljs-comment">// =&gt;</span>
+<span class="hljs-comment">//    {</span>
+<span class="hljs-comment">//      name: &#x27;Harry Potter&#x27;,</span>
+<span class="hljs-comment">//      price: 9.99,</span>
+<span class="hljs-comment">//      category: &#x27;book&#x27;</span>
+<span class="hljs-comment">//    }</span>
+<span class="hljs-comment">// =&gt;</span>
+<span class="hljs-comment">//    {</span>
+<span class="hljs-comment">//      name: &#x27;Roast Beef&#x27;,</span>
+<span class="hljs-comment">//      cheese: &#x27;Havarti&#x27;</span>
+<span class="hljs-comment">//    }</span></code></pre><p class="my-1 text-sm leading-7 mb-6">ES6 상속하에 구축된 이 일반적인 구조를 사용함으로써, 공통 인터페이스의 예측 가능성과 새로운 빌더 생성의 단순함을 얻게 됩니다.
+필요에 따라 사용자 정의 기능을 추가하기 위해 쉽게 추가 메서드를 삽입할 수 있기 때문에, 빌더들은 여전히 확장 가능성을 열어두고 있습니다. </p><p class="my-1 text-sm leading-7 mb-6">하지만 여전히 장황한 &quot;wither&quot; 구문을 따르고 있습니다. 이 접근법은 본질적으로 객체 지향적입니다. OOP에서는 문제가 없지만 JavaScript는 유연성이 뛰어나고 여러 패러다임을 채택합니다.
+좀 더 함수형 프로그래밍 기법을 활용해 빌더에 접근하면 어떨까요?</p>
+    <h2 id="" class="text-xl my-4 font-semibold">
+      단순 함수 사용
+    </h2><p class="my-1 text-sm leading-7 mb-6">클래스를 제거해봅시다. &quot;withers&quot;를 제거해봅시다. 대신 빌더를 함수로 모델링 해봅시다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">buildProduct</span> = (<span class="hljs-params">overrides = {}</span>) =&gt; {
+  <span class="hljs-keyword">const</span> defaults = {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;A functional product&#x27;</span>,
+    <span class="hljs-attr">price</span>: <span class="hljs-number">9.99</span>,
+    <span class="hljs-attr">category</span>: <span class="hljs-string">&#x27;other&#x27;</span>,
+  }
+
+  <span class="hljs-keyword">return</span> { ...defaults, ...overrides }
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(
+  <span class="hljs-title function_">buildProduct</span>({
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Harry Potter&#x27;</span>,
+    <span class="hljs-attr">category</span>: <span class="hljs-string">&#x27;book&#x27;</span>,
+  })
+)
+<span class="hljs-comment">// =&gt;</span>
+<span class="hljs-comment">//    {</span>
+<span class="hljs-comment">//      name: &#x27;Harry Potter&#x27;,</span>
+<span class="hljs-comment">//      price: 9.99,</span>
+<span class="hljs-comment">//      category: &#x27;book&#x27;</span>
+<span class="hljs-comment">//    }</span></code></pre><p class="my-1 text-sm leading-7 mb-6">여기서 우리는 두 객체를 합치기 위해 object rest spread 을 사용합니다.</p><p class="my-1 text-sm leading-7 mb-6">우아하지만 가장 명백한 단점은, <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">overrides</code> 객체의 내용에 대한 통제가 없다는 점이며, 이로인해 실수를 발생시킬 수 있습니다.
+위의 예에서 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">buildProduct({nme: 'Harry Potter'})</code>를 한다면 기본 name 을 가지고 추가 프로퍼티 &quot;nme&quot; 를 가진 객체를 만들어 낼 것입니다.
+이는 이상적이지 않습니다. 그걸 고쳐보겠습니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">import</span> { difference } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;lodash&#x27;</span>;
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">buildProduct</span> = (<span class="hljs-params">overrides = {}</span>) =&gt; {
+  <span class="hljs-keyword">const</span> defaults =
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;A functional product&#x27;</span>,
+    <span class="hljs-attr">price</span>: <span class="hljs-number">9.99</span>,
+    <span class="hljs-attr">category</span>: <span class="hljs-string">&#x27;other&#x27;</span>
+  };
+
+  <span class="hljs-comment">// overrides에 추가 키를 도입하지 못하도록 막음 </span>
+  <span class="hljs-keyword">const</span> extraOverrides = <span class="hljs-title function_">difference</span>(
+    <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">keys</span>(overrides),
+    <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">keys</span>(defaults)
+  );
+  <span class="hljs-keyword">if</span> (extraOverrides.<span class="hljs-property">length</span> &gt; <span class="hljs-number">0</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">`Invalid builder! <span class="hljs-subst">${extraOverrides}</span>`</span>);
+  }
+
+  <span class="hljs-keyword">return</span> {...defaults, ...overrides};
+};
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(
+  <span class="hljs-title function_">buildProduct</span>({
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Harry Potter&#x27;</span>,
+    <span class="hljs-attr">category</span>: <span class="hljs-string">&#x27;book&#x27;</span>,
+    <span class="hljs-attr">keyThatDoesNotExist</span>: <span class="hljs-string">&#x27;oops&#x27;</span>
+  })
+);
+<span class="hljs-comment">// =&gt; Error: Invalid builder! keyThatDoesNotExist</span></code></pre><p class="my-1 text-sm leading-7 mb-6"><a href="https://lodash.com/docs/4.17.15#difference" class="text-orange-500">lodash의 배열 비교 유틸리티</a>를 사용하여, 이 문제를 예방할 수 있습니다.
+그리고 다른 재사용 가능한 코드 조각들과 마찬가지로. 이를 많은 빌더들이 사용하는 함수로 추출할 수 있습니다.</p><p class="my-1 text-sm leading-7 mb-6">위의 모든 예에서 만들어지는 개체는 단순합니다. 이 함수형 기법은 여러 중첩된 객체를 포함하는 더 크고 복잡한 객체를 제대로 관리하지 못합니다. 깊은 합병(deep merging)을 할 수 있지만, 이는 추론하기 힘들기 때문에 피하겠습니다. 대신 여러 빌더를 함께 합성하는 것을 추천합니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">import</span> { difference } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;lodash&#x27;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">preventExtraOverrides</span> = (<span class="hljs-params">defaults, overrides</span>) =&gt; {
+  <span class="hljs-keyword">const</span> extraOverrides = <span class="hljs-title function_">difference</span>(<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">keys</span>(overrides), <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">keys</span>(defaults))
+
+  <span class="hljs-keyword">if</span> (extraOverrides.<span class="hljs-property">length</span> &gt; <span class="hljs-number">0</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">`Invalid builder! <span class="hljs-subst">${extraOverrides}</span>`</span>)
+  }
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">buildProductName</span> = (<span class="hljs-params">overrides = {}</span>) =&gt; {
+  <span class="hljs-keyword">const</span> defaults = {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;A product&#x27;</span>,
+    <span class="hljs-attr">description</span>: <span class="hljs-string">&#x27;A product description&#x27;</span>,
+  }
+
+  <span class="hljs-title function_">preventExtraOverrides</span>(defaults, overrides)
+
+  <span class="hljs-keyword">return</span> { ...defaults, ...overrides }
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">buildProductPrice</span> = (<span class="hljs-params">overrides = {}</span>) =&gt; {
+  <span class="hljs-keyword">const</span> defaults = {
+    <span class="hljs-attr">price</span>: <span class="hljs-number">50</span>,
+    <span class="hljs-attr">taxRate</span>: <span class="hljs-number">0.08</span>,
+  }
+
+  <span class="hljs-title function_">preventExtraOverrides</span>(defaults, overrides)
+
+  <span class="hljs-keyword">return</span> { ...defaults, ...overrides }
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">buildProduct</span> = (<span class="hljs-params">overrides = {}</span>) =&gt; {
+  <span class="hljs-keyword">const</span> defaults = {
+    <span class="hljs-attr">name</span>: <span class="hljs-title function_">buildProductName</span>(),
+    <span class="hljs-attr">price</span>: <span class="hljs-title function_">buildProductPrice</span>(),
+    <span class="hljs-attr">category</span>: <span class="hljs-string">&#x27;other&#x27;</span>,
+  }
+
+  <span class="hljs-title function_">preventExtraOverrides</span>(defaults, overrides)
+
+  <span class="hljs-keyword">return</span> { ...defaults, ...overrides }
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(
+  <span class="hljs-title function_">buildProduct</span>({
+    <span class="hljs-attr">name</span>: <span class="hljs-title function_">buildProductName</span>({ <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Harry Potter&#x27;</span> }),
+    <span class="hljs-attr">price</span>: <span class="hljs-title function_">buildProductPrice</span>({ <span class="hljs-attr">price</span>: <span class="hljs-number">9.99</span> }),
+  })
+)
+<span class="hljs-comment">// =&gt;</span>
+<span class="hljs-comment">//  {</span>
+<span class="hljs-comment">//    name: {</span>
+<span class="hljs-comment">//      name: &#x27;Harry Potter&#x27;,</span>
+<span class="hljs-comment">//      description: &#x27;A product description&#x27;</span>
+<span class="hljs-comment">//    },</span>
+<span class="hljs-comment">//    price: {</span>
+<span class="hljs-comment">//      price: 9.99,</span>
+<span class="hljs-comment">//      taxRate: 0.08</span>
+<span class="hljs-comment">//    },</span>
+<span class="hljs-comment">//    category: &#x27;other&#x27;</span>
+<span class="hljs-comment">//  }</span></code></pre><p class="my-1 text-sm leading-7 mb-6">빌더를 합성함으로써, 객체를 작고 독립적으로 분해했기 때문에 쉽게 추론할 수 있습니다.
+각 빌더는 비슷한 패턴을 따르지만, 스스로 포함되기 때문에 특정 상황에 맞춤화할 수 있습니다.</p>
+    <h2 id="" class="text-xl my-4 font-semibold">
+      그래서 어떤 방법이 최고일까요?
+    </h2><p class="my-1 text-sm leading-7 mb-6">상황에 따라 다릅니다. 듣고 싶었던 말은 아니겠죠?  그렇게 쉽지 않습니다.
+당신이 겪는 독특한 상황에는 어떤 패턴이 다른 것들 보다 더 적절할 수 있습니다.
+당신의 팀이 아직 JavaScript 의미론에 익숙하지 않은 전직 Java 개발자로 가득한 팀인가요?
+아마 고전적인 접근법으로 시작해서 메타 프로그래밍 기법을 향해 나아가는 것이 결국 적절할 것입니다.
+당신의 팀은 함수형 패러다임에 열성적인가요? 함수형 접근법을 사용하세요.</p><p class="my-1 text-sm leading-7 mb-6">전반적으로, JavaScript는 다중 패러다임 언어로, 많은 요구에 맞게 변화할 수 있다는 것을 기억세요. Enjoy!</p>
+          </main>
+        </div>
+        <script src="/dev-blog/scripts/header.js"></script>
+      </body>
+    </html>
+    
