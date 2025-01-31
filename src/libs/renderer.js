@@ -1,6 +1,5 @@
 import { html } from '@html-kit/html'
 import { toId } from './utils.js'
-import sanitizeHtml from 'sanitize-html'
 
 /**
  *
