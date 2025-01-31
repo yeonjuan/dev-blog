@@ -52,7 +52,7 @@
 마이크로소프트 엣지에는 오래전부터 로그 지점이 내장되어 있었고 크롬은 v73에서 로그 지점을 추가했지만 파이어 폭스에서는 그렇지 않습니다.
 하지만 조건부 중단점을 사용하여 모든 브라우저에서 중단점을 시뮬레이션할 수 있습니다.
 
-![](https://alan.norbauer.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fconditional-breakpoint-console-log.2d18d3e4.gif&w=1920&q=75)
+![](./assets/conditional-breakpoint-console-log.gif)
 
 해당 줄이 얼마나 많이 실행되었는지 카운트하고 싶다면 `console.log` 대신 `console.count`를 사용하세요.
 
@@ -63,11 +63,11 @@
 감시 창에서 `console.log`를 사용할 수도 있습니다.
 예를 들어 디버거에서 앱이 중단될 때마다 `localStorage`의 스냅샷을 덤프하고 싶다면 `console.table(localStorage)` 감지를 생성할 수 있습니다.
 
-![](https://alan.norbauer.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fconsole-table-in-watch.03919d55.png&w=1080&q=75)
+![](./assets/console-table-in-watch.png)
 
 또는 DOM이 변경된 후 표현식을 실행하려면 요소 검사기에서 DOM 변경 중단점을 설정합니다.
 
-![](https://alan.norbauer.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fconditional-breakpoint-DOM-mutation-chrome.27f07619.png&w=1920&q=75)
+![](./assets/conditional-breakpoint-DOM-mutation-chrome.png)
 
 그런 다음 감시 표현식을 추가합니다.
 예를 들어 DOM 스냅샷 기록을 하려면 다음과 같이 합니다: `(window.doms = window.doms || []).push(document.documentElement.outerHTML)`
@@ -79,7 +79,7 @@
 짝이 없는 표시 호출의 소스를 어떻게 찾을 수 있을까요?
 show 메서드의 조건부 중단점에서 `console.trace`를 사용하여 코드를 실행하고, show 메서드의 마지막 스택 기록을 찾은 다음 호출자를 클릭하여 해당 코드로 이동합니다.
 
-![](https://alan.norbauer.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fconsole-trace-find-stack.d107e89c.gif&w=1920&q=75)
+![](./assets/console-trace-find-stack.gif)
 
 ## <a id="changing-program-behavior"></a> 프로그램 동작 변경하기
 
@@ -89,7 +89,7 @@ show 메서드의 조건부 중단점에서 `console.trace`를 사용하여 코�
 `id=1`은 `true`로 평가되므로 이 조건부 중단점은 디버거를 일시 중지합니다.
 이를 방지하려면 표현식에 `false`를 추가하세요.
 
-![](https://alan.norbauer.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fconditional-breakpoint-parameter-override.375af5d5.gif&w=1920&q=75)
+![](./assets/conditional-breakpoint-parameter-override.gif)
 
 ## <a id="quick-and-dirty-performance-profiling"></a> 빠르고 간단한 성능 프로파일링
 
@@ -97,7 +97,7 @@ show 메서드의 조건부 중단점에서 `console.trace`를 사용하여 코�
 시작 지점에 `console.time('label')` 조건으로 중단점을 설정하고 종료 지점에 `console.timeEnd('label')` 조건으로 중단점을 설정하면 됩니다.
 측정 대상 항목이 실행될 때마다 브라우저는 소요 시간을 콘솔에 기록합니다.
 
-![](https://alan.norbauer.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fconsole-time-performance-profile.9b494665.gif&w=1920&q=75)
+![](./assets/console-time-performance-profile.gif)
 
 ## <a id="using-function-arity"></a> 함수의 항수(Arity) 활용
 
@@ -108,13 +108,13 @@ show 메서드의 조건부 중단점에서 `console.trace`를 사용하여 코�
 
 옵셔널 매개변수가 있는 함수가 있을 때 유용합니다.
 
-![](https://alan.norbauer.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fconditional-breakpoint-argument-length.eedb2e1c.gif&w=1920&q=75)
+![](./assets/conditional-breakpoint-argument-length.gif)
 
 ### <a id="break-on-function-arity-mismatch"></a> 항수 불일치시 중단
 
 현재 함수가 잘못된 인수 개수로 호출될 때만 일시 중지합니다. `(arguments.callee.length) != arguments.length`
 
-![](https://alan.norbauer.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fconditional-breakpoint-arity-check.70c0a60c.gif&w=1920&q=75)
+![](./assets/conditional-breakpoint-arity-check.gif)
 
 함수 호출부의 버그를 찾을 때 유용합니다.
 
@@ -152,9 +152,9 @@ show 메서드의 조건부 중단점에서 `console.trace`를 사용하여 코�
 공백을 우클릭하고 "Never Pause Here"을 선택하면 크롬은 `false` 인 절대 통과하지 않는 조건부 중단점을 생성합니다.
 이를 통해 디버거는 이 라인에서 일시 중지되지 않습니다.
 
-![](https://alan.norbauer.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fnever-pause-here.a4010ee4.png&w=640&q=75)
+![](./assets/never-pause-here.png)
 
-![](https://alan.norbauer.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fnever-pause-here-result.32dc71c3.png&w=750&q=75)
+![](./assets/never-pause-here-result.png)
 
 XHR 중단점에서 한 줄을 제외하거나, 예외가 발생했을 때 이를 무시하고 싶을 때 유용합니다.
 
@@ -169,7 +169,7 @@ XHR 중단점에서 한 줄을 제외하거나, 예외가 발생했을 때 이�
 
 전역 boolean을 사용하여 하나 이상의 조건부 중단점을 생성합니다.
 
-![](https://alan.norbauer.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fconditional-breakpoint-gated.d32764ce.png&w=1920&q=75)
+![](./assets/conditional-breakpoint-gated.png)
 
 그런 다음 프로그래밍 방식으로 다음과 같이 boolean을 토글 합니다.
 
@@ -181,7 +181,7 @@ window.enableBreakpoints = true;
 
 - 다른 중단점에서 하는 방법은 다음과 같습니다.
 
-![](https://alan.norbauer.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fconditional-breakpoint-gated-enable-from-breakpoint.1c568b6e.png&w=1920&q=75)
+![](./assets/conditional-breakpoint-gated-enable-from-breakpoint.png)
 
 - 콘솔의 타이머에서 하는 방법은 다음과 같습니다.
 
@@ -314,13 +314,13 @@ DOM 인스펙터에서 `ctrl+\` (크롬/윈도우)를 누르면 JS 실행을 언
 조건부로만 표시되는 DOM 요소를 검사하고 싶다고 가정해 보겠습니다.
 해당 요소를 검사하려면 마우스를 해당 요소로 이동해야 하는데, 마우스를 이동하려고 하면 해당 요소가 사라집니다:
 
-![](https://alan.norbauer.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Felusive-element.495b0945.gif&w=1920&q=75)
+![](./assets/elusive-element.gif)
 
 요소를 검사하려면 다음 코드를 콘솔에 붙여 넣으면 됩니다: `setTimeout(function() { debugger; }, 5000);`
 이렇게 하면 5초 동안 UI를 트리거할 수 있으며, 5초 타이머가 끝나면 JS 실행이 일시 중지되고 요소가 사라지지 않습니다.
 요소를 잃지 않고 개발 도구로 마우스를 자유롭게 이동할 수 있습니다.
 
-![](https://alan.norbauer.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Felusive-element-inspected.f5f036b4.gif&w=1920&q=75)
+![](./assets/elusive-element-inspected.gif)
 
 JS 실행이 일시 중지된 상태에서 요소를 검사하고, CSS를 편집하고, JS 콘솔에서 명령을 실행하는 등의 작업을 수행할 수 있습니다.
 
@@ -367,7 +367,7 @@ setInterval(() => {
 })();
 ```
 
-![](https://alan.norbauer.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fmonitor-focus.b9692b99.gif&w=1920&q=75)
+![](./assets/monitor-focus.gif)
 
 ## <a id="find-bold-elements"></a> 볼드 요소 찾기
 
@@ -403,7 +403,7 @@ Array.from($0.querySelectorAll("*")).filter(isBold);
 
 크롬에서는 현재 선택된 요소의 모든 이벤트 리스너를 조사할 수 있습니다: `getEventListener($0)`
 
-![](https://alan.norbauer.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FgetEventListeners.4ae6f43e.png&w=1920&q=75)
+![](./assets/getEventListeners.png)
 
 ### <a id="monitor-events-for-element"></a> 요소에 대한 이벤트 모니터링
 
@@ -411,7 +411,7 @@ Array.from($0.querySelectorAll("*")).filter(isBold);
 
 선택된 요소의 특정 이벤트 디버깅하기: `monitorEvents($0, ["control", "key"])`
 
-![](https://alan.norbauer.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FmonitorEvents.a03f9e53.gif&w=1920&q=75)
+![](./assets/monitorEvents.gif)
 
 ## 각주
 

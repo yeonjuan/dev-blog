@@ -5,7 +5,7 @@
 **빠른 요약**
 
 > 이 글은 Bookaway의 랜딩 페이지 성능에 대한 사례 연구를 다룹니다.
-Next.js 페이지로 전달되는 props를 어떻게 관리해서 로딩 시간과 웹 바이탈을 향상할 수 있었는지 알아보겠습니다.
+> Next.js 페이지로 전달되는 props를 어떻게 관리해서 로딩 시간과 웹 바이탈을 향상할 수 있었는지 알아보겠습니다.
 
 여러분이 무슨 생각을 하고 있는지 알고 있습니다.
 자바스크립트 의존성을 줄이고 클라이언트에 전송되는 번들 크기를 줄이는 것을 다룬 다른 글이 있습니다.
@@ -45,7 +45,7 @@ LCP는 사용자 중심의 지표이지만, 구글에 따르면 이를 줄이는
 > “웹은 사용할 수 있는 모든 URL을 탐색하고 인덱싱하는 구글의 능력을 초과하는 거의 무한한 공간입니다.
 > 따라서 구글 봇이 어떤 사이트를 탐색하는 데 사용할 수 있는 시간에 한계가 있습니다.
 > 사이트를 탐색하기 위한 구글의 시간과 자원의 양은 사이트의 크롤링 예산이라고 불립니다.”
->  \- "[Advanced SEO](https://developers.google.com/search/docs/advanced/crawling/large-site-managing-crawl-budget)", 구글 검색 센터 문서
+> \- "[Advanced SEO](https://developers.google.com/search/docs/advanced/crawling/large-site-managing-crawl-budget)", 구글 검색 센터 문서
 
 크롤링 예산을 개선하는 가장 좋은 기술적 방법의 하나는 [구글이 더 짧은 시간 내에 더 많은 작업을 할 수 있도록 돕는 것](https://developers.google.com/search/docs/advanced/crawling/large-site-managing-crawl-budget)입니다.
 
@@ -79,19 +79,19 @@ LCP는 사용자 중심의 지표이지만, 구글에 따르면 이를 줄이는
 
 1. A 도시에서 B 도시
 
-    A 도시 역에서 B 도시 역까지 이어져 있는 모든 노선.(예: [방콕에서 파타야까지](https://www.bookaway.com/routes/thailand/bangkok-to-pattaya))
+   A 도시 역에서 B 도시 역까지 이어져 있는 모든 노선.(예: [방콕에서 파타야까지](https://www.bookaway.com/routes/thailand/bangkok-to-pattaya))
 
 2. 도시
 
-    특정 도시를 지나는 모든 노선.(예: [칸쿤](https://www.bookaway.com/routes/mexico/cancun))
+   특정 도시를 지나는 모든 노선.(예: [칸쿤](https://www.bookaway.com/routes/mexico/cancun))
 
 3. 나라
 
-    특정 나라를 지나는 모든 노선.(예: [이탈리아](https://www.bookaway.com/routes/italy))
+   특정 나라를 지나는 모든 노선.(예: [이탈리아](https://www.bookaway.com/routes/italy))
 
 4. 역
 
-    특정 역을 지나는 모든 노선.(예: [하노이 공항](https://www.bookaway.com/routes/vietnam/hanoi/hanoi-airport))
+   특정 역을 지나는 모든 노선.(예: [하노이 공항](https://www.bookaway.com/routes/vietnam/hanoi/hanoi-airport))
 
 ## 이제, 아키텍처에 대해 살펴보겠습니다.
 
@@ -99,8 +99,7 @@ LCP는 사용자 중심의 지표이지만, 구글에 따르면 이를 줄이는
 흥미로운 부분은 `4`번과 `5`번입니다.
 여기에 낭비되는 부분이 있습니다.
 
-![](https://cloud.netlifyusercontent.com/assets/344dbf88-fdf9-42bb-adb4-46f01eedd629/74c8abb8-beae-42a6-860c-17aec640ccc0/1-architecture-before.png)
-
+![](./assets/1-architecture-before.png)
 
 ### 프로세스 핵심 사항
 
@@ -124,14 +123,14 @@ LCP는 사용자 중심의 지표이지만, 구글에 따르면 이를 줄이는
 
 ```html
 <script id="__NEXT_DATA__" type="application/json">
-// 큰 JSON
+  // 큰 JSON
 </script>
 ```
 
 이 JSON을 클립보드에 쉽게 복사하려면 Next.js 페이지에서 아래 스니펫을 사용하시면 됩니다.
 
 ```js
-copy($('#__NEXT_DATA__').innerHTML)
+copy($("#__NEXT_DATA__").innerHTML);
 ```
 
 의문이 생깁니다.
@@ -142,25 +141,25 @@ copy($('#__NEXT_DATA__').innerHTML)
 
 이것은 [역 페이지](https://www.bookaway.com/routes/vietnam/hanoi/hanoi-airport)를 조사하던 중에 발견된 최초의 결과입니다.
 
-![](https://cloud.netlifyusercontent.com/assets/344dbf88-fdf9-42bb-adb4-46f01eedd629/d4116a72-f55c-4a59-9e1b-e2ec139e3ef7/graph-json-analyzer.png)
+![](./assets/graph-json-analyzer.png)
 
 분석된 결과 두 가지 문제가 있었습니다.
 
 1. 데이터가 집계되지 않았습니다.
 
-    HTML에는 세분화된 제품의 전체 목록이 포함되어 있습니다.
-    그것들은 화면에 그릴 때 필요한 것은 아닙니다.
-    집계 방법을 위해 필요한 것들입니다.
-    예를 들어, 이 역을 통과하는 모든 노선의 목록을 가져오고 있습니다.
-    각 노선에는 공급업체가 있습니다.
-    하지만 노선 목록을 2개의 공급자로 구성된 배열로 줄여야 합니다.
-    나중에 예시를 보겠습니다.
+   HTML에는 세분화된 제품의 전체 목록이 포함되어 있습니다.
+   그것들은 화면에 그릴 때 필요한 것은 아닙니다.
+   집계 방법을 위해 필요한 것들입니다.
+   예를 들어, 이 역을 통과하는 모든 노선의 목록을 가져오고 있습니다.
+   각 노선에는 공급업체가 있습니다.
+   하지만 노선 목록을 2개의 공급자로 구성된 배열로 줄여야 합니다.
+   나중에 예시를 보겠습니다.
 
 2. 불필요한 필드들
 
-    각각의 객체를 파헤쳐 보면, 우리가 전혀 필요하지 않은 몇몇 필드를 발견했습니다.
-    이는 우리가 REST API에서 데이터를 가져오기 때문입니다.
-    어떤 데이터를 가져오는지 제어할 수 없습니다.
+   각각의 객체를 파헤쳐 보면, 우리가 전혀 필요하지 않은 몇몇 필드를 발견했습니다.
+   이는 우리가 REST API에서 데이터를 가져오기 때문입니다.
+   어떤 데이터를 가져오는지 제어할 수 없습니다.
 
 이 두 가지 이슈는 그 페이지들이 아키텍처 변경이 필요하다는 것을 보여주었습니다.
 하지만 잠깐.
@@ -168,11 +167,11 @@ copy($('#__NEXT_DATA__').innerHTML)
 
 ## 아키텍처 변경
 
-매우 큰 JSON 문제는 깔끔하고 계층화된 해결책으로 해결해야 했습니다. 
+매우 큰 JSON 문제는 깔끔하고 계층화된 해결책으로 해결해야 했습니다.
 어떻게 했을까요?
 다음 다이어그램에서 녹색으로 표시된 계층을 추가합니다.
 
-![](https://cloud.netlifyusercontent.com/assets/344dbf88-fdf9-42bb-adb4-46f01eedd629/23eb44e9-2b0d-4549-9925-49a4cb9f9448/2-architecture-after.png)
+![](./assets/2-architecture-after.png)
 
 몇 가지 주요 사항:
 
@@ -184,7 +183,7 @@ copy($('#__NEXT_DATA__').innerHTML)
 
 [역 페이지](https://www.bookaway.com/routes/vietnam/hanoi/tran-quy-cap-station)에서 이 섹션을 렌더링하고 싶습니다
 
-![](https://res.cloudinary.com/indysigner/image/fetch/f_auto,q_80/w_2000/https://cloud.netlifyusercontent.com/assets/344dbf88-fdf9-42bb-adb4-46f01eedd629/fbb38019-bad6-43db-99ec-3898f4257e4d/suppliers-sections.png)
+![](./assets/suppliers-sections.png)
 
 우리는 주어진 역에서 운영되는 공급자가 누구인지 알아야 합니다.
 `lines` REST 엔드 포인트에서 모든 노선에 대한 정보를 가져와야 합니다. 이것이 우리가 받은 응답입니다(예시 입니다, 실제로는 훨씬 큽니다).
@@ -277,11 +276,11 @@ HTML 이 너무 커지면 [성능 예산](https://addyosmani.com/blog/performanc
 
 여기 [역 페이지](https://www.bookaway.com/routes/vietnam/hanoi/hanoi-airport) 지표의 예시입니다.
 
-|    | HTML 크기 (gzip 이전) | HTML 다운로드 속도 (느린 3g) |
-| --- | --- | --- |
-| 이전 |  370kb | 820ms | 
-| 이후 | 166 | 540ms |
-| 전체 변경 | 240kb 감소 | 34% 감소 | 
+|           | HTML 크기 (gzip 이전) | HTML 다운로드 속도 (느린 3g) |
+| --------- | --------------------- | ---------------------------- |
+| 이전      | 370kb                 | 820ms                        |
+| 이후      | 166                   | 540ms                        |
+| 전체 변경 | 240kb 감소            | 34% 감소                     |
 
 ## 계층화 해결책
 
