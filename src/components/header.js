@@ -1,4 +1,5 @@
 import { html } from '@html-kit/html'
+import { resolvePath } from '../libs/utils.js'
 
 export default () => html`
   <style>
@@ -31,13 +32,13 @@ export default () => html`
       rel="noopener noreferrer"
     >
       <img
-        src="/assets/ic-github.svg"
+        src="${resolvePath('/assets/ic-github.svg')}"
         alt="go to github"
         width="20"
       >
     </a>
     <span>
-      <a href="/">
+      <a href="${resolvePath('/')}">
         DEV BLOG
       </a>
     </span>
@@ -60,16 +61,16 @@ export default () => html`
       <nav class="fixed text-black transition-[max-height] duration-200 overflow-hidden max-h-0 top-12 left-[0px] peer-checked:max-h-[200px] bg-white w-full border-b border-black">
         <ul class="p-4">
           <li>
-            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/">HOME</a>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="${resolvePath('/')}">HOME</a>
           </li>
           <li>
-            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/posts/JavaScript">JavaScript</a>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="${resolvePath('/posts/JavaScript')}">JavaScript</a>
           </li>
           <li>
-            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/posts/Review">Review</a>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="${resolvePath('/posts/Review')}">Review</a>
           </li>
           <li>
-            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="/posts/Browser">Browser</a>
+            <a class="inline-block w-full h-full py-2 hover:underline cursor-pointer" href="${resolvePath('/posts/Browser')}">Browser</a>
           </li>
         </ul>
       </nav>

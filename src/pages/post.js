@@ -1,5 +1,6 @@
 import { html } from '@html-kit/html'
 import layout from '../components/layout.js'
+import { resolvePath } from '../libs/utils.js'
 
 export default (children, data, { originalFilename }) => {
   const post = data('posts').posts.find((post) => {
@@ -23,7 +24,7 @@ export default (children, data, { originalFilename }) => {
     },
     ],
     link: html`
-      <link href="/css/github.min.css" type="text/css" rel="stylesheet" />
+      <link href="${resolvePath('/css/github.min.css')}" type="text/css" rel="stylesheet" />
     
     `,
   })

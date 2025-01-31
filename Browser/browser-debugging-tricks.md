@@ -70,7 +70,12 @@
 ![](./assets/conditional-breakpoint-DOM-mutation-chrome.png)
 
 그런 다음 감시 표현식을 추가합니다.
-예를 들어 DOM 스냅샷 기록을 하려면 다음과 같이 합니다: `(window.doms = window.doms || []).push(document.documentElement.outerHTML)`
+예를 들어 DOM 스냅샷 기록을 하려면 다음과 같이 합니다:
+
+```js
+(window.doms = window.doms || []).push(document.documentElement.outerHTML);
+```
+
 이제 DOM 하위 트리를 수정한 후 디버거가 실행을 일시 중지하고 새 DOM 스냅샷이 `window.doms` 배열의 끝에 오게 됩니다.(실행을 일시 중지하지 않는 DOM 변경 중단점을 생성하는 방법은 없습니다.)
 
 ### <a id="tracing-callstacks"></a> 호출 스택 추적
@@ -129,17 +134,30 @@ show 메서드의 조건부 중단점에서 `console.trace`를 사용하여 코�
 
 ### <a id="skip-n-seconds"></a> N 초 스킵하기
 
-다음 5초 이내에 중단점에 도달하면 실행을 일시 중지하지 않고, 그 이후에는 언제든지 일시 중지합니다. `window.baseline = window.baseline || Date.now(), (Date.now() - window.baseline) > 5000`
+다음 5초 이내에 중단점에 도달하면 실행을 일시 중지하지 않고, 그 이후에는 언제든지 일시 중지합니다.
+
+```js
+(window.baseline = window.baseline || Date.now()),
+  Date.now() - window.baseline > 5000;
+```
 
 원하는 경우 언제든지 콘솔에서 카운터를 재설정 합니다. `window.baseline = Date.now()`
 
 ## <a id="using-css"></a> CSS 사용
 
-계산된 CSS 값에 따라 일시 중지하기(예: document body의 배경색이 빨간색일 때만 실행 일시 중지): `window.getComputedStyle(document.body).backgroundColor === "rgb(255,0,0)"`
+계산된 CSS 값에 따라 일시 중지하기(예: document body의 배경색이 빨간색일 때만 실행 일시 중지):
+
+```js
+window.getComputedStyle(document.body).backgroundColor === "rgb(255,0,0)";
+```
 
 ## <a id="even-calls-only"></a> 짝수 호출만
 
-줄이 짝수 번 실행될 때마다 일시 중지: `window.counter = window.counter || 0, window.counter % 2 === 0`
+줄이 짝수 번 실행될 때마다 일시 중지:
+
+```js
+(window.counter = window.counter || 0), window.counter % 2 === 0;
+```
 
 ## <a id="break-on-sample"></a> 무작위 중단
 
@@ -294,10 +312,22 @@ debug(window.location.assign);
 `copy()` 콘솔 API를 사용하면 문자열을 잘라내지 않고도 브라우저에서 관심 있는 정보를 클립보드로 바로 복사할 수 있습니다.
 복사하고 싶을 만한 정보 몇 가지를 소개합니다.
 
-- 현재 DOM 스냅샷: `copy(document.documentElement.outerHTML)`
-- 리소스 메타데이터 (예. images): `copy(performance.getEntriesByType("resource"))`
-- 큰 JSON blob, 포맷팅된: `copy(JSON.parse(blob))`
-- localStorage 덤프: `copy(localStorage)`
+- 현재 DOM 스냅샷:
+  ```js
+  copy(document.documentElement.outerHTML);
+  ```
+- 리소스 메타데이터 (예. images):
+  ```js
+  copy(performance.getEntriesByType("resource"));
+  ```
+- 큰 JSON blob, 포맷팅된:
+  ```js
+  copy(JSON.parse(blob));
+  ```
+- localStorage 덤프:
+  ```js
+  copy(localStorage);
+  ```
 - 기타.
 
 ## <a id="debugging-htmlcss"><a> HTML/CSS 디버깅

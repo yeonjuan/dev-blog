@@ -9,3 +9,10 @@ export function toId(text) {
     .replace(/-+/g, '-')
     .replace(/-$/, '')
 }
+
+export function resolvePath(path) {
+  if (path.startsWith('/')) {
+    return '/dev-blog' + path
+  }
+  return path
+}

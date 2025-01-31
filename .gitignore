@@ -3,3 +3,4 @@ node_modules
 dist
 website/posts/*/assets
 out
+dev-blog

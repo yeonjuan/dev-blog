@@ -33,6 +33,7 @@ export class Builder {
    * @param {object} params
    * @param {string} params.key
    * @param {string} params.src
+   * @param {() => any} [params.postProcess]
    * @returns {this}
    */
   loadJson(params) {
@@ -104,7 +105,11 @@ export class Builder {
       switch (type) {
         case 'loadJson': {
           const json = await fs.readFile(resolvers.src(params.src), 'utf-8')
-          data.set(params.key, JSON.parse(json))
+          let parsed = JSON.parse(json)
+          if (params.postProcess) {
+            parsed = await params.postProcess(parsed)
+          }
+          data.set(params.key, parsed)
           break
         }
         case 'copy': {

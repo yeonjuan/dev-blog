@@ -9,6 +9,7 @@ import { Marked } from 'marked'
 import hljs from 'highlight.js'
 import xml from 'highlight.js/lib/languages/xml'
 import renderer from './libs/renderer.js'
+import { resolvePath } from './libs/utils.js'
 
 function parse(markdown) {
   hljs.registerLanguage('html', xml)
@@ -31,10 +32,16 @@ function parse(markdown) {
 
 new Builder({
   srcRoot: process.cwd(),
-  outRoot: path.resolve(process.cwd(), 'out'),
+  outRoot: path.resolve(process.cwd(), 'dev-blog'),
 }).loadJson({
   key: 'posts',
   src: 'src/data/posts.json',
+  postProcess: (data) => {
+    return {
+      ...data,
+      posts: data.posts.map(post => ({ ...post, href: resolvePath(post.href), thumbnail: resolvePath(post.thumbnail) })),
+    }
+  },
 }).copy([
   ['src/assets', 'assets'],
   ['src/css', 'css'],
