@@ -7,6 +7,10 @@
         <title>자바스크립트 에코시스템의 속도 향상 - 배럴(Barrel) 파일의 대실패 (번역) | DevBlog</title>
         <link href="/dev-blog/favicon.ico" rel="shortcut icon">
         <meta name="description" content="배럴(Barrel) 파일을 많이 사용하고 계신나요? 배럴 파일은 index.js 처럼 특정 파일에서 모듈들을 다시 export 해서 모듈을 사용하는 쪽에서 import 간결하게 하도록 도와주는 패턴을 뜻합니다. 이 글에서는 배럴 파일이 성능에 미치는 영향에 대해 이야기하고 배럴 파일을 사용하지 말 것을 권고하고 있습니다">
+        <meta property="og:image" content="/dev-blog/posts/JavaScript/assets/speeding-up-the-javascript-ecosystem-the-barrel-file-debacle.webp" /> 
+        <meta property="og:type" content="blog" />
+        <meta property="og:title" content="자바스크립트 에코시스템의 속도 향상 - 배럴(Barrel) 파일의 대실패 (번역) | DevBlog" /> 
+        <meta property="og:description" content="배럴(Barrel) 파일을 많이 사용하고 계신나요? 배럴 파일은 index.js 처럼 특정 파일에서 모듈들을 다시 export 해서 모듈을 사용하는 쪽에서 import 간결하게 하도록 도와주는 패턴을 뜻합니다. 이 글에서는 배럴 파일이 성능에 미치는 영향에 대해 이야기하고 배럴 파일을 사용하지 말 것을 권고하고 있습니다" /> 
         <link href="/dev-blog/output.css" type="text/css" rel="stylesheet" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,6 +18,25 @@
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
           rel="stylesheet"
         />
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "headline": "자바스크립트 에코시스템의 속도 향상 - 배럴(Barrel) 파일의 대실패 (번역) | DevBlog",
+          "image": [
+            "https://yeonjuan.github.io//dev-blog/posts/JavaScript/assets/speeding-up-the-javascript-ecosystem-the-barrel-file-debacle.webp",
+          ],
+            
+              "datePublished": "2023-10-30T00:00:00+09:00",
+              "dateModified": "2023-10-30T00:00:00+09:00",
+              
+          "author": [{
+              "@type": "Person",
+              "name": "YeonJuAn",
+              "url": "https://github.com/yeonjuan"
+            }]
+        }
+        </script>
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
@@ -185,7 +208,7 @@ globalThis.<span class="hljs-property">foo</span> = <span class="hljs-number">12
 일반적으로 린터는 파일 단위로 실행되므로 모듈 그래프를 구성하는 데 드는 비용을 모든 파일에 지불해야 합니다.
 이로 인해 린팅 시간이 통제 불능 상태가 되어 대규모 프로젝트에서 갑자기 린팅에 몇 시간이 걸리는 경우가 종종 있습니다.</p><p class="my-1 text-sm leading-7 mb-6">원시적인 수치를 얻고 모듈 그래프를 구성하는 데 드는 비용을 더 잘 파악하기 위해 파일을 서로 import 하는 프로젝트를 생성했습니다.
 모든 파일은 비어 있으며 import 문 이외의 코드는 포함하지 않습니다.
-시간은 제 MacBook M1 Air (2020)에서 측정했습니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/js-tools-module-cost.png"></p><p class="my-1 text-sm leading-7 mb-6">보시다시피 모듈을 더 적게 로드하면 그만한 가치가 있습니다.
+시간은 제 MacBook M1 Air (2020)에서 측정했습니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/js-tools-module-cost.png"></p><p class="my-1 text-sm leading-7 mb-6">보시다시피 모듈을 더 적게 로드하면 그만한 가치가 있습니다.
 이러한 숫자를 100개의 테스트 파일이 있는 프로젝트에 적용하고, 각 테스트 파일에 새로운 자식 프로세스를 생성하는 테스트 실행 도구를 사용한다고 가정해 봅시다.
 여기서는 테스드 러너가 4개의 테스트를 병렬로 실행할 수 있다고 가정해 보겠습니다.</p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">모듈 500 개: <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">0.15s \* 100 / 4</code> = <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">3.75s</code> 오버헤드</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">모듈 1000 개: <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">0.31s \* 100 / 4</code> = <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">7.75s</code> 오버헤드</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">모듈 10000 개: <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">3.12s \* 100 / 4</code> = <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">1:18m</code> 오버헤드</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">모듈 25000 개: <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">16.81s \* 100 / 4</code> = <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">~7:00m</code> 오버헤드</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">모듈 50000 개: <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">48.44s \* 100 / 4</code> = <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">~20:00m</code> 오버헤드</p></li></ul><p class="my-1 text-sm leading-7 mb-6">이것은 인위적인 설정이므로, 낮게 잡힌 수치입니다.
 실제 프로젝트에서는 이 수치가 더 나빠질 가능성이 높습니다.

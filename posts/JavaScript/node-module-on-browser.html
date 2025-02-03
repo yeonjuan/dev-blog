@@ -7,6 +7,10 @@
         <title>node 패키지 브라우저에서 사용하기 (with Webpack 4) | DevBlog</title>
         <link href="/dev-blog/favicon.ico" rel="shortcut icon">
         <meta name="description" content=".....">
+        <meta property="og:image" content="/dev-blog/posts/JavaScript/assets/webpack4.png" /> 
+        <meta property="og:type" content="blog" />
+        <meta property="og:title" content="node 패키지 브라우저에서 사용하기 (with Webpack 4) | DevBlog" /> 
+        <meta property="og:description" content="....." /> 
         <link href="/dev-blog/output.css" type="text/css" rel="stylesheet" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,6 +18,25 @@
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
           rel="stylesheet"
         />
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "headline": "node 패키지 브라우저에서 사용하기 (with Webpack 4) | DevBlog",
+          "image": [
+            "https://yeonjuan.github.io//dev-blog/posts/JavaScript/assets/webpack4.png",
+          ],
+            
+              "datePublished": "2023-01-01T00:00:00+09:00",
+              "dateModified": "2023-01-01T00:00:00+09:00",
+              
+          "author": [{
+              "@type": "Person",
+              "name": "YeonJuAn",
+              "url": "https://github.com/yeonjuan"
+            }]
+        }
+        </script>
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
@@ -119,7 +142,7 @@
       이유
     </h2><p class="my-1 text-sm leading-7 mb-6">근래에 TypeScript에 흥미를 느껴 <a href="https://github.com/typescript-eslint/typescript-eslint" class="text-orange-500">typescript-eslint</a> 프로젝트에 조금씩 컨트리뷰션을 하고 있습니다.
 컨트리뷰션을 하기 위해 해결할 이슈를 재현해 보곤 하는데, 매번 이슈를 재현하기 위해 프로젝트의 테스트 코드를 찾아서 수정하는 것이 귀찮게 느껴졌습니다.</p><p class="my-1 text-sm leading-7 mb-6">ESLint에서는 이를 위해 <a href="https://eslint.org/demo" class="text-orange-500">Online Demo</a>를 제공하고 있는데 이슈를 재현하고 공유할 때 유용하게 사용됩니다. 
-<img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/eslint-demo.png"></p><p class="my-1 text-sm leading-7 mb-6">이에 typescript-eslint 를 지원하는 웹 데모를 만들어 보면 좋겠다고 생각하였고 이를 만들며 겪었던 문제점과 해결 방법을 정리해 보았습니다. </p>
+<img class="my-4 border-gray-300 border rounded-sm p-1" alt="eslint-demo" src="./assets/eslint-demo.png"></p><p class="my-1 text-sm leading-7 mb-6">이에 typescript-eslint 를 지원하는 웹 데모를 만들어 보면 좋겠다고 생각하였고 이를 만들며 겪었던 문제점과 해결 방법을 정리해 보았습니다. </p>
     <h2 id="" class="text-xl my-4 font-semibold">
       문제점
     </h2><p class="my-1 text-sm leading-7 mb-6">typescript-eslint를 브라우저에서 동작시키기 위해서는 typescript-eslint 프로젝트뿐만 아니라 eslint 도 브라우저에서 동작시켜야 합니다. 하지만 해당 프로젝트들은 NodeJS 에서 동작하는 패키지이고 브라우저에서 동작을 지원하지 않습니다.</p><p class="my-1 text-sm leading-7 mb-6">NodeJS 의 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">fs</code>, <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">path</code> 와 같은 built-in 모듈을 사용하는 패키지를 웹팩을 이용해 번들해야 했는데 번들시 해당 모듈을 찾지 못해 아래와 같은 에러가 발생하게 됩니다.</p><pre><code class="my-4 hljs text-xs language-">ERROR in ./node_modules/@eslint/eslintrc/lib/config-array-factory.js
@@ -166,7 +189,7 @@ Module not found: Error: Can&#x27;t resolve &#x27;fs&#x27; in &#x27;...project/n
 }</code></pre></li></ul><p class="my-1 text-sm leading-7 mb-6">이제 웹팩으로 번들시 typescript-eslint 내부에서 import 해서 사용하는 globby 는 제 프로젝트에 있는 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">src/modules/globby.js</code> 로 대체되게 됩니다.</p>
     <h2 id="" class="text-xl my-4 font-semibold">
       결론
-    </h2><p class="my-1 text-sm leading-7 mb-6">결론적으로 위와 같은 과정(삽질?) 을 통해 <a href="https://github.com/yeonjuan/typescript-eslint-demo" class="text-orange-500">typescript-eslint-demo</a>를 완성하게 되었습니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/tseslint-demo.png"></p><p class="my-1 text-sm leading-7 mb-6">사이드 프로젝트였고 어찌 되었든 동작하는 것이 가장 큰 목표였기 때문에 위와 같은 삽질을 하게 되었는데요.</p><p class="my-1 text-sm leading-7 mb-6">정리해 놓고 보니 간단하지만 실제 과정은 녹록친 않았습니다. eslint, tyescript-eslint 내부에 어떤 모듈에서 Node Built-In 모듈을 사용하는지 파악하는게 어려웠기 때문에 매번 번들링을 시도하면서 에러가 발생하면 실제 코드를 찾아보고 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">null-loader</code> 나 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">NormalModuleReplacementPlugin</code> 으로 땜질(?)하듯이 작업해야 했습니다.</p><p class="my-1 text-sm leading-7 mb-6">작업 결과뿐 아니라 유지 보수 관점에서도 단점이 있는데요. 번들할 패키지가 의존하는 모듈에 의존적인 웹팩설정이기 때문에, 패키지 업데이트에 많이 취약하다는 단점이 있습니다. </p><blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6">typescript-eslint 에서 구조 리팩터링이 있다면 ... 웹팩을 다시 설정해야겠죠..?</p></blockquote><p class="my-1 text-sm leading-7 mb-6">때문에 실제 업무였다면 좀더 좋은 방법을 찾아보았을 것 같습니다.</p><p class="my-1 text-sm leading-7 mb-6">어찌 되었든 완성된 Online Demo 를 <a href="https://github.com/eslint/eslint/issues/13758#issuecomment-709353258" class="text-orange-500">ESLint 메인테이너분도 사용해 주시기도 하고</a>, <a href="https://github.com/typescript-eslint/typescript-eslint/issues/2703#issuecomment-715685452" class="text-orange-500">저도 이슈를 재현하고 사용자와 공유하는데</a> 사용중이라 만든 보람은 느껴지는 프로젝트였습니다.</p>
+    </h2><p class="my-1 text-sm leading-7 mb-6">결론적으로 위와 같은 과정(삽질?) 을 통해 <a href="https://github.com/yeonjuan/typescript-eslint-demo" class="text-orange-500">typescript-eslint-demo</a>를 완성하게 되었습니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="tseslint-demo" src="./assets/tseslint-demo.png"></p><p class="my-1 text-sm leading-7 mb-6">사이드 프로젝트였고 어찌 되었든 동작하는 것이 가장 큰 목표였기 때문에 위와 같은 삽질을 하게 되었는데요.</p><p class="my-1 text-sm leading-7 mb-6">정리해 놓고 보니 간단하지만 실제 과정은 녹록친 않았습니다. eslint, tyescript-eslint 내부에 어떤 모듈에서 Node Built-In 모듈을 사용하는지 파악하는게 어려웠기 때문에 매번 번들링을 시도하면서 에러가 발생하면 실제 코드를 찾아보고 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">null-loader</code> 나 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">NormalModuleReplacementPlugin</code> 으로 땜질(?)하듯이 작업해야 했습니다.</p><p class="my-1 text-sm leading-7 mb-6">작업 결과뿐 아니라 유지 보수 관점에서도 단점이 있는데요. 번들할 패키지가 의존하는 모듈에 의존적인 웹팩설정이기 때문에, 패키지 업데이트에 많이 취약하다는 단점이 있습니다. </p><blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6">typescript-eslint 에서 구조 리팩터링이 있다면 ... 웹팩을 다시 설정해야겠죠..?</p></blockquote><p class="my-1 text-sm leading-7 mb-6">때문에 실제 업무였다면 좀더 좋은 방법을 찾아보았을 것 같습니다.</p><p class="my-1 text-sm leading-7 mb-6">어찌 되었든 완성된 Online Demo 를 <a href="https://github.com/eslint/eslint/issues/13758#issuecomment-709353258" class="text-orange-500">ESLint 메인테이너분도 사용해 주시기도 하고</a>, <a href="https://github.com/typescript-eslint/typescript-eslint/issues/2703#issuecomment-715685452" class="text-orange-500">저도 이슈를 재현하고 사용자와 공유하는데</a> 사용중이라 만든 보람은 느껴지는 프로젝트였습니다.</p>
     <h2 id="summary" class="text-xl my-4 font-semibold">
       Summary
     </h2><p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">fs</code>, <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">path</code> 와 같은 NodeJS 모듈을 사용하는 패키지를 웹팩으로 번들하는 경우, 런타임에 필요없는 모듈은 <a href="https://webpack.js.org/loaders/null-loader/" class="text-orange-500">null-loader</a>, 런타임에도 필요한 모듈은 <a href="https://webpack.js.org/plugins/normal-module-replacement-plugin/" class="text-orange-500">NormalModuleReplacementPlugin</a> 를 활용해 보세요. </p>

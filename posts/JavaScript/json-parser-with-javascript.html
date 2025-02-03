@@ -7,6 +7,10 @@
         <title>JavaScript JSON 파서 (번역) | DevBlog</title>
         <link href="/dev-blog/favicon.ico" rel="shortcut icon">
         <meta name="description" content="이 글에서는 JavaScript로 JSON 파서를 구현하는 방법을 소개합니다. JSON 파서를 구현하는 예시를 통해 문법 다이어그램, 파서 구현 방법, 파싱 에러를 처리하는 방법들을 살펴볼 수 있습니다.">
+        <meta property="og:image" content="/dev-blog/posts/JavaScript/assets/json-parser-with-javascript.webp" /> 
+        <meta property="og:type" content="blog" />
+        <meta property="og:title" content="JavaScript JSON 파서 (번역) | DevBlog" /> 
+        <meta property="og:description" content="이 글에서는 JavaScript로 JSON 파서를 구현하는 방법을 소개합니다. JSON 파서를 구현하는 예시를 통해 문법 다이어그램, 파서 구현 방법, 파싱 에러를 처리하는 방법들을 살펴볼 수 있습니다." /> 
         <link href="/dev-blog/output.css" type="text/css" rel="stylesheet" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,6 +18,25 @@
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
           rel="stylesheet"
         />
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "headline": "JavaScript JSON 파서 (번역) | DevBlog",
+          "image": [
+            "https://yeonjuan.github.io//dev-blog/posts/JavaScript/assets/json-parser-with-javascript.webp",
+          ],
+            
+              "datePublished": "2022-12-12T00:00:00+09:00",
+              "dateModified": "2022-12-12T00:00:00+09:00",
+              
+          "author": [{
+              "@type": "Person",
+              "name": "YeonJuAn",
+              "url": "https://github.com/yeonjuan"
+            }]
+        }
+        </script>
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
@@ -121,7 +144,7 @@ JSON도 <a href="https://www.json.org/json-en.html" class="text-orange-500">스�
 JSON 파서를 작성하는데 필요한 지식과 기술은 JS 파서를 작성할 때도 활용할 수 있습니다.</p><p class="my-1 text-sm leading-7 mb-6">그럼, 이제 JSON 파서를 작성해 봅시다!</p>
     <h2 id="" class="text-xl my-4 font-semibold">
       문법 이해하기
-    </h2><p class="my-1 text-sm leading-7 mb-6"><a href="https://www.json.org/json-en.html" class="text-orange-500">스펙 문서</a>를 보면 2개의 다이어그램이 있습니다.</p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">왼쪽에 <a href="https://en.wikipedia.org/wiki/Syntax_diagram" class="text-orange-500">구문 다이어그램 (또는 철도 다이어그램)</a></p></li></ul><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/json-parser-object.webp">
+    </h2><p class="my-1 text-sm leading-7 mb-6"><a href="https://www.json.org/json-en.html" class="text-orange-500">스펙 문서</a>를 보면 2개의 다이어그램이 있습니다.</p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">왼쪽에 <a href="https://en.wikipedia.org/wiki/Syntax_diagram" class="text-orange-500">구문 다이어그램 (또는 철도 다이어그램)</a></p></li></ul><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/json-parser-object.webp">
 <em>이미지 출처: <a href="https://www.json.org/img/object.png" class="text-orange-500">https://www.json.org/img/object.png</a></em></p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">오른쪽에 <a href="https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form" class="text-orange-500">Backus–Naur 표기법</a>의 변형인, <a href="https://www.crockford.com/mckeeman.html" class="text-orange-500">McKeeman 표기법</a></p></li></ul><pre><code class="my-4 hljs text-xs language-">json
   element
 
@@ -136,7 +159,7 @@ value
 
 object
   &#x27;{&#x27; ws &#x27;}&#x27;
-  &#x27;{&#x27; members &#x27;}&#x27;</code></pre><p class="my-1 text-sm leading-7 mb-6">두 다이어그램은 동일합니다.</p><p class="my-1 text-sm leading-7 mb-6">하나는 시각적이고 하나는 텍스트 기반입니다. 텍스트 기반 문법 구문인 Backus–Naur 표기법은 보통 이 문법을 구문 분석하고 파서를 생성하는 다른 파서에 제공됩니다. 파서 개념에 대해 말하자면... 너무 복잡합니다!</p><p class="my-1 text-sm leading-7 mb-6">이 글에서는, 철도 다이어그램에 초점을 맞출 것입니다. 왜냐하면 시각적이고 저에게 더 익숙하게 보였기 때문입니다.</p><p class="my-1 text-sm leading-7 mb-6">첫 번째 철도 다이어그램을 살펴보겠습니다:</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/json-parser-object.webp">
+  &#x27;{&#x27; members &#x27;}&#x27;</code></pre><p class="my-1 text-sm leading-7 mb-6">두 다이어그램은 동일합니다.</p><p class="my-1 text-sm leading-7 mb-6">하나는 시각적이고 하나는 텍스트 기반입니다. 텍스트 기반 문법 구문인 Backus–Naur 표기법은 보통 이 문법을 구문 분석하고 파서를 생성하는 다른 파서에 제공됩니다. 파서 개념에 대해 말하자면... 너무 복잡합니다!</p><p class="my-1 text-sm leading-7 mb-6">이 글에서는, 철도 다이어그램에 초점을 맞출 것입니다. 왜냐하면 시각적이고 저에게 더 익숙하게 보였기 때문입니다.</p><p class="my-1 text-sm leading-7 mb-6">첫 번째 철도 다이어그램을 살펴보겠습니다:</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/json-parser-object.webp">
 <em>이미지 출처: <a href="https://www.json.org/img/object.png" class="text-orange-500">https://www.json.org/img/object.png</a></em></p><p class="my-1 text-sm leading-7 mb-6">이것이 JSON에서 <strong>&quot;object&quot;</strong> 에 대한 문법입니다.</p><p class="my-1 text-sm leading-7 mb-6">왼쪽에서 화살표를 따라 시작하고 오른쪽에서 끝납니다.</p><p class="my-1 text-sm leading-7 mb-6">원들은 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">{</code>, <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">,</code>, <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">:</code>, <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">}</code>과 같은 문자이며, <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">whitespace</code>, <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">string</code>, <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">value</code>과 같은 상자들은 다른 문법의 자리를 표시합니다.
 그래서 &quot;whitespace&quot;를 파싱하기 위해서는 <strong>&quot;whitespace&quot;</strong> 에 대한 문법을 살펴보아야 합니다.</p><p class="my-1 text-sm leading-7 mb-6">따라서, 객체인 경우 왼쪽부터 시작해서 첫 번째 문자는 열린 괄호여야 합니다, <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">{</code>. 그리고 여기서 두 가지 옵션이 있습니다.</p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">whitespace</code> → <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">}</code> → 종료, 또는</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">whitespace</code> → <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">string</code> → <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">whitespace</code> → <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">:</code> → <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">value</code> → <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">}</code> → 종료</p></li></ul><p class="my-1 text-sm leading-7 mb-6">물론, &quot;value&quot;에 도달하면 다음 옵션을 선택할 수 있습니다.</p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">→ <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">}</code> → 종료, 또는</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">→ <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">,</code> → <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">whitespace</code> → ... → value</p></li></ul><p class="my-1 text-sm leading-7 mb-6">그리고 아래처럼 갈 때까지 계속해서 반복할 수 있습니다:</p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">→ <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">}</code>  →  종료</p></li></ul><p class="my-1 text-sm leading-7 mb-6">그럼 이제 철도 다이어그램에 대해 잘 알고 있는 것 같네요. 다음 섹션으로 넘어가겠습니다.</p>
     <h2 id="" class="text-xl my-4 font-semibold">
@@ -228,7 +251,7 @@ object
       <span class="hljs-keyword">return</span> result;
     }
   }
-}</code></pre><p class="my-1 text-sm leading-7 mb-6">이제 &quot;object&quot; 문법을 구현하는 것을 보았으니 &quot;array&quot; 문법에 도전해 볼 차례입니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/json-parser-array.webp">
+}</code></pre><p class="my-1 text-sm leading-7 mb-6">이제 &quot;object&quot; 문법을 구현하는 것을 보았으니 &quot;array&quot; 문법에 도전해 볼 차례입니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/json-parser-array.webp">
 <em>이미지 출처: <a href="https://www.json.org/img/array.png" class="text-orange-500">https://www.json.org/img/array.png</a></em></p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">fakeParseJSON</span>(<span class="hljs-params">str</span>) {
   <span class="hljs-comment">// ...</span>
   <span class="hljs-keyword">function</span> <span class="hljs-title function_">parseArray</span>(<span class="hljs-params"></span>) {
@@ -251,7 +274,7 @@ object
       <span class="hljs-keyword">return</span> result;
     }
   }
-}</code></pre><p class="my-1 text-sm leading-7 mb-6">이제, 조금 더 흥미로운 문법인 &quot;value&quot;로 넘어갑니다:</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/json-parser-value.webp">
+}</code></pre><p class="my-1 text-sm leading-7 mb-6">이제, 조금 더 흥미로운 문법인 &quot;value&quot;로 넘어갑니다:</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/json-parser-value.webp">
 <em>이미지 출처: <a href="https://www.json.org/img/value.png" class="text-orange-500">https://www.json.org/img/value.png</a></em></p><p class="my-1 text-sm leading-7 mb-6">value는 &quot;whitespace&quot;로 시작하고, &quot;string&quot;, &quot;number&quot;, &quot;object&quot;, &quot;array&quot;, &quot;true&quot;, &quot;false&quot; 또는 &quot;null&quot; 모두 다음에 오고, &quot;whitespace&quot;로 끝이 납니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">fakeParseJSON</span>(<span class="hljs-params">str</span>) {
   <span class="hljs-comment">// ...</span>
   <span class="hljs-keyword">function</span> <span class="hljs-title function_">parseValue</span>(<span class="hljs-params"></span>) {

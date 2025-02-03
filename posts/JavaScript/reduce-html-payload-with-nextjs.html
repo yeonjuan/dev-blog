@@ -7,6 +7,10 @@
         <title>Next.js에서 HTML 페이로드 줄이기 (번역) | DevBlog</title>
         <link href="/dev-blog/favicon.ico" rel="shortcut icon">
         <meta name="description" content="이 글에서는 Next.js를 사용할 때, HTML 크기가 커지는 문제와 아키텍처 개선을 통해 이를 해결한 사례에 대해 설명합니다.">
+        <meta property="og:image" content="/dev-blog/posts/JavaScript/assets/reduce-html-payload-with-nextjs.webp" /> 
+        <meta property="og:type" content="blog" />
+        <meta property="og:title" content="Next.js에서 HTML 페이로드 줄이기 (번역) | DevBlog" /> 
+        <meta property="og:description" content="이 글에서는 Next.js를 사용할 때, HTML 크기가 커지는 문제와 아키텍처 개선을 통해 이를 해결한 사례에 대해 설명합니다." /> 
         <link href="/dev-blog/output.css" type="text/css" rel="stylesheet" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,6 +18,25 @@
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
           rel="stylesheet"
         />
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "headline": "Next.js에서 HTML 페이로드 줄이기 (번역) | DevBlog",
+          "image": [
+            "https://yeonjuan.github.io//dev-blog/posts/JavaScript/assets/reduce-html-payload-with-nextjs.webp",
+          ],
+            
+              "datePublished": "2023-01-31T00:00:00+09:00",
+              "dateModified": "2023-01-31T00:00:00+09:00",
+              
+          "author": [{
+              "@type": "Person",
+              "name": "YeonJuAn",
+              "url": "https://github.com/yeonjuan"
+            }]
+        }
+        </script>
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
@@ -146,7 +169,7 @@ LCP를 작게 하는 방법의 하나는 사용자가 가능한 작은 HTML을 �
       이제, 아키텍처에 대해 살펴보겠습니다.
     </h2><p class="my-1 text-sm leading-7 mb-6">지금 말씀드린 랜딩 페이지를 서비스하는 인프라에 대해 단순하고 고수준으로 살펴보겠습니다.
 흥미로운 부분은 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">4</code>번과 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">5</code>번입니다.
-여기에 낭비되는 부분이 있습니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/1-architecture-before.png"></p>프로세스 핵심 사항<ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">요청이 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">getInitialProps</code> 함수에 도달합니다. 이 함수는 서버에서 실행됩니다. 페이지를 구성하는데 필요한 데이터를 가져오는 것이 이 함수의 역할입니다.</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">REST 서버에서 반환된 정제되지 않은 데이터가 그대로 리액트에 전달됩니다.</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">먼저, 서버에서 실행됩니다. 집계되지 않은 데이터가 리액트로 전송되었으므로 리액트는 UI 컴포넌트에서 사용할 수 있는 데이터로 집계하는 역할도 담당합니다(자세한 내용은 다음 섹션 참조)</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">HTML이 정제되지 않은 데이터와 함께 클라이언트로 전송됩니다. 그런 다음 리액트는 클라이언트에서도 동일한 작업을 수행하기 위해 다시 시작합니다. hydration이 필요하기 때문입니다(자세한 내용은 다음 섹션 참조). 따라서 리액트는 데이터 집계 작업을 두 번 수행합니다.</p></li></ul>문제점<p class="my-1 text-sm leading-7 mb-6">페이지 생성 과정을 분석한 결과 HTML에 내장된 큰 JSON을 발견하게 되었습니다.
+여기에 낭비되는 부분이 있습니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/1-architecture-before.png"></p>프로세스 핵심 사항<ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">요청이 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">getInitialProps</code> 함수에 도달합니다. 이 함수는 서버에서 실행됩니다. 페이지를 구성하는데 필요한 데이터를 가져오는 것이 이 함수의 역할입니다.</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">REST 서버에서 반환된 정제되지 않은 데이터가 그대로 리액트에 전달됩니다.</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">먼저, 서버에서 실행됩니다. 집계되지 않은 데이터가 리액트로 전송되었으므로 리액트는 UI 컴포넌트에서 사용할 수 있는 데이터로 집계하는 역할도 담당합니다(자세한 내용은 다음 섹션 참조)</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">HTML이 정제되지 않은 데이터와 함께 클라이언트로 전송됩니다. 그런 다음 리액트는 클라이언트에서도 동일한 작업을 수행하기 위해 다시 시작합니다. hydration이 필요하기 때문입니다(자세한 내용은 다음 섹션 참조). 따라서 리액트는 데이터 집계 작업을 두 번 수행합니다.</p></li></ul>문제점<p class="my-1 text-sm leading-7 mb-6">페이지 생성 과정을 분석한 결과 HTML에 내장된 큰 JSON을 발견하게 되었습니다.
 정확히 얼마나 큰지 말하기는 어렵습니다.
 각 역이나 도시마다 서로 다른 데이터 셋을 집계해야 하므로 페이지 마다 약간씩 다릅니다.
 그렇지만 인기 있는 페이지에서 JSON 크기는 250kb만큼 클 수도 있습니다.
@@ -158,7 +181,7 @@ LCP를 작게 하는 방법의 하나는 사용자가 가능한 작은 HTML을 �
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre><p class="my-1 text-sm leading-7 mb-6">이 JSON을 클립보드에 쉽게 복사하려면 Next.js 페이지에서 아래 스니펫을 사용하시면 됩니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-title function_">copy</span>($(<span class="hljs-string">&quot;#__NEXT_DATA__&quot;</span>).<span class="hljs-property">innerHTML</span>);</code></pre><p class="my-1 text-sm leading-7 mb-6">의문이 생깁니다.</p>
     <h2 id="" class="text-xl my-4 font-semibold">
       왜 이렇게 클까요? 여기에 무엇이 담겨 있나요?
-    </h2><p class="my-1 text-sm leading-7 mb-6">훌륭한 도구인 <a href="https://www.debugbear.com/json-size-analyzer" class="text-orange-500">JSON Size analyzer</a>는 JSON을 처리하는 방법을 알고 있으며 어디가 대부분의 크기를 차지하고 있는지 보여줍니다.</p><p class="my-1 text-sm leading-7 mb-6">이것은 <a href="https://www.bookaway.com/routes/vietnam/hanoi/hanoi-airport" class="text-orange-500">역 페이지</a>를 조사하던 중에 발견된 최초의 결과입니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/graph-json-analyzer.png"></p><p class="my-1 text-sm leading-7 mb-6">분석된 결과 두 가지 문제가 있었습니다.</p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">데이터가 집계되지 않았습니다.</p><p class="my-1 text-sm leading-7 mb-6">HTML에는 세분화된 제품의 전체 목록이 포함되어 있습니다.
+    </h2><p class="my-1 text-sm leading-7 mb-6">훌륭한 도구인 <a href="https://www.debugbear.com/json-size-analyzer" class="text-orange-500">JSON Size analyzer</a>는 JSON을 처리하는 방법을 알고 있으며 어디가 대부분의 크기를 차지하고 있는지 보여줍니다.</p><p class="my-1 text-sm leading-7 mb-6">이것은 <a href="https://www.bookaway.com/routes/vietnam/hanoi/hanoi-airport" class="text-orange-500">역 페이지</a>를 조사하던 중에 발견된 최초의 결과입니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/graph-json-analyzer.png"></p><p class="my-1 text-sm leading-7 mb-6">분석된 결과 두 가지 문제가 있었습니다.</p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">데이터가 집계되지 않았습니다.</p><p class="my-1 text-sm leading-7 mb-6">HTML에는 세분화된 제품의 전체 목록이 포함되어 있습니다.
 그것들은 화면에 그릴 때 필요한 것은 아닙니다.
 집계 방법을 위해 필요한 것들입니다.
 예를 들어, 이 역을 통과하는 모든 노선의 목록을 가져오고 있습니다.
@@ -173,10 +196,10 @@ LCP를 작게 하는 방법의 하나는 사용자가 가능한 작은 HTML을 �
       아키텍처 변경
     </h2><p class="my-1 text-sm leading-7 mb-6">매우 큰 JSON 문제는 깔끔하고 계층화된 해결책으로 해결해야 했습니다.
 어떻게 했을까요?
-다음 다이어그램에서 녹색으로 표시된 계층을 추가합니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/2-architecture-after.png"></p><p class="my-1 text-sm leading-7 mb-6">몇 가지 주요 사항:</p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">중복 데이터 집계가 제거되고 Next.js 서버에서 한 번만 수행되도록 통합되었습니다.</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">Graphql 서버 계층이 추가되었습니다. 이는 우리가 원하는 필드만 얻을 수 있도록 해줍니다. 데이터베이스는 각 엔티티에 대해 더 많은 필드를 사용하여 확장할 수 있지만, 더 이상 영향을 미치지는 않습니다.</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">PageLogic</code> 함수가 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">getServerSideProps</code>에 추가되었습니다. 이 함수는 백엔드 서비스에서 집계되지 않은 데이터를 가져옵니다. 이 기능은 UI 구성요소에 대한 데이터를 집계하고 준비합니다.(서버에서만 실행됩니다).</p></li></ul>
+다음 다이어그램에서 녹색으로 표시된 계층을 추가합니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/2-architecture-after.png"></p><p class="my-1 text-sm leading-7 mb-6">몇 가지 주요 사항:</p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">중복 데이터 집계가 제거되고 Next.js 서버에서 한 번만 수행되도록 통합되었습니다.</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">Graphql 서버 계층이 추가되었습니다. 이는 우리가 원하는 필드만 얻을 수 있도록 해줍니다. 데이터베이스는 각 엔티티에 대해 더 많은 필드를 사용하여 확장할 수 있지만, 더 이상 영향을 미치지는 않습니다.</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">PageLogic</code> 함수가 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">getServerSideProps</code>에 추가되었습니다. 이 함수는 백엔드 서비스에서 집계되지 않은 데이터를 가져옵니다. 이 기능은 UI 구성요소에 대한 데이터를 집계하고 준비합니다.(서버에서만 실행됩니다).</p></li></ul>
     <h2 id="" class="text-xl my-4 font-semibold">
       데이터 흐름 예제
-    </h2><p class="my-1 text-sm leading-7 mb-6"><a href="https://www.bookaway.com/routes/vietnam/hanoi/tran-quy-cap-station" class="text-orange-500">역 페이지</a>에서 이 섹션을 렌더링하고 싶습니다</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/suppliers-sections.png"></p><p class="my-1 text-sm leading-7 mb-6">우리는 주어진 역에서 운영되는 공급자가 누구인지 알아야 합니다.
+    </h2><p class="my-1 text-sm leading-7 mb-6"><a href="https://www.bookaway.com/routes/vietnam/hanoi/tran-quy-cap-station" class="text-orange-500">역 페이지</a>에서 이 섹션을 렌더링하고 싶습니다</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/suppliers-sections.png"></p><p class="my-1 text-sm leading-7 mb-6">우리는 주어진 역에서 운영되는 공급자가 누구인지 알아야 합니다.
 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">lines</code> REST 엔드 포인트에서 모든 노선에 대한 정보를 가져와야 합니다. 이것이 우리가 받은 응답입니다(예시 입니다, 실제로는 훨씬 큽니다).</p><pre><code class="my-4 hljs text-xs language-js">[
   {
     <span class="hljs-attr">id</span>: <span class="hljs-string">&quot;58a8bd82b4869b00063b22d2&quot;</span>,

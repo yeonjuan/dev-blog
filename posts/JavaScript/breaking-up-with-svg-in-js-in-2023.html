@@ -7,6 +7,10 @@
         <title>2023년 SVG-in-JS와 결별 (번역) | DevBlog</title>
         <link href="/dev-blog/favicon.ico" rel="shortcut icon">
         <meta name="description" content="웹 사이트를 만들 때 SVG 이미지를 어떻게 가져와 사용하시나요? 저는 JSX로 변환해 리액트 컴포넌트로 만들어 사용하곤 했었는데요. 사용하면서 혹시나 런타임 성능에 안 좋지 않을까라는 생각을 하곤 했습니다. 이 글에서는 이런 SVG를 사용하는 방식과 성능에 대한 궁금증을 해결해 주고, 다른 대안을 제시해 주고 있습니다. 이 글이 웹 사이트 성능 개선에 관심 있는 분들께 도움이 되었으면 좋겠습니다.">
+        <meta property="og:image" content="/dev-blog/posts/JavaScript/assets/breaking-up-with-svg-in-js-in-2023.webp" /> 
+        <meta property="og:type" content="blog" />
+        <meta property="og:title" content="2023년 SVG-in-JS와 결별 (번역) | DevBlog" /> 
+        <meta property="og:description" content="웹 사이트를 만들 때 SVG 이미지를 어떻게 가져와 사용하시나요? 저는 JSX로 변환해 리액트 컴포넌트로 만들어 사용하곤 했었는데요. 사용하면서 혹시나 런타임 성능에 안 좋지 않을까라는 생각을 하곤 했습니다. 이 글에서는 이런 SVG를 사용하는 방식과 성능에 대한 궁금증을 해결해 주고, 다른 대안을 제시해 주고 있습니다. 이 글이 웹 사이트 성능 개선에 관심 있는 분들께 도움이 되었으면 좋겠습니다." /> 
         <link href="/dev-blog/output.css" type="text/css" rel="stylesheet" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,6 +18,25 @@
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
           rel="stylesheet"
         />
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "headline": "2023년 SVG-in-JS와 결별 (번역) | DevBlog",
+          "image": [
+            "https://yeonjuan.github.io//dev-blog/posts/JavaScript/assets/breaking-up-with-svg-in-js-in-2023.webp",
+          ],
+            
+              "datePublished": "2023-08-21T00:00:00+09:00",
+              "dateModified": "2023-08-21T00:00:00+09:00",
+              
+          "author": [{
+              "@type": "Person",
+              "name": "YeonJuAn",
+              "url": "https://github.com/yeonjuan"
+            }]
+        }
+        </script>
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
@@ -116,7 +139,7 @@
       2023년 SVG-in-JS와 결별
     </h1><blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6">원문: <a href="https://kurtextrem.de/posts/svg-in-js" class="text-orange-500">https://kurtextrem.de/posts/svg-in-js</a></p></blockquote><p class="my-1 text-sm leading-7 mb-6">작년 12월에 <a href="https://kofearticle.substack.com/p/korean-fe-article-css-in-js?utm_source=%2Fsearch%2Fcss-in-js&utm_medium=reader2" class="text-orange-500">&quot;우리가 CSS-in-JS와 헤어지는 이유&quot;</a>라는 글을 통해 더 이상 JS 번들 안에 CSS를 넣지 않으려는 이유를 설명했었습니다.
 하지만, 오늘날 JS 번들에 CSS만 들어가는 것은 아닙니다. <a href="https://preactjs.com/" class="text-orange-500">Preact</a>의 저자 <a href="https://jasonformat.com/" class="text-orange-500">Jason Miller</a>의 글에서 알 수 있듯이 SVG도 JS 번들에 들어갑니다.</p><blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6"><a href="https://twitter.com/_developit/status/1382838799420514317" class="text-orange-500">Jason Miller 트윗</a></p><p class="my-1 text-sm leading-7 mb-6">SVG를 JSX로 import 하지 마세요. 가장 비용이 많이 드는 스프라이트 시트입니다. 다른 기술보다 최소 3배 이상 비용이 들고 런타임(렌더링) 성능과 메모리 사용 모두 해칩니다. 유명한 사이트의 번들을 살펴보면 거의 50%가 SVG 아이콘(250kb)이 차지하고 대부분 사용되지 않습니다.
-<img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/svg-twitter.png"></p></blockquote><p class="my-1 text-sm leading-7 mb-6">JS 안의 SVG에는 비용이 들고 SVG는 JS 번들의 소유물이 아닙니다
+<img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/svg-twitter.png"></p></blockquote><p class="my-1 text-sm leading-7 mb-6">JS 안의 SVG에는 비용이 들고 SVG는 JS 번들의 소유물이 아닙니다
 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">SVG-in-HTML</code>로 돌아갈 때입니다.
 JS 번들을 작고 성능 좋게 유지하면서 JSX에서 SVG를 사용하는 더 나은 방법들에 대해 알아보겠습니다.</p>
     <h2 id="" class="text-xl my-4 font-semibold">
@@ -150,7 +173,7 @@ JS 번들을 작고 성능 좋게 유지하면서 JSX에서 SVG를 사용하는 
 웹 개발은 부유한 지역뿐 아니라 모든 사람을 위한 포용적인 것이어야 합니다.</p><blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6">바이트 단위의 자바스크립트는 같은 크기의 이미지나 웹 폰트보다 브라우저 처리 비용이 더 많이 듭니다.</p><p class="my-1 text-sm leading-7 mb-6">-- Tom Dale, <a href="https://web.dev/optimizing-content-efficiency-javascript-startup-optimization/#parsecompile" class="text-orange-500">web.dev</a></p></blockquote><p class="my-1 text-sm leading-7 mb-6">SVG는 자바스크립트가 아니라 이미지를 나타내는 HTML과 유사한 XML 태그입니다.
 JS 안에 이미지를 넣고 싶지는 않을 것입니다.
 SVG를 JS 번들 밖으로 옮기면 파싱 및 컴파일 단계에서 벗어나게 됩니다.
-아래에서 이것이 왜 유익한지 알아보겠습니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/js-exec.png"></p><p class="my-1 text-sm leading-7 mb-6"><sub>크로미움에서 자바스크립트 다운로드 및 실행 시각화. 파싱 및 컴파일은 메인 스레드를 차단하지 않습니다.<a href="https://v8.dev/blog/cost-of-javascript-2019">web.dev</a></sub></p><p class="my-1 text-sm leading-7 mb-6">파싱과 컴파일은 실행 직전에 일어납니다.
+아래에서 이것이 왜 유익한지 알아보겠습니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/js-exec.png"></p><p class="my-1 text-sm leading-7 mb-6"><sub>크로미움에서 자바스크립트 다운로드 및 실행 시각화. 파싱 및 컴파일은 메인 스레드를 차단하지 않습니다.<a href="https://v8.dev/blog/cost-of-javascript-2019">web.dev</a></sub></p><p class="my-1 text-sm leading-7 mb-6">파싱과 컴파일은 실행 직전에 일어납니다.
 그래서 자바스크립트를 다운로드하고 실행할 준비가 되면 <strong>파싱</strong>에 걸리는 <strong>시간</strong>과 <strong>컴파일</strong>에 걸리는 시간은 <strong>사용자가 상호작용을 기다리는 시간</strong>입니다.</p><p class="my-1 text-sm leading-7 mb-6">리액트의 경우 그 위에 하이드레이션도 필요합니다. 다운로드 + 파싱 + 컴파일 + 하이드레이션은 상호작용이 가능해 지기까지의 시간입니다.
 컴포넌트 트리가 클 수록 하이드레이션에 더 많은 시간이 소요됩니다.
 이 주제에 대해서는 Add Osmani의 <a href="https://web.dev/optimizing-content-efficiency-javascript-startup-optimization/#parsecompile" class="text-orange-500">&quot;JavaScript 최적화 시작하기&quot;</a> 문서에서 자세히 다루고 있습니다.</p><blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6">참고로 압축은 처리 시간에도 긍정적인 영향을 미칠 수 있지만, JS 엔진은 압축되지 않은 소스 코드에서도 작동한다는 점을 잊지 마세요.

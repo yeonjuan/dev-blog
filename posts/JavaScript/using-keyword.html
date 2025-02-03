@@ -7,6 +7,10 @@
         <title>타입스크립트 5.2의 새로운 키워드: 'using' (번역) | DevBlog</title>
         <link href="/dev-blog/favicon.ico" rel="shortcut icon">
         <meta name="description" content="최근 진행한 프로젝트에서 부득이하게 Next.js Static Exports 와 next-i18next을 같이 사용해서 다국어가 지원되는 정적 웹페이지를 구성해야 했습니다. 하지만 next-i18next에서 서버사이드 런타임에 동작해야 하는 로직 때문에 에러가 발생했는데요. 해결 과정에서 이 글을 찾게 되었고 프로젝트를 성공적으로 구성할 수 있었습니다. 같은 어려움을 겪는 분들에게 도움이 되었으면 좋겠습니다.">
+        <meta property="og:image" content="/dev-blog/posts/JavaScript/assets/using-keyword.webp" /> 
+        <meta property="og:type" content="blog" />
+        <meta property="og:title" content="타입스크립트 5.2의 새로운 키워드: 'using' (번역) | DevBlog" /> 
+        <meta property="og:description" content="최근 진행한 프로젝트에서 부득이하게 Next.js Static Exports 와 next-i18next을 같이 사용해서 다국어가 지원되는 정적 웹페이지를 구성해야 했습니다. 하지만 next-i18next에서 서버사이드 런타임에 동작해야 하는 로직 때문에 에러가 발생했는데요. 해결 과정에서 이 글을 찾게 되었고 프로젝트를 성공적으로 구성할 수 있었습니다. 같은 어려움을 겪는 분들에게 도움이 되었으면 좋겠습니다." /> 
         <link href="/dev-blog/output.css" type="text/css" rel="stylesheet" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,6 +18,25 @@
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
           rel="stylesheet"
         />
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "headline": "타입스크립트 5.2의 새로운 키워드: 'using' (번역) | DevBlog",
+          "image": [
+            "https://yeonjuan.github.io//dev-blog/posts/JavaScript/assets/using-keyword.webp",
+          ],
+            
+              "datePublished": "2023-07-06T00:00:00+09:00",
+              "dateModified": "2023-07-06T00:00:00+09:00",
+              
+          "author": [{
+              "@type": "Person",
+              "name": "YeonJuAn",
+              "url": "https://github.com/yeonjuan"
+            }]
+        }
+        </script>
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
@@ -114,7 +137,7 @@
             
     <h1 id="-5-2-using" class="text-2xl my-8 font-bold">
       타입스크립트 5.2의 새로운 키워드: 'using'
-    </h1><blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6">원문: <a href="https://www.totaltypescript.com/typescript-5-2-new-keyword-using" class="text-orange-500">https://www.totaltypescript.com/typescript-5-2-new-keyword-using</a></p></blockquote><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/using-keyword-thumbnail.webp"></p><p class="my-1 text-sm leading-7 mb-6">타입스크립트 5.2에서 새로운 키워드인 &#39;using&#39;이 도입되었습니다. 이는 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">Symbol.dispose</code> 함수를 통해 스코프를 벗어날 때 모든 것을 폐기하는 데 사용할 수 있습니다.</p><pre><code class="my-4 hljs text-xs language-ts">{
+    </h1><blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6">원문: <a href="https://www.totaltypescript.com/typescript-5-2-new-keyword-using" class="text-orange-500">https://www.totaltypescript.com/typescript-5-2-new-keyword-using</a></p></blockquote><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/using-keyword-thumbnail.webp"></p><p class="my-1 text-sm leading-7 mb-6">타입스크립트 5.2에서 새로운 키워드인 &#39;using&#39;이 도입되었습니다. 이는 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">Symbol.dispose</code> 함수를 통해 스코프를 벗어날 때 모든 것을 폐기하는 데 사용할 수 있습니다.</p><pre><code class="my-4 hljs text-xs language-ts">{
   <span class="hljs-keyword">const</span> <span class="hljs-title function_">getResource</span> = (<span class="hljs-params"></span>) =&gt; {
     <span class="hljs-keyword">return</span> {
       [<span class="hljs-title class_">Symbol</span>.<span class="hljs-property">dispose</span>]: <span class="hljs-function">() =&gt;</span> {
@@ -188,7 +211,7 @@
 {
   <span class="hljs-keyword">await</span> <span class="hljs-keyword">using</span> { connection } = <span class="hljs-title function_">getConnection</span>();
   <span class="hljs-comment">// connection으로 작업 수행</span>
-} <span class="hljs-comment">// 자동으로 연결이 닫힙니다!</span></code></pre><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/await-using_lalzrw.jpeg"></p>
+} <span class="hljs-comment">// 자동으로 연결이 닫힙니다!</span></code></pre><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/await-using_lalzrw.jpeg"></p>
           </main>
         </div>
         <script src="/dev-blog/scripts/header.js"></script>

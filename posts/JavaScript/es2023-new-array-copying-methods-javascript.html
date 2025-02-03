@@ -7,6 +7,10 @@
         <title>ES2023에는 자바스크립트에 새로운 배열 복사 메서드가 도입됩니다. (번역) | DevBlog</title>
         <link href="/dev-blog/favicon.ico" rel="shortcut icon">
         <meta name="description" content="ES2023에 도입되는 새로운 배열 메서드의 사용법에 대해서 알아볼 수 있습니다.">
+        <meta property="og:image" content="/dev-blog/posts/JavaScript/assets/es2023-new-array-copying-methods-javascript.webp" /> 
+        <meta property="og:type" content="blog" />
+        <meta property="og:title" content="ES2023에는 자바스크립트에 새로운 배열 복사 메서드가 도입됩니다. (번역) | DevBlog" /> 
+        <meta property="og:description" content="ES2023에 도입되는 새로운 배열 메서드의 사용법에 대해서 알아볼 수 있습니다." /> 
         <link href="/dev-blog/output.css" type="text/css" rel="stylesheet" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,6 +18,25 @@
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
           rel="stylesheet"
         />
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "headline": "ES2023에는 자바스크립트에 새로운 배열 복사 메서드가 도입됩니다. (번역) | DevBlog",
+          "image": [
+            "https://yeonjuan.github.io//dev-blog/posts/JavaScript/assets/es2023-new-array-copying-methods-javascript.webp",
+          ],
+            
+              "datePublished": "2023-10-12T00:00:00+09:00",
+              "dateModified": "2023-10-12T00:00:00+09:00",
+              
+          "author": [{
+              "@type": "Person",
+              "name": "YeonJuAn",
+              "url": "https://github.com/yeonjuan"
+            }]
+        }
+        </script>
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
@@ -114,7 +137,7 @@
             
     <h1 id="es2023" class="text-2xl my-8 font-bold">
       ES2023에는 자바스크립트에 새로운 배열 복사 메서드가 도입됩니다.
-    </h1><blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6">원문: <a href="https://www.sonarsource.com/blog/es2023-new-array-copying-methods-javascript/" class="text-orange-500">https://www.sonarsource.com/blog/es2023-new-array-copying-methods-javascript/</a></p></blockquote><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="https://assets-eu-01.kc-usercontent.com/6cc4ce1e-8db0-0171-a6b3-352aa24017de/7a119115-0abd-412f-9587-36c77808db7a/javascript-array-copying-methods_blog-index.webp?w=1200&h=628&auto=format&fit=crop"></p><p class="my-1 text-sm leading-7 mb-6"><a href="https://tc39.es/ecma262/" class="text-orange-500">ECMAScript 2023 스펙</a>이 최근 확정되었습니다.
+    </h1><blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6">원문: <a href="https://www.sonarsource.com/blog/es2023-new-array-copying-methods-javascript/" class="text-orange-500">https://www.sonarsource.com/blog/es2023-new-array-copying-methods-javascript/</a></p></blockquote><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="https://assets-eu-01.kc-usercontent.com/6cc4ce1e-8db0-0171-a6b3-352aa24017de/7a119115-0abd-412f-9587-36c77808db7a/javascript-array-copying-methods_blog-index.webp?w=1200&h=628&auto=format&fit=crop"></p><p class="my-1 text-sm leading-7 mb-6"><a href="https://tc39.es/ecma262/" class="text-orange-500">ECMAScript 2023 스펙</a>이 최근 확정되었습니다.
 이번 스펙에는 자바스크립트 프로그램을 더 예측 가능하고 유지 보수하기 쉽도록 하는 데 도움이 되는 배열 객체에 대한 몇 가지 새로운 메서드가 포함되어 있습니다.
 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">toSorted</code>, <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">toReversed</code>, <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">toSpliced</code>, <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">with</code> 메서드를 사용하면, 원본 데이터를 변경하지 않고 복사본을 만들어 변경하는 방식으로 배열에 대한 연산을 수행할 수 있습니다.
 그럼 변경된 내용과 프로젝트에서 이를 사용하는 방법을 살펴보겠습니다.</p>

@@ -7,6 +7,10 @@
         <title>Next.js에서 i18n과 호환성을 갖춘 정적 HTML Export (번역) | DevBlog</title>
         <link href="/dev-blog/favicon.ico" rel="shortcut icon">
         <meta name="description" content="최근 진행한 프로젝트에서 부득이하게 Next.js Static Exports 와 next-i18next을 같이 사용해서 다국어가 지원되는 정적 웹페이지를 구성해야 했습니다. 하지만 next-i18next에서 서버사이드 런타임에 동작해야 하는 로직 때문에 에러가 발생했는데요. 해결 과정에서 이 글을 찾게 되었고 프로젝트를 성공적으로 구성할 수 있었습니다. 같은 어려움을 겪는 분들에게 도움이 되었으면 좋겠습니다.">
+        <meta property="og:image" content="/dev-blog/posts/JavaScript/assets/static-html-export-i18n.webp" /> 
+        <meta property="og:type" content="blog" />
+        <meta property="og:title" content="Next.js에서 i18n과 호환성을 갖춘 정적 HTML Export (번역) | DevBlog" /> 
+        <meta property="og:description" content="최근 진행한 프로젝트에서 부득이하게 Next.js Static Exports 와 next-i18next을 같이 사용해서 다국어가 지원되는 정적 웹페이지를 구성해야 했습니다. 하지만 next-i18next에서 서버사이드 런타임에 동작해야 하는 로직 때문에 에러가 발생했는데요. 해결 과정에서 이 글을 찾게 되었고 프로젝트를 성공적으로 구성할 수 있었습니다. 같은 어려움을 겪는 분들에게 도움이 되었으면 좋겠습니다." /> 
         <link href="/dev-blog/output.css" type="text/css" rel="stylesheet" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,6 +18,25 @@
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
           rel="stylesheet"
         />
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "headline": "Next.js에서 i18n과 호환성을 갖춘 정적 HTML Export (번역) | DevBlog",
+          "image": [
+            "https://yeonjuan.github.io//dev-blog/posts/JavaScript/assets/static-html-export-i18n.webp",
+          ],
+            
+              "datePublished": "2023-07-25T00:00:00+09:00",
+              "dateModified": "2023-07-25T00:00:00+09:00",
+              
+          "author": [{
+              "@type": "Person",
+              "name": "YeonJuAn",
+              "url": "https://github.com/yeonjuan"
+            }]
+        }
+        </script>
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
@@ -114,7 +137,7 @@
             
     <h1 id="next-js-i18n-html-export" class="text-2xl my-8 font-bold">
       Next.js에서 i18n과 호환성을 갖춘 정적 HTML Export
-    </h1><blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6">원문: <a href="https://locize.com/blog/next-i18n-static/" class="text-orange-500">https://locize.com/blog/next-i18n-static/</a></p></blockquote><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/static-html-export-i18n-title.jpg"></p><p class="my-1 text-sm leading-7 mb-6"><a href="https://nextjs.org/" class="text-orange-500">Next.js</a>에 대해선 아시나요? - 모르신다면 이 글을 읽지 마시고 다른 것을 만들어 보세요.</p><p class="my-1 text-sm leading-7 mb-6"><em>Next.js 13과 app 디렉터리를 사용 중이라면 <a href="https://locize.com/blog/next-13-app-dir-i18n/" class="text-orange-500">이 블로그 글</a>을 확인해 보세요.</em></p><p class="my-1 text-sm leading-7 mb-6">Next.js는 굉장합니다! 필요한 모든 기능을 갖춘 최고의 개발자 경험을 제공합니다.</p>
+    </h1><blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6">원문: <a href="https://locize.com/blog/next-i18n-static/" class="text-orange-500">https://locize.com/blog/next-i18n-static/</a></p></blockquote><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/static-html-export-i18n-title.jpg"></p><p class="my-1 text-sm leading-7 mb-6"><a href="https://nextjs.org/" class="text-orange-500">Next.js</a>에 대해선 아시나요? - 모르신다면 이 글을 읽지 마시고 다른 것을 만들어 보세요.</p><p class="my-1 text-sm leading-7 mb-6"><em>Next.js 13과 app 디렉터리를 사용 중이라면 <a href="https://locize.com/blog/next-13-app-dir-i18n/" class="text-orange-500">이 블로그 글</a>을 확인해 보세요.</em></p><p class="my-1 text-sm leading-7 mb-6">Next.js는 굉장합니다! 필요한 모든 기능을 갖춘 최고의 개발자 경험을 제공합니다.</p>
     <h2 id="toc" class="text-xl my-4 font-semibold">
       TOC
     </h2><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">하지만, 이미 들어보셨을 수도 있습니다.</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">이제 어떻게 하면 좋을까요?</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">레시피</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">결과</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">🎉🥳 축하합니다 🎊🎁</p></li></ul>
@@ -124,7 +147,7 @@
 하지만 이 기능은 빌드 프로세스 중에 계산할 수 없는 동적 로직 또는 Node.js 서버가 필요하기 때문에 <a href="https://nextjs.org/docs/pages/building-your-application/deploying/static-exports#unsupported-features" class="text-orange-500">지원되지 않습니다</a>.</p><p class="my-1 text-sm leading-7 mb-6">예를 들어 <a href="https://github.com/i18next/next-i18next" class="text-orange-500">next-i18next</a>를 사용하는 것이 이 경우에 해당합니다.</p>
     <h2 id="" class="text-xl my-4 font-semibold">
       이제 어떻게 하면 좋을까요?
-    </h2><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/static-html-export-i18n-what.jpg"></p><p class="my-1 text-sm leading-7 mb-6">확실한 대안은 정적 HTML export를 포기하고 배포 환경으로 Node.js 서버 또는 Vercel을 사용하는 것입니다.</p><p class="my-1 text-sm leading-7 mb-6">하지만 회사 또는 아키텍처 가이드라인에 따라 정적 웹 서버를 사용해야 하는 경우도 있습니다.
+    </h2><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/static-html-export-i18n-what.jpg"></p><p class="my-1 text-sm leading-7 mb-6">확실한 대안은 정적 HTML export를 포기하고 배포 환경으로 Node.js 서버 또는 Vercel을 사용하는 것입니다.</p><p class="my-1 text-sm leading-7 mb-6">하지만 회사 또는 아키텍처 가이드라인에 따라 정적 웹 서버를 사용해야 하는 경우도 있습니다.
 그럼 i18n을 버려야 하나요? - 아니요, 지금 이 글을 읽고 있다면 이는 필수사항인 것 같습니다.
 그럼 Next.js 없이 해야 하나요? - 하지만 이건 모든 프로젝트를 다시 작성하는 것을 뜻합니다.</p><p class="my-1 text-sm leading-7 mb-6">i18n을 사용하지 않을 때 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">next export</code> 를 실행하면 잘 동작하는 것 같습니다. <a href="https://nextjs.org/docs/pages/building-your-application/routing/internationalization" class="text-orange-500">국제화 라우팅 기능</a>을 사용하지 않고 i18n 라우팅을 우리가 직접 수행하면 어떨까요?</p>
     <h2 id="" class="text-xl my-4 font-semibold">
@@ -328,7 +351,7 @@ export default Homepage</code></pre>5. [next-language-detector](https://github.c
 };</code></pre>
     <h2 id="" class="text-xl my-4 font-semibold">
       결과
-    </h2><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/static-html-export-i18n-result.jpg"></p><p class="my-1 text-sm leading-7 mb-6">이제 프로젝트를 시작하면(<code class="bg-gray-100 px-1 rounded-md inline-block text-sm">next dev</code>) 이전과 거의 동일한 동작을 볼 수 있습니다.</p><p class="my-1 text-sm leading-7 mb-6">그렇다면 어떤 이점이 있을까요?</p><p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">next build && next export</code>를 시도해 보세요.</p><p class="my-1 text-sm leading-7 mb-6">마지막에 다음과 같은 내용이 표시됩니다.</p><pre><code class="my-4 hljs text-xs language-">●  (SSG)     automatically generated as static HTML + JSON (uses getStaticProps)
+    </h2><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/static-html-export-i18n-result.jpg"></p><p class="my-1 text-sm leading-7 mb-6">이제 프로젝트를 시작하면(<code class="bg-gray-100 px-1 rounded-md inline-block text-sm">next dev</code>) 이전과 거의 동일한 동작을 볼 수 있습니다.</p><p class="my-1 text-sm leading-7 mb-6">그렇다면 어떤 이점이 있을까요?</p><p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">next build && next export</code>를 시도해 보세요.</p><p class="my-1 text-sm leading-7 mb-6">마지막에 다음과 같은 내용이 표시됩니다.</p><pre><code class="my-4 hljs text-xs language-">●  (SSG)     automatically generated as static HTML + JSON (uses getStaticProps)
 
 info  - using build directory: /Users/usr/projects/my-awesome-project/.next
 info  - Copying &quot;static build&quot; directory
@@ -339,14 +362,14 @@ info  - Exporting (3/3)
 Export successful. Files written to /Users/usr/projects/my-awesome-project/out</code></pre><p class="my-1 text-sm leading-7 mb-6"><strong>네, <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">i18과 호환되지 않는다는 next export</code> 에러가 더 이상 없습니다!</strong></p><p class="my-1 text-sm leading-7 mb-6"><strong>축하합니다. 이제 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">out</code> 디렉터리의 콘텐츠를 정적 웹서버에 &quot;배포&quot;할 수 있습니다.</strong></p><p class="my-1 text-sm leading-7 mb-6">🧑‍💻 완성된 코드는 <a href="https://github.com/i18next/next-language-detector/tree/main/examples/basic" class="text-orange-500">이곳</a>에서 확인할 수 있습니다.</p>
     <h2 id="" class="text-xl my-4 font-semibold">
       자발적인 부분
-    </h2><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/transform_your_localization_process_small.jpg"></p><p class="my-1 text-sm leading-7 mb-6">멋진 번역 관리 시스템에 연결해서 코드 외부에서 번역을 관리하세요.</p><p class="my-1 text-sm leading-7 mb-6"><a href="https://locize.com/" class="text-orange-500">locize</a>를 통해 번역 파일을 동기화해 보겠습니다.
+    </h2><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/transform_your_localization_process_small.jpg"></p><p class="my-1 text-sm leading-7 mb-6">멋진 번역 관리 시스템에 연결해서 코드 외부에서 번역을 관리하세요.</p><p class="my-1 text-sm leading-7 mb-6"><a href="https://locize.com/" class="text-orange-500">locize</a>를 통해 번역 파일을 동기화해 보겠습니다.
 이 작업은 온-디맨드 또는 CI서버에서 수행하거나 앱을 배포하기 전에 수행할 수 있습니다.</p>이 단계에 도달하기 위해 수행해야 할 작업:<ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">locize에서: <a href="https://locize.app/register에" class="text-orange-500">https://locize.app/register에</a> 가입하고 <a href="https://docs.locize.com/integration/getting-started/create-a-user-account" class="text-orange-500">로그인</a>합니다.</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">locize에서: <a href="https://docs.locize.com/integration/getting-started/add-a-new-project" class="text-orange-500">프로젝트를 생성합니다.</a></p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6">locize에서: 모든 추가 언어를 추가합니다.(<a href="https://docs.locize.com/integration/api#add-new-language" class="text-orange-500">API</a>로도 가능합니다)</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><a href="https://github.com/locize/locize-cli" class="text-orange-500">lociz-cli</a>를 설치합니다 (<code class="bg-gray-100 px-1 rounded-md inline-block text-sm">npm i locize-cli</code>)</p></li></ul>[locize-cli](https://github.com/locize/locize-cli) 사용.<p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">locize sync</code> 명령어를 사용해서 로컬 저장소(<code class="bg-gray-100 px-1 rounded-md inline-block text-sm">public/locales</code>) 와 locize에 배포된 것을 동기화 시킵니다.</p><p class="my-1 text-sm leading-7 mb-6">또는 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">locize download</code> 명령을 사용하여 앱을 번들링하기 전에 게시된 locize 번역을 로컬 저장소(<code class="bg-gray-100 px-1 rounded-md inline-block text-sm">public/locales</code>)에 다운로드할 수도 있습니다.</p>
     <h2 id="" class="text-xl my-4 font-semibold">
       🎉🥳 축하합니다 🎊🎁
     </h2><p class="my-1 text-sm leading-7 mb-6">정적 사이트 생성(SSG), <a href="https://nextjs.org/" class="text-orange-500">Next.js</a>, <a href="https://github.com/i18next/next-i18next" class="text-orange-500">next-i18next</a>, <a href="https://www.i18next.com/" class="text-orange-500">i18next</a> 및 <a href="https://locize.com/" class="text-orange-500">최신 국제화 워크플로우</a>에 대해 몇가지 새로운 사실을 알게 되셨기를 바랍니다.</p><p class="my-1 text-sm leading-7 mb-6">따라서 i18n 주제를 한 단계 더 발전시키고 싶다면 <a href="https://locize.com/" class="text-orange-500">국제화 관리 플랫폼인 locize</a>를 사용해볼 가치가 있습니다.</p><p class="my-1 text-sm leading-7 mb-6"><a href="https://locize.com/" class="text-orange-500">locize</a>의 창립자는 <a href="https://www.i18next.com/" class="text-orange-500">i18next</a>의 제작자이기도 합니다. 따라서 <a href="https://locize.com/" class="text-orange-500">locize</a>를 사용하면 i18next의 미래를 직접 지원할 수 있습니다.</p>
     <h2 id="-next-js" class="text-xl my-4 font-semibold">
       최적화된 Next.js 번역 셋업을 찾고 계신가요?
-    </h2><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/next-i18next.jpg"></p><p class="my-1 text-sm leading-7 mb-6"><a href="https://locize.com/blog/next-i18next/" class="text-orange-500">여기</a>에서 클라이언트 측 번역 다운로드 및 SEO 최적화와 함께 next-i18next를 가장 효과적으로 사용하는 방법에 대한 블로그 게시물을 확인할 수 있습니다.</p>
+    </h2><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/next-i18next.jpg"></p><p class="my-1 text-sm leading-7 mb-6"><a href="https://locize.com/blog/next-i18next/" class="text-orange-500">여기</a>에서 클라이언트 측 번역 다운로드 및 SEO 최적화와 함께 next-i18next를 가장 효과적으로 사용하는 방법에 대한 블로그 게시물을 확인할 수 있습니다.</p>
           </main>
         </div>
         <script src="/dev-blog/scripts/header.js"></script>

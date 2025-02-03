@@ -7,6 +7,10 @@
         <title>자동화 게임 극한까지 자바스크립트 성능 끌어올리기 (번역) | DevBlog</title>
         <link href="/dev-blog/favicon.ico" rel="shortcut icon">
         <meta name="description" content="이 글은 자바스크립트로 게임을 만들면서 진행한 성능 최적화에 대한 글입니다. 성능을 1초라도 끌어올리기 위해 어떤 방법들을 시도해 보았는지 알 수 있습니다.">
+        <meta property="og:image" content="/dev-blog/posts/JavaScript/assets/squeezing%20-last-bit-of-javascript-performance-for-my-automation-game.webp" /> 
+        <meta property="og:type" content="blog" />
+        <meta property="og:title" content="자동화 게임 극한까지 자바스크립트 성능 끌어올리기 (번역) | DevBlog" /> 
+        <meta property="og:description" content="이 글은 자바스크립트로 게임을 만들면서 진행한 성능 최적화에 대한 글입니다. 성능을 1초라도 끌어올리기 위해 어떤 방법들을 시도해 보았는지 알 수 있습니다." /> 
         <link href="/dev-blog/output.css" type="text/css" rel="stylesheet" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,6 +18,25 @@
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
           rel="stylesheet"
         />
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "headline": "자동화 게임 극한까지 자바스크립트 성능 끌어올리기 (번역) | DevBlog",
+          "image": [
+            "https://yeonjuan.github.io//dev-blog/posts/JavaScript/assets/squeezing%20-last-bit-of-javascript-performance-for-my-automation-game.webp",
+          ],
+            
+              "datePublished": "2024-02-22T00:00:00+09:00",
+              "dateModified": "2024-02-22T00:00:00+09:00",
+              
+          "author": [{
+              "@type": "Person",
+              "name": "YeonJuAn",
+              "url": "https://github.com/yeonjuan"
+            }]
+        }
+        </script>
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
@@ -116,7 +139,7 @@
       자동화 게임 극한까지 자바스크립트 성능 끌어올리기
     </h1><blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6"><a href="https://ruoyusun.com/2024/01/23/cividle-optimization.html" class="text-orange-500">https://ruoyusun.com/2024/01/23/cividle-optimization.html</a></p></blockquote><p class="my-1 text-sm leading-7 mb-6"><a href="https://industryidle.com/" class="text-orange-500">Industry Idle</a> 출시 직후에 <a href="https://ruoyusun.com/2022/01/28/game-pref.html" class="text-orange-500">글로도 작성 했었던</a> 대대적인 최적화 작업을 진행했습니다.
 Industry Idle 게임을 한 번도 해보지 않은 분들을 위해 설명하자면, 이 게임은 공장 자동화 및 경제 시뮬레이션 게임입니다.
-제가 직면한 주요 성능 문제는 렌더링 측면에서 발생했는데, 게임에서 미니멀한 그래픽을 제공하고 있다는 점을 생각하면 의외였습니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/8a4e9749-326b-4da6-ae96-3a68fec2de9c.gif"></p>
+제가 직면한 주요 성능 문제는 렌더링 측면에서 발생했는데, 게임에서 미니멀한 그래픽을 제공하고 있다는 점을 생각하면 의외였습니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/8a4e9749-326b-4da6-ae96-3a68fec2de9c.gif"></p>
     <h2 id="" class="text-xl my-4 font-semibold">
       왜 다시 타입스크립트/자바스크립트인가?
     </h2><p class="my-1 text-sm leading-7 mb-6">후속작인 <a href="https://www.cividle.com/" class="text-orange-500">CivIdle</a> 작업을 하기로 결정했을 때, 저는 처음부터 다시 작성하기로 했습니다.
@@ -154,7 +177,7 @@ Industry Idle에서 오프라인 수익(게임을 플레이하지 않아도 얻�
       항상 할당입니다!
     </h2><p class="my-1 text-sm leading-7 mb-6">최적화를 시작하기 전에 CPU 시간이 어디에 사용되는지 파악해야 합니다.
 다행히도 브라우저에는 매우 훌륭한 프로파일링 도구가 있습니다.
-Chrome에서 프로파일 세션을 실행하면 다음과 같은 결과가 나타납니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/89a4ed63-0f46-4786-a94c-66717d5d007d.png"></p><p class="my-1 text-sm leading-7 mb-6">프로파일러는 성능 저하의 주요 원인이 될 수 있는 함수를 보여 주는데, 이는 매우 희망적인 상황입니다. 이는 일반적으로 쉽게 개선할 수 있는 문제를 의미합니다.
+Chrome에서 프로파일 세션을 실행하면 다음과 같은 결과가 나타납니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/89a4ed63-0f46-4786-a94c-66717d5d007d.png"></p><p class="my-1 text-sm leading-7 mb-6">프로파일러는 성능 저하의 주요 원인이 될 수 있는 함수를 보여 주는데, 이는 매우 희망적인 상황입니다. 이는 일반적으로 쉽게 개선할 수 있는 문제를 의미합니다.
 문제의 함수는 바로 이것입니다.</p><pre><code class="my-4 hljs text-xs language-ts"> <span class="hljs-keyword">public</span> <span class="hljs-title function_">distance</span>(<span class="hljs-attr">x1</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">y1</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">x2</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">y2</span>: <span class="hljs-built_in">number</span>): <span class="hljs-built_in">number</span> {
    <span class="hljs-keyword">const</span> oc1 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">OffsetCoord</span>(x1, y1);
    <span class="hljs-keyword">const</span> hex1 = <span class="hljs-title class_">OffsetCoord</span>.<span class="hljs-title function_">roffsetToCube</span>(<span class="hljs-title class_">OffsetCoord</span>.<span class="hljs-property">ODD</span>, oc1);
@@ -183,7 +206,7 @@ Chrome에서 프로파일 세션을 실행하면 다음과 같은 결과가 나�
    <span class="hljs-keyword">const</span> distance = <span class="hljs-title class_">Grid</span>.<span class="hljs-property">_hex1</span>.<span class="hljs-title function_">distanceNonAlloc</span>(<span class="hljs-title class_">Grid</span>.<span class="hljs-property">_hex2</span>);
    <span class="hljs-keyword">return</span> distance;
 }</code></pre><p class="my-1 text-sm leading-7 mb-6">새 코드는 훨씬 더 나빠 보이고 스레드에서 안전하지 않지만 어쨌든 우리는 단일 스레드입니다.
-동일한 프로필을 실행하면 전체 시간이 21초에서 9초로 단축됩니다! 이것은 정말 쉬운 개선입니다!</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/936b6f25-c730-4306-90e6-5ef664b8c8e1.png"></p>
+동일한 프로필을 실행하면 전체 시간이 21초에서 9초로 단축됩니다! 이것은 정말 쉬운 개선입니다!</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/936b6f25-c730-4306-90e6-5ef664b8c8e1.png"></p>
     <h2 id="" class="text-xl my-4 font-semibold">
       메모이제이션과 캐싱
     </h2><p class="my-1 text-sm leading-7 mb-6">프로필 결과를 다시 살펴보니 몇 가지 함수가 눈에 띄었습니다. 이 함수는 CPU 시간을 상당히 많이 차지하지만 외부 상태에 의존하지 않고 부작용이 없는 &quot;순수한&quot; 계산만 포함하고 있습니다.

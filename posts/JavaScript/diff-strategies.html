@@ -7,6 +7,10 @@
         <title>Diff 전략 (번역) | DevBlog</title>
         <link href="/dev-blog/favicon.ico" rel="shortcut icon">
         <meta name="description" content="이 글에서는 텍스트 Diff 알고리즘을 이용해 차이점을 분석할 때 성능을 개선할 수 있는 전, 후처리 방법에 대해 소개합니다. ">
+        <meta property="og:image" content="/dev-blog/posts/JavaScript/assets/diff-strategies.webp" /> 
+        <meta property="og:type" content="blog" />
+        <meta property="og:title" content="Diff 전략 (번역) | DevBlog" /> 
+        <meta property="og:description" content="이 글에서는 텍스트 Diff 알고리즘을 이용해 차이점을 분석할 때 성능을 개선할 수 있는 전, 후처리 방법에 대해 소개합니다. " /> 
         <link href="/dev-blog/output.css" type="text/css" rel="stylesheet" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,6 +18,25 @@
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
           rel="stylesheet"
         />
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "headline": "Diff 전략 (번역) | DevBlog",
+          "image": [
+            "https://yeonjuan.github.io//dev-blog/posts/JavaScript/assets/diff-strategies.webp",
+          ],
+            
+              "datePublished": "2023-12-14T00:00:00+09:00",
+              "dateModified": "2023-12-14T00:00:00+09:00",
+              
+          "author": [{
+              "@type": "Person",
+              "name": "YeonJuAn",
+              "url": "https://github.com/yeonjuan"
+            }]
+        }
+        </script>
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
@@ -115,7 +138,7 @@
     <h1 id="diff" class="text-2xl my-8 font-bold">
       Diff 전략
     </h1><blockquote class="border-l-2 border-black pl-2 my-4"><p class="my-1 text-sm leading-7 mb-6">원문: <a href="https://neil.fraser.name/writing/diff/" class="text-orange-500">https://neil.fraser.name/writing/diff/</a></p></blockquote><p class="my-1 text-sm leading-7 mb-6">두 시퀀스 간의 차이점을 계산하는 것은 많은 애플리케이션의 핵심입니다.
-아래는 두 텍스트의 차이점을 계산하는 간단한 예입니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/diff-1.png"></p><p class="my-1 text-sm leading-7 mb-6">이 문서에서는 차이점 알고리즘에 관한 문헌을 조사하고 비교하며, 실질적으로 알고리즘의 유용성을 개선하기 위한 몇 가지 기법에 대해 설명합니다.
+아래는 두 텍스트의 차이점을 계산하는 간단한 예입니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/diff-1.png"></p><p class="my-1 text-sm leading-7 mb-6">이 문서에서는 차이점 알고리즘에 관한 문헌을 조사하고 비교하며, 실질적으로 알고리즘의 유용성을 개선하기 위한 몇 가지 기법에 대해 설명합니다.
 특히 전처리 최적화, 최적의 차이점 알고리즘을 선택하기 위한 전략, 후처리 정리에 대해 설명합니다.</p><hr>
 
     <h1 id="1" class="text-2xl my-8 font-bold">
@@ -345,7 +368,7 @@ Text 2: ox      | Text 2: box</code></pre><p class="my-1 text-sm leading-7 mb-6"
 속도 외에도 중요한 몇 가지 기준이 있습니다.</p>
     <h2 id="2-1" class="text-xl my-4 font-semibold">
       2.1 입력
-    </h2><p class="my-1 text-sm leading-7 mb-6">입력 텍스트를 비교하는 데는 보통 세 가지 모드가 있습니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/diff-2.png"></p><p class="my-1 text-sm leading-7 mb-6">개별 문자들 끼리 비교하면 가장 세밀한 수준의 디테일을 얻을 수 있지만 토큰 수가 많기 때문에 실행 시간이 가장 오래 걸립니다.
+    </h2><p class="my-1 text-sm leading-7 mb-6">입력 텍스트를 비교하는 데는 보통 세 가지 모드가 있습니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/diff-2.png"></p><p class="my-1 text-sm leading-7 mb-6">개별 문자들 끼리 비교하면 가장 세밀한 수준의 디테일을 얻을 수 있지만 토큰 수가 많기 때문에 실행 시간이 가장 오래 걸립니다.
 단어 경계 또는 줄 바꿈으로 비교하는 것이 더 빠르고 편집점이 더 적게 발생하지만 편집점의 총 길이는 더 길어집니다.
 필요한 세부 수준은 애플리케이션에 따라 다릅니다.
 예를 들어 소스 코드 비교는 일반적으로 줄 단위로 수행되는 반면, 영어 문서 비교는 단어 단위로, 바이너리 데이터나 DNA 서열 비교는 문자 단위로 수행됩니다.</p><p class="my-1 text-sm leading-7 mb-6">모든 차이점 알고리즘은 이론적으로 문자, 단어 또는 줄로 나뉘는지 여부에 관계없이 모든 입력을 처리할 수 있습니다.
@@ -362,8 +385,8 @@ Text 2: ox      | Text 2: box</code></pre><p class="my-1 text-sm leading-7 mb-6"
     <h2 id="2-2" class="text-xl my-4 font-semibold">
       2.2 출력
     </h2><p class="my-1 text-sm leading-7 mb-6">기존의 차이점 알고리즘들은 첫 번째 텍스트에 대해 수행해서 두 번째 텍스트가 되는 삽입 및 삭제 목록을 생성합니다.
-이를 확장하여 &#39;이동&#39; 연산자를 추가했습니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/diff-3.png"></p><p class="my-1 text-sm leading-7 mb-6">큰 텍스트 블록이 한 위치에서 다른 위치로 이동한 경우, 삭제 및 삽입보다는 이동으로 보는 것이 더 이해하기 쉬운 경우가 많습니다.
-&#39;이동&#39; 연산자를 사용하는 알고리즘은 1978년 P. Heckel의 <a href="https://dl.acm.org/doi/10.1145/359460.359467" class="text-orange-500">파일 간에 차이점을 분리하는 기술</a>이라는 논문에 설명되어 있습니다.</p><p class="my-1 text-sm leading-7 mb-6">완전히 다른 접근 방식은 &#39;복사&#39;와 &#39;삽입&#39;을 연산자로 사용하는 것입니다:</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/diff-4.png"></p><p class="my-1 text-sm leading-7 mb-6">이 방법은 첫 번째 텍스트의 일부를 복사하여 붙여넣어 두 번째 텍스트를 구성하는 방식입니다.
+이를 확장하여 &#39;이동&#39; 연산자를 추가했습니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/diff-3.png"></p><p class="my-1 text-sm leading-7 mb-6">큰 텍스트 블록이 한 위치에서 다른 위치로 이동한 경우, 삭제 및 삽입보다는 이동으로 보는 것이 더 이해하기 쉬운 경우가 많습니다.
+&#39;이동&#39; 연산자를 사용하는 알고리즘은 1978년 P. Heckel의 <a href="https://dl.acm.org/doi/10.1145/359460.359467" class="text-orange-500">파일 간에 차이점을 분리하는 기술</a>이라는 논문에 설명되어 있습니다.</p><p class="my-1 text-sm leading-7 mb-6">완전히 다른 접근 방식은 &#39;복사&#39;와 &#39;삽입&#39;을 연산자로 사용하는 것입니다:</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/diff-4.png"></p><p class="my-1 text-sm leading-7 mb-6">이 방법은 첫 번째 텍스트의 일부를 복사하여 붙여넣어 두 번째 텍스트를 구성하는 방식입니다.
 신문에서 단어를 스크랩하여 몸값을 요구하는 메모(랜섬 노트)를 작성하는 것과 비슷하지만, 스크랩한 단어를 복사하여 여러 번 사용할 수 있다는 점이 다릅니다.
 완전히 새로운 텍스트는 그대로 삽입됩니다.
 복사/삽입 차이는 일반적으로 사람이 읽을 수 없습니다.
@@ -373,7 +396,7 @@ Text 2: ox      | Text 2: box</code></pre><p class="my-1 text-sm leading-7 mb-6"
       2.3 정확성
     </h2><p class="my-1 text-sm leading-7 mb-6">차이점 알고리즘은 잘못된 결과, 즉 한 텍스트에서 다른 텍스트로의 차이점들을 설명하지 못하는 결과를 반환해서는 안 됩니다.
 그러나 일부 알고리즘은 속도를 위해 차선의 결과를 반환할 수 있습니다.
-예를 들어, 헤켈의 알고리즘(1978)은 빠르지만 입력에 반복되는 텍스트가 있는 경우 혼동을 일으킬 수 있습니다:</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/diff-5.png"></p><p class="my-1 text-sm leading-7 mb-6">속도를 위해 정확도를 희생하는 또 다른 예는 전체 텍스트를 줄 기반 알고리즘으로 처리한 다음, 수정된 줄을 문자 기반 알고리즘으로 재처리하는 것입니다.
+예를 들어, 헤켈의 알고리즘(1978)은 빠르지만 입력에 반복되는 텍스트가 있는 경우 혼동을 일으킬 수 있습니다:</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/diff-5.png"></p><p class="my-1 text-sm leading-7 mb-6">속도를 위해 정확도를 희생하는 또 다른 예는 전체 텍스트를 줄 기반 알고리즘으로 처리한 다음, 수정된 줄을 문자 기반 알고리즘으로 재처리하는 것입니다.
 이 멀티패스 접근 방식의 문제점은 줄 기반 차이로 인해 두 줄 사이의 부적절한 공통점을 식별할 수 있다는 것입니다.
 빈 줄은 서로 관련이 없는 두 텍스트에 나타날 수 있기 때문에 이러한 문제의 일반적인 원인입니다.
 이러한 부적절한 공통점은 수정 블록을 무작위로 분할하여 문자 기반 단계에서 실제로 공통 텍스트를 발견하는 것을 방해할 수 있습니다.
@@ -386,8 +409,8 @@ Text 2: ox      | Text 2: box</code></pre><p class="my-1 text-sm leading-7 mb-6"
     <h1 id="3" class="text-2xl my-8 font-bold">
       3. 후처리 정리
     </h1><p class="my-1 text-sm leading-7 mb-6">완벽한 차이점 알고리즘은 한 텍스트를 다른 텍스트로 변환하는 데 필요한 최소 편집 횟수를 보고합니다.
-하지만 때로는 결과가 너무 완벽할 때도 있습니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/diff-6.png"></p><p class="my-1 text-sm leading-7 mb-6">새로운 차이점을 처리할 때 첫 번째 단계는 섹션처럼 바꾸고 병합하는 것입니다.
-위의 예에서는 이러한 최적화가 가능합니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/diff-7.png"></p><p class="my-1 text-sm leading-7 mb-6">두 차이점 모두 출력은 동일하지만, 두 번째 차이점은 우연히 반복되는 등호를 바꾸어 두 연산을 하나로 합쳤습니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">diff_cleanupMerge</span>(<span class="hljs-params">diffs</span>) {
+하지만 때로는 결과가 너무 완벽할 때도 있습니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/diff-6.png"></p><p class="my-1 text-sm leading-7 mb-6">새로운 차이점을 처리할 때 첫 번째 단계는 섹션처럼 바꾸고 병합하는 것입니다.
+위의 예에서는 이러한 최적화가 가능합니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/diff-7.png"></p><p class="my-1 text-sm leading-7 mb-6">두 차이점 모두 출력은 동일하지만, 두 번째 차이점은 우연히 반복되는 등호를 바꾸어 두 연산을 하나로 합쳤습니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">diff_cleanupMerge</span>(<span class="hljs-params">diffs</span>) {
   <span class="hljs-comment">// 섹션이 수정된 것 처럼 순서를 바꾸고 병합합니다. 동일한 부분을 병합합니다.</span>
   <span class="hljs-comment">// 모든 편집 섹션은 동등한 부분을 넘어서지 않는 한 이동할 수 있습니다.</span>
   diffs.<span class="hljs-title function_">push</span>([<span class="hljs-variable constant_">DIFF_EQUAL</span>, <span class="hljs-string">&#x27;&#x27;</span>]);  <span class="hljs-comment">// 마지막에 더미 추가</span>
@@ -525,7 +548,7 @@ Text 2: ox      | Text 2: box</code></pre><p class="my-1 text-sm leading-7 mb-6"
 비용이 0이면 오버헤드가 없는 것입니다.
 예를 들어 이 비용이 10자인 경우, 편집되는 총 문자 수를 최대 9자까지 늘리고 편집 작업 수를 1자 줄이면 순 절감 효과가 발생합니다.
 따라서 차이의 총 비용은 o * c + n으로 계산할 수 있으며, 여기서 o는 수정 작업 수, c는 문자 수로 표시된 각 수정 작업의 상수 비용, n은 변경된 총 문자 수입니다.
-다음은 수정된 문자 수를 늘리면 수정 작업 수를 줄이고 전체 차이 비용을 줄일 수 있는 방법을 보여주는 세 가지 예입니다(c는 4로 임의로 설정).</p><p class="my-1 text-sm leading-7 mb-6">첫째, 기존 삽입 및 삭제에 의해 양쪽이 둘러싸인 등호(변경되지 않은 텍스트)는 길이가 c자 미만이어야 분할하는 것이 유리합니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/diff-8.png"></p><p class="my-1 text-sm leading-7 mb-6">둘째, 한쪽은 기존 삽입 및 삭제로 둘러싸여 있고 다른 한쪽은 기존 삽입 또는 삭제로 둘러싸여 있는 등호는 분할하는 것이 유리하려면 길이가 0.5C 문자 미만이어야 합니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/diff-9.png"></p><p class="my-1 text-sm leading-7 mb-6">이 두 가지 조건은 데이터를 한 번만 통과하면 빠르게 계산할 수 있으며, 분할로 인해 주변의 편집 유형이 변경된 경우 역추적하여 이전 동일성을 재평가할 수 있습니다.
+다음은 수정된 문자 수를 늘리면 수정 작업 수를 줄이고 전체 차이 비용을 줄일 수 있는 방법을 보여주는 세 가지 예입니다(c는 4로 임의로 설정).</p><p class="my-1 text-sm leading-7 mb-6">첫째, 기존 삽입 및 삭제에 의해 양쪽이 둘러싸인 등호(변경되지 않은 텍스트)는 길이가 c자 미만이어야 분할하는 것이 유리합니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/diff-8.png"></p><p class="my-1 text-sm leading-7 mb-6">둘째, 한쪽은 기존 삽입 및 삭제로 둘러싸여 있고 다른 한쪽은 기존 삽입 또는 삭제로 둘러싸여 있는 등호는 분할하는 것이 유리하려면 길이가 0.5C 문자 미만이어야 합니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/diff-9.png"></p><p class="my-1 text-sm leading-7 mb-6">이 두 가지 조건은 데이터를 한 번만 통과하면 빠르게 계산할 수 있으며, 분할로 인해 주변의 편집 유형이 변경된 경우 역추적하여 이전 동일성을 재평가할 수 있습니다.
 또 다른 패스는 편집 작업의 순서를 바꾸고 유사한 작업을 병합하기 위해 수행됩니다.</p><pre><code class="my-4 hljs text-xs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">diff_cleanupEfficiency</span>(<span class="hljs-params">diffs</span>) {
   <span class="hljs-comment">// 사소한 동일성을 제거해서 편집 횟수를 줄임</span>
   <span class="hljs-keyword">var</span> changes = <span class="hljs-literal">false</span>;
@@ -603,20 +626,20 @@ Text 2: ox      | Text 2: box</code></pre><p class="my-1 text-sm leading-7 mb-6"
   <span class="hljs-keyword">if</span> (changes) {
     <span class="hljs-title function_">diff_cleanupMerge</span>(diffs);
   }
-}</code></pre><p class="my-1 text-sm leading-7 mb-6">이는 좋은 시작이지만, 세 번째 유형의 상태를 포착하지 못하기 때문에 완전한 해결책은 아닙니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/diff-10.png"></p><p class="my-1 text-sm leading-7 mb-6">이와 유사한 경우, 개별 분할은 전체 비용을 높히지만, 이러한 분할이 결합되면 결과적으로 전체 비용은 낮아집니다.
+}</code></pre><p class="my-1 text-sm leading-7 mb-6">이는 좋은 시작이지만, 세 번째 유형의 상태를 포착하지 못하기 때문에 완전한 해결책은 아닙니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/diff-10.png"></p><p class="my-1 text-sm leading-7 mb-6">이와 유사한 경우, 개별 분할은 전체 비용을 높히지만, 이러한 분할이 결합되면 결과적으로 전체 비용은 낮아집니다.
 이러한 형태의 최적화를 계산하는 것은 앞의 두 경우의 O(n) 최적화와는 대조적으로 선택된 차이의 영역에 대한 O(n^2) 연산으로 보이므로, 절감 효과보다 더 많은 비용이 소요될 수 있습니다.</p>
     <h2 id="3-2" class="text-xl my-4 font-semibold">
       3.2 시맨틱
     </h2>3.2.1 시맨틱 쭉정이<p class="my-1 text-sm leading-7 mb-6">차이점의 출력이 시각적 표시와 같이 사람이 사용하도록 설계된 경우 문제가 달라집니다.
 이 경우 목표는 더 의미 있는 구분을 제공하는 것입니다.
-다음 두 가지 예를 생각해 보세요.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/diff-11.png"></p><p class="my-1 text-sm leading-7 mb-6">수학적으로 이 두 예는 매우 유사합니다.
+다음 두 가지 예를 생각해 보세요.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/diff-11.png"></p><p class="my-1 text-sm leading-7 mb-6">수학적으로 이 두 예는 매우 유사합니다.
 중심 등호(&quot;f&quot;)가 같고 편집 연산 횟수도 동일합니다.
 그러나 첫 번째 예(두 개의 오타를 수정하는 작업)는 등호를 분할하고 병합한 후가 아니라 원시 차이 단계에서 더 의미가 있습니다.
 반면 두 번째 예제(더 큰 편집이 포함됨)는 원시 차이점 단계에서는 의미가 거의 없으며 등호를 분할하고 병합한 후에 훨씬 더 명확해집니다.
 이 두 예제 사이의 주요 차이점은 등호를 둘러싼 변화의 양입니다.</p><p class="my-1 text-sm leading-7 mb-6">시맨틱 쭉정이를 제거하는 한 가지 해결책은 데이터를 통과하면서 양쪽의 삽입과 삭제보다 작거나 같은 등호를 찾는 것입니다.
 이러한 동일성이 발견되면 삭제와 추가로 나눕니다.
 그런 다음 두 번째 패스를 수행하여 살아남은 등호로 분리되지 않은 모든 삭제와 추가를 다시 정렬하고 병합합니다.
-아래는 이러한 단계를 보여주는 다소 인위적인 예시입니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/diff-12.png"></p><p class="my-1 text-sm leading-7 mb-6">이 경우 &quot;over&quot;의 길이는 네 글자인데 반해 그 주위의 변화는 다섯 글자와 한 글자밖에 되지 않으므로 그대로 남습니다.
+아래는 이러한 단계를 보여주는 다소 인위적인 예시입니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/diff-12.png"></p><p class="my-1 text-sm leading-7 mb-6">이 경우 &quot;over&quot;의 길이는 네 글자인데 반해 그 주위의 변화는 다섯 글자와 한 글자밖에 되지 않으므로 그대로 남습니다.
 그러나 &quot;n&quot;은 한 글자에 불과한 반면, 그 주위의 변화는 1글자와 5글자에 불과합니다.
 따라서 &quot;n&quot;은 분할됩니다.
 등호가 분할되면 컨텍스트가 변경되었으므로 패스는 이전 등호를 다시 평가하기 위해 역추적해야 합니다.
@@ -667,8 +690,8 @@ Text 2: ox      | Text 2: box</code></pre><p class="my-1 text-sm leading-7 mb-6"
 }
 </code></pre><p class="my-1 text-sm leading-7 mb-6">이 해결법은 완벽하지 않습니다.
 이는 좁은 시야를 가지고 있으며, 평가하는 각 동일성의 바로 옆을 보지 못합니다.
-이로 인해 소수의 쭉정이 그룹이 살아남을 수 있습니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/diff-13.png"></p><p class="my-1 text-sm leading-7 mb-6">보다 포괄적인 해결책은 문제의 평등에서 더 멀리 떨어진 차이의 가중 평균을 계산하는 것입니다.</p>3.2.2 시맨틱 정렬<p class="my-1 text-sm leading-7 mb-6">시맨틱하게 의미 있는 Diff를 만드는 것과는 별개로 편집 경계를 논리적 구분으로 정렬하는 문제가 있습니다.
-다음 diff를 생각해 보세요.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/diff-14.png"></p><p class="my-1 text-sm leading-7 mb-6">6개의 diff 모두 유효하며 최소한의 차이점입니다.
+이로 인해 소수의 쭉정이 그룹이 살아남을 수 있습니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/diff-13.png"></p><p class="my-1 text-sm leading-7 mb-6">보다 포괄적인 해결책은 문제의 평등에서 더 멀리 떨어진 차이의 가중 평균을 계산하는 것입니다.</p>3.2.2 시맨틱 정렬<p class="my-1 text-sm leading-7 mb-6">시맨틱하게 의미 있는 Diff를 만드는 것과는 별개로 편집 경계를 논리적 구분으로 정렬하는 문제가 있습니다.
+다음 diff를 생각해 보세요.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/diff-14.png"></p><p class="my-1 text-sm leading-7 mb-6">6개의 diff 모두 유효하며 최소한의 차이점입니다.
 Diff 1과 6은 차이점 알고리즘이 반환할 가능성이 가장 높은 Diff 입니다.
 그러나 Diff 3과 4는 차이점의 시맨틱 의미를 포착할 가능성이 더 높습니다.</p><p class="my-1 text-sm leading-7 mb-6">해결책은 양쪽이 등호로 둘러싸인 각 삽입 또는 삭제 부분을 찾아서 옆으로 밀어내는 것입니다.
 앞의 같음의 마지막 토큰이 편집의 마지막 토큰과 같으면 편집을 왼쪽으로 밀 수 있습니다.

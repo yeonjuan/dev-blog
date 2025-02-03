@@ -7,6 +7,10 @@
         <title>Next.js 와 React Router로 싱글 페이지 애플리케이션 만들기 | DevBlog</title>
         <link href="/dev-blog/favicon.ico" rel="shortcut icon">
         <meta name="description" content="이 글에서는 Next.js 와 react-router-dom 을 이용해 SPA를 구성하는 방법에 대해 소개합니다. 일반적으로 Next.js를 사용하는 경우 내장된 라우터만 사용하는데요. 최근 저는 서비스의 특별한 이유로 react-router-dom 과 내장된 라우터를 같이 사용해야만 했고, 프로젝트를 구성하는데 이 글에서 도움을 받았습니다. 저와 같은 문제를 겪으시는 분들에게 도움이 되었으면 좋겠습니다.">
+        <meta property="og:image" content="/dev-blog/posts/JavaScript/assets/building-a-spa-with-nextjs.webp" /> 
+        <meta property="og:type" content="blog" />
+        <meta property="og:title" content="Next.js 와 React Router로 싱글 페이지 애플리케이션 만들기 | DevBlog" /> 
+        <meta property="og:description" content="이 글에서는 Next.js 와 react-router-dom 을 이용해 SPA를 구성하는 방법에 대해 소개합니다. 일반적으로 Next.js를 사용하는 경우 내장된 라우터만 사용하는데요. 최근 저는 서비스의 특별한 이유로 react-router-dom 과 내장된 라우터를 같이 사용해야만 했고, 프로젝트를 구성하는데 이 글에서 도움을 받았습니다. 저와 같은 문제를 겪으시는 분들에게 도움이 되었으면 좋겠습니다." /> 
         <link href="/dev-blog/output.css" type="text/css" rel="stylesheet" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,6 +18,25 @@
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
           rel="stylesheet"
         />
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "headline": "Next.js 와 React Router로 싱글 페이지 애플리케이션 만들기 | DevBlog",
+          "image": [
+            "https://yeonjuan.github.io//dev-blog/posts/JavaScript/assets/building-a-spa-with-nextjs.webp",
+          ],
+            
+              "datePublished": "2023-05-26T00:00:00+09:00",
+              "dateModified": "2023-05-26T00:00:00+09:00",
+              
+          "author": [{
+              "@type": "Person",
+              "name": "YeonJuAn",
+              "url": "https://github.com/yeonjuan"
+            }]
+        }
+        </script>
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
@@ -169,7 +192,7 @@ Next.js의 라우팅 시스템을 사용하기로 결정한 경우 이런 접근
     <h2 id="-browser-history-needs-a-dom" class="text-xl my-4 font-semibold">
       `Browser history needs a DOM`
     </h2><p class="my-1 text-sm leading-7 mb-6">먼저 새로운 Next.js 앱을 만들고, React Router를 설치한 다음 (<code class="bg-gray-100 px-1 rounded-md inline-block text-sm">npm install react-router-dom</code>), 위 라우터 코드를 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">pages/index.tsx</code>에 붙여 넣어 보겠습니다.
-그리고 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">next dev</code>를 실행하면 즉시 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">Invariant failed: Browser history needs a DOM </code> 에러가 발생합니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/nextjs_no_dom.png"></p><p class="my-1 text-sm leading-7 mb-6">이는 Next.js가 개발 모드에서 개발 서버에 페이지를 미리 렌더링하려고 시도하기 때문에 발생합니다.
+그리고 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">next dev</code>를 실행하면 즉시 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">Invariant failed: Browser history needs a DOM </code> 에러가 발생합니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/nextjs_no_dom.png"></p><p class="my-1 text-sm leading-7 mb-6">이는 Next.js가 개발 모드에서 개발 서버에 페이지를 미리 렌더링하려고 시도하기 때문에 발생합니다.
 반면 React Router는 브라우저에서 제공하는 전역 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">window</code> 객체에 접근이 필요합니다.
 서버 환경에서는 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">window</code>를 사용할 수 없기 때문에 React Router가 작동을 멈춥니다.</p><p class="my-1 text-sm leading-7 mb-6">이 문제를 해결하려면 (두둥) <a href="https://nextjs.org/docs/pages/building-your-application/routing/custom-app" class="text-orange-500">커스텀 앱</a>을 사용해야 합니다!
 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">pages/_app.tsx</code> (또는 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">pages/_app.js</code> 만약 당신이 괴물이라면)이라는 파일을 추가합니다.
@@ -184,7 +207,7 @@ Next.js의 라우팅 시스템을 사용하기로 결정한 경우 이런 접근
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">App</span>;</code></pre>
     <h2 id="-hydration-failed" class="text-xl my-4 font-semibold">
       `Hydration failed`
-    </h2><p class="my-1 text-sm leading-7 mb-6">페이지를 다시 로드하면 새로운 오류가 표시됩니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/hydration_failed.png"></p><p class="my-1 text-sm leading-7 mb-6">Next.js 앱의 페이지를 로드하면 Next.js는 1) 서버에서 사전 렌더링을 시도하고 2) 결과를 브라우저로 전송한 다음 3) 브라우저에서 페이지를 &quot;re-hydrates&quot; 합니다. Re-hydration은 브라우저에서 다시 렌더링하고 서버에서 렌더링한 버전과 비교하는 것을 의미합니다.
+    </h2><p class="my-1 text-sm leading-7 mb-6">페이지를 다시 로드하면 새로운 오류가 표시됩니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/hydration_failed.png"></p><p class="my-1 text-sm leading-7 mb-6">Next.js 앱의 페이지를 로드하면 Next.js는 1) 서버에서 사전 렌더링을 시도하고 2) 결과를 브라우저로 전송한 다음 3) 브라우저에서 페이지를 &quot;re-hydrates&quot; 합니다. Re-hydration은 브라우저에서 다시 렌더링하고 서버에서 렌더링한 버전과 비교하는 것을 의미합니다.
 두 버전이 일치하지 않으면 React는 오류를 발생시킵니다.</p><p class="my-1 text-sm leading-7 mb-6">좀 더 영리하게 생각해 봅시다.</p><pre><code class="my-4 hljs text-xs language-jsx"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">AppProps</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;next/app&quot;</span>;
 <span class="hljs-keyword">import</span> { useEffect, useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;react&quot;</span>;
 
@@ -224,7 +247,7 @@ react-router의 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&
     <h2 id="" class="text-xl my-4 font-semibold">
       클라이언트 사이드 렌더링과 서버 사이드 렌더링 혼합하기
     </h2><p class="my-1 text-sm leading-7 mb-6">주의할 점: 들어오는 요청이 pages 디렉터리의 기존 페이지에 해당하는 경우 Next.js는 이 rewrite 규칙을 무시합니다.
-예를 들어, 나중에 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">pages/about.tsx</code>를 추가하면 Next.js는 홈페이지에 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">/about</code>을 다시 작성하는 것을 멈춥니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/nextjs_pages.png"></p><p class="my-1 text-sm leading-7 mb-6">정말 멋진 기능입니다! 우선, 추가 구성없이 API Routes를 사용할 수 있습니다.
+예를 들어, 나중에 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">pages/about.tsx</code>를 추가하면 Next.js는 홈페이지에 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">/about</code>을 다시 작성하는 것을 멈춥니다.</p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/nextjs_pages.png"></p><p class="my-1 text-sm leading-7 mb-6">정말 멋진 기능입니다! 우선, 추가 구성없이 API Routes를 사용할 수 있습니다.
 하지만 더 중요한 것은 SPA, SSR, SSG 패러다임을 마음대로 섞어서 사용할 수 있다는 점입니다!
 예를 들어 서버사이드에서 렌더링되는 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">/settings</code>페이지를 추가할 수 있습니다.</p><ul class="my-2 px-3"><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">pages/settings.tsx</code>를 생성하고 구현합니다.</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">getServerSideProps</code> 를 추가합니다.</p></li><li  class="text-base *:mb-0 *:mt-0 *:leading-6"><p class="my-1 text-sm leading-7 mb-6"><code class="bg-gray-100 px-1 rounded-md inline-block text-sm">next/link</code> (<code class="bg-gray-100 px-1 rounded-md inline-block text-sm">react-router-dom</code> 이 아닌)의 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">&lt;Link&gt;</code> 컴포넌트를 사용해서 <code class="bg-gray-100 px-1 rounded-md inline-block text-sm">/settings</code>로 이동하는 링크를 추가합니다.</p></li></ul><p class="my-1 text-sm leading-7 mb-6">이제 SPA내에서 싱글 서버 사이드 페이지가 생겼습니다!. create-react-app으로는 불가능합니다.🙃</p>
     <h2 id="" class="text-xl my-4 font-semibold">

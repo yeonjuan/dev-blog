@@ -7,6 +7,10 @@
         <title>정말 리액트에서 useMemo를 사용해야 할까요? 알아봅시다. (번역) | DevBlog</title>
         <link href="/dev-blog/favicon.ico" rel="shortcut icon">
         <meta name="description" content="리액트에서 useMemo를 언제 사용해야 좋을지 고민해 보신 적 있으신가요? 저는 useMemo를 사용할 때, 정말 성능 개선에 도움이 될지 의문을 가지곤 했는데요. 이 글에서는 useMemo의 성능에 대한 가설을 세우고 이를 검증하기 위해 복잡도별로 성능을 측정해 분석합니다. 저와 같은 고민을 하신 분들께 도움이 되었으면 좋겠습니다.">
+        <meta property="og:image" content="/dev-blog/posts/JavaScript/assets/should-you-really-use-usememo.webp" /> 
+        <meta property="og:type" content="blog" />
+        <meta property="og:title" content="정말 리액트에서 useMemo를 사용해야 할까요? 알아봅시다. (번역) | DevBlog" /> 
+        <meta property="og:description" content="리액트에서 useMemo를 언제 사용해야 좋을지 고민해 보신 적 있으신가요? 저는 useMemo를 사용할 때, 정말 성능 개선에 도움이 될지 의문을 가지곤 했는데요. 이 글에서는 useMemo의 성능에 대한 가설을 세우고 이를 검증하기 위해 복잡도별로 성능을 측정해 분석합니다. 저와 같은 고민을 하신 분들께 도움이 되었으면 좋겠습니다." /> 
         <link href="/dev-blog/output.css" type="text/css" rel="stylesheet" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,6 +18,25 @@
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
           rel="stylesheet"
         />
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "headline": "정말 리액트에서 useMemo를 사용해야 할까요? 알아봅시다. (번역) | DevBlog",
+          "image": [
+            "https://yeonjuan.github.io//dev-blog/posts/JavaScript/assets/should-you-really-use-usememo.webp",
+          ],
+            
+              "datePublished": "2023-03-21T00:00:00+09:00",
+              "dateModified": "2023-03-21T00:00:00+09:00",
+              
+          "author": [{
+              "@type": "Person",
+              "name": "YeonJuAn",
+              "url": "https://github.com/yeonjuan"
+            }]
+        }
+        </script>
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
@@ -208,17 +231,17 @@ n &gt; 1000인 경우, useMemo를 사용하여 리렌더링에서 유사하거�
 <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">BenchmarkNormal</span> <span class="hljs-attr">level</span>=<span class="hljs-string">{1}</span> <span class="hljs-attr">count</span>=<span class="hljs-string">{count}</span> /&gt;</span></span>;</code></pre><p class="my-1 text-sm leading-7 mb-6">결과를 깔끔하게 유지하기 위해서, 테스트를 시작하기 전에 항상 브라우저 새 웹페이지로 시작(리렌더링 제외)하여 페이지에 남아 결과에 영향을 줄 수 있는 캐시를 모두 정리합니다.</p>
     <h2 id="" class="text-xl my-4 font-semibold">
       결과
-    </h2>복잡도 n = 1 결과<p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/use-memo-table-n-1.webp"></p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/use-memo-graph-n-1.webp"></p><p class="my-1 text-sm leading-7 mb-6">복잡도는 왼쪽 열에 표시되며 첫 번째 테스트는 초기 렌더링, 두 번째 테스트는 첫 번째 리 렌더링, 마지막 테스트는 두 번째 리렌더링 입니다.
+    </h2>복잡도 n = 1 결과<p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/use-memo-table-n-1.webp"></p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/use-memo-graph-n-1.webp"></p><p class="my-1 text-sm leading-7 mb-6">복잡도는 왼쪽 열에 표시되며 첫 번째 테스트는 초기 렌더링, 두 번째 테스트는 첫 번째 리 렌더링, 마지막 테스트는 두 번째 리렌더링 입니다.
 두 번째 열은 useMemo를 사용하지 않은 일반 벤치마크 결과입니다.
 마지막 열은 useMemo를 사용한 벤치마크 결과입니다.
 이 값들은 벤치마크 컴포넌트의 10,000 번 렌더링의 평균 렌더링 시간입니다.</p><p class="my-1 text-sm leading-7 mb-6">useMemo를 사용할 때 초기 렌더링은 19% 느려지며 예상치인 5-10% 보다 훨씬 높습니다.
-후속 렌더링은 useMemo 캐시를 통과하는 데 든 오버헤드가 실제 값을 재계산하는 것보다 더 비용이 들기 때문에 여전히 느립니다.</p><p class="my-1 text-sm leading-7 mb-6">결론적으로 복잡성이 n=1일 경우 오버헤드가 항상 성능보다 크기 때문에 useMemo를 사용하지 않는 것이 항상 빠릅니다.</p>복잡도 n = 100 결과<p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/use-memo-table-n-100.webp"></p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/use-memo-graph-n-100.webp"></p><p class="my-1 text-sm leading-7 mb-6">복잡도가 100이면, useMemo를 사용한 초기 렌더링은 62% 느려지는데 이는 상당한 크기입니다.
+후속 렌더링은 useMemo 캐시를 통과하는 데 든 오버헤드가 실제 값을 재계산하는 것보다 더 비용이 들기 때문에 여전히 느립니다.</p><p class="my-1 text-sm leading-7 mb-6">결론적으로 복잡성이 n=1일 경우 오버헤드가 항상 성능보다 크기 때문에 useMemo를 사용하지 않는 것이 항상 빠릅니다.</p>복잡도 n = 100 결과<p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/use-memo-table-n-100.webp"></p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/use-memo-graph-n-100.webp"></p><p class="my-1 text-sm leading-7 mb-6">복잡도가 100이면, useMemo를 사용한 초기 렌더링은 62% 느려지는데 이는 상당한 크기입니다.
 후속 렌더링은 평균적으로 약간 빠르거나 유사한 것으로 보입니다.</p><p class="my-1 text-sm leading-7 mb-6">결론적으로, 100의 복잡도에서, 초기 렌더링은 상당히 느리지만, 후속 리렌더링은 거의 유사하고 기껏해야 조금 더 빠른 정도입니다.
-이 시점에서, useMemo가 아직 흥미로워 보이지는 않습니다.</p>복잡도 n = 1000 결과<p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/use-memo-table-n-1000.webp"></p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/use-memo-graph-n-1000.webp"></p><p class="my-1 text-sm leading-7 mb-6">복잡도가 1000 이면 useMemo를 사용한 초기 렌더링이 183% 느려지는 것을 볼 수 있습니다.
+이 시점에서, useMemo가 아직 흥미로워 보이지는 않습니다.</p>복잡도 n = 1000 결과<p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/use-memo-table-n-1000.webp"></p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/use-memo-graph-n-1000.webp"></p><p class="my-1 text-sm leading-7 mb-6">복잡도가 1000 이면 useMemo를 사용한 초기 렌더링이 183% 느려지는 것을 볼 수 있습니다.
 아마도 useMemo 캐시가 값을 저장하기 위해 더 열심히 일하고 있을 것입니다.
 후속 렌더링은 약 37% 더 빠릅니다!</p><p class="my-1 text-sm leading-7 mb-6">이 시점에서, 리렌더링 하는 동안 약간의 성능 향상을 볼 수 있지만 공짜는 아닙니다.
 초기 렌더링은 183%의 시간 손실로 훨씬 느려집니다.</p><p class="my-1 text-sm leading-7 mb-6"><strong>결론적으로</strong>, 복잡도가 1000인 경우 초기 렌더링 동안 더 큰 성능 손실(183%)을 볼 수 있지만 이후 렌더링은 약 37% 더 빠릅니다.</p><p class="my-1 text-sm leading-7 mb-6">이것이 이미 흥미로운지 아닌지는 사용 사례에 따라 크게 달라집니다.
-초기 렌더링 중에 183%의 성능 손실은 납득하기 어렵지만 컴포넌트에서 리렌더링이 많은 경우에는 정당화할 수 있습니다.</p>복잡도 n = 5000 결과<p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/use-memo-table-n-5000.webp"></p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/use-memo-graph-n-5000.webp"></p><p class="my-1 text-sm leading-7 mb-6">복잡도가 5000인 경우 useMemo를 사용하면 초기 렌더링 속도가 545% 느려집니다.
+초기 렌더링 중에 183%의 성능 손실은 납득하기 어렵지만 컴포넌트에서 리렌더링이 많은 경우에는 정당화할 수 있습니다.</p>복잡도 n = 5000 결과<p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/use-memo-table-n-5000.webp"></p><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/use-memo-graph-n-5000.webp"></p><p class="my-1 text-sm leading-7 mb-6">복잡도가 5000인 경우 useMemo를 사용하면 초기 렌더링 속도가 545% 느려집니다.
 데이터 처리가 복잡할수록 초기 렌더링은 useMemo가 없는 것에 비해 느려집니다.</p><p class="my-1 text-sm leading-7 mb-6">후속 렌더링을 보면 흥미롭습니다. useMemo를 사용한 경우 후속 렌더링마다 성능이 437%에서 609%까지 향상합니다.</p><p class="my-1 text-sm leading-7 mb-6"><strong>결론적으로</strong> 초기 렌더링 비용은 useMemo를 사용하면 훨씬 더 비싸지만, 후속 리렌더링에서는 훨씬 더 큰 성능 향상을 보입니다.
 여러분의 애플리케이션이 복잡도 &gt; 5000 이상인 데이터/처리를 가지고 있고 어느 정도 리렌더링이 발생하는 경우 useMemo를 사용하는 것의 이점을 볼 수 있습니다.</p>
     <h2 id="" class="text-xl my-4 font-semibold">
@@ -229,7 +252,7 @@ n &gt; 1000인 경우, useMemo를 사용하여 리렌더링에서 유사하거�
 모든 결론이 동일하게 적용됩니다.</p>
     <h2 id="" class="text-xl my-4 font-semibold">
       결론
-    </h2><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" src="./assets/use-memo-conclusion.webp"></p><p class="my-1 text-sm leading-7 mb-6">애플리케이션이 배열에 값을 n번 반복하여 추가하는 복잡도 n의 값을 가진 컴포넌트를 사용한 결과입니다.
+    </h2><p class="my-1 text-sm leading-7 mb-6"><img class="my-4 border-gray-300 border rounded-sm p-1" alt="" src="./assets/use-memo-conclusion.webp"></p><p class="my-1 text-sm leading-7 mb-6">애플리케이션이 배열에 값을 n번 반복하여 추가하는 복잡도 n의 값을 가진 컴포넌트를 사용한 결과입니다.
 <strong>결과는 데이터의 양과 데이터를 어떻게 처리하는지에 따라 달라질 수 있다는 점에 유의하세요.</strong>
 하지만 데이터의 크기에 따른 성능 차이를 대략 파악할 수 있습니다</p><p class="my-1 text-sm leading-7 mb-6">사용 사례에 따라 크게 달라지겠지만, 복잡도가 100 미만인 경우 useMemo는 별로 흥미로워 보이지 않습니다.
 초기 성능 손실은 약 5~10% 정도일 것으로 예상했지만, 데이터/처리 복잡성에 따라 크게 달라지며 심지어 예상보다 100배나 많은 500%의 성능 손실이 발생할 수도 있다는 사실을 발견했습니다.
