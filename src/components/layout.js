@@ -8,6 +8,7 @@ export default ({
   link = '',
   breadcrumb = [],
   description,
+  thumbnail = '',
 }) => {
   return html`
    <!doctype html>
@@ -18,6 +19,10 @@ export default ({
         <title>${title}</title>
         <link href="${resolvePath('/favicon.ico')}" rel="shortcut icon">
         ${description && html`<meta name="description" content="${description}">`}
+        ${thumbnail && html`<meta property="og:image" content="${thumbnail}" /> `}
+        <meta property="og:type" content="blog" />
+        <meta property="og:title" content="${title}" /> 
+        <meta property="og:description" content="${description}" /> 
         <link href="${resolvePath('/output.css')}" type="text/css" rel="stylesheet" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

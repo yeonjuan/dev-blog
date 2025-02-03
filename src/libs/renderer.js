@@ -75,8 +75,8 @@ function list({ items }) {
   return html`<ul class="my-2 px-3">${items.map(item => html`<li  class="text-base *:mb-0 *:mt-0 *:leading-6">${this.parser.parse(item.tokens)}</li>`).join('')}</ul>`
 }
 
-function image({ href }) {
-  return html`<img class="my-4 border-gray-300 border rounded-sm p-1" src="${href}">`
+function image({ href, text }) {
+  return html`<img class="my-4 border-gray-300 border rounded-sm p-1" alt="${text || ''}" src="${href}">`
 }
 
 function code({ text, lang }) {

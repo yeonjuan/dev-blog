@@ -12,6 +12,7 @@ export default (children, data, { originalFilename }) => {
     title: post.title + ' | DevBlog',
     children,
     description: post.description,
+    thumbnail: post.thumbnail,
     breadcrumb: [{
       title: 'Home',
       href: '/',

@@ -16,7 +16,7 @@
 
 한동안 쉬고 있었던 오픈 소스 기여를 다시 시작했다.
 
-![](./assets/2025-retrospect/pr-counts.png)
+![PR 차트](./assets/2025-retrospect/pr-counts.png)
 
 주로 [typescript-eslint](https://github.com/typescript-eslint/typescript-eslint)에 기여를 했는데, 이슈를 해결하려다 보니 연관된 프로젝트인 [eslint](https://github.com/eslint/eslint) 와 [TypeScript](https://github.com/microsoft/TypeScript)에도 기여를 할 수 있는 기회가 있었다.
 
