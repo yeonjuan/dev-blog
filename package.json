@@ -38,6 +38,7 @@
     "website/posts/**/*.html"
   ],
   "dependencies": {
+    "date-fns": "^4.1.0",
     "glob": "^11.0.1"
   }
 }

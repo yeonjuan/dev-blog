@@ -13,6 +13,7 @@ export default (children, data, { originalFilename }) => {
     children,
     description: post.description,
     thumbnail: post.thumbnail,
+    createdAt: post.createdAt,
     breadcrumb: [{
       title: 'Home',
       href: '/',

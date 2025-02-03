@@ -1,3 +1,4 @@
+import { formatISO, parse } from 'date-fns'
 import { html } from '@html-kit/html'
 import header from './header.js'
 import { resolvePath } from '../libs/utils.js'
@@ -9,7 +10,9 @@ export default ({
   breadcrumb = [],
   description,
   thumbnail = '',
+  createdAt = '',
 }) => {
+  const date = parse(createdAt, 'yyyy.MM.dd', new Date())
   return html`
    <!doctype html>
     <html lang="ko">
@@ -30,6 +33,31 @@ export default ({
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
           rel="stylesheet"
         />
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "headline": "${title}",
+          ${thumbnail
+            ? `"image": [
+            "https://yeonjuan.github.io/${thumbnail}"
+          ],`
+            : ''}
+            ${
+              createdAt
+                ? `
+              "datePublished": "${formatISO(date)}",
+              "dateModified": "${formatISO(date)}",
+              `
+                : ''
+            }
+          "author": [{
+              "@type": "Person",
+              "name": "YeonJuAn",
+              "url": "https://github.com/yeonjuan"
+            }]
+        }
+        </script>
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBZX7LMVNE"></script>
         <script>
           window.dataLayer = window.dataLayer || [];
