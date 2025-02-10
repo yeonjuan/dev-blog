@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "## YeonJuAn 👋",
   "scripts": {
-    "lint": "eslint website",
+    "lint": "eslint src",
     "build": "node src/blogify && npx tailwindcss -i ./src/input.css -o ./dev-blog/output.css && skick",
     "dev": "npx serve .",
     "deploy": "gh-pages -d dev-blog"
@@ -12,8 +12,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@html-eslint/eslint-plugin": "^0.31.1",
-    "@html-eslint/parser": "^0.31.0",
+    "@html-eslint/eslint-plugin": "^0.35.0-alpha.0",
+    "@html-eslint/parser": "^0.35.0-alpha.0",
     "@html-kit/html": "^0.0.4",
     "@parcel/transformer-sass": "^2.13.3",
     "@stylistic/eslint-plugin": "^2.13.0",

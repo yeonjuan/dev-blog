@@ -10,7 +10,7 @@ const postItem = post => html`
       <span class="block my-3 text-xl font-bold">${post.title}</span>
    
       <p class="text-sm text-zinc-600 mb-8">
-          ${post.description}
+        ${post.description}
       </p>
       <img src="${post.thumbnail}" loading="lazy" class="m-auto max-w-2xl w-full" alt="">
     </a>
@@ -19,8 +19,8 @@ const postItem = post => html`
 
 export default posts => html`
   <div>
-        ${
-          posts.map(post => postItem(post)).join('\n')
-        }
+    ${
+      posts.map(post => postItem(post)).join('\n')
+    }
   </div>
 `

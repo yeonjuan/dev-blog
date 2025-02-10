@@ -22,7 +22,7 @@ export default () => html`
         .menuInput:checked ~ .hamburger > div:nth-child(3) {
             transform: translateY(-6.5px) rotate(-45deg);
         }
-    </style>
+  </style>
   <div id="overlay" class="backdrop-blur-sm bg-black/20 dark:bg-slate-900/80 fixed h-full inset-0 hidden"></div>
   <header class="bg-zinc-800 text-white h-12 fixed flex justify-between items-center w-full px-4">
     <a

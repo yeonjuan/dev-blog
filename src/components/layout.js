@@ -70,14 +70,14 @@ export default ({
       </head>
       <body>
         <div class="relative">
-            ${header()}
+          ${header()}
           <main class="py-2 px-4 pt-10 max-w-3xl m-auto pb-20">
-          ${!!breadcrumb.length && html`
-            <aside class="mt-14">
-              ${breadcrumb.map(({ href, title }) => {
-                return html`<a href="${resolvePath(href)}" class="hover:underline">${title}</a>`
-              }).join(' &gt; ')}
-            </aside>
+            ${!!breadcrumb.length && html`
+              <aside class="mt-14">
+                ${breadcrumb.map(({ href, title }) => {
+                  return html`<a href="${resolvePath(href)}" class="hover:underline">${title}</a>`
+                }).join(' &gt; ')}
+              </aside>
           `}
             ${children}
           </main>
