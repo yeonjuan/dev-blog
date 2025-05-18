@@ -15,6 +15,10 @@
 
 ## Posts
 
+### 2025
+
+- [ESLint can now lint HTML using the html-eslint language plugin](https://eslint.org/blog/2025/05/eslint-html-plugin/)
+
 ### 2024
 
 - [2024 회고](./Review/2024-retrospect.md)
