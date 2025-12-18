@@ -17,36 +17,58 @@ Google I/O 본 행사에서 발표된 최신 기술과 제품을 현지 개발�
 
 ## 현장
 
-![상하이 국제 엑스포 센터](./assets/google-io-2025/shanghai-expo.jpg)
+<p align="center">
+<img src="./assets/google-io-2025/shanghai-expo.jpg" width="350">
+</p>
+
+
 
 행사는 상하이 국제 엑스포 센터에서 열렸습니다.
 너무 더운 날씨 때문에 주변을 돌아다니기가 어려웠습니다.
 
-![내부 홀](./assets/google-io-2025/hall.png)
-![굿즈](./assets/google-io-2025/goods.jpg)
+<p align="center">
+<img src="./assets/google-io-2025/hall.png" width="350">
+</p>
+<p align="center">
+<img src="./assets/google-io-2025/goods.jpg" width="350">
+</p>
 
 내부 홀에서 등록을 완료하면 굿즈를 받을 수 있었습니다.
 
-![프레젠테이션 홀](./assets/google-io-2025/presentation-hall.png)
+<p align="center">
+<img src="./assets/google-io-2025/presentation-hall.png" width="350">
+</p>
 
 발표 홀은 두 개로 나뉘어 있었고, 여러 세션 중 원하는 발표를 선택해서 들을 수 있었습니다.
 저는 주로 웹 관련 세션을 위주로 선택했습니다.
 
 발표는 중국어와 영어로 진행되었는데, 중국어 발표의 경우 통역기를 통해 들을 수 있었습니다. 다만 모든 내용을 완벽히 이해하기에는 다소 어려움이 있었습니다.
 
-![html-eslint logo](./assets/google-io-2025/html-eslint.png)
+<p align="center">
+<img src="./assets/google-io-2025/html-eslint.png" width="350">
+</p>
 
 Baseline 세션에서 HTML-ESLint가 잠깐 소개되었습니다.
 제가 만든 로고가 Google 발표 자료에 등장하는 모습을 보니 신기하면서도 뿌듯한 기분이 들었습니다.
 
-![런치 바우처](./assets/google-io-2025/lunch-voucher.jpg)
-![런치](./assets/google-io-2025//lunch.jpg)
+<p align="center">
+<img src="./assets/google-io-2025/lunch-voucher.jpg" width="300">
+</p>
+
+<p align="center">
+<img src="./assets/google-io-2025/lunch.jpg" width="300">
+</p>
 
 점심시간에는 등록할 때 받은 런치 바우처로 식사를 했습니다.
 아쉽게도 음식은 제 입맛에 잘 맞지는 않았습니다.
 
-![demo1](./assets/google-io-2025/demo1.png)
-![demo2](./assets/google-io-2025/demo2.png)
+<p align="center">
+<img src="./assets/google-io-2025/demo1.png" width="400">
+</p>
+
+<p align="center">
+<img src="./assets/google-io-2025/demo2.png" width="400">
+</p>
 
 점심시간 이후에는 윗층에 마련된 체험 부스를 둘러봤습니다.
 Google에서 개발 중이거나 새롭게 출시한 제품들을 직접 확인하고 체험해 볼 수 있는 좋은 기회였습니다.
