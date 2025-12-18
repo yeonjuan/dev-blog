@@ -17,6 +17,7 @@
 
 ### 2025
 
+- [2025 Googoe I/O Connect 상하이 참여 후기](./Review/2025-google-io-connect-shanghai.md)
 - [ESLint can now lint HTML using the html-eslint language plugin](https://eslint.org/blog/2025/05/eslint-html-plugin/)
 
 ### 2024
